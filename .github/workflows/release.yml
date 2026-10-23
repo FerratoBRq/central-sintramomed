@@ -29,8 +29,8 @@ jobs:
           TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
           TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ""
         with:
-          tagName: ${{ github.ref_name }}
-          releaseName: "Central Sintramomed ${{ github.ref_name }}"
+          tagName: v__VERSION__
+          releaseName: "Central Sintramomed v__VERSION__"
           releaseBody: "Veja as novidades no CHANGELOG.md."
           releaseDraft: false
           includeUpdaterJson: true
@@ -40,9 +40,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tagName: ${{ github.ref_name }}
-          releaseName: "Central Sintramomed ${{ github.ref_name }}"
+          tagName: v__VERSION__
+          releaseName: "Central Sintramomed v__VERSION__"
           releaseBody: "Instalador. A atualização automática passa a funcionar quando o segredo TAURI_SIGNING_PRIVATE_KEY for cadastrado."
           releaseDraft: false
           includeUpdaterJson: false
-          args: --config "{\"bundle\":{\"createUpdaterArtifacts\":false}}"
+          args: --config src-tauri/tauri.sem-assinatura.conf.json
