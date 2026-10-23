@@ -24,7 +24,7 @@ docs/                Mapeamento do sistema e planos
 ## Publicar uma nova versão
 1. Atualizar a versão em `package.json`, `src-tauri/tauri.conf.json`, `src-tauri/Cargo.toml`, `APP_VERSION` em `web/index.html` e `web/version.json`
 2. Registrar no `CHANGELOG.md`
-3. `git tag vX.Y.Z && git push --tags`
+3. Publicar uma release com a tag vX.Y.Z no GitHub (ou Actions → Release do .exe → Run workflow)
 
 ## Atualização automática dos programas instalados
 Cadastre uma vez em Settings → Secrets and variables → Actions:
