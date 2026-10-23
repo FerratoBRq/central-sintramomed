@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.7 — 23/10/2026
+- Atualização sozinha pelo GitHub, sem chave de assinatura (como no Livro Caixa): a cada 5 minutos o programa consulta a última versão publicada, baixa o instalador, instala em modo passivo e reabre. Opção "Atualizar sozinho" na engrenagem.
+- Cada envio para a main com versão nova gera o instalador automaticamente.
+
 ## 0.1.6 — 23/10/2026
 - Primeira importação grava em lotes de 25: os trabalhadores aparecem durante a sincronização e o progresso não se perde se o programa fechar.
 - Corrige acentos quebrados no programa instalado (página declarada em UTF-8).

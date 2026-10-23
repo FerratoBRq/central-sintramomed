@@ -1,6 +1,7 @@
 // Esconde o console no .exe de produção
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+mod atualizacao;
 mod esocial;
 
 use tauri::Manager;
@@ -25,7 +26,8 @@ fn main() {
             esocial::cred_apagar,
             esocial::esocial_testar,
             esocial::esocial_get,
-            esocial::esocial_post
+            esocial::esocial_post,
+            atualizacao::instalar_atualizacao
         ])
         .run(tauri::generate_context!())
         .expect("erro ao iniciar a Central Sintramomed");

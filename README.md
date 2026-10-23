@@ -17,17 +17,14 @@ src-tauri/           Programa Windows (Tauri 2)
   src/esocial.rs     Login, sessão e leitura do Sistema eSocial
 .github/workflows/
   ci.yml             Confere a compilação a cada envio
-  release.yml        Gera o instalador .exe a cada tag vX.Y.Z
+  release.yml        Gera o instalador e publica a release a cada versão nova na main
 docs/                Mapeamento do sistema e planos
 ```
 
 ## Publicar uma nova versão
 1. Atualizar a versão em `package.json`, `src-tauri/tauri.conf.json`, `src-tauri/Cargo.toml`, `APP_VERSION` em `web/index.html` e `web/version.json`
 2. Registrar no `CHANGELOG.md`
-3. Publicar uma release com a tag vX.Y.Z no GitHub (ou Actions → Release do .exe → Run workflow)
+3. Enviar para a main (`git push`). O GitHub gera o instalador e os programas instalados se atualizam sozinhos em até 5 minutos.
 
 ## Atualização automática dos programas instalados
-Cadastre uma vez em Settings → Secrets and variables → Actions:
-- `TAURI_SIGNING_PRIVATE_KEY`: conteúdo do arquivo `central.key` (guarde esse arquivo em local seguro; nunca coloque no repositório)
-
-Sem esse segredo o instalador é gerado normalmente, só não publica o arquivo de atualização.
+Como no Livro Caixa, sem chave: a cada 5 minutos o programa consulta a última release no GitHub; se houver versão nova, baixa o instalador, instala em modo passivo e reabre. Pode ser desligado na engrenagem ("Atualizar sozinho").

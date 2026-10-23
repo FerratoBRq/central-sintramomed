@@ -1,48 +1,58 @@
-# Gera o instalador .exe a cada tag vX.Y.Z.
-# Com o segredo TAURI_SIGNING_PRIVATE_KEY configurado, também gera o latest.json
-# usado pela atualização automática dos programas já instalados.
+# Como no Livro Caixa: cada envio para a main com uma versão nova em src-tauri/tauri.conf.json
+# gera o instalador e publica a release vX.Y.Z. Os programas instalados encontram a versão
+# nova no GitHub em até 5 minutos, baixam, instalam e reabrem sozinhos. Não precisa de chave.
 name: Release do .exe
 on:
   push:
-    tags: ["v*"]
+    branches: [main]
+    paths: ["web/**", "src-tauri/**", "package.json"]
   workflow_dispatch:
 jobs:
   build-windows:
     runs-on: windows-latest
     permissions:
       contents: write
-    env:
-      TEM_CHAVE: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY != '' }}
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Versão nova?
+        id: ver
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          V=$(node -p "require('./src-tauri/tauri.conf.json').version")
+          echo "versao=$V" >> "$GITHUB_OUTPUT"
+          if gh release view "v$V" --repo "$GITHUB_REPOSITORY" --json assets --jq '.assets[].name' 2>/dev/null | grep -q -- '-setup.exe$'; then
+            echo "Versão v$V já publicada com instalador. Nada a fazer."; echo "nova=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "nova=true" >> "$GITHUB_OUTPUT"
+          fi
+      - if: steps.ver.outputs.nova == 'true'
+        uses: actions/setup-node@v4
         with: { node-version: 20 }
-      - uses: dtolnay/rust-toolchain@stable
-      - uses: swatinem/rust-cache@v2
+      - if: steps.ver.outputs.nova == 'true'
+        uses: dtolnay/rust-toolchain@stable
+      - if: steps.ver.outputs.nova == 'true'
+        uses: swatinem/rust-cache@v2
         with: { workspaces: "src-tauri -> target" }
-      - run: npm install
-      - name: Build assinado (com atualização automática)
-        if: env.TEM_CHAVE == 'true'
-        uses: tauri-apps/tauri-action@v0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
-          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ""
-        with:
-          tagName: v__VERSION__
-          releaseName: "Central Sintramomed v__VERSION__"
-          releaseBody: "Veja as novidades no CHANGELOG.md."
-          releaseDraft: false
-          includeUpdaterJson: true
-      - name: Build sem assinatura (primeira instalação)
-        if: env.TEM_CHAVE != 'true'
+      - if: steps.ver.outputs.nova == 'true'
+        run: npm install
+      - name: Notas da versão
+        if: steps.ver.outputs.nova == 'true'
+        id: notas
+        shell: bash
+        run: |
+          awk -v v="## ${{ steps.ver.outputs.versao }}" 'index($0,v)==1{f=1;next} /^## /{if(f)exit} f' CHANGELOG.md > notas.md
+          { echo "corpo<<FIM"; cat notas.md; echo "FIM"; } >> "$GITHUB_OUTPUT"
+      - name: Gerar instalador e publicar
+        if: steps.ver.outputs.nova == 'true'
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tagName: v__VERSION__
           releaseName: "Central Sintramomed v__VERSION__"
-          releaseBody: "Instalador. A atualização automática passa a funcionar quando o segredo TAURI_SIGNING_PRIVATE_KEY for cadastrado."
+          releaseBody: ${{ steps.notas.outputs.corpo }}
           releaseDraft: false
           includeUpdaterJson: false
           args: --config src-tauri/tauri.sem-assinatura.conf.json

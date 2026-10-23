@@ -230,7 +230,7 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
       <button data-v="modelos"><span data-ico="print"></span>Modelos para impressão</button>
     </nav>
     <div class="side-foot">
-      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.6</b></span><span id="runtime">modo navegador</span></div>
+      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.7</b></span><span id="runtime">modo navegador</span></div>
       <span id="syncInfo"></span>
       <span id="updInfo">Verificando atualizações…</span>
       <button class="link" id="btnUpdate" type="button">Verificar agora</button>
@@ -243,7 +243,7 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
 
 <script>
 "use strict";
-const APP_VERSION="0.1.6";
+const APP_VERSION="0.1.7";
 /* ---------- utilidades ---------- */
 const $=(s,r=document)=>r.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -372,7 +372,7 @@ const ATALHOS=[
   {id:"escavador",n:"Escavador",d:"Pesquisa de processos por nome",u:"https://www.escavador.com/",t:"pesquisa"},
   {id:"semaforo",n:"Semáforo eSocial",d:"Status dos web services do governo",u:"https://www.gov.br/esocial/pt-br/acesso-ao-sistema/semaforo",t:"governo",semLogin:true}
 ];
-const NOVIDADES=["Trabalhadores aparecem durante a primeira importação (gravação em lotes de 25)","Corrige acentos quebrados no programa instalado","Impede abrir duas janelas do programa ao mesmo tempo","Importação automática: o programa entra sozinho no Sistema eSocial e atualiza os trabalhadores a cada 5 minutos","Senha do Sistema eSocial guardada no Windows, pedida uma única vez","Importação completa do Sistema eSocial: status, última produção, ASO, NR-33/35, EPI, documentos e endereço","Novos status: afastado e inativo no sistema","Cofre de acessos simplificado: só Sistema eSocial e Escavador","Verificação automática de atualizações a cada 5 minutos","Nova interface: tema claro e escuro, barra lateral com ícones, atalhos e indicadores redesenhados","Engrenagem de configurações com cofre de acessos (login e senha) protegido por PIN","Botões Copiar usuário e Copiar senha nos atalhos do painel","Atalho do Escavador no painel","Verificação de antecedentes na ficha e na entrevista"];
+const NOVIDADES=["Atualização sozinha pelo GitHub, sem chave: baixa, instala e reabre o programa","Trabalhadores aparecem durante a primeira importação (gravação em lotes de 25)","Corrige acentos quebrados no programa instalado","Impede abrir duas janelas do programa ao mesmo tempo","Importação automática: o programa entra sozinho no Sistema eSocial e atualiza os trabalhadores a cada 5 minutos","Senha do Sistema eSocial guardada no Windows, pedida uma única vez","Importação completa do Sistema eSocial: status, última produção, ASO, NR-33/35, EPI, documentos e endereço","Novos status: afastado e inativo no sistema","Cofre de acessos simplificado: só Sistema eSocial e Escavador","Verificação automática de atualizações a cada 5 minutos","Nova interface: tema claro e escuro, barra lateral com ícones, atalhos e indicadores redesenhados","Engrenagem de configurações com cofre de acessos (login e senha) protegido por PIN","Botões Copiar usuário e Copiar senha nos atalhos do painel","Atalho do Escavador no painel","Verificação de antecedentes na ficha e na entrevista"];
 
 /* ---------- cofre de acessos: AES-GCM com chave derivada do PIN (PBKDF2). A chave fica só na memória; recarregar a página tranca. ---------- */
 const b64e=u=>btoa(String.fromCharCode(...u));const b64d=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
@@ -417,9 +417,11 @@ function openConfig(){
    <div class="drawer-h"><div><div class="eyebrow">Configurações</div><h2 id="ch">Conexões e acessos</h2></div><button class="btn" id="closeC">Fechar</button></div>
    <div class="drawer-b"><div id="cxBody">${conexaoHTML()}</div><h3 class="eyebrow" style="margin:6px 0 -6px">Cofre de senhas para copiar</h3><div id="vBody">${body()}</div>
     <fieldset><legend>Sobre esta versão</legend><p style="margin:0">Versão <b class="mono">${APP_VERSION}</b> · ${IS_TAURI?"programa instalado":"modo navegador (sempre na versão mais recente)"}</p>
+     ${IS_TAURI?`<label class="chk" style="margin-top:10px"><input type="checkbox" id="autoUpd" ${autoUpd()?"checked":""}> Atualizar sozinho quando sair versão nova no GitHub</label>`:""}
      <ul style="margin:8px 0 0;padding-left:18px">${NOVIDADES.map(n=>`<li>${esc(n)}</li>`).join("")}</ul></fieldset>
    </div></div>`;
   const close=()=>{$("#layer").innerHTML="";render()};$("#scrim").onclick=close;$("#closeC").onclick=close;
+  const au=$("#autoUpd");if(au)au.onchange=()=>{LS.set("cs_auto_upd",au.checked?"1":"0");toast(au.checked?"Atualização automática ligada":"Atualização automática desligada")};
   const redraw=()=>{$("#vBody").innerHTML=body();bind()};
   const redrawCx=()=>{$("#cxBody").innerHTML=conexaoHTML();bindConexao(redrawCx)};bindConexao(redrawCx);
   const bind=()=>{
@@ -915,17 +917,33 @@ function hhmm(d){return `${pad(d.getHours())}:${pad(d.getMinutes())}`}
 function showUpd(v,nov){updPending=v;const b=$("#updBar");b.hidden=false;
   b.innerHTML=`<div class="banner" style="background:var(--accent-soft)"><span><b>Versão ${esc(v)} disponível.</b> ${esc((nov||[]).slice(0,2).join(" · "))}</span><button class="btn sm primary" id="doUpd">Atualizar agora</button></div>`;
   $("#doUpd").onclick=aplicarUpd}
+/* No programa instalado (como no Livro Caixa): consulta as versões publicadas no GitHub,
+   baixa o instalador da versão nova, instala sem perguntas e reabre. Sem chave de assinatura. */
+const GH_RELEASES="https://api.github.com/repos/FerratoBRq/central-sintramomed/releases/latest";
+const cmpVer=(a,b)=>{const x=String(a).replace(/^v/,"").split(".").map(Number),y=String(b).replace(/^v/,"").split(".").map(Number);for(let i=0;i<3;i++){if((x[i]||0)!==(y[i]||0))return (x[i]||0)>(y[i]||0)?1:-1}return 0};
+let updUrl="";
+const autoUpd=()=>LS.get("cs_auto_upd")!=="0";
 async function aplicarUpd(){
-  if(IS_TAURI){try{const up=await window.__TAURI__.updater.check();if(up){toast(`Baixando versão ${up.version}…`);await up.downloadAndInstall();await window.__TAURI__.process.relaunch()}}catch(e){toast("Não foi possível instalar agora. Tente de novo em instantes.")}return}
+  if(IS_TAURI){if(!updUrl){toast("Nenhuma atualização disponível agora");return}
+    toast(`Baixando a versão ${updPending}… o programa vai fechar e abrir de novo sozinho`);
+    try{await tinvoke("instalar_atualizacao",{url:updUrl})}catch(e){toast(String(e))}return}
   location.reload()}
 async function checkUpd(manual){
   const info=$("#updInfo");
   try{
-    if(IS_TAURI){const up=await window.__TAURI__.updater.check();if(up)showUpd(up.version,[up.body||""]);else if(manual)toast("Você já está na versão mais recente")}
+    if(IS_TAURI){const r=await fetch(GH_RELEASES,{cache:"no-store",headers:{Accept:"application/vnd.github+json"}});
+      if(r.status===404){if(manual)toast("Ainda não há versão publicada");}
+      else{if(!r.ok)throw new Error("GitHub "+r.status);const rel=await r.json();const v=String(rel.tag_name||"").replace(/^v/,"");
+        const asset=(rel.assets||[]).find(a=>/-setup\.exe$/i.test(a.name));
+        if(v&&asset&&cmpVer(v,APP_VERSION)>0){updUrl=asset.browser_download_url;
+          const nov=String(rel.body||"").split(/\r?\n/).map(l=>l.replace(/^[-*]\s*/,"").trim()).filter(Boolean);
+          if(autoUpd()&&!Sync.rodando&&!$("#layer").innerHTML){updPending=v;aplicarUpd();return}
+          showUpd(v,nov)}
+        else if(manual)toast("Você já está na versão mais recente")}}
     else{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});const v=await r.json();
       if(v.version&&v.version!==APP_VERSION)showUpd(v.version,v.novidades);else if(manual)toast("Você já está na versão mais recente")}
     const n=new Date();info.textContent=`Verificado às ${hhmm(n)} · próxima às ${hhmm(new Date(n.getTime()+UPD_MS))}`;
-  }catch(e){if(IS_TAURI){const n=new Date();info.textContent=`Versão ${APP_VERSION} · próxima verificação às ${hhmm(new Date(n.getTime()+UPD_MS))}`;if(manual)toast("Nenhuma atualização disponível agora")}else{info.textContent="Sem conexão para verificar. Nova tentativa em 5 min.";if(manual)toast("Não foi possível verificar agora. Confira a internet.")}}
+  }catch(e){info.textContent="Sem conexão com o GitHub. Nova tentativa em 5 min.";if(manual)toast("Não foi possível verificar agora. Confira a internet.")}
 }
 $("#btnUpdate").onclick=()=>checkUpd(true);
 setTimeout(()=>checkUpd(false),4000);setInterval(()=>checkUpd(false),UPD_MS);
