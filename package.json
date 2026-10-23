@@ -1,0 +1,14 @@
+{
+  "name": "central-sintramomed",
+  "version": "0.1.5",
+  "private": true,
+  "scripts": {
+    "web": "npx --yes serve web -l 5173",
+    "tauri": "tauri",
+    "dev": "tauri dev",
+    "build": "tauri build"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2"
+  }
+}

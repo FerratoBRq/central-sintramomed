@@ -1,0 +1,48 @@
+# Gera o instalador .exe a cada tag vX.Y.Z.
+# Com o segredo TAURI_SIGNING_PRIVATE_KEY configurado, também gera o latest.json
+# usado pela atualização automática dos programas já instalados.
+name: Release do .exe
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    env:
+      TEM_CHAVE: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY != '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: swatinem/rust-cache@v2
+        with: { workspaces: "src-tauri -> target" }
+      - run: npm install
+      - name: Build assinado (com atualização automática)
+        if: env.TEM_CHAVE == 'true'
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ""
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: "Central Sintramomed ${{ github.ref_name }}"
+          releaseBody: "Veja as novidades no CHANGELOG.md."
+          releaseDraft: false
+          includeUpdaterJson: true
+      - name: Build sem assinatura (primeira instalação)
+        if: env.TEM_CHAVE != 'true'
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: ${{ github.ref_name }}
+          releaseName: "Central Sintramomed ${{ github.ref_name }}"
+          releaseBody: "Instalador. A atualização automática passa a funcionar quando o segredo TAURI_SIGNING_PRIVATE_KEY for cadastrado."
+          releaseDraft: false
+          includeUpdaterJson: false
+          args: --config "{\"bundle\":{\"createUpdaterArtifacts\":false}}"

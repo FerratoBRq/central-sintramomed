@@ -1,0 +1,936 @@
+<title>Central Sintramomed</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js"></script>
+<style>
+/* Layout: escritório do sindicato — barra lateral clara com ícones, cabeçalho com saudação, conteúdo em cartões arejados; verde-lavoura como cor principal, âmbar de segurança só para alertas */
+:root{
+  --bg:#F3F5F2; --surface:#FFFFFF; --surface-2:#F0F3EF; --ink:#18241E; --muted:#5D6C64; --line:#E1E7E2; --line-2:#CFD8D2;
+  --accent:#1F6B4F; --accent-ink:#FFFFFF; --accent-soft:#E2F0E8; --accent-2:#2E8A66;
+  --amber:#B8730A; --amber-soft:#FBF1DE; --blue:#2F6390; --blue-soft:#E3EDF6; --slate:#55636B; --slate-soft:#EBEFF1;
+  --crit:#C2372C; --crit-soft:#FCE9E7; --warn:#9C5F00; --warn-soft:#FBF0DA; --ok:#23794F; --ok-soft:#E1F2E8;
+  --shadow:0 1px 2px rgba(20,32,26,.05),0 6px 20px rgba(20,32,26,.05);
+  --f-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --f-body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  --r:14px; --r-sm:9px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E1311; --surface:#151C19; --surface-2:#1B2420; --ink:#E5EDE8; --muted:#94A49B; --line:#232D28; --line-2:#2F3B35;
+  --accent:#5CC497; --accent-ink:#06140D; --accent-soft:#163128; --accent-2:#7AD6AD;
+  --amber:#F0B048; --amber-soft:#33270F; --blue:#7FB2DE; --blue-soft:#172A3A; --slate:#A3B1B8; --slate-soft:#1F282C;
+  --crit:#F27F72; --crit-soft:#3A1D1A; --warn:#EAB04C; --warn-soft:#352812; --ok:#62CB93; --ok-soft:#14301F;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E1311; --surface:#151C19; --surface-2:#1B2420; --ink:#E5EDE8; --muted:#94A49B; --line:#232D28; --line-2:#2F3B35;
+  --accent:#5CC497; --accent-ink:#06140D; --accent-soft:#163128; --accent-2:#7AD6AD;
+  --amber:#F0B048; --amber-soft:#33270F; --blue:#7FB2DE; --blue-soft:#172A3A; --slate:#A3B1B8; --slate-soft:#1F282C;
+  --crit:#F27F72; --crit-soft:#3A1D1A; --warn:#EAB04C; --warn-soft:#352812; --ok:#62CB93; --ok-soft:#14301F;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25); color-scheme:dark}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums;font-size:.92em}
+.ico{width:18px;height:18px;flex:none}
+.app{display:grid;grid-template-columns:256px minmax(0,1fr);min-height:100%}
+
+/* barra lateral */
+.side{background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column;gap:6px;position:sticky;top:0;height:100vh;padding:18px 14px max(16px,env(safe-area-inset-bottom,0px));padding-left:max(14px,env(safe-area-inset-left,0px))}
+.brand{display:flex;align-items:center;gap:12px;padding:4px 6px 16px}
+.mark{width:40px;height:40px;border-radius:11px;flex:none;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-family:var(--f-display);font-weight:700;font-size:20px;position:relative;overflow:hidden}
+.mark::after{content:"";position:absolute;left:0;right:0;bottom:0;height:6px;background:repeating-linear-gradient(-45deg,#F2B23A 0 5px,transparent 5px 10px)}
+.brand-t{display:flex;flex-direction:column;min-width:0;line-height:1.15}
+.brand-t b{font-family:var(--f-display);font-size:18px;font-weight:700;letter-spacing:-.01em}
+.brand-t span{font-size:12px;color:var(--muted)}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav-l{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:12px 10px 6px}
+.nav button{all:unset;cursor:pointer;display:flex;align-items:center;gap:11px;padding:9px 10px;border-radius:var(--r-sm);color:var(--muted);font-weight:500;font-size:14.5px}
+.nav button:hover{color:var(--ink);background:var(--surface-2)}
+.nav button[aria-current="page"]{color:var(--accent);background:var(--accent-soft);font-weight:600}
+.nav button:focus-visible{outline:2px solid var(--accent)}
+.nav .count{margin-left:auto;font-family:var(--f-mono);font-size:11px;background:var(--crit);color:#fff;border-radius:20px;padding:1px 8px;font-weight:600}
+.side-foot{margin-top:auto;background:var(--surface-2);border-radius:var(--r);padding:12px 14px;font-size:12.5px;color:var(--muted);display:flex;flex-direction:column;gap:8px}
+.side-foot .row2{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.side-foot button.link{all:unset;cursor:pointer;color:var(--accent);font-weight:600}
+.gear{all:unset;cursor:pointer;width:34px;height:34px;display:grid;place-items:center;border-radius:var(--r-sm);color:var(--muted);border:1px solid var(--line);background:var(--surface)}
+.gear:hover{color:var(--accent);border-color:var(--accent)}
+.gear:focus-visible{outline:2px solid var(--accent)}
+
+/* área principal */
+main{min-width:0;padding-block:28px 56px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1160px;margin:0 auto;display:flex;flex-direction:column;gap:22px;padding-inline:clamp(0px,2vw,16px)}
+.head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:14px}
+.head h1{font-family:var(--f-display);font-size:clamp(26px,3.2vw,34px);font-weight:700;line-height:1.1;margin:0;letter-spacing:-.02em;text-wrap:balance}
+.head p{margin:6px 0 0;color:var(--muted);max-width:62ch}
+.eyebrow{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:flex;flex-direction:column;gap:16px;min-width:0;box-shadow:var(--shadow)}
+.panel h2{font-family:var(--f-display);font-size:19px;font-weight:700;margin:0;letter-spacing:-.01em}
+.panel-h{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+
+/* indicadores */
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.tile{all:unset;box-sizing:border-box;cursor:pointer;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:14px;align-items:center;box-shadow:var(--shadow);transition:transform .15s,border-color .15s}
+.tile:hover{border-color:var(--line-2);transform:translateY(-1px)}
+.tile:focus-visible{outline:2px solid var(--accent)}
+.tile .ic{grid-row:1/3;width:44px;height:44px;border-radius:12px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent)}
+.tile .n{font-family:var(--f-display);font-size:30px;font-weight:700;line-height:1}
+.tile .l{color:var(--muted);font-size:13px;line-height:1.3}
+.tile.crit .ic{background:var(--crit-soft);color:var(--crit)} .tile.crit .n{color:var(--crit)}
+.tile.warn .ic{background:var(--warn-soft);color:var(--warn)} .tile.warn .n{color:var(--warn)}
+.tile.slate .ic{background:var(--slate-soft);color:var(--slate)}
+
+/* atalhos */
+.shortcuts{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.sc{display:flex;flex-direction:column;gap:12px;padding:14px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);transition:border-color .15s,box-shadow .15s}
+.sc:hover{border-color:var(--line-2);box-shadow:var(--shadow)}
+.sc a{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;text-decoration:none;color:inherit}
+.sc .badge{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-family:var(--f-display);font-weight:700;font-size:15px;letter-spacing:.02em}
+.sc .t-sindicato{background:var(--accent-soft);color:var(--accent)} .sc .t-tomadora{background:var(--amber-soft);color:var(--amber)}
+.sc .t-pesquisa{background:var(--blue-soft);color:var(--blue)} .sc .t-governo{background:var(--slate-soft);color:var(--slate)}
+.sc .txt{display:flex;flex-direction:column;min-width:0;line-height:1.3}
+.sc b{font-weight:600;font-size:15px}
+.sc span{font-size:12.5px;color:var(--muted)}
+.sc em{font-style:normal;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+.sc .go{color:var(--muted)} .sc:hover .go{color:var(--accent)}
+.sc-act{display:flex;flex-wrap:wrap;gap:6px;padding-top:10px;border-top:1px dashed var(--line)}
+
+/* botões e campos */
+.btn{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line-2);background:var(--surface);border-radius:var(--r-sm);padding:8px 14px;cursor:pointer;font-weight:600;font-size:14px;text-decoration:none;color:var(--ink);transition:background .15s,border-color .15s}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.primary:hover{background:var(--accent-2);border-color:var(--accent-2);color:var(--accent-ink)}
+.btn.danger{color:var(--crit)} .btn.danger:hover{border-color:var(--crit)}
+.btn.sm{padding:5px 10px;font-size:12.5px;border-radius:8px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.field{display:flex;flex-direction:column;gap:5px;min-width:0}
+.field label{font-size:12.5px;font-weight:600;color:var(--muted)}
+.field input,.field select,.field textarea,.inp{border:1px solid var(--line-2);background:var(--surface);border-radius:var(--r-sm);padding:9px 11px;width:100%;min-width:0;transition:border-color .15s,box-shadow .15s}
+.field input:focus,.field select:focus,.field textarea:focus,.inp:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.field textarea{min-height:72px;resize:vertical}
+.chk{display:flex;align-items:center;gap:9px;font-size:14px}
+.chk input{width:17px;height:17px;accent-color:var(--accent)}
+.form-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.span2{grid-column:span 2}.span4{grid-column:1/-1}
+fieldset{border:1px solid var(--line);border-radius:var(--r);padding:16px 18px 18px;margin:0;min-width:0;background:var(--surface)}
+legend{font-family:var(--f-display);font-weight:700;font-size:15px;padding:0 8px;display:flex;align-items:center;gap:8px}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.search{position:relative;flex:1 1 280px;max-width:380px}
+.search .ico{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted)}
+.search .inp{padding-left:36px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line-2);background:var(--surface);border-radius:20px;padding:5px 13px;cursor:pointer;font-size:13.5px;font-weight:500;color:var(--muted)}
+.chip:hover{color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+
+/* tabelas */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);box-shadow:var(--shadow)}
+table{border-collapse:collapse;width:100%;min-width:660px}
+th,td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--surface-2);font-weight:600}
+tbody tr:last-child td{border-bottom:0}
+tbody tr.click{cursor:pointer} tbody tr.click:hover{background:var(--surface-2)}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+.who{display:flex;align-items:center;gap:11px;min-width:0}
+.av{width:36px;height:36px;border-radius:50%;flex:none;display:grid;place-items:center;font-weight:700;font-size:13px;background:var(--accent-soft);color:var(--accent)}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;border-radius:20px;padding:2px 10px;font-weight:600;white-space:nowrap}
+.pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;flex:none}
+.pill.crit{background:var(--crit-soft);color:var(--crit)} .pill.warn{background:var(--warn-soft);color:var(--warn)} .pill.ok{background:var(--ok-soft);color:var(--ok)}
+.pill.info{background:var(--blue-soft);color:var(--blue)} .pill.info::before{display:none}
+.evt{font-family:var(--f-mono);font-size:11px;border:1px solid var(--line-2);border-radius:6px;padding:0 6px;color:var(--muted);font-weight:500}
+.list{display:flex;flex-direction:column}
+.list .row{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--line)}
+.list .row:last-child{border-bottom:0}
+.list .row a{color:inherit;text-decoration:none;font-weight:500} .list .row a:hover{color:var(--accent)}
+.muted{color:var(--muted)} .small{font-size:12.5px}
+.empty{padding:26px;text-align:center;color:var(--muted);border:1.5px dashed var(--line-2);border-radius:var(--r);background:var(--surface-2)}
+.note{font-size:13px;color:var(--muted);background:var(--surface-2);border-radius:var(--r-sm);padding:10px 12px;line-height:1.5}
+.banner{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;background:var(--amber-soft);color:var(--ink);border-radius:var(--r);padding:12px 16px;font-size:14px}
+
+/* gaveta lateral */
+.scrim{position:fixed;inset:0;background:rgba(8,14,11,.42);backdrop-filter:blur(2px);z-index:40}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(880px,100%);background:var(--bg);z-index:41;display:flex;flex-direction:column;box-shadow:-16px 0 48px rgba(0,0,0,.2);animation:slide .22s ease-out}
+@keyframes slide{from{transform:translateX(24px);opacity:.6}to{transform:none;opacity:1}}
+.drawer-h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px max(22px,env(safe-area-inset-right,0px)) 16px 22px;padding-top:max(16px,env(safe-area-inset-top,0px));background:var(--surface);border-bottom:1px solid var(--line)}
+.drawer-h h2{font-family:var(--f-display);font-size:24px;font-weight:700;margin:0;letter-spacing:-.01em}
+.drawer-b{overflow:auto;padding:22px max(22px,env(safe-area-inset-right,0px)) 22px 22px;display:flex;flex-direction:column;gap:16px}
+.drawer-f{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end;padding:14px 22px;padding-bottom:max(14px,env(safe-area-inset-bottom,0px));background:var(--surface);border-top:1px solid var(--line)}
+.docslots{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
+.slot{border:1.5px dashed var(--line-2);border-radius:var(--r-sm);padding:12px;display:flex;flex-direction:column;gap:8px;background:var(--surface-2)}
+.slot.has{border-style:solid;border-color:var(--ok);background:var(--ok-soft)}
+.slot .t{font-weight:600;font-size:13.5px;display:flex;justify-content:space-between;gap:6px}
+.slot .f{font-size:12.5px;color:var(--muted);display:flex;flex-direction:column;gap:4px}
+.slot .f a{color:var(--accent);cursor:pointer;text-decoration:underline;word-break:break-all}
+
+/* fatiador */
+.drop{border:2px dashed var(--line-2);border-radius:var(--r);padding:44px 20px;text-align:center;background:var(--surface);cursor:pointer;display:flex;flex-direction:column;gap:8px;align-items:center;transition:background .15s,border-color .15s}
+.drop:hover,.drop.over{border-color:var(--accent);background:var(--accent-soft)}
+.drop .ic{width:56px;height:56px;border-radius:16px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent)}
+.drop b{font-family:var(--f-display);font-size:21px;font-weight:700}
+.pages{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+.page{border:1px solid var(--line);border-radius:var(--r);background:var(--surface);padding:12px;display:flex;flex-direction:column;gap:8px}
+.page canvas,.page .ph{width:100%;aspect-ratio:210/297;max-width:100%;background:var(--surface-2);border:1px solid var(--line);border-radius:6px;display:block}
+.page .ph{display:flex;align-items:center;justify-content:center;font-family:var(--f-display);font-size:40px;color:var(--muted)}
+.page .pn{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+
+/* entrevista */
+.q{display:flex;flex-direction:column;gap:10px;padding:16px 0;border-bottom:1px solid var(--line)}
+.q:last-child{border-bottom:0}
+.q .qt{font-weight:600;max-width:75ch}
+.q .qn{display:inline-grid;place-items:center;min-width:26px;height:26px;border-radius:8px;background:var(--accent-soft);color:var(--accent);font-family:var(--f-mono);font-size:12px;margin-right:8px}
+.q .opts{display:flex;flex-direction:column;gap:7px;padding-left:34px}
+.q .opt{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.q .opt input[type=text]{flex:1 1 200px}
+.q .law{font-size:12.5px;color:var(--muted);max-width:75ch;padding-left:34px}
+.hist{display:grid;grid-template-columns:2fr 1.2fr .6fr;gap:8px;padding-left:34px}
+
+/* pré-visualização */
+.modal{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.modal-c{background:var(--surface);border-radius:var(--r);max-width:820px;width:100%;max-height:100%;display:flex;flex-direction:column;overflow:hidden;position:relative;z-index:1}
+.modal-c .drawer-b{background:var(--surface-2);align-items:center}
+.modal-c canvas,.modal-c img{max-width:100%;height:auto;box-shadow:0 2px 10px rgba(0,0,0,.15);background:#fff}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:max(22px,calc(env(safe-area-inset-bottom,0px) + 12px));background:var(--ink);color:var(--bg);padding:11px 18px;border-radius:30px;z-index:60;font-size:14px;font-weight:500;max-width:calc(100% - 32px);box-shadow:var(--shadow)}
+
+@media (max-width:1060px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}.form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.grid2{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:780px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  .side{position:sticky;top:0;height:auto;z-index:20;padding:10px 0 0;border-right:0;border-bottom:1px solid var(--line);gap:0}
+  .brand{padding:0 max(16px,env(safe-area-inset-right,0px)) 8px max(16px,env(safe-area-inset-left,0px))}
+  .brand .gear{margin-left:auto}
+  .mark{width:34px;height:34px;font-size:17px}
+  .nav{flex-direction:row;overflow-x:auto;padding:0 12px 10px;gap:4px}
+  .nav-l,.side-foot{display:none}
+  .nav button{white-space:nowrap;padding:7px 11px}
+  .form-grid{grid-template-columns:minmax(0,1fr)} .span2{grid-column:auto}
+  .hist,.q .opts,.q .law{padding-left:0} .hist{grid-template-columns:minmax(0,1fr)}
+  .tiles{gap:10px} .tile{padding:14px} .tile .ic{width:38px;height:38px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="app">
+  <aside class="side">
+    <div class="brand"><div class="mark" aria-hidden="true">S</div><div class="brand-t"><b>Central Sintramomed</b><span>Gestão de Pessoas · Dourados/MS</span></div>
+      <button class="gear" id="btnCfg" type="button" aria-label="Configurações e acessos" title="Configurações e acessos" style="margin-left:auto"><span data-ico="gear"></span></button></div>
+    <nav class="nav" id="nav" aria-label="Seções">
+      <div class="nav-l">Rotina</div>
+      <button data-v="painel"><span data-ico="home"></span>Painel</button>
+      <button data-v="trabalhadores"><span data-ico="users"></span>Trabalhadores</button>
+      <button data-v="pendencias"><span data-ico="alert"></span>Pendências <span class="count" id="navCount" hidden></span></button>
+      <button data-v="relatorios"><span data-ico="list"></span>Listas e inativos</button>
+      <div class="nav-l">Ferramentas</div>
+      <button data-v="fatiador"><span data-ico="scissors"></span>Fatiador de PDF</button>
+      <button data-v="entrevista"><span data-ico="chat"></span>Entrevista online</button>
+      <button data-v="modelos"><span data-ico="print"></span>Modelos para impressão</button>
+    </nav>
+    <div class="side-foot">
+      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.5</b></span><span id="runtime">modo navegador</span></div>
+      <span id="syncInfo"></span>
+      <span id="updInfo">Verificando atualizações…</span>
+      <button class="link" id="btnUpdate" type="button">Verificar agora</button>
+    </div>
+  </aside>
+  <main><div class="wrap"><div id="updBar" hidden></div><div id="view" style="display:flex;flex-direction:column;gap:22px"></div></div></main>
+</div>
+<div id="layer"></div>
+<input type="file" id="hiddenFile" hidden>
+
+<script>
+"use strict";
+const APP_VERSION="0.1.5";
+/* ---------- utilidades ---------- */
+const $=(s,r=document)=>r.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const uid=()=>Math.random().toString(36).slice(2,10)+Date.now().toString(36).slice(-4);
+const pad=n=>String(n).padStart(2,"0");
+const iso=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const TODAY=new Date(); TODAY.setHours(0,0,0,0);
+const parse=s=>{if(!s)return null;const[a,b,c]=s.split("-").map(Number);return new Date(a,b-1,c)};
+const addDays=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
+const addYears=(s,n)=>{const d=parse(s);if(!d)return"";d.setFullYear(d.getFullYear()+n);return iso(d)};
+const daysBetween=(a,b)=>Math.round((b-a)/864e5);
+const br=s=>{const d=parse(s);return d?`${pad(d.getDate())}/${pad(d.getMonth()+1)}/${d.getFullYear()}`:"—"};
+const MESES=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+const ym=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}`;
+const ymLabel=s=>{const[a,b]=s.split("-").map(Number);return `${MESES[b-1]}/${a}`};
+const prevYm=s=>{const[a,b]=s.split("-").map(Number);const d=new Date(a,b-2,1);return ym(d)};
+const fmtCPF=v=>{const d=String(v||"").replace(/\D/g,"").slice(0,11);return d.replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d{1,2})$/,"$1-$2")};
+const cpfOk=v=>{const c=String(v||"").replace(/\D/g,"");if(c.length!==11||/^(\d)\1+$/.test(c))return false;let s=0;for(let i=0;i<9;i++)s+=+c[i]*(10-i);let r=(s*10)%11%10;if(r!==+c[9])return false;s=0;for(let i=0;i<10;i++)s+=+c[i]*(11-i);r=(s*10)%11%10;return r===+c[10]};
+function toast(msg){const t=document.createElement("div");t.className="toast";t.setAttribute("role","status");t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2800)}
+const IS_TAURI=!!(window.__TAURI__||window.__TAURI_INTERNALS__);
+const ICONS={
+  home:'<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M10 21v-6h4v6"/>',
+  users:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7"/><path d="M18.5 14a6.5 6.5 0 0 1 3 6"/>',
+  alert:'<path d="M12 3 2 20h20L12 3z"/><path d="M12 10v4"/><path d="M12 17.5v.01"/>',
+  list:'<path d="M8 6h13M8 12h13M8 18h13"/><path d="M3.5 6h.01M3.5 12h.01M3.5 18h.01"/>',
+  scissors:'<circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4 8.1 15.9M14.5 14.5 20 20M8.1 8.1 12 12"/>',
+  chat:'<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M8.5 10.5h7M8.5 13.5h4"/>',
+  print:'<path d="M6 9V3h12v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M6 14h12v7H6z"/>',
+  gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>',
+  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  pause:'<circle cx="12" cy="12" r="9"/><path d="M10 9v6M14 9v6"/>',
+  arrow:'<path d="M7 17 17 7M9 7h8v8"/>',
+  search:'<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+  upload:'<path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v4h16v-4"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>'
+};
+const ico=(n,s=18)=>`<svg class="ico" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n]||""}</svg>`;
+document.querySelectorAll("[data-ico]").forEach(s=>s.outerHTML=ico(s.dataset.ico));
+const iniciais=n=>String(n||"?").trim().split(/\s+/).filter(p=>p.length>2||/^[A-ZÁ-Ú]/.test(p)).slice(0,2).map(p=>p[0]).join("").toUpperCase()||"?";
+const saudacao=()=>{const h=new Date().getHours();return h<12?"Bom dia":h<18?"Boa tarde":"Boa noite"};
+
+/* ---------- armazenamento (IndexedDB no navegador; no .exe será trocado por arquivos locais criptografados) ---------- */
+const Store={db:null,mem:{workers:new Map(),docs:new Map(),lists:new Map(),interviews:new Map()},
+  async open(){try{this.db=await new Promise((res,rej)=>{const r=indexedDB.open("central-sintramomed",1);r.onupgradeneeded=()=>{const db=r.result;["workers","docs","lists","interviews"].forEach(s=>{if(!db.objectStoreNames.contains(s))db.createObjectStore(s,{keyPath:"id"})})};r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}catch(e){this.db=null}},
+  async all(s){if(!this.db)return[...this.mem[s].values()];try{return await new Promise((res,rej)=>{const q=this.db.transaction(s).objectStore(s).getAll();q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error)})}catch(e){return[...this.mem[s].values()]}},
+  async put(s,o){this.mem[s].set(o.id,o);if(!this.db)return;try{await new Promise((res,rej)=>{const t=this.db.transaction(s,"readwrite");t.objectStore(s).put(o);t.oncomplete=res;t.onerror=()=>rej(t.error)})}catch(e){}},
+  async del(s,id){this.mem[s].delete(id);if(!this.db)return;try{await new Promise((res,rej)=>{const t=this.db.transaction(s,"readwrite");t.objectStore(s).delete(id);t.oncomplete=res;t.onerror=()=>rej(t.error)})}catch(e){}}
+};
+const S={workers:[],docs:[],lists:[],interviews:[]};
+async function loadAll(){for(const k of Object.keys(S))S[k]=await Store.all(k)}
+
+/* ---------- regras ---------- */
+const DOC_TIPOS=["RG","CPF","CNH","CTPS","Ficha de cadastro","Ficha de EPI","ASO","NR-33","NR-35","Ficha de entrevista","Comprovante de residência","Outro"];
+const DOC_OBRIG=["RG","CPF","Ficha de cadastro","Ficha de EPI","ASO"];
+const CATEGORIAS={"202":"202 · Avulso não portuário","201":"201 · Avulso portuário","701":"701 · Contribuinte individual","901":"901 · Estagiário"};
+const STATUS={ativo:"Ativo",a_desligar:"A desligar",afastado:"Afastado",inativo:"Inativo no sistema",desligado:"Desligado"};
+const ATIVOS=w=>w.status==="ativo"||w.status==="a_desligar";
+const INATIVO_DIAS=90;
+const escavadorURL=n=>"https://www.escavador.com/busca?q="+encodeURIComponent(`"${n}"`);
+const PF_URL="https://www.gov.br/pt-br/servicos/emitir-certidao-de-antecedentes-criminais";
+function diasSemProducao(w){const ref=parse(w.ultimaProducao)||parse(w.dtCadastro);return ref?daysBetween(ref,TODAY):0}
+function docsDe(wid){return S.docs.filter(d=>d.workerId===wid)}
+function venc(label,dt,evt){if(!dt)return null;const d=daysBetween(TODAY,parse(dt));if(d<0)return{l:"crit",t:`${label} vencido há ${-d} d`,evt};if(d<=30)return{l:"warn",t:`${label} vence em ${d} d`,evt};return null}
+function pendencias(w){
+  const p=[];if(w.status==="desligado"){if(!w.ev?.s2399)p.push({l:"crit",t:"Término não enviado",evt:"S-2399"});return p}
+  if(w.status==="inativo"||w.status==="afastado")return p;
+  if(!w.ev?.s2300)p.push({l:"crit",t:"Início não enviado",evt:"S-2300"});
+  if(!w.asoData)p.push({l:"crit",t:"Sem ASO admissional",evt:"S-2220"});else{const v=venc("ASO",w.asoValidade,"S-2220");if(v)p.push(v)}
+  if(!w.ev?.s2240)p.push({l:"warn",t:"Condições ambientais não registradas",evt:"S-2240"});
+  if(w.exige35){if(!w.nr35Data)p.push({l:"warn",t:"Sem treinamento NR-35",evt:"NR-35"});else{const v=venc("NR-35",w.nr35Validade,"NR-35");if(v)p.push(v)}}
+  if(w.exige33){if(!w.nr33Data)p.push({l:"warn",t:"Sem treinamento NR-33",evt:"NR-33"});else{const v=venc("NR-33",w.nr33Validade,"NR-33");if(v)p.push(v)}}
+  if(w.cnhValidade){const v=venc("CNH",w.cnhValidade,"CNH");if(v)p.push(v)}
+  if(!w.epiEntrega)p.push({l:"warn",t:"Ficha de EPI não entregue",evt:"EPI"});
+  const tem=new Set(docsDe(w.id).map(d=>d.tipo));const falta=DOC_OBRIG.filter(t=>!tem.has(t));
+  if(falta.length)p.push({l:"warn",t:`Faltam anexos: ${falta.join(", ")}`,evt:"DOC"});
+  if(w.antecResultado==="Requer análise da diretoria")p.push({l:"warn",t:"Antecedentes aguardando análise",evt:"ANTEC"});
+  if(w.status==="a_desligar"&&!w.ev?.s2399)p.push({l:"crit",t:"Marcado para desligar: enviar término",evt:"S-2399"});
+  else{const ds=diasSemProducao(w);if(w.status==="ativo"&&ds>INATIVO_DIAS)p.push({l:"warn",t:`Sem produção há ${ds} dias`,evt:"PROD"})}
+  return p}
+const nivel=w=>{const p=pendencias(w);return p.some(x=>x.l==="crit")?"crit":p.length?"warn":"ok"};
+const pillsHTML=(p,max=3)=>p.length?p.slice(0,max).map(x=>`<span class="pill ${x.l}"><span class="evt" style="border:0;padding:0;color:inherit">${esc(x.evt)}</span> ${esc(x.t)}</span>`).join(" ")+(p.length>max?` <span class="pill info">+${p.length-max}</span>`:""):`<span class="pill ok">Em dia</span>`;
+
+/* ---------- exemplos (marcados) ---------- */
+async function seedIfEmpty(){
+  if(S.workers.length)return;
+  const d=n=>iso(addDays(TODAY,n));
+  const ex=[
+    ["Antônio Ribeiro da Silva","52998224725",-420,-3,true,true,d(-200),d(165),d(-300),d(430),true,false],
+    ["Marcos Vinícius Ferreira","11144477735",-380,-12,true,true,d(-350),d(15),d(-700),d(20),true,false],
+    ["José Carlos Almeida","39053344705",-300,-130,true,false,d(-380),d(-15),null,null,true,false],
+    ["Reginaldo Souza Pinto","15350946056",-250,-110,true,true,d(-240),d(125),d(-240),d(490),true,true],
+    ["Paulo Henrique Matos","71428793860",-40,-5,true,false,d(-38),d(327),null,null,true,false],
+    ["Edson Luiz Cardoso","86288366757",-35,null,false,false,null,null,null,null,true,false],
+    ["Valdecir Gomes Nunes","98765432100",-28,-2,true,true,d(-27),d(338),d(-25),d(705),true,false],
+    ["Fábio Rodrigues Lima","04170458087",-6,null,false,false,null,null,null,null,true,false]
+  ];
+  for(const [nome,cpf,cad,prod,s2300,s2240,aso,asoV,nr35,nr35V,ex35,ex33] of ex){
+    const w={id:uid(),exemplo:true,nome,cpf,nis:"",dtNasc:"",telefone:"(67) 9 9"+String(Math.floor(1000+Math.random()*8999))+"-"+String(Math.floor(1000+Math.random()*8999)),email:"",
+      matricula:String(1000+S.workers.length),categoria:"202",dtCadastro:d(cad),dtInicio:d(cad+1),funcao:"Movimentador de mercadorias",ultimaProducao:prod===null?"":d(prod),status:"ativo",dtTermino:"",
+      rgNum:"",rgOrgao:"SSP/MS",cnhNum:"",cnhCat:"",cnhValidade:"",ctpsNum:"",ctpsSerie:"",
+      ev:{s2300,s2240,s2399:false},asoData:aso||"",asoValidade:asoV||"",epiEntrega:aso?aso:"",nr35Data:nr35||"",nr35Validade:nr35V||"",exige35:ex35,nr33Data:ex33?d(-200):"",nr33Validade:ex33?d(165):"",exige33:ex33,obs:""};
+    S.workers.push(w);await Store.put("workers",w)}
+}
+async function limparExemplos(){for(const w of S.workers.filter(w=>w.exemplo)){for(const dc of docsDe(w.id))await Store.del("docs",dc.id);await Store.del("workers",w.id)}await loadAll();toast("Exemplos removidos");render()}
+
+/* ---------- roteamento ---------- */
+const VIEWS=["painel","trabalhadores","pendencias","fatiador","relatorios","entrevista","modelos"];
+let current=VIEWS.includes(location.hash.slice(1))?location.hash.slice(1):"painel";
+let ui={filtro:"todos",busca:"",nivelPend:"todos",listaAlvo:ym(TODAY)};
+function go(v){current=v;try{history.replaceState(null,"","#"+v)}catch(e){}render();window.scrollTo(0,0)}
+$("#nav").addEventListener("click",e=>{const b=e.target.closest("button[data-v]");if(b)go(b.dataset.v)});
+function render(){
+  document.querySelectorAll("#nav button").forEach(b=>b.setAttribute("aria-current",b.dataset.v===current?"page":"false"));
+  const crit=S.workers.filter(w=>nivel(w)==="crit").length;const nc=$("#navCount");nc.hidden=!crit;nc.textContent=crit;
+  ({painel:vPainel,trabalhadores:vTrab,pendencias:vPend,fatiador:vFat,relatorios:vRel,entrevista:vEnt,modelos:vMod})[current]();
+}
+const exBanner=()=>S.workers.some(w=>w.exemplo)?`<div class="banner"><span><b>Dados de exemplo.</b> Os trabalhadores marcados como exemplo servem só para testar as telas.</span><button class="btn sm" id="clrEx">Remover exemplos</button></div>`:"";
+function bindBanner(){const b=$("#clrEx");if(b)b.onclick=limparExemplos}
+
+/* ---------- PAINEL ---------- */
+const ATALHOS=[
+  {id:"esocial",n:"Sistema eSocial",d:"Folha e eventos S-2300 · Guia Campo Grande",u:"https://sistemaesocial.guiacampogrande.com/",t:"sindicato",extra:"Cidade"},
+  {id:"cargill",n:"Cargill · GEC",d:"Gestão de terceiros · SistemasGAP",u:"https://gec.sistemasgap.com.br/login",t:"tomadora",semLogin:true},
+  {id:"cvale",n:"C.Vale · Cesla",d:"Portal Cesla (login FusionAuth)",u:"https://wssolution.fusionauth.io/oauth2/authorize?response_type=code&client_id=b94a87eb-797e-4c53-8619-1e772ab58f7b&redirect_uri=https%3A%2F%2Fcesla.tech%2F&scope=offline_access",t:"tomadora",semLogin:true},
+  {id:"coamo",n:"Coamo · Guardião",d:"Caixa de entrada Guardião Digital",u:"https://easy.guardiaodigital.com.br/inbox",t:"tomadora",semLogin:true},
+  {id:"escavador",n:"Escavador",d:"Pesquisa de processos por nome",u:"https://www.escavador.com/",t:"pesquisa"},
+  {id:"semaforo",n:"Semáforo eSocial",d:"Status dos web services do governo",u:"https://www.gov.br/esocial/pt-br/acesso-ao-sistema/semaforo",t:"governo",semLogin:true}
+];
+const NOVIDADES=["Importação automática: o programa entra sozinho no Sistema eSocial e atualiza os trabalhadores a cada 5 minutos","Senha do Sistema eSocial guardada no Windows, pedida uma única vez","Importação completa do Sistema eSocial: status, última produção, ASO, NR-33/35, EPI, documentos e endereço","Novos status: afastado e inativo no sistema","Cofre de acessos simplificado: só Sistema eSocial e Escavador","Verificação automática de atualizações a cada 5 minutos","Nova interface: tema claro e escuro, barra lateral com ícones, atalhos e indicadores redesenhados","Engrenagem de configurações com cofre de acessos (login e senha) protegido por PIN","Botões Copiar usuário e Copiar senha nos atalhos do painel","Atalho do Escavador no painel","Verificação de antecedentes na ficha e na entrevista"];
+
+/* ---------- cofre de acessos: AES-GCM com chave derivada do PIN (PBKDF2). A chave fica só na memória; recarregar a página tranca. ---------- */
+const b64e=u=>btoa(String.fromCharCode(...u));const b64d=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
+const LS={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v);return true}catch(e){return false}},del(k){try{localStorage.removeItem(k)}catch(e){}}};
+const Vault={key:null,salt:null,data:null,
+  exists(){return !!LS.get("cs_vault")},
+  get open(){return !!this.data},
+  async derive(pin,salt){const base=await crypto.subtle.importKey("raw",new TextEncoder().encode(pin),"PBKDF2",false,["deriveKey"]);return crypto.subtle.deriveKey({name:"PBKDF2",salt,iterations:250000,hash:"SHA-256"},base,{name:"AES-GCM",length:256},false,["encrypt","decrypt"])},
+  async create(pin){this.salt=crypto.getRandomValues(new Uint8Array(16));this.key=await this.derive(pin,this.salt);this.data={esocial:{user:"Gabriel",extra:"Dourados MS",pass:""}};return this.save()},
+  async unlock(pin){const raw=JSON.parse(LS.get("cs_vault"));const salt=b64d(raw.s);const key=await this.derive(pin,salt);const pt=await crypto.subtle.decrypt({name:"AES-GCM",iv:b64d(raw.i)},key,b64d(raw.c));this.key=key;this.salt=salt;this.data=JSON.parse(new TextDecoder().decode(pt))},
+  async save(){const iv=crypto.getRandomValues(new Uint8Array(12));const ct=await crypto.subtle.encrypt({name:"AES-GCM",iv},this.key,new TextEncoder().encode(JSON.stringify(this.data)));return LS.set("cs_vault",JSON.stringify({s:b64e(this.salt),i:b64e(iv),c:b64e(new Uint8Array(ct))}))},
+  lock(){this.key=null;this.data=null},
+  reset(){LS.del("cs_vault");this.lock()}
+};
+function copyText(t,label){if(!t){toast(`${label} não cadastrado`);return}
+  const ok=()=>toast(`${label} copiado`);const fb=()=>{const ta=document.createElement("textarea");ta.value=t;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();let r=false;try{r=document.execCommand("copy")}catch(e){}ta.remove();r?ok():toast("Não foi possível copiar. Abra a engrenagem e copie manualmente.")};
+  if(navigator.clipboard?.writeText)navigator.clipboard.writeText(t).then(ok,fb);else fb()}
+function scHTML(a){const c=Vault.open?Vault.data[a.id]:null;const act=c&&(c.user||c.pass)?`<div class="sc-act">${c.user?`<button class="btn sm" data-cu="${a.id}">Copiar usuário</button>`:""}${c.pass?`<button class="btn sm" data-cp="${a.id}">Copiar senha</button>`:""}${c.extra?`<button class="btn sm" data-ce="${a.id}">Copiar ${esc((a.extra||"extra").toLowerCase())}</button>`:""}</div>`:"";
+  return `<div class="sc"><a href="${esc(a.u)}" target="_blank" rel="noopener"><span class="badge t-${a.t}">${esc(iniciais(a.n.replace("·"," ")))}</span><span class="txt"><em>${esc(a.t)}</em><b>${esc(a.n)}</b><span>${esc(a.d)}</span></span><span class="go">${ico("arrow",18)}</span></a>${act}</div>`}
+function bindSc(){document.querySelectorAll("[data-cu]").forEach(b=>b.onclick=()=>copyText(Vault.data[b.dataset.cu]?.user,"Usuário"));
+  document.querySelectorAll("[data-cp]").forEach(b=>b.onclick=()=>copyText(Vault.data[b.dataset.cp]?.pass,"Senha"));
+  document.querySelectorAll("[data-ce]").forEach(b=>b.onclick=()=>copyText(Vault.data[b.dataset.ce]?.extra,"Campo"))}
+
+/* ---------- CONFIGURAÇÕES (engrenagem) ---------- */
+function openConfig(){
+  const body=()=>{
+    if(!Vault.exists())return `<div class="note">Crie um PIN de pelo menos 6 dígitos. Os logins e senhas ficam guardados criptografados neste computador e só abrem com o PIN. Ninguém, nem a Anthropic, consegue ler sem ele.</div>
+      <div class="form-grid"><div class="field span2"><label for="pin1">Novo PIN</label><input id="pin1" type="password" inputmode="numeric" autocomplete="new-password"></div><div class="field span2"><label for="pin2">Repita o PIN</label><input id="pin2" type="password" inputmode="numeric" autocomplete="new-password"></div></div>
+      <div class="toolbar"><button class="btn primary" id="vCreate">Criar cofre</button></div>`;
+    if(!Vault.open)return `<div class="note">O cofre está trancado. Digite o PIN para ver e editar os acessos.</div>
+      <div class="form-grid"><div class="field span2"><label for="pinU">PIN</label><input id="pinU" type="password" inputmode="numeric" autocomplete="current-password"></div></div>
+      <div class="toolbar"><button class="btn primary" id="vUnlock">Destravar</button><span style="flex:1"></span><button class="btn sm danger" id="vReset">Esqueci o PIN: apagar cofre</button></div>`;
+    return `<div class="note">Preencha só os sistemas que você usa. A senha fica criptografada; no painel aparecem os botões Copiar usuário e Copiar senha para colar na tela de login.</div>
+      ${ATALHOS.filter(a=>!a.semLogin).map(a=>{const c=Vault.data[a.id]||{};return `<fieldset><legend>${esc(a.n)}</legend><div class="form-grid">
+        <div class="field"><label for="u_${a.id}">Usuário / login</label><input id="u_${a.id}" data-vu="${a.id}" autocomplete="off" value="${esc(c.user||"")}"></div>
+        <div class="field"><label for="p_${a.id}">Senha</label><div class="toolbar" style="flex-wrap:nowrap"><input id="p_${a.id}" data-vp="${a.id}" type="password" autocomplete="new-password" value="${esc(c.pass||"")}" class="inp"><button class="btn sm" type="button" data-sp="${a.id}">Mostrar</button></div></div>
+        <div class="field span2"><label for="e_${a.id}">${esc(a.extra||"Outro campo (opcional)")}</label><input id="e_${a.id}" data-ve="${a.id}" autocomplete="off" value="${esc(c.extra||"")}"></div>
+      </div></fieldset>`}).join("")}
+      <div class="toolbar"><button class="btn primary" id="vSave">Salvar acessos</button><button class="btn" id="vLock">Trancar cofre</button></div>`;
+  };
+  $("#layer").innerHTML=`<div class="scrim" id="scrim"></div><div class="drawer" role="dialog" aria-modal="true" aria-labelledby="ch">
+   <div class="drawer-h"><div><div class="eyebrow">Configurações</div><h2 id="ch">Conexões e acessos</h2></div><button class="btn" id="closeC">Fechar</button></div>
+   <div class="drawer-b"><div id="cxBody">${conexaoHTML()}</div><h3 class="eyebrow" style="margin:6px 0 -6px">Cofre de senhas para copiar</h3><div id="vBody">${body()}</div>
+    <fieldset><legend>Sobre esta versão</legend><p style="margin:0">Versão <b class="mono">${APP_VERSION}</b> · ${IS_TAURI?"programa instalado":"modo navegador (sempre na versão mais recente)"}</p>
+     <ul style="margin:8px 0 0;padding-left:18px">${NOVIDADES.map(n=>`<li>${esc(n)}</li>`).join("")}</ul></fieldset>
+   </div></div>`;
+  const close=()=>{$("#layer").innerHTML="";render()};$("#scrim").onclick=close;$("#closeC").onclick=close;
+  const redraw=()=>{$("#vBody").innerHTML=body();bind()};
+  const redrawCx=()=>{$("#cxBody").innerHTML=conexaoHTML();bindConexao(redrawCx)};bindConexao(redrawCx);
+  const bind=()=>{
+    const c=$("#vCreate");if(c)c.onclick=async()=>{const a=$("#pin1").value,b=$("#pin2").value;if(!/^\d{6,}$/.test(a)){toast("O PIN precisa ter pelo menos 6 números");return}if(a!==b){toast("Os dois PINs não são iguais");return}
+      if(!(await Vault.create(a))){toast("Este navegador não permite guardar dados. Use o programa instalado.");Vault.lock();return}toast("Cofre criado");redraw()};
+    const u=$("#vUnlock");if(u){const go=async()=>{try{await Vault.unlock($("#pinU").value);toast("Cofre destravado");redraw()}catch(e){toast("PIN incorreto")}};u.onclick=go;$("#pinU").onkeydown=e=>{if(e.key==="Enter")go()};$("#pinU").focus()}
+    const r=$("#vReset");if(r)r.onclick=()=>{if(!r.dataset.armed){r.dataset.armed="1";r.textContent="Confirmar: apagar todos os acessos";return}Vault.reset();toast("Cofre apagado");redraw()};
+    document.querySelectorAll("[data-sp]").forEach(b=>b.onclick=()=>{const i=$("#p_"+b.dataset.sp);const s=i.type==="password";i.type=s?"text":"password";b.textContent=s?"Ocultar":"Mostrar"});
+    const s=$("#vSave");if(s)s.onclick=async()=>{ATALHOS.filter(a=>!a.semLogin).forEach(a=>{Vault.data[a.id]={user:$("#u_"+a.id).value.trim(),pass:$("#p_"+a.id).value,extra:$("#e_"+a.id).value.trim()}});
+      toast(await Vault.save()?"Acessos salvos":"Não foi possível salvar neste navegador")};
+    const l=$("#vLock");if(l)l.onclick=()=>{Vault.lock();toast("Cofre trancado");redraw()};
+  };bind();
+}
+function vPainel(){
+  const ativos=S.workers.filter(ATIVOS);
+  const crit=ativos.filter(w=>nivel(w)==="crit");
+  const vencs=[];ativos.forEach(w=>pendencias(w).filter(p=>/venc/.test(p.t)).forEach(p=>vencs.push({w,p})));
+  const inat=ativos.filter(w=>w.status==="ativo"&&diasSemProducao(w)>INATIVO_DIAS);
+  const mes=ym(TODAY);const novos=S.workers.filter(w=>(w.dtCadastro||"").startsWith(mes));
+  $("#view").innerHTML=`
+  <div class="head"><div><div class="eyebrow">${esc(TODAY.toLocaleDateString("pt-BR",{weekday:"long",day:"numeric",month:"long"}))}</div><h1>${saudacao()}, Gabriel</h1><p>Veja o que precisa de atenção hoje e acesse os sistemas das tomadoras.</p></div>
+  <button class="btn primary" id="novoTrab">${ico("plus",16)} Novo trabalhador</button></div>
+  ${IS_TAURI&&Sync.cfg&&!Sync.cfg.configurado?`<div class="banner" style="background:var(--accent-soft)"><span><b>Conecte o Sistema eSocial uma vez.</b> Depois disso os trabalhadores entram e se atualizam sozinhos a cada 5 minutos.</span><button class="btn sm primary" id="bnCx">Conectar agora</button></div>`:exBanner()}
+  <div class="tiles">
+    <button class="tile" data-go="trabalhadores"><span class="ic">${ico("users",22)}</span><span class="n">${ativos.length}</span><span class="l">Trabalhadores ativos</span></button>
+    <button class="tile crit" data-go="pendencias"><span class="ic">${ico("alert",22)}</span><span class="n">${crit.length}</span><span class="l">Com pendência crítica</span></button>
+    <button class="tile warn" data-go="pendencias"><span class="ic">${ico("clock",22)}</span><span class="n">${vencs.length}</span><span class="l">Vencidos ou vencendo em 30 dias</span></button>
+    <button class="tile slate" data-go="relatorios"><span class="ic">${ico("pause",22)}</span><span class="n">${inat.length}</span><span class="l">Sem produção há +3 meses</span></button>
+  </div>
+  ${LS.get("cs_ver_visto")!==APP_VERSION?`<div class="banner" style="background:var(--accent-soft)"><span><b>Atualizado para a versão ${APP_VERSION}.</b> ${esc(NOVIDADES.slice(0,2).join(" · "))}</span><button class="btn sm" id="okVer">Entendi</button></div>`:""}
+  <section class="panel"><div class="panel-h"><h2>Atalhos</h2><span class="toolbar"><span class="small muted">Abre em nova aba</span>${Vault.exists()?(Vault.open?`<span class="pill ok">Acessos destravados</span>`:`<button class="btn sm" id="unlockSc">Destravar acessos</button>`):`<button class="btn sm" id="setupSc">Cadastrar logins e senhas</button>`}</span></div>
+    <div class="shortcuts">${ATALHOS.map(scHTML).join("")}</div>
+  </section>
+  <div class="grid2">
+    <section class="panel"><div class="panel-h"><h2>Vencimentos</h2><span class="small muted">ASO, NR-33, NR-35, CNH</span></div>
+      ${vencs.length?`<div class="list">${vencs.sort((a,b)=>a.p.l===b.p.l?0:a.p.l==="crit"?-1:1).slice(0,8).map(({w,p})=>`<div class="row"><a href="#" data-w="${w.id}" style="color:inherit">${esc(w.nome)}</a><span class="pill ${p.l}">${esc(p.t)}</span></div>`).join("")}</div>`:`<div class="empty">Nada vencendo nos próximos 30 dias.</div>`}
+    </section>
+    <section class="panel"><div class="panel-h"><h2>Cadastrados em ${MESES[TODAY.getMonth()]}</h2><span class="small muted">Entram na lista de ${ymLabel(ym(new Date(TODAY.getFullYear(),TODAY.getMonth()+1,1)))}</span></div>
+      ${novos.length?`<div class="list">${novos.map(w=>`<div class="row"><a href="#" data-w="${w.id}" style="color:inherit">${esc(w.nome)}</a><span class="mono small muted">${br(w.dtCadastro)}</span></div>`).join("")}</div>`:`<div class="empty">Ninguém cadastrado este mês ainda.</div>`}
+    </section>
+  </div>`;
+  bindBanner();bindSc();const bx=$("#bnCx");if(bx)bx.onclick=openConfig;
+  const ov=$("#okVer");if(ov)ov.onclick=()=>{LS.set("cs_ver_visto",APP_VERSION);vPainel()};
+  const us=$("#unlockSc")||$("#setupSc");if(us)us.onclick=openConfig;
+  $("#novoTrab").onclick=()=>openWorker(null);
+  document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>go(b.dataset.go));
+  document.querySelectorAll("[data-w]").forEach(a=>a.onclick=e=>{e.preventDefault();openWorker(a.dataset.w)});
+}
+
+/* ---------- TRABALHADORES ---------- */
+function vTrab(){
+  const f=ui.filtro,q=ui.busca.toLowerCase().trim(),qd=q.replace(/\D/g,"");
+  let ws=S.workers.slice().sort((a,b)=>a.nome.localeCompare(b.nome));
+  if(f==="crit")ws=ws.filter(w=>nivel(w)==="crit");
+  if(f==="inativos")ws=ws.filter(w=>w.status==="ativo"&&diasSemProducao(w)>INATIVO_DIAS);
+  if(f==="a_desligar")ws=ws.filter(w=>w.status==="a_desligar");
+  if(f==="desligados")ws=ws.filter(w=>w.status==="desligado");
+  if(f==="todos")ws=ws.filter(ATIVOS);if(f==="outros")ws=ws.filter(w=>w.status==="inativo"||w.status==="afastado");
+  if(q)ws=ws.filter(w=>w.nome.toLowerCase().includes(q)||(qd&&w.cpf.includes(qd))||(w.matricula||"").includes(q));
+  const chips=[["todos","Ativos"],["crit","Pendência crítica"],["inativos","Sem produção +3 meses"],["a_desligar","A desligar"],["outros","Inativos e afastados"],["desligados","Desligados"]];
+  $("#view").innerHTML=`
+  <div class="head"><div><h1>Trabalhadores</h1><p>Ficha completa com documentos, carteira, SST e situação dos eventos eSocial.</p></div><div class="toolbar"><button class="btn" id="impBtn">${ico("upload",16)} Importar do Sistema eSocial</button><button class="btn primary" id="novoTrab">${ico("plus",16)} Novo trabalhador</button></div></div>
+  ${exBanner()}
+  <div class="toolbar"><div class="search">${ico("search",16)}<input class="inp" id="busca" placeholder="Buscar por nome, CPF ou matrícula" value="${esc(ui.busca)}" aria-label="Buscar trabalhador"></div>
+   <div class="chips">${chips.map(([k,l])=>`<button class="chip" aria-pressed="${f===k}" data-f="${k}">${l}</button>`).join("")}</div></div>
+  ${ws.length?`<div class="tbl-wrap"><table><thead><tr><th>Nome</th><th>CPF</th><th>Cadastro</th><th>Última produção</th><th>Anexos</th><th>Situação</th></tr></thead><tbody>
+  ${ws.map(w=>{const p=pendencias(w);const nd=docsDe(w.id).length;return `<tr class="click" data-w="${w.id}"><td><div class="who"><span class="av">${esc(iniciais(w.nome))}</span><div style="min-width:0"><b>${esc(w.nome)}</b>${w.exemplo?` <span class="pill info">exemplo</span>`:""}<div class="small muted">Mat. ${esc(w.matricula||"—")} · ${esc(STATUS[w.status])}</div></div></div></td>
+   <td class="mono">${esc(fmtCPF(w.cpf))}</td><td class="mono">${br(w.dtCadastro)}</td><td class="mono">${br(w.ultimaProducao)}${w.status!=="desligado"?`<div class="small muted">${diasSemProducao(w)} dias</div>`:""}</td><td class="num mono">${nd}</td><td>${pillsHTML(p,2)}</td></tr>`}).join("")}
+  </tbody></table></div>`:`<div class="empty">Nenhum trabalhador neste filtro.</div>`}`;
+  bindBanner();
+  $("#novoTrab").onclick=()=>openWorker(null);
+  $("#impBtn").onclick=openImport;
+  const b=$("#busca");b.oninput=()=>{ui.busca=b.value;const pos=b.selectionStart;vTrab();const nb=$("#busca");nb.focus();nb.setSelectionRange(pos,pos)};
+  document.querySelectorAll("[data-f]").forEach(c=>c.onclick=()=>{ui.filtro=c.dataset.f;vTrab()});
+  document.querySelectorAll("tr[data-w]").forEach(r=>r.onclick=()=>openWorker(r.dataset.w));
+}
+
+/* ---------- FICHA (drawer) ---------- */
+function openWorker(id,preset){
+  const w=id?structuredClone(S.workers.find(x=>x.id===id)):Object.assign({id:uid(),nome:"",cpf:"",nis:"",dtNasc:"",telefone:"",email:"",matricula:"",categoria:"202",dtCadastro:iso(TODAY),dtInicio:iso(TODAY),funcao:"Movimentador de mercadorias",ultimaProducao:"",status:"ativo",dtTermino:"",rgNum:"",rgOrgao:"",cnhNum:"",cnhCat:"",cnhValidade:"",ctpsNum:"",ctpsSerie:"",ev:{s2300:false,s2240:false,s2399:false},asoData:"",asoValidade:"",epiEntrega:"",nr35Data:"",nr35Validade:"",exige35:true,nr33Data:"",nr33Validade:"",exige33:false,obs:""},preset||{});
+  const isNew=!id;
+  const F=(k,l,t="text",cls="")=>`<div class="field ${cls}"><label for="f_${k}">${l}</label><input id="f_${k}" data-k="${k}" type="${t}" value="${esc(w[k]??"")}"></div>`;
+  const C=(path,l,evt)=>{const [a,b]=path.split(".");const v=b?w[a]?.[b]:w[a];return `<label class="chk"><input type="checkbox" id="c_${path.replace(".","_")}" data-c="${path}" ${v?"checked":""}> ${evt?`<span class="evt">${evt}</span>`:""} ${l}</label>`};
+  $("#layer").innerHTML=`<div class="scrim" id="scrim"></div>
+  <div class="drawer" role="dialog" aria-modal="true" aria-labelledby="dh">
+   <div class="drawer-h"><div><div class="eyebrow">${isNew?"Novo cadastro":"Ficha do trabalhador"}</div><h2 id="dh">${esc(w.nome||"Sem nome")}</h2></div><button class="btn" id="closeD">Fechar</button></div>
+   <div class="drawer-b">
+    <div id="pendBox"></div>
+    <fieldset><legend>Identificação</legend><div class="form-grid">
+     ${F("nome","Nome completo *","text","span2")}${F("cpf","CPF *")}${F("nis","NIS / PIS")}
+     ${F("dtNasc","Data de nascimento","date")}${F("telefone","Telefone")}${F("email","E-mail","email","span2")}
+    </div></fieldset>
+    <fieldset><legend>Vínculo avulso <span class="evt">S-2300</span></legend><div class="form-grid">
+     ${F("matricula","Matrícula")}
+     <div class="field"><label for="f_categoria">Categoria</label><select id="f_categoria" data-k="categoria">${Object.entries(CATEGORIAS).map(([k,v])=>`<option value="${k}" ${w.categoria===k?"selected":""}>${v}</option>`).join("")}</select></div>
+     ${F("dtCadastro","Cadastro no sindicato","date")}${F("dtInicio","Data de início (S-2300)","date")}
+     ${F("funcao","Função","text","span2")}${F("ultimaProducao","Última produção","date")}
+     <div class="field"><label for="f_status">Situação</label><select id="f_status" data-k="status">${Object.entries(STATUS).map(([k,v])=>`<option value="${k}" ${w.status===k?"selected":""}>${v}</option>`).join("")}</select></div>
+     ${F("dtTermino","Data de término (S-2399)","date")}
+    </div></fieldset>
+    <fieldset><legend>Documentos e carteira</legend><div class="form-grid">
+     ${F("rgNum","RG nº")}${F("rgOrgao","Órgão / UF")}${F("ctpsNum","CTPS nº")}${F("ctpsSerie","CTPS série")}
+     ${F("cnhNum","CNH nº")}${F("cnhCat","CNH categoria")}${F("cnhValidade","CNH validade","date")}
+    </div></fieldset>
+    <fieldset><legend>Saúde e segurança</legend><div class="form-grid">
+     ${F("asoData","Data do ASO (S-2220)","date")}${F("asoValidade","Validade do ASO","date")}${F("epiEntrega","Entrega da ficha de EPI","date","span2")}
+     ${F("nr35Data","NR-35 · conclusão","date")}${F("nr35Validade","NR-35 · validade","date")}${F("nr33Data","NR-33 · conclusão","date")}${F("nr33Validade","NR-33 · validade","date")}
+     <div class="span4 toolbar">${C("exige35","Exige NR-35 (trabalho em altura)")} ${C("exige33","Exige NR-33 (espaço confinado)")}</div>
+     <div class="span4 note">Ao preencher a data de conclusão, a validade é sugerida: ASO 1 ano, NR-33 1 ano, NR-35 2 anos. Ajuste se o PCMSO definir outro prazo.</div>
+    </div></fieldset>
+    <fieldset><legend>Verificação de antecedentes</legend><div class="form-grid">
+     <div class="span4 note">Pela tese do TST (IRR 243000-58.2013), pedir antecedentes só é lícito quando a função justifica, como no setor agroindustrial das tomadoras. Registre o consentimento e só o resultado. Busca por nome pode trazer homônimos: para decidir, use a certidão oficial pelo CPF.</div>
+     <div class="span4">${C("antecConsent","Candidato autorizou a consulta (LGPD)")}</div>
+     <div class="span4 toolbar" id="antecLinks"></div>
+     ${F("antecData","Data da consulta","date")}
+     <div class="field"><label for="f_antecFonte">Fonte</label><select id="f_antecFonte" data-k="antecFonte">${["","Escavador","Certidão Polícia Federal","Certidão estadual (TJMS)","Outra"].map(o=>`<option ${w.antecFonte===o?"selected":""}>${o}</option>`).join("")}</select></div>
+     <div class="field"><label for="f_antecResultado">Resultado</label><select id="f_antecResultado" data-k="antecResultado">${["","Nada encontrado","Homônimo, não confirmado","Requer análise da diretoria","Impedimento confirmado"].map(o=>`<option ${w.antecResultado===o?"selected":""}>${o}</option>`).join("")}</select></div>
+     ${F("antecResp","Responsável pela consulta")}
+    </div></fieldset>
+    <fieldset><legend>Eventos já enviados no sistema eSocial</legend><div class="toolbar" style="gap:18px">
+     ${C("ev.s2300","Início do TSVE","S-2300")}${C("ev.s2240","Condições ambientais","S-2240")}${C("ev.s2399","Término do TSVE","S-2399")}
+    </div><div class="note" style="margin-top:10px">O envio continua no sistema atual. Aqui você só marca o que já foi transmitido para acompanhar as pendências.</div></fieldset>
+    <fieldset><legend>Anexos</legend><div class="docslots" id="slots"></div>
+     <div class="note" style="margin-top:10px">Aceita PDF, JPG e PNG. Para um PDF com várias páginas de pessoas ou documentos diferentes, use o Fatiador de PDF.</div></fieldset>
+    <div class="field"><label for="f_obs">Observações</label><textarea id="f_obs" data-k="obs">${esc(w.obs)}</textarea></div>
+   </div>
+   <div class="drawer-f">${isNew?"":`<button class="btn danger" id="delW">Excluir cadastro</button>`}<span style="flex:1"></span><button class="btn" id="cancelD">Cancelar</button><button class="btn primary" id="saveW">Salvar ficha</button></div>
+  </div>`;
+  const close=()=>{$("#layer").innerHTML=""};
+  $("#scrim").onclick=close;$("#closeD").onclick=close;$("#cancelD").onclick=close;
+  const read=()=>{document.querySelectorAll("#layer [data-k]").forEach(i=>w[i.dataset.k]=i.value);document.querySelectorAll("#layer [data-c]").forEach(i=>{const[a,b]=i.dataset.c.split(".");if(b){w[a]=w[a]||{};w[a][b]=i.checked}else w[a]=i.checked});w.cpf=w.cpf.replace(/\D/g,"")};
+  const pendBox=()=>{read();const p=pendencias(w);$("#pendBox").innerHTML=p.length?`<div class="chips">${pillsHTML(p,20)}</div>`:`<span class="pill ok">Nenhuma pendência</span>`};
+  const auto={asoData:["asoValidade",1],nr35Data:["nr35Validade",2],nr33Data:["nr33Validade",1]};
+  document.querySelectorAll("#layer [data-k],#layer [data-c]").forEach(i=>i.addEventListener("change",()=>{const a=auto[i.dataset.k];if(a&&i.value){const t=$("#f_"+a[0]);if(!t.value)t.value=addYears(i.value,a[1])}if(i.dataset.k==="cpf")i.value=fmtCPF(i.value);if(i.dataset.k==="nome")$("#dh").textContent=i.value||"Sem nome";pendBox()}));
+  $("#f_cpf").value=fmtCPF(w.cpf);
+  const drawSlots=()=>{const ds=docsDe(w.id);$("#slots").innerHTML=DOC_TIPOS.map(t=>{const mine=ds.filter(d=>d.tipo===t);return `<div class="slot ${mine.length?"has":""}"><div class="t"><span>${t}</span>${DOC_OBRIG.includes(t)?`<span class="small muted">obrig.</span>`:""}</div>
+    <div class="f">${mine.map(d=>`<span><a data-view="${d.id}">${esc(d.nome)}</a> <button class="btn sm danger" data-rm="${d.id}">Remover</button></span>`).join("")||"Nenhum arquivo"}</div>
+    <button class="btn sm" data-up="${esc(t)}">Anexar arquivo</button></div>`}).join("");
+    document.querySelectorAll("[data-up]").forEach(b=>b.onclick=()=>pickFile(".pdf,image/*",async file=>{await saveDoc(w.id,b.dataset.up,file.name,file,file.type);drawSlots();pendBox();toast(`${b.dataset.up} anexado`)}));
+    document.querySelectorAll("[data-view]").forEach(a=>a.onclick=()=>previewDoc(a.dataset.view));
+    document.querySelectorAll("[data-rm]").forEach(b=>b.onclick=async()=>{if(b.dataset.armed){await Store.del("docs",b.dataset.rm);S.docs=S.docs.filter(d=>d.id!==b.dataset.rm);drawSlots();pendBox();toast("Anexo removido")}else{b.dataset.armed="1";b.textContent="Confirmar remoção"}});};
+  const drawAntec=()=>{const ok=$("#c_antecConsent").checked&&$("#f_nome").value.trim();const nome=$("#f_nome").value.trim();
+    $("#antecLinks").innerHTML=ok?`<a class="btn sm" href="${escavadorURL(nome)}" target="_blank" rel="noopener">Pesquisar nome no Escavador</a><a class="btn sm" href="${PF_URL}" target="_blank" rel="noopener">Certidão da Polícia Federal</a><span class="small muted">Entre no Escavador com seu login na aba que abrir.</span>`:`<span class="small muted">Marque a autorização e preencha o nome para liberar as consultas.</span>`};
+  $("#c_antecConsent").addEventListener("change",drawAntec);$("#f_nome").addEventListener("input",drawAntec);drawAntec();
+  drawSlots();pendBox();
+  $("#saveW").onclick=async()=>{read();if(!w.nome.trim()){toast("Informe o nome do trabalhador");$("#f_nome").focus();return}
+    if(w.cpf&&!cpfOk(w.cpf)){toast("CPF inválido. Confira os dígitos.");$("#f_cpf").focus();return}
+    if(S.workers.some(x=>x.id!==w.id&&w.cpf&&x.cpf===w.cpf)){toast("Já existe um trabalhador com este CPF");return}
+    if(w.status==="desligado"&&!w.dtTermino)w.dtTermino=iso(TODAY);
+    await Store.put("workers",w);const i=S.workers.findIndex(x=>x.id===w.id);if(i>=0)S.workers[i]=w;else S.workers.push(w);close();toast("Ficha salva");render()};
+  const del=$("#delW");if(del)del.onclick=async()=>{if(!del.dataset.armed){del.dataset.armed="1";del.textContent="Confirmar exclusão (apaga anexos)";return}
+    for(const dc of docsDe(w.id))await Store.del("docs",dc.id);await Store.del("workers",w.id);await loadAll();close();toast("Cadastro excluído");render()};
+}
+function pickFile(accept,cb){const i=$("#hiddenFile");i.accept=accept;i.value="";i.onchange=()=>{if(i.files[0])cb(i.files[0])};i.click()}
+async function saveDoc(workerId,tipo,nome,blob,mime){const d={id:uid(),workerId,tipo,nome,blob,mime:mime||blob.type,data:iso(TODAY)};await Store.put("docs",d);S.docs.push(d);return d}
+
+
+/* ---------- IMPORTAÇÃO do Sistema eSocial (arquivo .json ou .csv; cruza pelo CPF) ---------- */
+function parseImport(txt){
+  txt=txt.trim();if(!txt)return[];
+  if(txt[0]==="["||txt[0]==="{"){const j=JSON.parse(txt);return Array.isArray(j)?j:(j.trabalhadores||[])}
+  const sep=(txt.split("\n")[0].match(/;/g)||[]).length>=(txt.split("\n")[0].match(/,/g)||[]).length?";":",";
+  const rows=txt.split(/\r?\n/).filter(Boolean).map(l=>l.split(sep).map(c=>c.replace(/^"|"$/g,"").trim()));
+  const hd=rows.shift().map(x=>x.toLowerCase());return rows.map(r=>Object.fromEntries(hd.map((k,i)=>[k,r[i]||""])))}
+const brToIso=s=>{if(!s)return"";const m=String(s).match(/^(\d{2})\/(\d{2})\/(\d{4})/);return m?`${m[3]}-${m[2]}-${m[1]}`:/^\d{4}-\d{2}-\d{2}/.test(s)?s.slice(0,10):""};
+const SYS_FIELDS=["status","ultimaProducao","asoData","asoValidade","nr33Data","nr33Validade","nr35Data","nr35Validade","epiEntrega","s2300Enviado","origemId"];
+function planImport(list){
+  const plan={novos:[],atualiza:[],iguais:0,invalidos:0};
+  for(const r of list){const cpf=String(r.cpf||"").replace(/\D/g,"");const nome=(r.nome||"").trim();
+    if(!nome||cpf.length!==11){plan.invalidos++;continue}
+    const dados={nome,cpf,nis:String(r.nis||r.pis||"").replace(/\D/g,""),dtNasc:brToIso(r.dtNasc||r.data_nascimento),dtCadastro:brToIso(r.dtCadastro||r.data_cadastro),dtInicio:brToIso(r.dtInicio||r.data_inicio),matricula:String(r.matricula||r.codigo||""),telefone:r.telefone||r.celular||"",email:r.email||"",
+      rgNum:r.rgNum||"",rgOrgao:r.rgOrgao||"",ctpsNum:r.ctpsNum||"",ctpsSerie:r.ctpsSerie||"",cnhNum:r.cnhNum||"",cnhCat:r.cnhCat||"",cnhValidade:brToIso(r.cnhValidade),endereco:r.endereco||"",
+      status:r.status||"",ultimaProducao:brToIso(r.ultimaProducao),asoData:brToIso(r.asoData),asoValidade:brToIso(r.asoValidade),nr33Data:brToIso(r.nr33Data),nr33Validade:brToIso(r.nr33Validade),nr35Data:brToIso(r.nr35Data),nr35Validade:brToIso(r.nr35Validade),epiEntrega:brToIso(r.epiEntrega),s2300Enviado:r.s2300Enviado,origemId:r.origemId||""};
+    const ex=S.workers.find(w=>w.cpf===cpf);
+    if(!ex){plan.novos.push(dados);continue}
+    const mud={};for(const[k,v]of Object.entries(dados)){if(v===""||v===undefined)continue;
+      if(k==="s2300Enviado"){if(v&&!ex.ev?.s2300)mud.s2300Enviado=true;continue}
+      if(k==="status"&&ex.status==="a_desligar"&&v==="ativo")continue;
+      if(SYS_FIELDS.includes(k)?ex[k]!==v:!ex[k])mud[k]=v}
+    if(Object.keys(mud).length)plan.atualiza.push({w:ex,mud});else plan.iguais++}
+  return plan}
+function openImport(){
+  const m=document.createElement("div");m.className="modal";
+  m.innerHTML=`<div class="scrim"></div><div class="modal-c" role="dialog" aria-modal="true" aria-labelledby="imh"><div class="drawer-h"><div><div class="eyebrow">Sistema eSocial · Guia Campo Grande</div><h2 id="imh" style="font-size:22px">Importar trabalhadores</h2></div><button class="btn" id="imClose">Fechar</button></div>
+   <div class="drawer-b" style="align-items:stretch;background:var(--bg)">
+    <div class="note">Envie o arquivo <b>trabalhadores-esocial.json</b> (ou um .csv com as colunas cpf, nome, nis, data_nascimento, data_cadastro, data_inicio, matricula). O cruzamento é pelo CPF: quem já existe só ganha os campos que estavam vazios, nada é apagado.</div>
+    <label class="drop" for="imFile" style="padding:26px"><span class="ic">${ico("upload",24)}</span><b style="font-size:18px">Escolher arquivo</b><span class="muted small">.json ou .csv</span></label><input type="file" id="imFile" accept=".json,.csv,.txt" hidden>
+    <div id="imRes"></div>
+   </div></div>`;
+  document.body.appendChild(m);const close=()=>m.remove();m.querySelector(".scrim").onclick=close;$("#imClose").onclick=close;
+  $("#imFile").onchange=async ev=>{const f=ev.target.files[0];if(!f)return;let list;try{list=parseImport(await f.text())}catch(e){$("#imRes").innerHTML=`<div class="empty">Não consegui ler o arquivo. Confira se é o .json gerado ou um .csv com cabeçalho.</div>`;return}
+    const pl=planImport(list);
+    $("#imRes").innerHTML=`<div class="panel" style="box-shadow:none"><h2>${esc(f.name)}</h2>
+     <div class="chips"><span class="pill ok">${pl.novos.length} novos</span><span class="pill info">${pl.atualiza.length} com dados completados</span><span class="pill warn">${pl.iguais} já iguais</span>${pl.invalidos?`<span class="pill crit">${pl.invalidos} sem CPF válido</span>`:""}</div>
+     ${pl.novos.length?`<div class="small muted">Novos: ${esc(pl.novos.slice(0,8).map(x=>x.nome).join(", "))}${pl.novos.length>8?` e mais ${pl.novos.length-8}`:""}</div>`:""}
+     <div class="toolbar"><button class="btn primary" id="imGo" ${pl.novos.length||pl.atualiza.length?"":"disabled"}>Importar ${pl.novos.length+pl.atualiza.length} trabalhadores</button></div></div>`;
+    $("#imGo").onclick=async()=>{await aplicarPlano(pl);LS.set("cs_ultima_importacao",new Date().toISOString());
+      close();toast(`${pl.novos.length} novos e ${pl.atualiza.length} atualizados`);render()}}
+}
+async function aplicarPlano(pl,marca){
+  for(const d of pl.novos){const{s2300Enviado,...rest}=d;const w={id:uid(),origem:"esocial",categoria:"202",funcao:"Movimentador de mercadorias",dtTermino:"",exige35:true,exige33:!!d.nr33Data,obs:"Importado do Sistema eSocial.",
+      ...Object.fromEntries(Object.entries(rest).map(([k,v])=>[k,v||""])),status:d.status||"ativo",dtCadastro:d.dtCadastro||d.dtInicio||iso(TODAY),dtInicio:d.dtInicio||d.dtCadastro||"",ev:{s2300:!!s2300Enviado,s2240:false,s2399:d.status==="desligado"},...(marca||{})};
+    S.workers.push(w);await Store.put("workers",w)}
+  for(const{w,mud}of pl.atualiza){const{s2300Enviado,...m}=mud;Object.assign(w,m,marca||{});if(s2300Enviado){w.ev=w.ev||{};w.ev.s2300=true}if(m.nr33Data)w.exige33=true;if(m.status==="desligado"){w.ev=w.ev||{};w.ev.s2399=true}await Store.put("workers",w)}
+}
+
+/* ---------- SINCRONIZAÇÃO AUTOMÁTICA com o Sistema eSocial (só no programa instalado) ----------
+   Somente leitura. A cada 5 min: lista + relatório de produção; detalhes (ASO, NR, EPI, documentos)
+   em lotes de até 50 trabalhadores, priorizando novos e quem mudou de situação. */
+const SYNC_MS=5*60*1000,LOTE=50;
+const Sync={rodando:false,cfg:null,erro:"",feitos:0,total:0,ultima:LS.get("cs_sync_ultima")||""};
+const tinvoke=(c,a)=>window.__TAURI__.core.invoke(c,a||{});
+const sget=c=>tinvoke("esocial_get",{caminho:c});
+const spost=(c,campos)=>tinvoke("esocial_post",{caminho:c,campos});
+const dom=t=>new DOMParser().parseFromString(t,"text/html");
+const XS={
+  vals(d){const o={};d.querySelectorAll("input,select,textarea").forEach(e=>{const n=e.name;if(!n||["button","submit","hidden","radio","checkbox"].includes(e.type))return;let v=e.tagName==="SELECT"?((e.querySelector("option[selected]")||{}).textContent||""):(e.tagName==="TEXTAREA"?e.textContent:(e.getAttribute("value")||""));v=v.trim();if(v&&!/^Selecione/.test(v))o[n]=v});return o},
+  rows(d){const out=[];d.querySelectorAll("tr").forEach(tr=>{const c=[...tr.children].filter(x=>x.tagName==="TD").map(x=>x.textContent.replace(/\s+/g," ").trim());if(c.some(x=>/\d{2}\/\d{2}\/\d{4}/.test(x))&&c.length>=2&&!tr.querySelector("input,select"))out.push(c.filter(x=>x&&x!=="Alterar"&&x!=="Excluir"))});return out},
+  d2i(s){const m=String(s||"").match(/(\d{2})\/(\d{2})\/(\d{4})/);return m&&m[3]!=="0000"?`${m[3]}-${m[2]}-${m[1]}`:""},
+  ultimo(rows,re,di,vi){let b=null;for(const r of rows||[]){if(!re.test(r.join(" ")))continue;const d=XS.d2i(r[di]);if(!b||d>b.d)b={d,v:XS.d2i(r[vi])}}return b||{d:"",v:""}}
+};
+async function lerTrabalhador(id,producao){
+  const m=await sget("/register/cad_colaborador.php?acao=Procurar&cod_colaborador="+id);const md=dom(m);const v=XS.vals(md);
+  const i=m.indexOf("Status eSocial");const st=m.slice(i,i+700).replace(/<[^>]+>/g," ").replace(/&nbsp;/g," ").replace(/\s+/g," ");
+  const se=(st.match(/Status eSocial:\s*(.*?)\s*Data/)||[])[1]||"",ss=(st.match(/Status Sistema:\s*(\w+)/)||[])[1]||"";
+  const pg=[];for(const u of ["/register/cad_colabEndereco.php?cod_colaborador=","/register/colaborador_docs.php?acao=Procurar&cod_colaborador=","/register/cad_colabcursos.php?cod_colaborador=","/register/cad_colabexames.php?cod_colaborador=","/register/cad_coleq.php?cod_colaborador=","/register/infoEsocial.php?tab=colaborador&ev=S2300&id="+id+"&colab="])pg.push(dom(await sget(u+id)));
+  const [en,dc,cu,ex,ep,ie]=pg;const e=XS.vals(en),docs=XS.vals(dc),cursos=XS.rows(cu),exames=XS.rows(ex),epis=XS.rows(ep);
+  let status="inativo";if(/DESLIGADO/.test(se))status="desligado";else if(/AFASTADO/.test(se))status="afastado";else if(ss==="ATIVO"||/ATIVO \( ?ON/.test(se))status="ativo";
+  const aso=XS.ultimo(exames,/ASO/i,2,4),n33=XS.ultimo(cursos,/NR ?33/i,2,3),n35=XS.ultimo(cursos,/NR ?35/i,2,3);
+  return {origemId:String(id),nome:v.nome||"",cpf:(v.cpf||"").replace(/\D/g,""),nis:v.pis||docs.pis||"",dtNasc:XS.d2i(v.data_nascimento),dtCadastro:XS.d2i(v.data_cadastro),dtInicio:XS.d2i(v.colab_dtinicio),
+    matricula:(se.match(/Matricula:\s*(\d+)/)||[])[1]||"",telefone:v.celular_colaborador||v.fone_colaborador||"",email:v.colab_emailprinc||"",status,ultimaProducao:producao||"",
+    s2300Enviado:(t=>!/N.o h. transmiss/.test(t)&&/\d{2}\/\d{2}\/\d{4}/.test(t))((ie.body?ie.body.innerText:"")),asoData:aso.d,asoValidade:aso.v,nr33Data:n33.d,nr33Validade:n33.v,nr35Data:n35.d,nr35Validade:n35.v,
+    epiEntrega:epis.map(x=>XS.d2i(x[0])).sort().pop()||"",ctpsNum:docs.ctps||"",ctpsSerie:docs.serie_ctps||"",rgNum:docs.rg||"",rgOrgao:docs.ssp_rg||"",cnhNum:docs.colab_nrregcnh||"",cnhValidade:XS.d2i(docs.colab_dtvalidcnh),
+    endereco:[e.rua_colaborador,e.numero,e.bairro_colaborador,e.cep].filter(Boolean).join(", ")};
+}
+function syncInfo(){const el=$("#syncInfo");if(!el)return;
+  if(!IS_TAURI){el.innerHTML=`Importação automática disponível no programa instalado`;return}
+  if(Sync.cfg&&!Sync.cfg.configurado){el.innerHTML=`<button class="link" id="syncCfg" type="button">Conectar Sistema eSocial</button>`;$("#syncCfg").onclick=openConfig;return}
+  if(Sync.rodando){el.textContent=Sync.total?`Sincronizando… ${Sync.feitos} de ${Sync.total}`:"Sincronizando com o Sistema eSocial…";return}
+  if(Sync.erro){el.innerHTML=`<span style="color:var(--crit)">${esc(Sync.erro)}</span>`;return}
+  if(Sync.ultima){const d=new Date(Sync.ultima);el.textContent=`eSocial sincronizado às ${hhmm(d)}`}else el.textContent="Aguardando a primeira sincronização";
+}
+function rerenderSeguro(){if(!$("#layer").innerHTML&&!document.querySelector(".modal")&&!document.querySelector("main input:focus,main select:focus,main textarea:focus"))render();else{const crit=S.workers.filter(w=>nivel(w)==="crit").length;const nc=$("#navCount");nc.hidden=!crit;nc.textContent=crit}}
+async function syncCiclo(manual){
+  if(!IS_TAURI||Sync.rodando)return;
+  try{Sync.cfg=await tinvoke("cred_status")}catch(e){Sync.cfg={configurado:false}}
+  if(!Sync.cfg.configurado){syncInfo();if(manual)openConfig();return}
+  Sync.rodando=true;Sync.erro="";Sync.feitos=0;Sync.total=0;syncInfo();
+  try{
+    const lista=async()=>[...(await sget("/funcoes/procuraSimples.php?key=%25&field2=nome&field1=cod_colaborador&label=C&table=colaborador&title=x")).matchAll(/name=id value=(\d+)/g)].map(m=>m[1]);
+    let ids=await lista();if(!ids.length){await tinvoke("esocial_testar");ids=await lista()}
+    if(!ids.length)throw new Error("O Sistema eSocial não retornou a lista de trabalhadores.");
+    const rel=dom(await spost("/register/rel_trabInativo.php",[["acao","Visualizar"],["qtdDias","1"]]));
+    const prod={};rel.querySelectorAll("tr").forEach(tr=>{const c=[...tr.children].map(x=>x.textContent.replace(/\s+/g," ").trim());if(/^\d+$/.test(c[0]||""))prod[c[0]]={cpf:(c[2]||"").replace(/\D/g,""),data:XS.d2i(c[4]),st:c[5]||""}});
+    const porOrigem={};S.workers.forEach(w=>{if(w.origemId)porOrigem[w.origemId]=w});
+    const primeira=!S.workers.some(w=>w.origemId);
+    const prioridade=new Set();
+    if(!primeira){
+      for(const id of ids){const w=porOrigem[id];const p=prod[id];
+        if(!w){prioridade.add(id);continue}
+        if(p){if(p.data&&w.ultimaProducao!==p.data){w.ultimaProducao=p.data;await Store.put("workers",w)}if(w.status!=="ativo"&&w.status!=="a_desligar")prioridade.add(id)}
+        else if(ATIVOS(w))prioridade.add(id)}
+    }
+    let fila=primeira?ids.slice():[...prioridade];
+    if(!primeira&&fila.length<LOTE){const resto=ids.filter(id=>!prioridade.has(id)).sort((a,b)=>String(porOrigem[a]?.syncAt||"").localeCompare(String(porOrigem[b]?.syncAt||"")));fila=fila.concat(resto.slice(0,LOTE-fila.length))}
+    Sync.total=fila.length;syncInfo();
+    const recs=[];let falhas=0;
+    const worker=async()=>{while(fila.length){const id=fila.shift();try{recs.push(await lerTrabalhador(id,prod[id]?.data))}catch(e){falhas++}Sync.feitos++;if(Sync.feitos%10===0)syncInfo()}};
+    await Promise.all([worker(),worker(),worker()]);
+    const pl=planImport(recs);const agora=new Date().toISOString();
+    await aplicarPlano(pl,{syncAt:agora});
+    for(const r of recs){const w=S.workers.find(x=>x.cpf===r.cpf);if(w&&w.syncAt!==agora){w.syncAt=agora;if(!w.origemId)w.origemId=r.origemId;await Store.put("workers",w)}}
+    if(recs.length&&S.workers.some(w=>w.exemplo)){for(const w of S.workers.filter(w=>w.exemplo)){for(const dc of docsDe(w.id))await Store.del("docs",dc.id);await Store.del("workers",w.id)}S.workers=S.workers.filter(w=>!w.exemplo)}
+    Sync.ultima=agora;LS.set("cs_sync_ultima",agora);
+    if(falhas)Sync.erro=`${falhas} fichas não carregaram; nova tentativa em 5 min`;
+    if(primeira||manual)toast(`${pl.novos.length} trabalhadores importados e ${pl.atualiza.length} atualizados`);
+  }catch(e){Sync.erro=String(e&&e.message||e).slice(0,140)}
+  finally{Sync.rodando=false;syncInfo();rerenderSeguro()}
+}
+function conexaoHTML(){
+  if(!IS_TAURI)return `<fieldset><legend>Sistema eSocial · importação automática</legend><div class="note">No programa instalado, o Central entra sozinho no Sistema eSocial e importa os trabalhadores a cada 5 minutos. Aqui no navegador use Trabalhadores → Importar do Sistema eSocial.</div></fieldset>`;
+  const c=Sync.cfg||{};
+  if(c.configurado)return `<fieldset><legend>Sistema eSocial · importação automática</legend><div class="toolbar"><span class="pill ok">Conectado como ${esc(c.login)} · ${esc(c.cidade)}</span><span class="small muted" id="cfgSyncTxt"></span></div>
+    <div class="toolbar" style="margin-top:10px"><button class="btn primary" id="cfgSync">Sincronizar agora</button><button class="btn" id="cfgTrocar">Trocar acesso</button><button class="btn danger" id="cfgApagar">Remover acesso</button></div>
+    <div class="note" style="margin-top:10px">A senha fica no Gerenciador de Credenciais do Windows. A consulta é só leitura: nada é alterado no Sistema eSocial.</div></fieldset>`;
+  return `<fieldset><legend>Sistema eSocial · importação automática</legend><div class="note">Informe o acesso uma única vez. O Central entra sozinho e importa os trabalhadores a cada 5 minutos, só lendo os dados.</div>
+    <div class="form-grid" style="margin-top:12px"><div class="field"><label for="esL">Login</label><input id="esL" autocomplete="off" value="${esc(c.login||"Gabriel")}"></div>
+    <div class="field"><label for="esS">Senha</label><input id="esS" type="password" autocomplete="new-password"></div>
+    <div class="field span2"><label for="esC">Cidade</label><input id="esC" autocomplete="off" value="${esc(c.cidade||"Dourados MS")}"></div></div>
+    <div class="toolbar" style="margin-top:12px"><button class="btn primary" id="cfgSalvar">Salvar e conectar</button></div></fieldset>`;
+}
+function bindConexao(redraw){
+  const s=$("#cfgSalvar");if(s)s.onclick=async()=>{s.disabled=true;s.textContent="Conectando…";
+    try{await tinvoke("cred_salvar",{login:$("#esL").value,senha:$("#esS").value,cidade:$("#esC").value});await tinvoke("esocial_testar");Sync.cfg=await tinvoke("cred_status");toast("Conectado. Importando os trabalhadores…");redraw();syncCiclo(true)}
+    catch(e){toast(String(e));s.disabled=false;s.textContent="Salvar e conectar"}};
+  const y=$("#cfgSync");if(y)y.onclick=()=>{toast("Sincronizando…");syncCiclo(true)};
+  const t=$("#cfgTrocar");if(t)t.onclick=()=>{Sync.cfg={configurado:false,login:Sync.cfg.login,cidade:Sync.cfg.cidade};redraw()};
+  const a=$("#cfgApagar");if(a)a.onclick=async()=>{if(!a.dataset.armed){a.dataset.armed="1";a.textContent="Confirmar remoção";return}await tinvoke("cred_apagar");Sync.cfg={configurado:false};toast("Acesso removido");redraw()};
+  const tx=$("#cfgSyncTxt");if(tx)tx.textContent=Sync.ultima?`Última sincronização às ${hhmm(new Date(Sync.ultima))}`:"";
+}
+/* ---------- pré-visualização ---------- */
+async function previewDoc(id){
+  const d=S.docs.find(x=>x.id===id);if(!d)return;
+  const m=document.createElement("div");m.className="modal";m.innerHTML=`<div class="scrim"></div><div class="modal-c" role="dialog" aria-modal="true"><div class="drawer-h"><div><div class="eyebrow">${esc(d.tipo)}</div><h2 style="font-size:20px">${esc(d.nome)}</h2></div><button class="btn" id="mclose">Fechar</button></div><div class="drawer-b" id="mbody"><span class="muted">Carregando…</span></div></div>`;
+  document.body.appendChild(m);const close=()=>m.remove();m.querySelector(".scrim").onclick=close;$("#mclose").onclick=close;
+  const body=$("#mbody");
+  try{if((d.mime||"").startsWith("image/")){const img=new Image();img.src=URL.createObjectURL(d.blob);body.innerHTML="";body.appendChild(img)}
+    else{const buf=await d.blob.arrayBuffer();const pdf=await pdfjsLib.getDocument({data:buf}).promise;body.innerHTML="";for(let i=1;i<=Math.min(pdf.numPages,10);i++){const c=await renderPage(pdf,i,780);body.appendChild(c)}}
+  }catch(e){body.innerHTML=`<div class="empty">Não foi possível exibir este arquivo aqui. Ele continua salvo na ficha.</div>`}
+}
+async function renderPage(pdf,n,width){const page=await pdf.getPage(n);const v1=page.getViewport({scale:1});const scale=width/v1.width;const vp=page.getViewport({scale:scale*(window.devicePixelRatio||1)});const c=document.createElement("canvas");c.width=vp.width;c.height=vp.height;c.style.width="100%";await page.render({canvasContext:c.getContext("2d"),viewport:vp}).promise;return c}
+
+/* ---------- PENDÊNCIAS ---------- */
+function vPend(){
+  const ws=S.workers.map(w=>({w,p:pendencias(w)})).filter(x=>x.p.length);
+  const lv=ui.nivelPend;const list=ws.filter(x=>lv==="todos"||x.p.some(p=>p.l===lv)).sort((a,b)=>(b.p.filter(p=>p.l==="crit").length-a.p.filter(p=>p.l==="crit").length)||a.w.nome.localeCompare(b.w.nome));
+  const count=k=>ws.reduce((n,x)=>n+x.p.filter(p=>p.evt===k).length,0);
+  $("#view").innerHTML=`
+  <div class="head"><div><h1>Pendências</h1><p>O que falta em cada trabalhador para a cadeia do S-2300 ficar completa: início, saúde, riscos, treinamentos, anexos e término.</p></div></div>
+  <section class="panel"><div class="panel-h"><h2>Cadeia do trabalhador avulso</h2><span class="small muted">quantidade de pendências por item</span></div>
+   <div class="chips">${[["S-2300","Início"],["S-2220","ASO"],["S-2240","Riscos"],["NR-35","Altura"],["NR-33","Confinado"],["EPI","Ficha EPI"],["DOC","Anexos"],["PROD","Produção"],["S-2399","Término"]].map(([k,l])=>`<span class="pill ${count(k)?"warn":"ok"}"><span class="mono">${k}</span> ${l}: ${count(k)}</span>`).join("")}</div>
+  </section>
+  <div class="chips">${[["todos","Todas"],["crit","Críticas"],["warn","Atenção"]].map(([k,l])=>`<button class="chip" aria-pressed="${lv===k}" data-l="${k}">${l}</button>`).join("")}</div>
+  ${list.length?`<div class="tbl-wrap"><table><thead><tr><th>Trabalhador</th><th>Pendências</th></tr></thead><tbody>${list.map(({w,p})=>`<tr class="click" data-w="${w.id}"><td style="width:28%"><b>${esc(w.nome)}</b><div class="small muted mono">${esc(fmtCPF(w.cpf))}</div></td><td><div class="chips">${pillsHTML(p.filter(x=>lv==="todos"||x.l===lv),20)}</div></td></tr>`).join("")}</tbody></table></div>`:`<div class="empty">Nenhuma pendência. Tudo em dia.</div>`}`;
+  document.querySelectorAll("[data-l]").forEach(c=>c.onclick=()=>{ui.nivelPend=c.dataset.l;vPend()});
+  document.querySelectorAll("tr[data-w]").forEach(r=>r.onclick=()=>openWorker(r.dataset.w));
+}
+
+/* ---------- FATIADOR ---------- */
+let fat=null; // {nome, bytes, n, pages:[{w,tipo}]}
+function vFat(){
+  const opts=`<option value="">— escolher trabalhador —</option>`+S.workers.filter(w=>w.status!=="desligado").sort((a,b)=>a.nome.localeCompare(b.nome)).map(w=>`<option value="${w.id}">${esc(w.nome)}</option>`).join("");
+  const tipos=DOC_TIPOS.map(t=>`<option>${t}</option>`).join("");
+  $("#view").innerHTML=`
+  <div class="head"><div><h1>Fatiador de PDF</h1><p>Envie um PDF digitalizado com várias páginas. Cada página vira um arquivo separado, que você entrega para a ficha do trabalhador certo.</p></div></div>
+  ${fat?`<section class="panel"><div class="panel-h"><div><div class="eyebrow">Arquivo carregado</div><h2>${esc(fat.nome)} · <span class="mono">${fat.n}</span> página${fat.n>1?"s":""}</h2></div>
+     <div class="toolbar"><button class="btn" id="fatNovo">Trocar arquivo</button><button class="btn primary" id="fatSalvar">Salvar páginas nas fichas</button></div></div>
+     <div class="toolbar"><span class="small muted">Aplicar a todas:</span><select class="inp" id="allW" style="max-width:260px">${opts}</select><select class="inp" id="allT" style="max-width:200px"><option value="">— tipo —</option>${tipos}</select><button class="btn sm" id="applyAll">Aplicar</button></div>
+     <div class="pages" id="pages">${fat.pages.map((p,i)=>`<div class="page"><div class="ph" id="ph${i}">${i+1}</div><span class="pn">Página ${i+1} de ${fat.n}</span>
+       <select class="inp" data-pw="${i}">${opts}</select><select class="inp" data-pt="${i}">${tipos}</select></div>`).join("")}</div>
+     <div class="note">Páginas sem trabalhador escolhido não são salvas. Cada página salva vira um PDF próprio de 1 página, no tamanho original (A4).</div>
+   </section>`
+  :`<label class="drop" id="drop" for="fatFile"><span class="ic">${ico("upload",28)}</span><b>Arraste o PDF aqui</b><span class="muted">ou clique para escolher · ex.: um PDF de 5 páginas vira 5 arquivos</span></label><input type="file" id="fatFile" accept="application/pdf" hidden>`}`;
+  if(!fat){const dz=$("#drop"),fi=$("#fatFile");fi.onchange=()=>fi.files[0]&&loadFat(fi.files[0]);
+    ["dragenter","dragover"].forEach(e=>dz.addEventListener(e,ev=>{ev.preventDefault();dz.classList.add("over")}));["dragleave","drop"].forEach(e=>dz.addEventListener(e,ev=>{ev.preventDefault();dz.classList.remove("over")}));
+    dz.addEventListener("drop",ev=>{const f=ev.dataTransfer.files[0];if(f)loadFat(f)});return}
+  fat.pages.forEach((p,i)=>{$(`[data-pw="${i}"]`).value=p.w;$(`[data-pt="${i}"]`).value=p.tipo});
+  document.querySelectorAll("[data-pw]").forEach(s=>s.onchange=()=>fat.pages[s.dataset.pw].w=s.value);
+  document.querySelectorAll("[data-pt]").forEach(s=>s.onchange=()=>fat.pages[s.dataset.pt].tipo=s.value);
+  $("#applyAll").onclick=()=>{const w=$("#allW").value,t=$("#allT").value;fat.pages.forEach(p=>{if(w)p.w=w;if(t)p.tipo=t});vFat()};
+  $("#fatNovo").onclick=()=>{fat=null;vFat()};
+  $("#fatSalvar").onclick=saveFat;
+  drawThumbs();
+}
+async function loadFat(file){
+  if(file.type!=="application/pdf"&&!/\.pdf$/i.test(file.name)){toast("Escolha um arquivo PDF");return}
+  try{const bytes=new Uint8Array(await file.arrayBuffer());const doc=await PDFLib.PDFDocument.load(bytes,{ignoreEncryption:true});const n=doc.getPageCount();
+    fat={nome:file.name,bytes,n,pages:Array.from({length:n},()=>({w:"",tipo:"Outro"}))};vFat()}catch(e){toast("Não consegui ler este PDF. Ele pode estar protegido ou corrompido.")}}
+async function drawThumbs(){if(!fat||!window.pdfjsLib)return;try{const pdf=await pdfjsLib.getDocument({data:fat.bytes.slice()}).promise;for(let i=0;i<fat.n;i++){const ph=$("#ph"+i);if(!ph)return;const c=await renderPage(pdf,i+1,220);ph.replaceWith(c)}}catch(e){}}
+async function saveFat(){
+  const todo=fat.pages.map((p,i)=>({...p,i})).filter(p=>p.w);if(!todo.length){toast("Escolha o trabalhador de pelo menos uma página");return}
+  const src=await PDFLib.PDFDocument.load(fat.bytes,{ignoreEncryption:true});const base=fat.nome.replace(/\.pdf$/i,"");
+  for(const p of todo){const out=await PDFLib.PDFDocument.create();const[pg]=await out.copyPages(src,[p.i]);out.addPage(pg);const bytes=await out.save();
+    await saveDoc(p.w,p.tipo,`${base}_pag${p.i+1}.pdf`,new Blob([bytes],{type:"application/pdf"}),"application/pdf")}
+  toast(`${todo.length} página${todo.length>1?"s":""} salva${todo.length>1?"s":""} nas fichas`);fat=null;vFat()}
+
+/* ---------- LISTAS E INATIVOS ---------- */
+function vRel(){
+  const inat=S.workers.filter(w=>w.status==="ativo"&&diasSemProducao(w)>INATIVO_DIAS).sort((a,b)=>diasSemProducao(b)-diasSemProducao(a));
+  const alvo=ui.listaAlvo,origem=prevYm(alvo);
+  const cands=S.workers.filter(w=>(w.dtCadastro||"").startsWith(origem)).sort((a,b)=>a.dtCadastro.localeCompare(b.dtCadastro));
+  const jaExiste=S.lists.find(l=>l.mes===alvo);
+  const meses=[];for(let k=-6;k<=2;k++){const d=new Date(TODAY.getFullYear(),TODAY.getMonth()+k,1);meses.push(ym(d))}
+  $("#view").innerHTML=`
+  <div class="head"><div><h1>Listas e inativos</h1><p>Quem pode ser desligado por falta de produção e a lista mensal dos novos cadastrados.</p></div></div>
+  ${exBanner()}
+  <section class="panel"><div class="panel-h"><div><h2>Sem produção há mais de 3 meses</h2><span class="small muted">Base: última produção (ou data de cadastro, se nunca produziu) há mais de ${INATIVO_DIAS} dias</span></div>
+   <button class="btn primary" id="markDes" ${inat.length?"":"disabled"}>Marcar selecionados para desligar</button></div>
+   ${inat.length?`<div class="tbl-wrap"><table><thead><tr><th style="width:36px"><input type="checkbox" id="selAll" aria-label="Selecionar todos"></th><th>Nome</th><th>CPF</th><th>Última produção</th><th class="num">Dias parado</th></tr></thead><tbody>
+   ${inat.map(w=>`<tr><td><input type="checkbox" class="selI" value="${w.id}" aria-label="Selecionar ${esc(w.nome)}"></td><td><a href="#" data-w="${w.id}" style="color:inherit"><b>${esc(w.nome)}</b></a></td><td class="mono">${esc(fmtCPF(w.cpf))}</td><td class="mono">${w.ultimaProducao?br(w.ultimaProducao):"nunca"}</td><td class="num mono"><span class="pill warn">${diasSemProducao(w)}</span></td></tr>`).join("")}
+   </tbody></table></div><div class="note">Marcar para desligar não envia nada. O trabalhador passa a aparecer em Pendências até você enviar o <span class="evt">S-2399</span> no sistema eSocial e marcar na ficha.</div>`:`<div class="empty">Nenhum trabalhador ativo sem produção há mais de 3 meses.</div>`}
+  </section>
+  <section class="panel"><div class="panel-h"><div><h2>Lista mensal de novos cadastrados</h2><span class="small muted">Os cadastrados em um mês entram na lista do mês seguinte</span></div>
+   <div class="toolbar"><label class="small muted" for="alvo">Lista de</label><select class="inp" id="alvo" style="width:auto">${meses.map(m=>`<option value="${m}" ${m===alvo?"selected":""}>${ymLabel(m)}</option>`).join("")}</select></div></div>
+   <p class="muted" style="margin:0">A lista de <b>${ymLabel(alvo)}</b> reúne quem foi cadastrado em <b>${ymLabel(origem)}</b>: <b class="mono">${cands.length}</b> trabalhador${cands.length===1?"":"es"}.</p>
+   ${cands.length?`<div class="tbl-wrap"><table><thead><tr><th>Nome</th><th>CPF</th><th>Cadastro</th><th>Situação</th></tr></thead><tbody>${cands.map(w=>`<tr><td>${esc(w.nome)}</td><td class="mono">${esc(fmtCPF(w.cpf))}</td><td class="mono">${br(w.dtCadastro)}</td><td>${pillsHTML(pendencias(w),1)}</td></tr>`).join("")}</tbody></table></div>`:""}
+   <div class="toolbar"><button class="btn primary" id="criarLista" ${cands.length?"":"disabled"}>${jaExiste?"Recriar":"Criar"} lista de ${ymLabel(alvo)}</button>${jaExiste?`<span class="small muted">Criada em ${br(jaExiste.criadoEm)}</span>`:""}</div>
+   <h3 class="eyebrow" style="margin:6px 0 0">Listas criadas</h3>
+   ${S.lists.length?`<div class="list">${S.lists.slice().sort((a,b)=>b.mes.localeCompare(a.mes)).map(l=>`<div class="row"><span><b>${ymLabel(l.mes)}</b> <span class="small muted">· ${l.itens.length} nomes · criada em ${br(l.criadoEm)}</span></span><span class="toolbar"><button class="btn sm" data-copy="${l.id}">Copiar lista</button><button class="btn sm" data-show="${l.id}">Ver</button></span></div><pre class="note mono" id="pre_${l.id}" hidden style="white-space:pre-wrap;margin:0">${esc(listaTexto(l))}</pre>`).join("")}</div>`:`<div class="empty">Nenhuma lista criada ainda.</div>`}
+  </section>`;
+  bindBanner();
+  document.querySelectorAll("[data-w]").forEach(a=>a.onclick=e=>{e.preventDefault();openWorker(a.dataset.w)});
+  const sa=$("#selAll");if(sa)sa.onchange=()=>document.querySelectorAll(".selI").forEach(c=>c.checked=sa.checked);
+  $("#markDes").onclick=async()=>{const ids=[...document.querySelectorAll(".selI:checked")].map(c=>c.value);if(!ids.length){toast("Selecione pelo menos um trabalhador");return}
+    for(const id of ids){const w=S.workers.find(x=>x.id===id);w.status="a_desligar";await Store.put("workers",w)}toast(`${ids.length} marcado${ids.length>1?"s":""} para desligar`);render()};
+  $("#alvo").onchange=e=>{ui.listaAlvo=e.target.value;vRel()};
+  $("#criarLista").onclick=async()=>{const l=jaExiste||{id:uid(),mes:alvo};l.criadoEm=iso(TODAY);l.origem=origem;l.itens=cands.map(w=>({id:w.id,nome:w.nome,cpf:w.cpf,dtCadastro:w.dtCadastro}));
+    await Store.put("lists",l);if(!jaExiste)S.lists.push(l);toast(`Lista de ${ymLabel(alvo)} criada com ${l.itens.length} nomes`);vRel()};
+  document.querySelectorAll("[data-show]").forEach(b=>b.onclick=()=>{const p=$("#pre_"+b.dataset.show);p.hidden=!p.hidden});
+  document.querySelectorAll("[data-copy]").forEach(b=>b.onclick=()=>{const l=S.lists.find(x=>x.id===b.dataset.copy);const t=listaTexto(l);
+    navigator.clipboard?.writeText(t).then(()=>toast("Lista copiada"),()=>{const p=$("#pre_"+l.id);p.hidden=false;const r=document.createRange();r.selectNodeContents(p);const s=getSelection();s.removeAllRanges();s.addRange(r);toast("Texto selecionado. Use Ctrl+C.")})});
+}
+function listaTexto(l){return `SINTRAMOMED - Lista de ${ymLabel(l.mes)} (cadastrados em ${ymLabel(l.origem||prevYm(l.mes))})\n`+l.itens.map((x,i)=>`${String(i+1).padStart(2,"0")}. ${x.nome} - CPF ${fmtCPF(x.cpf)} - cadastro ${br(x.dtCadastro)}`).join("\n")}
+
+/* ---------- ENTREVISTA ONLINE (protótipo da Ficha de Triagem) ---------- */
+const QS=[
+ {n:1,t:"Qual meio de transporte você utiliza para chegar às frentes de trabalho das tomadoras?",o:["Transporte público / coletivo","Veículo próprio|Especificar","Outros|Especificar"]},
+ {n:2,t:"Possui CNH ativa? Se sim, qual categoria?",o:["Não","Sim|Categoria (A, B, C, D ou E)"]},
+ {n:3,t:"Está recebendo seguro-desemprego ou tem parcelas programadas?",o:["Não","Sim|Meses previstos"],law:"O trabalho avulso gera recolhimento previdenciário e tributário, o que suspende o seguro-desemprego por indicar renda."},
+ {n:4,t:"Estado civil (cadastro de dependentes e benefícios da CCT)",o:["Solteiro(a)","Divorciado(a)","Viúvo(a)","Casado(a)|Tempo de convívio (anos)","União estável|Tempo de convívio (anos)"]},
+ {n:5,t:"Possui filhos ou dependentes legais (salário-família ou CCT)?",o:["Não","Sim|Idades"]},
+ {n:6,t:"Escolaridade concluída (estatística e adequação de treinamentos de NR)",o:["Ensino fundamental","Ensino médio","Técnico / superior|Especificar"]},
+ {n:7,t:"Possui restrição de saúde, recomendação ergonômica ou sequela de acidente que limite esforço físico?",o:["Não possuo restrições","Sim|Descrever a recomendação"]},
+ {n:8,t:"Está ciente e concorda em prestar serviço como Trabalhador Avulso Não Portuário (Lei 12.023/2009), de forma não contínua e com intermediação do Sindicato?",o:["Sim, estou ciente e de acordo","Não concordo"]},
+ {n:9,t:"Está ciente de que deve cumprir as normas de medicina e segurança das tomadoras, com uso obrigatório de EPI, sob pena de exclusão da escala?",o:["Sim, estou ciente","Não"]},
+ {n:10,t:"Está ciente de que as diárias e reflexos (férias, 13º e FGTS) são pagos de forma consolidada quinzenalmente pelo Sindicato, conforme a CCT?",o:["Sim, estou ciente e de acordo","Não"]},
+ {n:11,t:"Está ciente de que o Sindicato oferece assistência jurídica e previdenciária à categoria?",o:["Sim, estou ciente","Não"]},
+ {n:12,t:"Para acesso a áreas reguladas das tomadoras: possui impedimento judicial que restrinja acesso a recintos alfandegados ou centros de distribuição?",o:["Não possuo impedimentos","Sim|Se desejar, descrever"]},
+ {n:13,t:"Histórico profissional recente em movimentação de cargas, logística ou serviços gerais (últimos 5 anos)",hist:true},
+ {n:14,t:"Tem experiência prática em movimentação manual de cargas, ensacamento, estiva, paletização ou similar?",o:["Não","Sim|Tipo de atividade"]},
+ {n:15,t:"Está ciente de que o Sindicato mantém seguro de acidentes pessoais coletivo para os trabalhadores das escalas?",o:["Sim, estou ciente","Não"]},
+ {n:16,t:"Como conheceu o Sindicato ou quem indicou você?",o:["Indicação de trabalhador avulso cadastrado|Nome de quem indicou","Divulgação nas frentes de trabalho / tomadoras","Convocação ou convite da diretoria","Redes sociais, site ou canais digitais","Outros|Especificar"]}
+];
+let entDraft=null;
+function vEnt(){
+  const recent=S.interviews.slice().sort((a,b)=>b.criadoEm.localeCompare(a.criadoEm));
+  $("#view").innerHTML=`
+  <div class="head"><div><div class="eyebrow">Protótipo · Lei 12.023/2009</div><h1>Entrevista online</h1><p>Versão digital da Ficha de Declaração, Triagem e Averiguação Sindical. Hoje é preenchida no balcão; no futuro, o candidato poderá responder por um link.</p></div></div>
+  <section class="panel"><div class="panel-h"><h2>Entrevistas registradas</h2><button class="btn primary" id="novaEnt">+ Nova entrevista</button></div>
+   ${recent.length?`<div class="list">${recent.map(e=>`<div class="row"><span><b>${esc(e.dados.nome||"Sem nome")}</b> <span class="small muted mono">${esc(fmtCPF(e.dados.cpf))} · ${br(e.criadoEm)}</span> ${e.alertas.length?`<span class="pill warn">${e.alertas.length} ponto${e.alertas.length>1?"s":""} de atenção</span>`:`<span class="pill ok">Sem alertas</span>`} ${e.workerId?`<span class="pill info">cadastrado</span>`:""}</span>
+     <span class="toolbar"><button class="btn sm" data-open="${e.id}">Abrir</button>${e.workerId?"":`<button class="btn sm primary" data-conv="${e.id}">Converter em cadastro</button>`}</span></div>`).join("")}</div>`:`<div class="empty">Nenhuma entrevista ainda. Clique em Nova entrevista para testar o formulário.</div>`}
+  </section>
+  <div id="entForm"></div>`;
+  $("#novaEnt").onclick=()=>{entDraft={id:uid(),dados:{},resp:{},hist:[{},{},{},{}]};drawEnt()};
+  document.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>{entDraft=structuredClone(S.interviews.find(x=>x.id===b.dataset.open));drawEnt()});
+  document.querySelectorAll("[data-conv]").forEach(b=>b.onclick=()=>convertEnt(b.dataset.conv));
+  if(entDraft)drawEnt();
+}
+function drawEnt(){
+  const e=entDraft;const D=(k,l,t="text",cls="")=>`<div class="field ${cls}"><label for="e_${k}">${l}</label><input id="e_${k}" data-d="${k}" type="${t}" value="${esc(e.dados[k]??"")}"></div>`;
+  $("#entForm").innerHTML=`<section class="panel"><div class="panel-h"><h2>Ficha de triagem</h2><span class="small muted">SINTRAMOMED · CNPJ 03.682.762/0001-03</span></div>
+  <fieldset><legend>Dados do candidato</legend><div class="form-grid">
+   ${D("nome","Nome","text","span2")}${D("idade","Idade","number")}${D("cpf","CPF")}
+   ${D("rg","RG")}${D("tel1","1º telefone")}${D("tel1obs","Obs. 1º telefone")}${D("tel2","2º telefone")}
+   ${D("nacionalidade","Nacionalidade")}${D("naturalidade","Naturalidade")}${D("email","E-mail","email","span2")}
+   ${D("endereco","Endereço","text","span2")}${D("cep","CEP")}${D("idiomas","Idioma(s) fluente(s)")}
+  </div><label class="chk" style="margin-top:10px"><input type="checkbox" id="e_consent" ${e.dados.consent?"checked":""}> Candidato autoriza a consulta de antecedentes exigida pelas tomadoras (LGPD)</label><div class="note" style="margin-top:10px">Anexe foto 3x4 ou documento com foto pela ficha do trabalhador depois da conversão.</div></fieldset>
+  <div>${QS.map(q=>q.hist?`<div class="q"><div class="qt"><span class="qn">${q.n}.</span>${esc(q.t)}</div>${e.hist.map((h,i)=>`<div class="hist"><input class="inp" placeholder="Empresa / local" data-h="${i}.emp" value="${esc(h.emp||"")}" aria-label="Empresa ${i+1}"><input class="inp" placeholder="Função" data-h="${i}.fun" value="${esc(h.fun||"")}" aria-label="Função ${i+1}"><input class="inp" placeholder="Ano" data-h="${i}.ano" value="${esc(h.ano||"")}" aria-label="Ano ${i+1}"></div>`).join("")}</div>`
+   :`<div class="q" role="radiogroup" aria-labelledby="qt${q.n}"><div class="qt" id="qt${q.n}"><span class="qn">${q.n}.</span>${esc(q.t)}</div><div class="opts">${q.o.map((o,i)=>{const[l,extra]=o.split("|");const r=e.resp[q.n]||{};return `<div class="opt"><label class="chk"><input type="radio" name="q${q.n}" value="${i}" ${r.op==i?"checked":""}> ${esc(l)}</label>${extra?`<input type="text" class="inp" data-x="${q.n}.${i}" placeholder="${esc(extra)}" value="${esc(r.op==i?r.x||"":"")}" aria-label="${esc(extra)}">`:""}</div>`}).join("")}</div>${q.law?`<div class="law">Nota: ${esc(q.law)}</div>`:""}</div>`).join("")}</div>
+  <div class="toolbar" style="justify-content:flex-end"><button class="btn" id="entCancel">Descartar</button><button class="btn primary" id="entSave">Salvar entrevista</button></div></section>`;
+  document.querySelectorAll("#entForm [data-d]").forEach(i=>i.oninput=()=>{e.dados[i.dataset.d]=i.dataset.d==="cpf"?(i.value=fmtCPF(i.value)).replace(/\D/g,""):i.value});
+  $("#e_consent").onchange=ev=>{e.dados.consent=ev.target.checked};
+  document.querySelectorAll("#entForm input[type=radio]").forEach(r=>r.onchange=()=>{const n=r.name.slice(1);e.resp[n]={op:+r.value,x:($(`[data-x="${n}.${r.value}"]`)||{}).value||""}});
+  document.querySelectorAll("#entForm [data-x]").forEach(i=>i.oninput=()=>{const[n,op]=i.dataset.x.split(".");e.resp[n]={op:+op,x:i.value};const r=$(`input[name="q${n}"][value="${op}"]`);if(r)r.checked=true});
+  document.querySelectorAll("#entForm [data-h]").forEach(i=>i.oninput=()=>{const[k,f]=i.dataset.h.split(".");e.hist[k][f]=i.value});
+  $("#entCancel").onclick=()=>{entDraft=null;vEnt()};
+  $("#entSave").onclick=async()=>{if(!e.dados.nome){toast("Informe o nome do candidato");$("#e_nome").focus();return}
+    if(e.dados.cpf&&!cpfOk(e.dados.cpf)){toast("CPF inválido. Confira os dígitos.");return}
+    const faltam=QS.filter(q=>!q.hist&&!e.resp[q.n]).map(q=>q.n);if(faltam.length){toast(`Responda as questões ${faltam.join(", ")}`);return}
+    e.alertas=[];const neg=(n,op)=>e.resp[n]?.op===op;
+    if(neg(3,1))e.alertas.push("Recebe seguro-desemprego");if(neg(7,1))e.alertas.push("Restrição de saúde declarada");
+    [8,9,10].forEach(n=>{if(neg(n,1))e.alertas.push(`Não concorda com a questão ${n}`)});if(neg(12,1))e.alertas.push("Impedimento de acesso declarado");
+    e.criadoEm=e.criadoEm||iso(TODAY);await Store.put("interviews",e);const i=S.interviews.findIndex(x=>x.id===e.id);if(i>=0)S.interviews[i]=e;else S.interviews.push(e);
+    entDraft=null;toast(e.alertas.length?`Entrevista salva com ${e.alertas.length} ponto(s) de atenção`:"Entrevista salva");vEnt()};
+  $("#e_nome").focus();
+}
+async function convertEnt(id){const e=S.interviews.find(x=>x.id===id);const r=e.resp;
+  const cnhCat=r[2]?.op===1?r[2].x:"";
+  openWorker(null,{nome:e.dados.nome||"",cpf:e.dados.cpf||"",telefone:e.dados.tel1||"",email:e.dados.email||"",rgNum:e.dados.rg||"",cnhCat,antecConsent:!!e.dados.consent,obs:`Entrevista de ${br(e.criadoEm)}.${e.alertas.length?" Atenção: "+e.alertas.join("; ")+".":""}`,entrevistaId:e.id});
+  const save=$("#saveW");const orig=save.onclick;save.onclick=async()=>{await orig();const w=S.workers.find(x=>x.entrevistaId===e.id);if(w){e.workerId=w.id;await Store.put("interviews",e);if(current==="entrevista")vEnt()}}}
+
+/* ---------- MODELOS PARA IMPRESSÃO ---------- */
+const MODELOS=[{n:"Ficha de Declaração, Triagem e Averiguação Sindical",d:"Ficha de entrevista do candidato · 16 questões",f:"modelos/ficha-entrevista.pdf",p:2,ver:"07/2026"}];
+function vMod(){
+  $("#view").innerHTML=`<div class="head"><div><h1>Modelos para impressão</h1><p>Formulários do sindicato prontos para imprimir em A4.</p></div></div>
+  <div class="shortcuts">${MODELOS.map(m=>`<div class="panel" style="gap:8px"><div class="eyebrow">A4 · ${m.p} páginas · versão ${m.ver}</div><h2 style="font-size:20px">${esc(m.n)}</h2><span class="small muted">${esc(m.d)}</span>
+   <div class="toolbar"><a class="btn primary" href="${m.f}" target="_blank" rel="noopener">Abrir para imprimir</a></div></div>`).join("")}</div>
+  <div class="note">O PDF abre em uma nova aba (no programa instalado, no leitor de PDF do Windows). Use Ctrl+P, papel A4 e escala 100% (tamanho real).</div>`;
+}
+
+/* ---------- atualização (só no .exe) ---------- */
+$("#btnCfg").onclick=openConfig;
+$("#ver").textContent=APP_VERSION;$("#runtime").textContent=IS_TAURI?"programa instalado":"modo navegador";
+/* ---------- atualização automática: verifica a cada 5 minutos ---------- */
+const UPD_MS=5*60*1000;let updPending=null;
+function hhmm(d){return `${pad(d.getHours())}:${pad(d.getMinutes())}`}
+function showUpd(v,nov){updPending=v;const b=$("#updBar");b.hidden=false;
+  b.innerHTML=`<div class="banner" style="background:var(--accent-soft)"><span><b>Versão ${esc(v)} disponível.</b> ${esc((nov||[]).slice(0,2).join(" · "))}</span><button class="btn sm primary" id="doUpd">Atualizar agora</button></div>`;
+  $("#doUpd").onclick=aplicarUpd}
+async function aplicarUpd(){
+  if(IS_TAURI){try{const up=await window.__TAURI__.updater.check();if(up){toast(`Baixando versão ${up.version}…`);await up.downloadAndInstall();await window.__TAURI__.process.relaunch()}}catch(e){toast("Não foi possível instalar agora. Tente de novo em instantes.")}return}
+  location.reload()}
+async function checkUpd(manual){
+  const info=$("#updInfo");
+  try{
+    if(IS_TAURI){const up=await window.__TAURI__.updater.check();if(up)showUpd(up.version,[up.body||""]);else if(manual)toast("Você já está na versão mais recente")}
+    else{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});const v=await r.json();
+      if(v.version&&v.version!==APP_VERSION)showUpd(v.version,v.novidades);else if(manual)toast("Você já está na versão mais recente")}
+    const n=new Date();info.textContent=`Verificado às ${hhmm(n)} · próxima às ${hhmm(new Date(n.getTime()+UPD_MS))}`;
+  }catch(e){info.textContent="Sem conexão para verificar. Nova tentativa em 5 min.";if(manual)toast("Não foi possível verificar agora. Confira a internet.")}
+}
+$("#btnUpdate").onclick=()=>checkUpd(true);
+setTimeout(()=>checkUpd(false),4000);setInterval(()=>checkUpd(false),UPD_MS);
+
+/* ---------- links externos no .exe: abrem no navegador / leitor padrão do Windows ---------- */
+if(IS_TAURI)document.addEventListener("click",ev=>{const a=ev.target.closest('a[target="_blank"]');if(!a)return;ev.preventDefault();
+  const op=window.__TAURI__?.opener;if(!op)return;op.openUrl(a.href)});
+
+/* ---------- início ---------- */
+(async()=>{await Store.open();await loadAll();
+  if(IS_TAURI){try{Sync.cfg=await tinvoke("cred_status")}catch(e){Sync.cfg={configurado:false}}}
+  else await seedIfEmpty();
+  render();syncInfo();
+  if(IS_TAURI){setTimeout(()=>syncCiclo(false),2500);setInterval(()=>syncCiclo(false),SYNC_MS)}})();
+</script>

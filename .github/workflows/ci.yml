@@ -1,0 +1,15 @@
+# Confere se o programa compila a cada envio (sem gerar instalador)
+name: Conferir compilação
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  check:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: swatinem/rust-cache@v2
+        with: { workspaces: "src-tauri -> target" }
+      - run: cargo check --manifest-path src-tauri/Cargo.toml
