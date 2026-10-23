@@ -33,4 +33,5 @@ WhatsApp para envio de documentos com foto: (67) 9 9805-5700
 - O trabalho avulso gera recolhimento de INSS e impostos, o que suspende o seguro-desemprego.
 
 ## Horário de atendimento
-(preencher: dias e horários da sede)
+Segunda a sexta-feira, das 7h às 11h e das 13h às 17h (fechado para almoço das 11h às 13h).
+Sábados e domingos: sem atendimento na sede.

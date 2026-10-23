@@ -37,4 +37,3 @@ Depois peça ao Claude: "configure o atendente do WhatsApp usando a pasta whatsa
 
 ## Falta
 - Texto da Convenção Coletiva (CCT) vigente e das NRs (NR-06, NR-07, NR-35, NR-33): adicionar em `base-legal/`.
-- Horário de atendimento da sede em `base-sindicato/sindicato.md`.
