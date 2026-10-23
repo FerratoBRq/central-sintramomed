@@ -30,9 +30,9 @@ pub async fn instalar_atualizacao(app: tauri::AppHandle, url: String) -> Result<
     std::fs::write(&setup, &bytes).map_err(|e| format!("Não foi possível salvar o instalador: {e}"))?;
     let exe = std::env::current_exe().map_err(|e| e.to_string())?;
 
-    // Espera o instalador terminar (modo passivo, sem perguntas) e abre a nova versão.
+    // Espera o instalador terminar (modo silencioso, sem janelas) e abre a nova versão.
     let script = format!(
-        "Start-Sleep -Seconds 1; Start-Process -Wait -FilePath {} -ArgumentList '/P'; Start-Process -FilePath {}",
+        "Start-Sleep -Seconds 1; Start-Process -Wait -FilePath {} -ArgumentList '/S'; Start-Process -FilePath {}",
         aspas_ps(&setup.to_string_lossy()),
         aspas_ps(&exe.to_string_lossy())
     );

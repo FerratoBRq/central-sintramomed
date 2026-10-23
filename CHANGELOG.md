@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.9 — 23/10/2026
+- Visual novo, no estilo Apple: barra lateral translúcida, cartões brancos, tipografia do sistema e azul como cor de destaque, com tema escuro.
+- Tela de Feedback: registre sugestões e problemas, envie ao GitHub com um clique e acompanhe o que já foi implementado; notas de cada versão publicada.
+- Modelos para impressão abrem dentro do programa, com botão Imprimir (antes não abriam no programa instalado).
+- Atualização automática instala em modo silencioso e reabre o programa sozinha.
+
 ## 0.1.8 — 23/10/2026
 - Lançar ASO ou NR: anexe o documento (PDF com texto ou digitalizado; no programa instalado o texto da imagem é lido por OCR), o Central encontra o trabalhador pelo CPF, lê tipo de exame, data, clínica, resultado e liberações, mostra para conferir e lança no Sistema eSocial (aba Atestados/Exames ou Cursos), marcando o registro anterior como INATIVO. Depois relê o sistema para confirmar e atualiza a ficha.
 - "Só registrar no Central" quando não for lançar no sistema.
