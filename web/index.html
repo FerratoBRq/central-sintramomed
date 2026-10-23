@@ -211,6 +211,16 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
   .hist,.q .opts,.q .law{padding-left:0} .hist{grid-template-columns:minmax(0,1fr)}
   .tiles{gap:10px} .tile{padding:14px} .tile .ic{width:38px;height:38px}
 }
+.rodape{position:sticky;bottom:0;margin-top:28px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px 4px;padding-bottom:max(10px,env(safe-area-inset-bottom,0px));font-size:12.5px;color:var(--muted);background:var(--bg);border-top:1px solid var(--line);font-variant-numeric:tabular-nums;text-transform:capitalize}
+.ficha{background:#fff;color:#111;font:13px/1.45 Figtree,Arial,sans-serif;padding:28px;max-width:794px;width:100%;margin:0 auto;box-shadow:0 2px 10px rgba(0,0,0,.12)}
+.ficha header{display:flex;justify-content:space-between;gap:16px;border-bottom:2px solid #1F6B4F;padding-bottom:10px}
+.ficha header div{display:flex;flex-direction:column;gap:2px}.ficha header b{font-size:18px;color:#1F6B4F}.ficha header span{font-size:11px;color:#444}
+.ficha .fr{text-align:right;font-weight:600;display:block}.ficha .fr small{font-weight:400;color:#555}
+.ficha h1{font-size:20px;margin:14px 0 6px}.ficha h2{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#1F6B4F;margin:14px 0 4px}
+.ficha table{width:100%;min-width:0;border-collapse:collapse}.ficha th,.ficha td{border:1px solid #ccc;padding:5px 8px;text-align:left;font-size:12.5px;background:#fff;color:#111;text-transform:none;letter-spacing:0}.ficha th{width:30%;background:#f3f5f2;font-weight:600}
+.ficha footer{display:flex;justify-content:space-between;gap:20px;margin-top:48px;text-align:center;font-size:12px}
+#printArea{display:none}
+@media print{body>*:not(#printArea){display:none!important}#printArea{display:block!important}#printArea .ficha{box-shadow:none;padding:0;max-width:none}@page{size:A4;margin:14mm}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 
@@ -230,20 +240,21 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
       <button data-v="modelos"><span data-ico="print"></span>Modelos para impressão</button>
     </nav>
     <div class="side-foot">
-      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.7</b></span><span id="runtime">modo navegador</span></div>
+      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.8</b></span><span id="runtime">modo navegador</span></div>
       <span id="syncInfo"></span>
       <span id="updInfo">Verificando atualizações…</span>
       <button class="link" id="btnUpdate" type="button">Verificar agora</button>
     </div>
   </aside>
-  <main><div class="wrap"><div id="updBar" hidden></div><div id="view" style="display:flex;flex-direction:column;gap:22px"></div></div></main>
+  <main><div class="wrap"><div id="updBar" hidden></div><div id="view" style="display:flex;flex-direction:column;gap:22px"></div></div><footer class="rodape"><span id="relogio"></span><span>Central Sintramomed</span></footer></main>
 </div>
 <div id="layer"></div>
+<div id="printArea" aria-hidden="true"></div>
 <input type="file" id="hiddenFile" hidden>
 
 <script>
 "use strict";
-const APP_VERSION="0.1.7";
+const APP_VERSION="0.1.8";
 /* ---------- utilidades ---------- */
 const $=(s,r=document)=>r.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -313,8 +324,9 @@ function pendencias(w){
   if(!w.ev?.s2300)p.push({l:"crit",t:"Início não enviado",evt:"S-2300"});
   if(!w.asoData)p.push({l:"crit",t:"Sem ASO admissional",evt:"S-2220"});else{const v=venc("ASO",w.asoValidade,"S-2220");if(v)p.push(v)}
   if(!w.ev?.s2240)p.push({l:"warn",t:"Condições ambientais não registradas",evt:"S-2240"});
-  if(w.exige35){if(!w.nr35Data)p.push({l:"warn",t:"Sem treinamento NR-35",evt:"NR-35"});else{const v=venc("NR-35",w.nr35Validade,"NR-35");if(v)p.push(v)}}
-  if(w.exige33){if(!w.nr33Data)p.push({l:"warn",t:"Sem treinamento NR-33",evt:"NR-33"});else{const v=venc("NR-33",w.nr33Validade,"NR-33");if(v)p.push(v)}}
+  // NR-35/NR-33 só são cobradas quando o ASO libera altura/espaço confinado (ou quando ainda não há essa informação).
+  if(w.exige35&&w.asoAltura!==false){if(!w.nr35Data)p.push({l:"warn",t:"Sem treinamento NR-35",evt:"NR-35"});else{const v=venc("NR-35",w.nr35Validade,"NR-35");if(v)p.push(v)}}
+  if(w.exige33&&w.asoConfinado!==false){if(!w.nr33Data)p.push({l:"warn",t:"Sem treinamento NR-33",evt:"NR-33"});else{const v=venc("NR-33",w.nr33Validade,"NR-33");if(v)p.push(v)}}
   if(w.cnhValidade){const v=venc("CNH",w.cnhValidade,"CNH");if(v)p.push(v)}
   if(!w.epiEntrega)p.push({l:"warn",t:"Ficha de EPI não entregue",evt:"EPI"});
   const tem=new Set(docsDe(w.id).map(d=>d.tipo));const falta=DOC_OBRIG.filter(t=>!tem.has(t));
@@ -372,7 +384,7 @@ const ATALHOS=[
   {id:"escavador",n:"Escavador",d:"Pesquisa de processos por nome",u:"https://www.escavador.com/",t:"pesquisa"},
   {id:"semaforo",n:"Semáforo eSocial",d:"Status dos web services do governo",u:"https://www.gov.br/esocial/pt-br/acesso-ao-sistema/semaforo",t:"governo",semLogin:true}
 ];
-const NOVIDADES=["Atualização sozinha pelo GitHub, sem chave: baixa, instala e reabre o programa","Trabalhadores aparecem durante a primeira importação (gravação em lotes de 25)","Corrige acentos quebrados no programa instalado","Impede abrir duas janelas do programa ao mesmo tempo","Importação automática: o programa entra sozinho no Sistema eSocial e atualiza os trabalhadores a cada 5 minutos","Senha do Sistema eSocial guardada no Windows, pedida uma única vez","Importação completa do Sistema eSocial: status, última produção, ASO, NR-33/35, EPI, documentos e endereço","Novos status: afastado e inativo no sistema","Cofre de acessos simplificado: só Sistema eSocial e Escavador","Verificação automática de atualizações a cada 5 minutos","Nova interface: tema claro e escuro, barra lateral com ícones, atalhos e indicadores redesenhados","Engrenagem de configurações com cofre de acessos (login e senha) protegido por PIN","Botões Copiar usuário e Copiar senha nos atalhos do painel","Atalho do Escavador no painel","Verificação de antecedentes na ficha e na entrevista"];
+const NOVIDADES=["Liberação do ASO para altura e espaço confinado: sem liberação, NR-35/NR-33 não são cobradas","Lançar ASO e NR no Sistema eSocial a partir do documento anexado (lê datas e tipo)","Editar o endereço direto no Sistema eSocial","Emitir ficha de cadastro do trabalhador para imprimir","Data e hora no rodapé","Atualização sozinha pelo GitHub, sem chave: baixa, instala e reabre o programa","Trabalhadores aparecem durante a primeira importação (gravação em lotes de 25)","Corrige acentos quebrados no programa instalado","Impede abrir duas janelas do programa ao mesmo tempo","Importação automática: o programa entra sozinho no Sistema eSocial e atualiza os trabalhadores a cada 5 minutos","Senha do Sistema eSocial guardada no Windows, pedida uma única vez","Importação completa do Sistema eSocial: status, última produção, ASO, NR-33/35, EPI, documentos e endereço","Novos status: afastado e inativo no sistema","Cofre de acessos simplificado: só Sistema eSocial e Escavador","Verificação automática de atualizações a cada 5 minutos","Nova interface: tema claro e escuro, barra lateral com ícones, atalhos e indicadores redesenhados","Engrenagem de configurações com cofre de acessos (login e senha) protegido por PIN","Botões Copiar usuário e Copiar senha nos atalhos do painel","Atalho do Escavador no painel","Verificação de antecedentes na ficha e na entrevista"];
 
 /* ---------- cofre de acessos: AES-GCM com chave derivada do PIN (PBKDF2). A chave fica só na memória; recarregar a página tranca. ---------- */
 const b64e=u=>btoa(String.fromCharCode(...u));const b64d=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
@@ -483,7 +495,7 @@ function vTrab(){
   if(q)ws=ws.filter(w=>w.nome.toLowerCase().includes(q)||(qd&&w.cpf.includes(qd))||(w.matricula||"").includes(q));
   const chips=[["todos","Ativos"],["crit","Pendência crítica"],["inativos","Sem produção +3 meses"],["a_desligar","A desligar"],["outros","Inativos e afastados"],["desligados","Desligados"]];
   $("#view").innerHTML=`
-  <div class="head"><div><h1>Trabalhadores</h1><p>Ficha completa com documentos, carteira, SST e situação dos eventos eSocial.</p></div><div class="toolbar"><button class="btn" id="impBtn">${ico("upload",16)} Importar do Sistema eSocial</button><button class="btn primary" id="novoTrab">${ico("plus",16)} Novo trabalhador</button></div></div>
+  <div class="head"><div><h1>Trabalhadores</h1><p>Ficha completa com documentos, carteira, SST e situação dos eventos eSocial.</p></div><div class="toolbar"><button class="btn" id="lancBtn">${ico("upload",16)} Lançar ASO ou NR</button><button class="btn" id="impBtn">${ico("upload",16)} Importar do Sistema eSocial</button><button class="btn primary" id="novoTrab">${ico("plus",16)} Novo trabalhador</button></div></div>
   ${exBanner()}
   <div class="toolbar"><div class="search">${ico("search",16)}<input class="inp" id="busca" placeholder="Buscar por nome, CPF ou matrícula" value="${esc(ui.busca)}" aria-label="Buscar trabalhador"></div>
    <div class="chips">${chips.map(([k,l])=>`<button class="chip" aria-pressed="${f===k}" data-f="${k}">${l}</button>`).join("")}</div></div>
@@ -493,7 +505,7 @@ function vTrab(){
   </tbody></table></div>`:`<div class="empty">Nenhum trabalhador neste filtro.</div>`}`;
   bindBanner();
   $("#novoTrab").onclick=()=>openWorker(null);
-  $("#impBtn").onclick=openImport;
+  $("#impBtn").onclick=openImport;$("#lancBtn").onclick=()=>abrirLancamento(null,()=>render());
   const b=$("#busca");b.oninput=()=>{ui.busca=b.value;const pos=b.selectionStart;vTrab();const nb=$("#busca");nb.focus();nb.setSelectionRange(pos,pos)};
   document.querySelectorAll("[data-f]").forEach(c=>c.onclick=()=>{ui.filtro=c.dataset.f;vTrab()});
   document.querySelectorAll("tr[data-w]").forEach(r=>r.onclick=()=>openWorker(r.dataset.w));
@@ -507,12 +519,14 @@ function openWorker(id,preset){
   const C=(path,l,evt)=>{const [a,b]=path.split(".");const v=b?w[a]?.[b]:w[a];return `<label class="chk"><input type="checkbox" id="c_${path.replace(".","_")}" data-c="${path}" ${v?"checked":""}> ${evt?`<span class="evt">${evt}</span>`:""} ${l}</label>`};
   $("#layer").innerHTML=`<div class="scrim" id="scrim"></div>
   <div class="drawer" role="dialog" aria-modal="true" aria-labelledby="dh">
-   <div class="drawer-h"><div><div class="eyebrow">${isNew?"Novo cadastro":"Ficha do trabalhador"}</div><h2 id="dh">${esc(w.nome||"Sem nome")}</h2></div><button class="btn" id="closeD">Fechar</button></div>
+   <div class="drawer-h"><div><div class="eyebrow">${isNew?"Novo cadastro":"Ficha do trabalhador"}</div><h2 id="dh">${esc(w.nome||"Sem nome")}</h2></div><div class="toolbar">${isNew?"":`<button class="btn" id="fichaW">${ico("print",16)} Emitir ficha</button>`}<button class="btn" id="closeD">Fechar</button></div></div>
    <div class="drawer-b">
     <div id="pendBox"></div>
     <fieldset><legend>Identificação</legend><div class="form-grid">
      ${F("nome","Nome completo *","text","span2")}${F("cpf","CPF *")}${F("nis","NIS / PIS")}
      ${F("dtNasc","Data de nascimento","date")}${F("telefone","Telefone")}${F("email","E-mail","email","span2")}
+     ${F("endereco","Endereço","text","span4")}
+     ${isNew?"":`<div class="span4 toolbar"><button class="btn sm" type="button" id="endW">Editar endereço no Sistema eSocial</button></div>`}
     </div></fieldset>
     <fieldset><legend>Vínculo avulso <span class="evt">S-2300</span></legend><div class="form-grid">
      ${F("matricula","Matrícula")}
@@ -529,7 +543,10 @@ function openWorker(id,preset){
     <fieldset><legend>Saúde e segurança</legend><div class="form-grid">
      ${F("asoData","Data do ASO (S-2220)","date")}${F("asoValidade","Validade do ASO","date")}${F("epiEntrega","Entrega da ficha de EPI","date","span2")}
      ${F("nr35Data","NR-35 · conclusão","date")}${F("nr35Validade","NR-35 · validade","date")}${F("nr33Data","NR-33 · conclusão","date")}${F("nr33Validade","NR-33 · validade","date")}
+     <div class="span4 toolbar">${C("asoAltura","ASO: apto para trabalho em altura")} ${C("asoConfinado","ASO: apto para espaço confinado")}</div>
      <div class="span4 toolbar">${C("exige35","Exige NR-35 (trabalho em altura)")} ${C("exige33","Exige NR-33 (espaço confinado)")}</div>
+     <div class="span4 note">Sem liberação no ASO para altura ou espaço confinado, a NR-35 ou a NR-33 não é cobrada nas pendências.</div>
+     <div class="span4 toolbar">${isNew?"":`<button class="btn" type="button" id="lancW">${ico("upload",16)} Lançar ASO ou NR no Sistema eSocial</button>`}</div>
      <div class="span4 note">Ao preencher a data de conclusão, a validade é sugerida: ASO 1 ano, NR-33 1 ano, NR-35 2 anos. Ajuste se o PCMSO definir outro prazo.</div>
     </div></fieldset>
     <fieldset><legend>Verificação de antecedentes</legend><div class="form-grid">
@@ -552,7 +569,7 @@ function openWorker(id,preset){
   </div>`;
   const close=()=>{$("#layer").innerHTML=""};
   $("#scrim").onclick=close;$("#closeD").onclick=close;$("#cancelD").onclick=close;
-  const read=()=>{document.querySelectorAll("#layer [data-k]").forEach(i=>w[i.dataset.k]=i.value);document.querySelectorAll("#layer [data-c]").forEach(i=>{const[a,b]=i.dataset.c.split(".");if(b){w[a]=w[a]||{};w[a][b]=i.checked}else w[a]=i.checked});w.cpf=w.cpf.replace(/\D/g,"")};
+  const read=()=>{document.querySelectorAll("#layer [data-k]").forEach(i=>w[i.dataset.k]=i.value);document.querySelectorAll("#layer [data-c]").forEach(i=>{const[a,b]=i.dataset.c.split(".");if(b){w[a]=w[a]||{};w[a][b]=i.checked}else{if(/^aso(Altura|Confinado)$/.test(a)&&w[a]===undefined&&!i.dataset.mexeu)return;w[a]=i.checked}});w.cpf=w.cpf.replace(/\D/g,"")};
   const pendBox=()=>{read();const p=pendencias(w);$("#pendBox").innerHTML=p.length?`<div class="chips">${pillsHTML(p,20)}</div>`:`<span class="pill ok">Nenhuma pendência</span>`};
   const auto={asoData:["asoValidade",1],nr35Data:["nr35Validade",2],nr33Data:["nr33Validade",1]};
   document.querySelectorAll("#layer [data-k],#layer [data-c]").forEach(i=>i.addEventListener("change",()=>{const a=auto[i.dataset.k];if(a&&i.value){const t=$("#f_"+a[0]);if(!t.value)t.value=addYears(i.value,a[1])}if(i.dataset.k==="cpf")i.value=fmtCPF(i.value);if(i.dataset.k==="nome")$("#dh").textContent=i.value||"Sem nome";pendBox()}));
@@ -572,6 +589,11 @@ function openWorker(id,preset){
     if(S.workers.some(x=>x.id!==w.id&&w.cpf&&x.cpf===w.cpf)){toast("Já existe um trabalhador com este CPF");return}
     if(w.status==="desligado"&&!w.dtTermino)w.dtTermino=iso(TODAY);
     await Store.put("workers",w);const i=S.workers.findIndex(x=>x.id===w.id);if(i>=0)S.workers[i]=w;else S.workers.push(w);close();toast("Ficha salva");render()};
+  const fb=$("#fichaW");if(fb)fb.onclick=()=>{read();emitirFicha(w)};
+  [["asoAltura","exige35"],["asoConfinado","exige33"]].forEach(([a,b])=>{const ca=$("#c_"+a),cb=$("#c_"+b);if(ca&&cb)ca.addEventListener("change",()=>{ca.dataset.mexeu="1";cb.checked=ca.checked;pendBox()})});
+  const reabrir=()=>{render();openWorker(w.id)};
+  const lb=$("#lancW");if(lb)lb.onclick=()=>abrirLancamento(S.workers.find(x=>x.id===w.id)||w,reabrir);
+  const eb=$("#endW");if(eb)eb.onclick=()=>abrirEndereco(S.workers.find(x=>x.id===w.id)||w,reabrir);
   const del=$("#delW");if(del)del.onclick=async()=>{if(!del.dataset.armed){del.dataset.armed="1";del.textContent="Confirmar exclusão (apaga anexos)";return}
     for(const dc of docsDe(w.id))await Store.del("docs",dc.id);await Store.del("workers",w.id);await loadAll();close();toast("Cadastro excluído");render()};
 }
@@ -951,6 +973,192 @@ setTimeout(()=>checkUpd(false),4000);setInterval(()=>checkUpd(false),UPD_MS);
 /* ---------- links externos no .exe: abrem no navegador / leitor padrão do Windows ---------- */
 if(IS_TAURI)document.addEventListener("click",ev=>{const a=ev.target.closest('a[target="_blank"]');if(!a)return;ev.preventDefault();
   const op=window.__TAURI__?.opener;if(!op)return;op.openUrl(a.href)});
+
+// Leitura de ASO e certificado de NR a partir do texto do documento (PDF com texto ou OCR).
+// Modelo de referência: ASO da AESMT (Nome, RG/CPF, Avaliação, Data, Condições com "( X )").
+function lerDocumentoTexto(txt){
+  const t=String(txt||"").replace(/[ \t]+/g," ");
+  const dIso=s=>{const m=String(s||"").match(/(\d{2})[\/.-](\d{2})[\/.-](\d{4})/);if(!m)return"";const[y,mo,da]=[+m[3],+m[2],+m[1]];return y>1990&&y<2100&&mo>=1&&mo<=12&&da>=1&&da<=31?`${m[3]}-${m[2]}-${m[1]}`:""};
+  const datas=[...t.matchAll(/\b\d{2}[\/.-]\d{2}[\/.-]\d{4}\b/g)].map(m=>dIso(m[0])).filter(Boolean);
+  const marcado=re=>new RegExp("\\(\\s*[xX]\\s*\\)\\s*"+re,"i").test(t);
+  const cpf=[...t.matchAll(/\b(\d{3})[.\s]?(\d{3})[.\s]?(\d{3})\s?-?\s?(\d{2})\b/g)].map(m=>m.slice(1).join("")).find(c=>cpfOk(c))||"";
+  const nome=((t.match(/Nome\s*:?\s*([A-ZÀ-Ú][A-ZÀ-Ú ]{4,60}?)(?=\s{2,}|\s*_|\s*Data|\s*\n|$)/m)||[])[1]||"").trim();
+  const nr=(t.match(/\bNR[\s-]*0?(\d{1,2})\b/i)||[])[1];
+  const ehAso=/\bA\.?S\.?O\.?\b|atestado de sa\S*de ocupacional|\bapto\b|\binapto\b|PCMSO/i.test(t);
+  const out={tipo:ehAso&&!/certificado/i.test(t)?"aso":(nr?"curso":(ehAso?"aso":"")),cpf,nome,datas:[...new Set(datas)]};
+  if(out.tipo==="aso"){
+    const av=((t.match(/Avalia\S*\s*:?\s*([A-Za-zÀ-ú]+)/i)||[])[1]||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toUpperCase();
+    out.exame=/DEMISS/.test(av+t.slice(0,0))?"DEMISSIONAL":/^RETORNO/.test(av)?"RETORNO":/^MUDAN/.test(av)?"MUDANCA":/^PERI/.test(av)?"PERIODICO":/^ADMIS/.test(av)?"ADMISSIONAL":(/demissional/i.test(t)?"DEMISSIONAL":/peri\S*dico/i.test(t)?"PERIODICO":"ADMISSIONAL");
+    out.resultado=marcado("Inapto")?"INAPTO":marcado("Apto")?"APTO":(/\binapto\b/i.test(t)&&!/\bapto\b/i.test(t.replace(/inapto/ig,""))?"INAPTO":"");
+    out.altura=marcado("Para Trabalho em Altura");out.confinado=marcado("Para Espa\\S*o Confinado");
+    const crm=t.match(/CRM[\s\/-]*([A-Z]{2})?[\s\/-]*(\d{3,7})/i);out.crm=crm?`CRM ${crm[1]||""} ${crm[2]}`.replace(/\s+/g," ").trim():"";
+    const cl=t.match(/cl[ií]nica\s+[^\d,.;:\n]{3,50}/i);out.clinica=/AESMT|ASSESSORIA EM MEDICINA/i.test(t)?"AESMT":(cl?cl[0].trim():"");
+    const dExame=dIso((t.match(/\bData\s*(?:do exame|de realiza\S*)?\s*:\s*(\d{2}[\/.-]\d{2}[\/.-]\d{4})/i)||[])[1]);
+    const hoje=iso(new Date());const nasc=dIso((t.match(/Nascimento\s*:?\s*(\d{2}[\/.-]\d{2}[\/.-]\d{4})/i)||[])[1]);
+    out.data=dExame||out.datas.filter(d=>d<=hoje&&d!==nasc).sort().pop()||"";out.validade=out.data?addYears(out.data,1):"";
+  }else if(out.tipo==="curso"){
+    out.nr="NR "+Number(nr);
+    const ch=t.match(/(\d{1,3})\s*(h|horas)\b/i);out.cargaHoraria=ch?ch[1]+"h":"";
+    const hoje=iso(new Date());out.data=out.datas.filter(d=>d<=hoje).sort().pop()||out.datas[0]||"";
+    const anos={"35":2,"33":1,"11":1,"12":2,"18":2,"31":2,"10":2};out.validade=out.data?addYears(out.data,anos[String(Number(nr))]||1):"";
+    const emp=t.match(/(ministrado por|empresa|instrutor[a]?|realizado por)\s*:?\s+([^,.;\n]{3,60})/i);out.empresa=emp?emp[2].trim():"";
+  }
+  return out;
+}
+
+/* ---------- LANÇAR NO SISTEMA eSOCIAL (ASO, NR, endereço) ----------
+   O Guia Campo Grande guarda a informação; o Central lê o documento, lança pelo formulário
+   do próprio sistema, confere relendo a página e puxa a ficha de volta. Só no programa instalado. */
+const semAcento=s=>String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toUpperCase().trim();
+function formCampos(html){
+  const d=dom(html),f=d.forms[0];if(!f)throw new Error("Formulário não encontrado no Sistema eSocial.");
+  const sets={};for(const m of html.matchAll(/SetSelect\(document\.form1\.(\w+)\s*,\s*'([^']*)'\)/g))sets[m[1]]=m[2];
+  const out=[];for(const e of f.elements){if(!e.name||["button","submit","reset"].includes(e.type))continue;
+    let v=e.tagName==="SELECT"?(sets[e.name]??(e.querySelector("option[selected]")||{}).value??""):e.tagName==="TEXTAREA"?e.textContent:(e.getAttribute("value")||"");
+    if((e.type==="radio"||e.type==="checkbox")&&!e.hasAttribute("checked"))continue;out.push([e.name,v])}
+  return {campos:out,d,sets}}
+async function gravarForm(pagina,mudancas,acao){
+  const {campos}=formCampos(await sget(pagina));const m={...mudancas,acao};
+  const final=campos.map(([k,v])=>[k,k in m?String(m[k]):v]);for(const k of Object.keys(m))if(!final.some(([x])=>x===k))final.push([k,String(m[k])]);
+  return tinvoke("esocial_gravar",{caminho:pagina,campos:final})}
+// Na lista do sistema, cada registro tem um botão "Alterar" com onClick="location.href='...&chave=123'".
+function registros(html,chave){return [...dom(html).querySelectorAll(`[onclick*="${chave}="],a[href*="${chave}="]`)].map(a=>{const tr=a.closest("tr");const ref=a.getAttribute("onclick")||a.getAttribute("href")||"";return {codigo:(ref.match(new RegExp(chave+"=(\\d+)"))||[])[1],texto:(tr?tr.textContent:"").replace(/\s+/g," ").trim()}}).filter(r=>r.codigo)}
+const NR_COD={"NR 33":"1","NR 35":"2","NR 12":"3","NR 31":"4","NR 11":"5","NR 18":"6"};
+async function lancarNoSistema(w,x){
+  if(!IS_TAURI)throw new Error("O lançamento no Sistema eSocial funciona no programa instalado.");
+  if(!w.origemId)throw new Error("Este trabalhador ainda não foi sincronizado com o Sistema eSocial.");
+  const aso=x.tipo==="aso";
+  const lista=aso?`/register/cad_colabexames.php?cod_colaborador=${w.origemId}`:`/register/cad_colabcursos.php?cod_colaborador=${w.origemId}`;
+  const chave=aso?"colabexam_codigo":"colabcurs_codigo";
+  const nomeCurso=aso?"":x.nr;
+  const antes=registros(await sget(lista),chave).filter(r=>/\bATIVO\b/.test(r.texto)&&!/INATIVO/.test(r.texto)&&(aso?/ASO/.test(r.texto):r.texto.includes(nomeCurso)));
+  const muda=aso?{cod_tipo:"1",exam_codigo:x.exameCod,colabexam_empresa:semAcento(x.empresa),colabexam_data:br(x.data),colabexam_datavalidade:br(x.validade)}
+                :{cod_tipo:"1",curs_codigo:NR_COD[x.nr],colabcurs_empresa:semAcento(x.empresa),colabcurs_data:br(x.data),colabcurs_datavalidade:br(x.validade)};
+  await gravarForm(lista,muda,"Inserir");
+  const depois=registros(await sget(lista),chave);
+  const novo=depois.find(r=>!antes.some(a=>a.codigo===r.codigo)&&r.texto.includes(br(x.data))&&r.texto.includes(br(x.validade)));
+  if(!novo)throw new Error("O Sistema eSocial não mostrou o registro novo. Confira lá antes de tentar de novo.");
+  let inativados=0;
+  if(x.inativarAnterior)for(const a of antes){const pg=aso?`/register/cad_colabexames.php?acao=Procurar&colabexam_codigo=${a.codigo}`:`/register/cad_colabcursos.php?acao=Procurar&colabcurs_codigo=${a.codigo}`;await gravarForm(pg,{cod_tipo:"2"},"Alterar");inativados++}
+  await atualizarDoSistema(w);
+  return {inativados}}
+async function atualizarDoSistema(w){const rec=await lerTrabalhador(w.origemId,w.ultimaProducao);await aplicarPlano(planImport([rec]),{syncAt:new Date().toISOString()})}
+async function textoDoArquivo(file,aviso){
+  let txt="";
+  if(/pdf$/i.test(file.type)||/\.pdf$/i.test(file.name)){const pdf=await pdfjsLib.getDocument({data:new Uint8Array(await file.arrayBuffer())}).promise;
+    for(let i=1;i<=Math.min(pdf.numPages,3);i++){const c=await (await pdf.getPage(i)).getTextContent();txt+=" "+c.items.map(it=>it.str).join(" ")}
+    if(txt.replace(/\s/g,"").length>40)return txt;
+    if(!IS_TAURI)return txt;aviso("Documento digitalizado: lendo a imagem…");
+    const pg=await pdf.getPage(1);const c=await renderPage(pdf,1,1600);return ocr(c)}
+  if(/^image\//.test(file.type)){if(!IS_TAURI)return "";aviso("Lendo a imagem…");return ocr(file)}
+  return txt}
+let _tess=null;
+async function ocr(src){
+  if(!window.Tesseract)await new Promise((ok,err)=>{const s=document.createElement("script");s.src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js";s.onload=ok;s.onerror=()=>err(new Error("Não foi possível carregar o leitor de imagens. Confira a internet."));document.head.appendChild(s)});
+  _tess=_tess||await Tesseract.createWorker("por");const r=await _tess.recognize(src);return r.data.text||""}
+function abrirLancamento(w0,aoTerminar){let w=w0;
+  const m=document.createElement("div");m.className="modal";
+  m.innerHTML=`<div class="scrim"></div><div class="modal-c" role="dialog" aria-modal="true" aria-labelledby="lh"><div class="drawer-h"><div><div class="eyebrow" id="lWho">${esc(w?w.nome:"Trabalhador identificado pelo CPF do documento")}</div><h2 id="lh" style="font-size:20px">Lançar ASO ou NR no Sistema eSocial</h2></div><button class="btn" id="lClose">Fechar</button></div>
+   <div class="drawer-b" style="align-items:stretch;background:var(--bg)">
+    <label class="drop" for="lFile" style="padding:22px"><span class="ic">${ico("upload",24)}</span><b style="font-size:18px">Anexar ASO ou certificado de NR</b><span class="muted small">PDF ou foto · o Central lê as datas e o tipo</span></label><input type="file" id="lFile" accept=".pdf,image/*" hidden>
+    <div id="lRes"></div></div></div>`;
+  document.body.appendChild(m);const close=()=>m.remove();m.querySelector(".scrim").onclick=close;$("#lClose").onclick=close;
+  let arquivo=null;
+  const form=x=>{const aso=x.tipo!=="curso";
+    const doDoc=x.cpf?S.workers.find(z=>z.cpf===x.cpf):null;
+    const outro=w0&&x.cpf&&x.cpf!==w0.cpf;
+    if(!w0)w=doDoc||null;
+    const quem=outro?`<div class="banner" style="background:var(--crit-soft)">O CPF do documento (${esc(fmtCPF(x.cpf))}${x.nome?" · "+esc(x.nome):""}) não é de ${esc(w0.nome)}. Confira o arquivo.</div>`
+      :w?`<div class="toolbar"><span class="pill ok">${esc(w.nome)} · CPF ${esc(fmtCPF(w.cpf))}</span>${x.altura?`<span class="pill info">Liberado para altura</span>`:""}${x.confinado?`<span class="pill info">Liberado para espaço confinado</span>`:""}</div>`
+      :`<div class="field"><label for="lWk">Trabalhador${x.cpf?` (CPF ${esc(fmtCPF(x.cpf))} não encontrado no Central)`:""}</label><select id="lWk"><option value="">— escolher —</option>${S.workers.filter(ATIVOS).sort((a,b)=>a.nome.localeCompare(b.nome)).map(z=>`<option value="${z.id}">${esc(z.nome)}</option>`).join("")}</select></div>`;
+    $("#lRes").innerHTML=`<div class="panel" style="box-shadow:none">${quem}<div class="note">Confira os dados lidos do documento antes de lançar. Campos em branco não foram encontrados.</div>
+     <div class="form-grid">
+      <div class="field"><label for="lTipo">Documento</label><select id="lTipo"><option value="aso" ${aso?"selected":""}>ASO</option><option value="curso" ${aso?"":"selected"}>Curso de NR</option></select></div>
+      <div class="field" ${aso?"":"hidden"} id="lExW"><label for="lEx">Exame</label><select id="lEx"><option value="1" ${x.exame==="ADMISSIONAL"?"selected":""}>ASO admissional</option><option value="2" ${x.exame&&x.exame!=="ADMISSIONAL"?"selected":""}>ASO periódico</option></select></div>
+      <div class="field" ${aso?"hidden":""} id="lNrW"><label for="lNr">Curso</label><select id="lNr">${Object.keys(NR_COD).map(n=>`<option ${x.nr===n?"selected":""}>${n}</option>`).join("")}</select></div>
+      <div class="field span2"><label for="lEmp">${aso?"Clínica / médico":"Empresa do curso"}</label><input id="lEmp" value="${esc(aso?(x.clinica||x.crm||""):(x.empresa||""))}"></div>
+      <div class="field"><label for="lData">Data de realização</label><input id="lData" type="date" value="${x.data||""}"></div>
+      <div class="field"><label for="lVal">Validade</label><input id="lVal" type="date" value="${x.validade||""}"></div>
+      ${aso?`<div class="span4 toolbar"><label class="chk"><input type="checkbox" id="lAlt" ${x.altura?"checked":""}> Apto para trabalho em altura (NR-35)</label><label class="chk"><input type="checkbox" id="lConf" ${x.confinado?"checked":""}> Apto para espaço confinado (NR-33)</label></div>`:""}
+      ${aso&&x.resultado?`<div class="field span2"><label>Resultado lido</label><span class="pill ${x.resultado==="APTO"?"ok":"crit"}">${x.resultado}</span></div>`:""}
+      <div class="span4"><label class="chk"><input type="checkbox" id="lInat" checked> Marcar o registro anterior como INATIVO (como já é feito no sistema)</label></div>
+     </div>
+     ${x.resultado==="INAPTO"?`<div class="banner" style="background:var(--crit-soft)">O documento indica INAPTO. Confira com o responsável antes de lançar.</div>`:""}
+     <div class="toolbar" style="justify-content:flex-end"><button class="btn" id="lLocal">Só registrar no Central</button><button class="btn primary" id="lGo">Lançar no Sistema eSocial</button></div></div>`;
+    $("#lTipo").onchange=()=>{const a=$("#lTipo").value==="aso";$("#lExW").hidden=!a;$("#lNrW").hidden=a};
+    const wk=$("#lWk");if(wk)wk.onchange=()=>{w=S.workers.find(z=>z.id===wk.value)||null;$("#lWho").textContent=w?w.nome:"Escolha o trabalhador"};
+    if(w)$("#lWho").textContent=w.nome;
+    if(outro){$("#lGo").disabled=true;$("#lGo").textContent="CPF do documento não confere"}
+    const lerForm=()=>({tipo:$("#lTipo").value,exameCod:$("#lEx").value,nr:$("#lNr").value,empresa:$("#lEmp").value,data:$("#lData").value,validade:$("#lVal").value,inativarAnterior:$("#lInat").checked,
+      altura:$("#lAlt")?$("#lAlt").checked:undefined,confinado:$("#lConf")?$("#lConf").checked:undefined});
+    const registrarNoCentral=async(alvo,y)=>{const wk=S.workers.find(z=>z.id===alvo.id);if(!wk)return;
+      if(y.tipo==="aso"){Object.assign(wk,{asoData:y.data,asoValidade:y.validade,asoAltura:!!y.altura,asoConfinado:!!y.confinado,exige35:!!y.altura,exige33:!!y.confinado})}
+      else if(y.nr==="NR 35")Object.assign(wk,{nr35Data:y.data,nr35Validade:y.validade});else if(y.nr==="NR 33")Object.assign(wk,{nr33Data:y.data,nr33Validade:y.validade});
+      await Store.put("workers",wk);
+      if(arquivo)await saveDoc(wk.id,y.tipo==="aso"?"ASO":(y.nr==="NR 35"?"NR-35":y.nr==="NR 33"?"NR-33":"Outro"),arquivo.name,arquivo,arquivo.type)};
+    $("#lLocal").onclick=async()=>{const y=lerForm();if(!w){toast("Escolha o trabalhador");return}if(!y.data||!y.validade){toast("Informe a data de realização e a validade");return}
+      if(outro)return;await registrarNoCentral(w,y);close();toast("Registrado no Central (sem lançar no Sistema eSocial)");aoTerminar&&aoTerminar()};
+    $("#lGo").onclick=async()=>{const b=$("#lGo");
+      const y=lerForm();
+      if(!w){toast("Escolha o trabalhador");return}
+      if(!y.data||!y.validade){toast("Informe a data de realização e a validade");return}
+      if(y.validade<=y.data){toast("A validade precisa ser depois da data de realização");return}
+      if(!b.dataset.armed){b.dataset.armed="1";b.textContent=`Confirmar: lançar ${y.tipo==="aso"?"ASO":y.nr} de ${br(y.data)} para ${w.nome.split(" ")[0]}`;return}
+      b.disabled=true;b.textContent="Lançando…";
+      try{const r=await lancarNoSistema(w,y);await registrarNoCentral(w,y);
+        close();toast(`Lançado no Sistema eSocial${r.inativados?` · ${r.inativados} anterior(es) marcado(s) como inativo`:""}`);aoTerminar&&aoTerminar()}
+      catch(e){toast(String(e&&e.message||e));b.disabled=false;b.textContent="Lançar no Sistema eSocial";delete b.dataset.armed}}};
+  $("#lFile").onchange=async ev=>{arquivo=ev.target.files[0];if(!arquivo)return;$("#lRes").innerHTML=`<div class="empty">Lendo o documento…</div>`;
+    try{const txt=await textoDoArquivo(arquivo,t=>$("#lRes").innerHTML=`<div class="empty">${esc(t)}</div>`);form(lerDocumentoTexto(txt))}
+    catch(e){$("#lRes").innerHTML=`<div class="empty">${esc(String(e&&e.message||e))} Preencha os dados à mão.</div>`;setTimeout(()=>form({tipo:"aso"}),1500)}};
+}
+async function abrirEndereco(w,aoTerminar){
+  if(!IS_TAURI){toast("A edição no Sistema eSocial funciona no programa instalado.");return}
+  if(!w.origemId){toast("Este trabalhador ainda não foi sincronizado com o Sistema eSocial.");return}
+  const pg=`/register/cad_colabEndereco.php?cod_colaborador=${w.origemId}`;let f;
+  try{f=formCampos(await sget(pg))}catch(e){toast(String(e.message||e));return}
+  const val=k=>(f.campos.find(([x])=>x===k)||[])[1]||"";
+  const sel=(k,lab)=>{const e=f.d.forms[0].elements[k];if(!e)return"";return `<div class="field"><label for="en_${k}">${lab}</label><select id="en_${k}" data-en="${k}" ${k==="uf"?"disabled":""}>${[...e.options].map(o=>`<option value="${esc(o.value)}" ${o.value===val(k)?"selected":""}>${esc(o.text.trim())}</option>`).join("")}</select></div>`};
+  const inp=(k,lab,cls="")=>`<div class="field ${cls}"><label for="en_${k}">${lab}</label><input id="en_${k}" data-en="${k}" value="${esc(val(k))}"></div>`;
+  const m=document.createElement("div");m.className="modal";
+  m.innerHTML=`<div class="scrim"></div><div class="modal-c" role="dialog" aria-modal="true"><div class="drawer-h"><div><div class="eyebrow">${esc(w.nome)}</div><h2 style="font-size:20px">Endereço no Sistema eSocial</h2></div><button class="btn" id="eClose">Fechar</button></div>
+   <div class="drawer-b" style="align-items:stretch;background:var(--bg)"><div class="panel" style="box-shadow:none"><div class="form-grid">
+    ${sel("colab_tplograd","Tipo de logradouro")}${inp("rua_colaborador","Descrição (rua)","span2")}${inp("numero","Número")}
+    ${inp("colab_endcomplbr","Complemento")}${inp("bairro_colaborador","Bairro")}${inp("cep","CEP")}${sel("uf","UF")}${sel("cidade","Cidade")}
+   </div><div class="note">Grava direto na aba Endereço do trabalhador no Sistema eSocial. O endereço entra no próximo evento S-2205 que vocês enviarem por lá.</div>
+   <div class="toolbar" style="justify-content:flex-end"><button class="btn primary" id="eGo">Salvar no Sistema eSocial</button></div></div></div></div>`;
+  document.body.appendChild(m);const close=()=>m.remove();m.querySelector(".scrim").onclick=close;$("#eClose").onclick=close;
+  $("#eGo").onclick=async()=>{const b=$("#eGo");const mud={};m.querySelectorAll("[data-en]").forEach(e=>{if(e.disabled)return;mud[e.dataset.en]=e.tagName==="SELECT"?e.value:semAcento(e.value)});
+    if((mud.rua_colaborador||"").length<3||!mud.numero||!mud.cep){toast("Preencha rua, número e CEP");return}
+    if(!b.dataset.armed){b.dataset.armed="1";b.textContent="Confirmar: salvar endereço no Sistema eSocial";return}
+    b.disabled=true;b.textContent="Salvando…";
+    try{await gravarForm(pg,mud,"Alterar");const conf=formCampos(await sget(pg));const ok=(conf.campos.find(([k])=>k==="rua_colaborador")||[])[1]===mud.rua_colaborador;
+      if(!ok)throw new Error("O Sistema eSocial não mostrou o endereço novo. Confira lá.");
+      await atualizarDoSistema(w);close();toast("Endereço salvo no Sistema eSocial");aoTerminar&&aoTerminar()}
+    catch(e){toast(String(e&&e.message||e));b.disabled=false;b.textContent="Salvar no Sistema eSocial";delete b.dataset.armed}};
+}
+
+/* ---------- FICHA DE CADASTRO (A4) ---------- */
+function fichaHTML(w){
+  const L=(r,v)=>`<tr><th>${r}</th><td>${esc(v||"—")}</td></tr>`;const d=v=>v?br(v):"—";
+  const docs=docsDe(w.id).map(x=>`${x.tipo}: ${x.nome}`);const p=pendencias(w);
+  return `<div class="ficha"><header><div><b>SINTRAMOMED</b><span>Sindicato dos Trabalhadores na Movimentação de Mercadorias em Geral de Dourados · CNPJ 03.682.762/0001-03</span><span>Rua Luiz Egídio de Cerqueira César, 3085 · Jardim Shekiná · Dourados/MS</span></div><div class="fr">Ficha de cadastro do trabalhador<br><small>Emitida em ${br(iso(new Date()))} às ${hhmm(new Date())}</small></div></header>
+   <h1>${esc(w.nome)}</h1>
+   <section><h2>Identificação</h2><table>${L("CPF",fmtCPF(w.cpf))}${L("NIS/PIS",w.nis)}${L("Nascimento",d(w.dtNasc))}${L("Telefone",w.telefone)}${L("E-mail",w.email)}${L("Endereço",w.endereco)}</table></section>
+   <section><h2>Vínculo avulso</h2><table>${L("Matrícula",w.matricula)}${L("Categoria",CATEGORIAS[w.categoria]||w.categoria)}${L("Situação",STATUS[w.status])}${L("Cadastro no sindicato",d(w.dtCadastro))}${L("Início (S-2300)",d(w.dtInicio))}${L("Função",w.funcao)}${L("Última produção",d(w.ultimaProducao))}${w.dtTermino?L("Término (S-2399)",d(w.dtTermino)):""}</table></section>
+   <section><h2>Documentos</h2><table>${L("RG",[w.rgNum,w.rgOrgao].filter(Boolean).join(" · "))}${L("CTPS",[w.ctpsNum,w.ctpsSerie&&("série "+w.ctpsSerie)].filter(Boolean).join(" · "))}${L("CNH",[w.cnhNum,w.cnhCat&&("cat. "+w.cnhCat),w.cnhValidade&&("validade "+br(w.cnhValidade))].filter(Boolean).join(" · "))}</table></section>
+   <section><h2>Saúde e segurança</h2><table>${L("ASO",w.asoData?`${br(w.asoData)} · validade ${d(w.asoValidade)}`:"")}${L("NR-35",w.nr35Data?`${br(w.nr35Data)} · validade ${d(w.nr35Validade)}`:"")}${L("NR-33",w.nr33Data?`${br(w.nr33Data)} · validade ${d(w.nr33Validade)}`:"")}${L("Liberações do ASO",w.asoAltura===undefined&&w.asoConfinado===undefined?"":`Altura: ${w.asoAltura?"apto":"não liberado"} · Espaço confinado: ${w.asoConfinado?"apto":"não liberado"}`)}${L("Ficha de EPI",d(w.epiEntrega))}</table></section>
+   <section><h2>Anexos e pendências</h2><table>${L("Anexos",docs.join("; "))}${L("Pendências",p.map(x=>`${x.evt}: ${x.t}`).join("; ")||"Nenhuma")}${w.obs?L("Observações",w.obs):""}</table></section>
+   <footer><div>__________________________________<br>Assinatura do trabalhador</div><div>__________________________________<br>Responsável do sindicato</div></footer></div>`}
+function emitirFicha(w){
+  const m=document.createElement("div");m.className="modal";
+  m.innerHTML=`<div class="scrim"></div><div class="modal-c" role="dialog" aria-modal="true" aria-label="Ficha de cadastro"><div class="drawer-h"><div><div class="eyebrow">Ficha de cadastro · A4</div><h2 style="font-size:20px">${esc(w.nome)}</h2></div><div class="toolbar"><button class="btn primary" id="fPrint">${ico("print",16)} Imprimir</button><button class="btn" id="fClose">Fechar</button></div></div><div class="drawer-b" style="background:var(--surface-2)">${fichaHTML(w)}</div></div>`;
+  document.body.appendChild(m);const close=()=>m.remove();m.querySelector(".scrim").onclick=close;$("#fClose").onclick=close;
+  $("#fPrint").onclick=()=>{const pa=$("#printArea");pa.innerHTML=fichaHTML(w);if(IS_TAURI)window.print();else toast("A impressão funciona no programa instalado. No navegador, use a ficha na tela.")};
+}
+
+/* ---------- rodapé: data e hora ---------- */
+(function relogio(){const el=$("#relogio");if(!el)return;const t=()=>{const n=new Date();el.textContent=n.toLocaleDateString("pt-BR",{weekday:"long",day:"2-digit",month:"2-digit",year:"numeric"})+" · "+n.toLocaleTimeString("pt-BR")};t();setInterval(t,1000)})();
 
 /* ---------- início ---------- */
 (async()=>{await Store.open();await loadAll();

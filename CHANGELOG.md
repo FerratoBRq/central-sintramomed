@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.8 — 23/10/2026
+- Lançar ASO ou NR: anexe o documento (PDF com texto ou digitalizado; no programa instalado o texto da imagem é lido por OCR), o Central encontra o trabalhador pelo CPF, lê tipo de exame, data, clínica, resultado e liberações, mostra para conferir e lança no Sistema eSocial (aba Atestados/Exames ou Cursos), marcando o registro anterior como INATIVO. Depois relê o sistema para confirmar e atualiza a ficha.
+- "Só registrar no Central" quando não for lançar no sistema.
+- Liberações do ASO para altura e espaço confinado na ficha; sem liberação, NR-35/NR-33 deixam de ser cobradas nas pendências.
+- Editar o endereço direto no Sistema eSocial (aba Endereço).
+- Emitir ficha de cadastro do trabalhador (A4).
+- Rodapé com data e hora.
+
 ## 0.1.7 — 23/10/2026
 - Atualização sozinha pelo GitHub, sem chave de assinatura (como no Livro Caixa): a cada 5 minutos o programa consulta a última versão publicada, baixa o instalador, instala em modo passivo e reabre. Opção "Atualizar sozinho" na engrenagem.
 - Cada envio para a main com versão nova gera o instalador automaticamente.

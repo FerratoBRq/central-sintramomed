@@ -4,7 +4,9 @@
 //!   do Windows), nunca em arquivo.
 //! - O programa faz o login sozinho, guarda o cookie da sessão em memória e entra de
 //!   novo quando a sessão expira.
-//! - Só existem leituras (GET) e o POST de relatório; nada é gravado no sistema.
+//! - Leituras (GET) e POST de relatório. Gravação só pelos formulários da lista
+//!   GRAVAVEIS (exames/ASO, cursos/NR, endereço), com ação Inserir ou Alterar — nunca Remover —
+//!   e sempre depois de confirmação na tela.
 
 use serde::{Deserialize, Serialize};
 use tauri::State;
@@ -177,6 +179,27 @@ pub async fn esocial_post(st: State<'_, Esocial>, caminho: String, campos: Vec<(
     // POST permitido apenas para relatórios (consulta), nunca para cadastros.
     if !caminho.starts_with("/register/rel_") {
         return Err("Somente relatórios podem ser consultados por POST".into());
+    }
+    let u = url(&caminho)?;
+    pedir(&st, || st.client.post(&u).form(&campos)).await
+}
+
+/// Formulários em que o Central pode gravar (ASO, cursos de NR e endereço).
+const GRAVAVEIS: [&str; 3] = [
+    "/register/cad_colabexames.php",
+    "/register/cad_colabcursos.php",
+    "/register/cad_colabEndereco.php",
+];
+
+#[tauri::command]
+pub async fn esocial_gravar(st: State<'_, Esocial>, caminho: String, campos: Vec<(String, String)>) -> Result<String, String> {
+    let pagina = caminho.split('?').next().unwrap_or("");
+    if !GRAVAVEIS.contains(&pagina) {
+        return Err("Este formulário não pode ser gravado pelo Central.".into());
+    }
+    let acao = campos.iter().find(|(k, _)| k == "acao").map(|(_, v)| v.as_str()).unwrap_or("");
+    if acao != "Inserir" && acao != "Alterar" {
+        return Err("Ação não permitida (só Inserir ou Alterar).".into());
     }
     let u = url(&caminho)?;
     pedir(&st, || st.client.post(&u).form(&campos)).await

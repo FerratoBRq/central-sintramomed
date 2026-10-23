@@ -27,6 +27,7 @@ fn main() {
             esocial::esocial_testar,
             esocial::esocial_get,
             esocial::esocial_post,
+            esocial::esocial_gravar,
             atualizacao::instalar_atualizacao
         ])
         .run(tauri::generate_context!())

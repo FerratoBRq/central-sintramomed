@@ -1,7 +1,7 @@
 # Central Sintramomed — instruções para o Claude
 
 ## Regras do projeto
-- O Sistema eSocial (sistemaesocial.guiacampogrande.com) é **somente leitura**. Não crie funções que gravem, alterem ou enviem dados lá. O Rust só aceita GET e POST de relatório (`/register/rel_*`).
+- O Sistema eSocial (sistemaesocial.guiacampogrande.com) é onde a informação fica guardada. O Central lê tudo, mas só grava pelos formulários da lista `GRAVAVEIS` em `src-tauri/src/esocial.rs` (Atestados/Exames, Cursos, Endereço), com ação Inserir ou Alterar — nunca Remover —, sempre após confirmação na tela e conferindo depois (relendo a página). Não grave na tela principal do cadastro (gera eventos S-2300/S-2205) sem pedido explícito do Gabriel.
 - Senhas ficam no Gerenciador de Credenciais do Windows (`keyring`). Nunca em arquivo, log ou repositório.
 - Textos da interface em português do Brasil, datas dd/mm/aaaa, valores em R$.
 - A interface é um HTML único (`web/index.html`) que roda no navegador e dentro do .exe. Use `IS_TAURI` para o que só existe no programa instalado.
