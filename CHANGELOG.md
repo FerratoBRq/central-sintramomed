@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.6 — 23/10/2026
+- Corrige acentos quebrados no programa instalado (página declarada em UTF-8).
+- Só uma janela do programa por vez: abrir de novo traz a janela existente para frente.
+- Verificação de atualização não mostra mais "sem conexão" quando ainda não há versão nova publicada.
+
 ## 0.1.5 — 23/10/2026
 - Importação automática no programa instalado: login sozinho no Sistema eSocial (senha guardada no Gerenciador de Credenciais do Windows) e sincronização a cada 5 minutos, só leitura.
 - Primeira sincronização importa todos os trabalhadores; depois atualiza produção a cada ciclo e os detalhes (ASO, NR, EPI, documentos) em lotes de 50, priorizando novos e quem mudou de situação.

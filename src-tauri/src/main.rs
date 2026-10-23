@@ -3,8 +3,18 @@
 
 mod esocial;
 
+use tauri::Manager;
+
 fn main() {
     tauri::Builder::default()
+        // Uma janela só: abrir o programa de novo traz a janela existente para frente.
+        .plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
+            if let Some(w) = app.get_webview_window("main") {
+                let _ = w.unminimize();
+                let _ = w.show();
+                let _ = w.set_focus();
+            }
+        }))
         .plugin(tauri_plugin_updater::Builder::new().build())
         .plugin(tauri_plugin_process::init())
         .plugin(tauri_plugin_opener::init())
