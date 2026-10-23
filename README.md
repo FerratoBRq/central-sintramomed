@@ -19,6 +19,7 @@ src-tauri/           Programa Windows (Tauri 2)
   ci.yml             Confere a compilação a cada envio
   release.yml        Gera o instalador e publica a release a cada versão nova na main
 docs/                Mapeamento do sistema e planos
+whatsapp/            Atendente do WhatsApp (Kapso): roteiro, base legal e base do sindicato
 ```
 
 ## Publicar uma nova versão
