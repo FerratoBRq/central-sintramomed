@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.11 — 23/10/2026
+- Modelos para impressão: cartão + para adicionar um PDF próprio (nome e descrição) e botão Remover em cada modelo; modelos padrão removidos podem ser restaurados.
+
 ## 0.1.10 — 23/10/2026
 - Corrige as janelas centrais (Importar, Lançar ASO ou NR, ficha, modelos, anexos) que ficavam atrás do fundo desfocado e não podiam ser usadas.
 
