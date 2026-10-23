@@ -18,7 +18,6 @@ src-tauri/           Programa Windows (Tauri 2)
 .github/workflows/
   ci.yml             Confere a compilação a cada envio
   release.yml        Gera o instalador .exe a cada tag vX.Y.Z
-  pages.yml          Publica web/ no GitHub Pages
 docs/                Mapeamento do sistema e planos
 ```
 
