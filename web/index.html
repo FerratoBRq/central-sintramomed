@@ -372,7 +372,7 @@ const ATALHOS=[
   {id:"escavador",n:"Escavador",d:"Pesquisa de processos por nome",u:"https://www.escavador.com/",t:"pesquisa"},
   {id:"semaforo",n:"Semáforo eSocial",d:"Status dos web services do governo",u:"https://www.gov.br/esocial/pt-br/acesso-ao-sistema/semaforo",t:"governo",semLogin:true}
 ];
-const NOVIDADES=["Corrige acentos quebrados no programa instalado","Impede abrir duas janelas do programa ao mesmo tempo","Importação automática: o programa entra sozinho no Sistema eSocial e atualiza os trabalhadores a cada 5 minutos","Senha do Sistema eSocial guardada no Windows, pedida uma única vez","Importação completa do Sistema eSocial: status, última produção, ASO, NR-33/35, EPI, documentos e endereço","Novos status: afastado e inativo no sistema","Cofre de acessos simplificado: só Sistema eSocial e Escavador","Verificação automática de atualizações a cada 5 minutos","Nova interface: tema claro e escuro, barra lateral com ícones, atalhos e indicadores redesenhados","Engrenagem de configurações com cofre de acessos (login e senha) protegido por PIN","Botões Copiar usuário e Copiar senha nos atalhos do painel","Atalho do Escavador no painel","Verificação de antecedentes na ficha e na entrevista"];
+const NOVIDADES=["Trabalhadores aparecem durante a primeira importação (gravação em lotes de 25)","Corrige acentos quebrados no programa instalado","Impede abrir duas janelas do programa ao mesmo tempo","Importação automática: o programa entra sozinho no Sistema eSocial e atualiza os trabalhadores a cada 5 minutos","Senha do Sistema eSocial guardada no Windows, pedida uma única vez","Importação completa do Sistema eSocial: status, última produção, ASO, NR-33/35, EPI, documentos e endereço","Novos status: afastado e inativo no sistema","Cofre de acessos simplificado: só Sistema eSocial e Escavador","Verificação automática de atualizações a cada 5 minutos","Nova interface: tema claro e escuro, barra lateral com ícones, atalhos e indicadores redesenhados","Engrenagem de configurações com cofre de acessos (login e senha) protegido por PIN","Botões Copiar usuário e Copiar senha nos atalhos do painel","Atalho do Escavador no painel","Verificação de antecedentes na ficha e na entrevista"];
 
 /* ---------- cofre de acessos: AES-GCM com chave derivada do PIN (PBKDF2). A chave fica só na memória; recarregar a página tranca. ---------- */
 const b64e=u=>btoa(String.fromCharCode(...u));const b64d=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
@@ -686,12 +686,18 @@ async function syncCiclo(manual){
     let fila=primeira?ids.slice():[...prioridade];
     if(!primeira&&fila.length<LOTE){const resto=ids.filter(id=>!prioridade.has(id)).sort((a,b)=>String(porOrigem[a]?.syncAt||"").localeCompare(String(porOrigem[b]?.syncAt||"")));fila=fila.concat(resto.slice(0,LOTE-fila.length))}
     Sync.total=fila.length;syncInfo();
-    const recs=[];let falhas=0;
-    const worker=async()=>{while(fila.length){const id=fila.shift();try{recs.push(await lerTrabalhador(id,prod[id]?.data))}catch(e){falhas++}Sync.feitos++;if(Sync.feitos%10===0)syncInfo()}};
+    const agora=new Date().toISOString();const tot={novos:0,atualiza:0,lidos:0};let falhas=0;let pend=[];let fila2=Promise.resolve();
+    // Grava em lotes de 25: os trabalhadores aparecem durante a importação e nada se perde se o programa fechar.
+    const gravar=()=>{const lote=pend.splice(0);if(!lote.length)return fila2;fila2=fila2.then(async()=>{
+      const pl=planImport(lote);tot.novos+=pl.novos.length;tot.atualiza+=pl.atualiza.length;tot.lidos+=lote.length;
+      await aplicarPlano(pl,{syncAt:agora});
+      for(const r of lote){const w=S.workers.find(x=>x.cpf===r.cpf);if(w&&w.syncAt!==agora){w.syncAt=agora;if(!w.origemId)w.origemId=r.origemId;await Store.put("workers",w)}}
+      if(primeira&&S.workers.some(w=>w.exemplo)){for(const w of S.workers.filter(w=>w.exemplo)){for(const dc of docsDe(w.id))await Store.del("docs",dc.id);await Store.del("workers",w.id)}S.workers=S.workers.filter(w=>!w.exemplo)}
+      rerenderSeguro()});return fila2};
+    const worker=async()=>{while(fila.length){const id=fila.shift();try{pend.push(await lerTrabalhador(id,prod[id]?.data))}catch(e){falhas++}Sync.feitos++;if(Sync.feitos%10===0)syncInfo();if(pend.length>=25)gravar()}};
     await Promise.all([worker(),worker(),worker()]);
-    const pl=planImport(recs);const agora=new Date().toISOString();
-    await aplicarPlano(pl,{syncAt:agora});
-    for(const r of recs){const w=S.workers.find(x=>x.cpf===r.cpf);if(w&&w.syncAt!==agora){w.syncAt=agora;if(!w.origemId)w.origemId=r.origemId;await Store.put("workers",w)}}
+    await gravar();await fila2;
+    const pl={novos:{length:tot.novos},atualiza:{length:tot.atualiza}},recs={length:tot.lidos};
     if(recs.length&&S.workers.some(w=>w.exemplo)){for(const w of S.workers.filter(w=>w.exemplo)){for(const dc of docsDe(w.id))await Store.del("docs",dc.id);await Store.del("workers",w.id)}S.workers=S.workers.filter(w=>!w.exemplo)}
     Sync.ultima=agora;LS.set("cs_sync_ultima",agora);
     if(falhas)Sync.erro=`${falhas} fichas não carregaram; nova tentativa em 5 min`;

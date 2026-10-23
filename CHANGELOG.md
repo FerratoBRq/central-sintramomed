@@ -1,6 +1,7 @@
 # Changelog
 
 ## 0.1.6 — 23/10/2026
+- Primeira importação grava em lotes de 25: os trabalhadores aparecem durante a sincronização e o progresso não se perde se o programa fechar.
 - Corrige acentos quebrados no programa instalado (página declarada em UTF-8).
 - Só uma janela do programa por vez: abrir de novo traz a janela existente para frente.
 - Verificação de atualização não mostra mais "sem conexão" quando ainda não há versão nova publicada.
