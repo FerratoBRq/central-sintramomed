@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.12 — 23/10/2026
+- "Boa tarde, …" usa o primeiro nome do login do Sistema eSocial salvo no computador, para cada pessoa que usa o programa ver o próprio nome.
+
 ## 0.1.11 — 23/10/2026
 - Modelos para impressão: cartão + para adicionar um PDF próprio (nome e descrição) e botão Remover em cada modelo; modelos padrão removidos podem ser restaurados.
 
