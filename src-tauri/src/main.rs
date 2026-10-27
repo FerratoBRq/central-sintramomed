@@ -3,6 +3,7 @@
 
 mod atualizacao;
 mod esocial;
+mod pasta;
 
 use tauri::Manager;
 
@@ -28,7 +29,11 @@ fn main() {
             esocial::esocial_get,
             esocial::esocial_post,
             esocial::esocial_gravar,
-            atualizacao::instalar_atualizacao
+            atualizacao::instalar_atualizacao,
+            pasta::pasta_ler,
+            pasta::pasta_gravar,
+            pasta::pasta_arquivo_gravar,
+            pasta::pasta_arquivo_ler
         ])
         .run(tauri::generate_context!())
         .expect("erro ao iniciar a Central Sintramomed");

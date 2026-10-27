@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.14 — 27/10/2026
+- Nova aba Estoque: camisa manga longa e manga curta (P a XG), calça (36 a 50) e botina (37 a 45), com saldo por tamanho.
+- Entradas (compra, devolução) e saídas ligadas ao colaborador: Vale (valor a descontar, com autorização do art. 462 da CLT no termo) e Uniforme da safra (no máximo 1 calça e 1 camisa por colaborador na safra; botina só por vale). Baixa para perda ou avaria.
+- Movimentos nunca são apagados: erro se desfaz com Estornar. Vales podem ser marcados como descontados. Termo de entrega A4 para assinar.
+- Ficha do trabalhador mostra os uniformes e vales recebidos.
+- Engrenagem › Compartilhar entre computadores: com uma pasta do OneDrive, Google Drive ou rede, fichas, anexos, listas, entrevistas, modelos, feedback e estoque ficam iguais em todos os computadores com o Central. Cada computador grava só o próprio arquivo e lê os dos outros a cada minuto.
+
 ## 0.1.13 — 26/10/2026
 - S-2240 (condições ambientais) não é mais cobrado nas pendências, na cadeia do trabalhador nem na ficha, porque não se aplica à categoria (sugestão #1).
 

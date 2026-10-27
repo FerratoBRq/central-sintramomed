@@ -229,6 +229,7 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
 .ficha h1{font-size:22px;margin:16px 0 6px;letter-spacing:-.02em}.ficha h2{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:#6e6e73;margin:16px 0 6px}
 .ficha table{width:100%;min-width:0;border-collapse:collapse}.ficha th,.ficha td{border-bottom:1px solid #e5e5ea;padding:6px 4px;text-align:left;font-size:12.5px;background:#fff;color:#1d1d1f;text-transform:none;letter-spacing:0;font-weight:400}.ficha th{width:32%;color:#6e6e73}
 .ficha footer{display:flex;justify-content:space-between;gap:20px;margin-top:56px;text-align:center;font-size:12px;color:#1d1d1f}
+.tams{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}.tam{display:flex;flex-direction:column;align-items:center;min-width:46px;padding:6px 8px;border-radius:10px;background:var(--surface-2);font-variant-numeric:tabular-nums;font-size:15px}.tam b{font-size:11px;color:var(--muted);font-weight:600}.tam.baixo{background:var(--warn-soft);color:var(--warn)}.tam.zero{background:var(--crit-soft);color:var(--crit)}
 #printArea{display:none}
 #printArea img.pagina{width:100%;display:block;page-break-after:always;break-after:page}
 @media print{body>*:not(#printArea){display:none!important}#printArea{display:block!important}#printArea .ficha{box-shadow:none;padding:0;max-width:none}@page{size:A4;margin:14mm}}
@@ -260,6 +261,7 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
       <button data-v="trabalhadores"><span data-ico="users"></span>Trabalhadores</button>
       <button data-v="pendencias"><span data-ico="alert"></span>Pendências <span class="count" id="navCount" hidden></span></button>
       <button data-v="relatorios"><span data-ico="list"></span>Listas e inativos</button>
+      <button data-v="estoque"><span data-ico="box"></span>Estoque</button>
       <div class="nav-l">Ferramentas</div>
       <button data-v="fatiador"><span data-ico="scissors"></span>Fatiador de PDF</button>
       <button data-v="entrevista"><span data-ico="chat"></span>Entrevista online</button>
@@ -268,7 +270,7 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
       <button data-v="feedback"><span data-ico="idea"></span>Feedback</button>
     </nav>
     <div class="side-foot">
-      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.13</b></span><span id="runtime">modo navegador</span></div>
+      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.14</b></span><span id="runtime">modo navegador</span></div>
       <span id="syncInfo"></span>
       <span id="updInfo">Verificando atualizações…</span>
       <button class="link" id="btnUpdate" type="button">Verificar agora</button>
@@ -282,7 +284,7 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
 
 <script>
 "use strict";
-const APP_VERSION="0.1.13";
+const APP_VERSION="0.1.14";
 /* ---------- utilidades ---------- */
 const $=(s,r=document)=>r.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -318,6 +320,7 @@ const ICONS={
   search:'<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
   upload:'<path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v4h16v-4"/>',
   plus:'<path d="M12 5v14M5 12h14"/>',
+  box:'<path d="M21 8 12 3 3 8v8l9 5 9-5V8z"/><path d="M3 8l9 5 9-5"/><path d="M12 13v8"/>',
   idea:'<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.4 1 1.1 1 1.8V16h5v-.3c0-.7.4-1.4 1-1.8A6 6 0 0 0 12 3z"/>'
 };
 const ico=(n,s=18)=>`<svg class="ico" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n]||""}</svg>`;
@@ -331,8 +334,9 @@ const saudacao=()=>{const h=new Date().getHours();return h<12?"Bom dia":h<18?"Bo
 const Store={db:null,mem:{workers:new Map(),docs:new Map(),lists:new Map(),interviews:new Map()},
   async open(){try{this.db=await new Promise((res,rej)=>{const r=indexedDB.open("central-sintramomed",1);r.onupgradeneeded=()=>{const db=r.result;["workers","docs","lists","interviews"].forEach(s=>{if(!db.objectStoreNames.contains(s))db.createObjectStore(s,{keyPath:"id"})})};r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}catch(e){this.db=null}},
   async all(s){if(!this.db)return[...this.mem[s].values()];try{return await new Promise((res,rej)=>{const q=this.db.transaction(s).objectStore(s).getAll();q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error)})}catch(e){return[...this.mem[s].values()]}},
-  async put(s,o){this.mem[s].set(o.id,o);if(!this.db)return;try{await new Promise((res,rej)=>{const t=this.db.transaction(s,"readwrite");t.objectStore(s).put(o);t.oncomplete=res;t.onerror=()=>rej(t.error)})}catch(e){}},
-  async del(s,id){this.mem[s].delete(id);if(!this.db)return;try{await new Promise((res,rej)=>{const t=this.db.transaction(s,"readwrite");t.objectStore(s).delete(id);t.oncomplete=res;t.onerror=()=>rej(t.error)})}catch(e){}}
+  // local=true: gravação que veio do Sistema eSocial ou de outro computador (não vai para o diário compartilhado).
+  async put(s,o,local){this.mem[s].set(o.id,o);if(!local)registrar(s,o,false);if(!this.db)return;try{await new Promise((res,rej)=>{const t=this.db.transaction(s,"readwrite");t.objectStore(s).put(o);t.oncomplete=res;t.onerror=()=>rej(t.error)})}catch(e){}},
+  async del(s,id,local){if(!local){const o=(S[s]||[]).find(x=>x.id===id)||this.mem[s].get(id);if(o)registrar(s,o,true)}this.mem[s].delete(id);if(!this.db)return;try{await new Promise((res,rej)=>{const t=this.db.transaction(s,"readwrite");t.objectStore(s).delete(id);t.oncomplete=res;t.onerror=()=>rej(t.error)})}catch(e){}}
 };
 const S={workers:[],docs:[],lists:[],interviews:[]};
 async function loadAll(){for(const k of Object.keys(S))S[k]=await Store.all(k)}
@@ -390,10 +394,10 @@ async function seedIfEmpty(){
       ev:{s2300,s2240,s2399:false},asoData:aso||"",asoValidade:asoV||"",epiEntrega:aso?aso:"",nr35Data:nr35||"",nr35Validade:nr35V||"",exige35:ex35,nr33Data:ex33?d(-200):"",nr33Validade:ex33?d(165):"",exige33:ex33,obs:""};
     S.workers.push(w);await Store.put("workers",w)}
 }
-async function limparExemplos(){for(const w of S.workers.filter(w=>w.exemplo)){for(const dc of docsDe(w.id))await Store.del("docs",dc.id);await Store.del("workers",w.id)}await loadAll();toast("Exemplos removidos");render()}
+async function limparExemplos(){for(const w of S.workers.filter(w=>w.exemplo)){for(const dc of docsDe(w.id))await Store.del("docs",dc.id,true);await Store.del("workers",w.id,true)}await loadAll();toast("Exemplos removidos");render()}
 
 /* ---------- roteamento ---------- */
-const VIEWS=["painel","trabalhadores","pendencias","fatiador","relatorios","entrevista","modelos","feedback"];
+const VIEWS=["painel","trabalhadores","pendencias","fatiador","relatorios","entrevista","modelos","feedback","estoque"];
 let current=VIEWS.includes(location.hash.slice(1))?location.hash.slice(1):"painel";
 let ui={filtro:"todos",busca:"",nivelPend:"todos",listaAlvo:ym(TODAY)};
 function go(v){current=v;try{history.replaceState(null,"","#"+v)}catch(e){}render();window.scrollTo(0,0)}
@@ -401,7 +405,7 @@ $("#nav").addEventListener("click",e=>{const b=e.target.closest("button[data-v]"
 function render(){
   document.querySelectorAll("#nav button").forEach(b=>b.setAttribute("aria-current",b.dataset.v===current?"page":"false"));
   const crit=S.workers.filter(w=>nivel(w)==="crit").length;const nc=$("#navCount");nc.hidden=!crit;nc.textContent=crit;
-  ({painel:vPainel,trabalhadores:vTrab,pendencias:vPend,fatiador:vFat,relatorios:vRel,entrevista:vEnt,modelos:vMod,feedback:vFeed})[current]();
+  ({painel:vPainel,trabalhadores:vTrab,pendencias:vPend,fatiador:vFat,relatorios:vRel,entrevista:vEnt,modelos:vMod,feedback:vFeed,estoque:vEst})[current]();
 }
 const exBanner=()=>S.workers.some(w=>w.exemplo)?`<div class="banner"><span><b>Dados de exemplo.</b> Os trabalhadores marcados como exemplo servem só para testar as telas.</span><button class="btn sm" id="clrEx">Remover exemplos</button></div>`:"";
 function bindBanner(){const b=$("#clrEx");if(b)b.onclick=limparExemplos}
@@ -415,7 +419,7 @@ const ATALHOS=[
   {id:"escavador",n:"Escavador",d:"Pesquisa de processos por nome",u:"https://www.escavador.com/",t:"pesquisa"},
   {id:"semaforo",n:"Semáforo eSocial",d:"Status dos web services do governo",u:"https://www.gov.br/esocial/pt-br/acesso-ao-sistema/semaforo",t:"governo",semLogin:true}
 ];
-const NOVIDADES=["S-2240 deixa de ser cobrado nas pendências (não se aplica à categoria)","A saudação usa o nome do login do Sistema eSocial de quem está usando o programa","Modelos para impressão: botão + para adicionar seus PDFs e opção de remover modelos","Corrige janelas (Importar, Lançar ASO, ficha) que ficavam atrás do fundo desfocado","Visual novo, no estilo Apple","Tela de Feedback: registre sugestões e problemas, envie ao GitHub e acompanhe o que foi implementado","Modelos para impressão abrem dentro do programa","Atualização reabre o programa sozinha","Liberação do ASO para altura e espaço confinado: sem liberação, NR-35/NR-33 não são cobradas","Lançar ASO e NR no Sistema eSocial a partir do documento anexado (lê datas e tipo)","Editar o endereço direto no Sistema eSocial","Emitir ficha de cadastro do trabalhador para imprimir","Data e hora no rodapé","Atualização sozinha pelo GitHub, sem chave: baixa, instala e reabre o programa","Trabalhadores aparecem durante a primeira importação (gravação em lotes de 25)","Corrige acentos quebrados no programa instalado","Impede abrir duas janelas do programa ao mesmo tempo","Importação automática: o programa entra sozinho no Sistema eSocial e atualiza os trabalhadores a cada 5 minutos","Senha do Sistema eSocial guardada no Windows, pedida uma única vez","Importação completa do Sistema eSocial: status, última produção, ASO, NR-33/35, EPI, documentos e endereço","Novos status: afastado e inativo no sistema","Cofre de acessos simplificado: só Sistema eSocial e Escavador","Verificação automática de atualizações a cada 5 minutos","Nova interface: tema claro e escuro, barra lateral com ícones, atalhos e indicadores redesenhados","Engrenagem de configurações com cofre de acessos (login e senha) protegido por PIN","Botões Copiar usuário e Copiar senha nos atalhos do painel","Atalho do Escavador no painel","Verificação de antecedentes na ficha e na entrevista"];
+const NOVIDADES=["Estoque de uniformes: camisas, calças e botinas por tamanho, vale ao colaborador, uniforme da safra (1 calça e 1 camisa) e termo de entrega","Pasta compartilhada na engrenagem: fichas, anexos, listas, entrevistas, modelos, feedback e estoque iguais em todos os computadores","S-2240 deixa de ser cobrado nas pendências (não se aplica à categoria)","A saudação usa o nome do login do Sistema eSocial de quem está usando o programa","Modelos para impressão: botão + para adicionar seus PDFs e opção de remover modelos","Corrige janelas (Importar, Lançar ASO, ficha) que ficavam atrás do fundo desfocado","Visual novo, no estilo Apple","Tela de Feedback: registre sugestões e problemas, envie ao GitHub e acompanhe o que foi implementado","Modelos para impressão abrem dentro do programa","Atualização reabre o programa sozinha","Liberação do ASO para altura e espaço confinado: sem liberação, NR-35/NR-33 não são cobradas","Lançar ASO e NR no Sistema eSocial a partir do documento anexado (lê datas e tipo)","Editar o endereço direto no Sistema eSocial","Emitir ficha de cadastro do trabalhador para imprimir","Data e hora no rodapé","Atualização sozinha pelo GitHub, sem chave: baixa, instala e reabre o programa","Trabalhadores aparecem durante a primeira importação (gravação em lotes de 25)","Corrige acentos quebrados no programa instalado","Impede abrir duas janelas do programa ao mesmo tempo","Importação automática: o programa entra sozinho no Sistema eSocial e atualiza os trabalhadores a cada 5 minutos","Senha do Sistema eSocial guardada no Windows, pedida uma única vez","Importação completa do Sistema eSocial: status, última produção, ASO, NR-33/35, EPI, documentos e endereço","Novos status: afastado e inativo no sistema","Cofre de acessos simplificado: só Sistema eSocial e Escavador","Verificação automática de atualizações a cada 5 minutos","Nova interface: tema claro e escuro, barra lateral com ícones, atalhos e indicadores redesenhados","Engrenagem de configurações com cofre de acessos (login e senha) protegido por PIN","Botões Copiar usuário e Copiar senha nos atalhos do painel","Atalho do Escavador no painel","Verificação de antecedentes na ficha e na entrevista"];
 
 /* ---------- cofre de acessos: AES-GCM com chave derivada do PIN (PBKDF2). A chave fica só na memória; recarregar a página tranca. ---------- */
 const b64e=u=>btoa(String.fromCharCode(...u));const b64d=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
@@ -458,7 +462,7 @@ function openConfig(){
   };
   $("#layer").innerHTML=`<div class="scrim" id="scrim"></div><div class="drawer" role="dialog" aria-modal="true" aria-labelledby="ch">
    <div class="drawer-h"><div><div class="eyebrow">Configurações</div><h2 id="ch">Conexões e acessos</h2></div><button class="btn" id="closeC">Fechar</button></div>
-   <div class="drawer-b"><div id="cxBody">${conexaoHTML()}</div><h3 class="eyebrow" style="margin:6px 0 -6px">Cofre de senhas para copiar</h3><div id="vBody">${body()}</div>
+   <div class="drawer-b"><div id="cxBody">${conexaoHTML()}</div><div id="cpBody">${compHTML()}</div><h3 class="eyebrow" style="margin:6px 0 -6px">Cofre de senhas para copiar</h3><div id="vBody">${body()}</div>
     <fieldset><legend>Sobre esta versão</legend><p style="margin:0">Versão <b class="mono">${APP_VERSION}</b> · ${IS_TAURI?"programa instalado":"modo navegador (sempre na versão mais recente)"}</p>
      ${IS_TAURI?`<label class="chk" style="margin-top:10px"><input type="checkbox" id="autoUpd" ${autoUpd()?"checked":""}> Atualizar sozinho quando sair versão nova no GitHub</label>`:""}
      <ul style="margin:8px 0 0;padding-left:18px">${NOVIDADES.map(n=>`<li>${esc(n)}</li>`).join("")}</ul></fieldset>
@@ -467,6 +471,7 @@ function openConfig(){
   const au=$("#autoUpd");if(au)au.onchange=()=>{LS.set("cs_auto_upd",au.checked?"1":"0");toast(au.checked?"Atualização automática ligada":"Atualização automática desligada")};
   const redraw=()=>{$("#vBody").innerHTML=body();bind()};
   const redrawCx=()=>{$("#cxBody").innerHTML=conexaoHTML();bindConexao(redrawCx)};bindConexao(redrawCx);
+  const redrawCp=()=>{$("#cpBody").innerHTML=compHTML();bindComp(redrawCp)};bindComp(redrawCp);
   const bind=()=>{
     const c=$("#vCreate");if(c)c.onclick=async()=>{const a=$("#pin1").value,b=$("#pin2").value;if(!/^\d{6,}$/.test(a)){toast("O PIN precisa ter pelo menos 6 números");return}if(a!==b){toast("Os dois PINs não são iguais");return}
       if(!(await Vault.create(a))){toast("Este navegador não permite guardar dados. Use o programa instalado.");Vault.lock();return}toast("Cofre criado");redraw()};
@@ -580,6 +585,7 @@ function openWorker(id,preset){
      <div class="span4 toolbar">${isNew?"":`<button class="btn" type="button" id="lancW">${ico("upload",16)} Lançar ASO ou NR no Sistema eSocial</button>`}</div>
      <div class="span4 note">Ao preencher a data de conclusão, a validade é sugerida: ASO 1 ano, NR-33 1 ano, NR-35 2 anos. Ajuste se o PCMSO definir outro prazo.</div>
     </div></fieldset>
+    ${isNew?"":`<fieldset><legend>Uniformes e vales</legend>${uniformesHTML(w)}</fieldset>`}
     <fieldset><legend>Verificação de antecedentes</legend><div class="form-grid">
      <div class="span4 note">Pela tese do TST (IRR 243000-58.2013), pedir antecedentes só é lícito quando a função justifica, como no setor agroindustrial das tomadoras. Registre o consentimento e só o resultado. Busca por nome pode trazer homônimos: para decidir, use a certidão oficial pelo CPF.</div>
      <div class="span4">${C("antecConsent","Candidato autorizou a consulta (LGPD)")}</div>
@@ -677,8 +683,8 @@ function openImport(){
 async function aplicarPlano(pl,marca){
   for(const d of pl.novos){const{s2300Enviado,...rest}=d;const w={id:uid(),origem:"esocial",categoria:"202",funcao:"Movimentador de mercadorias",dtTermino:"",exige35:true,exige33:!!d.nr33Data,obs:"Importado do Sistema eSocial.",
       ...Object.fromEntries(Object.entries(rest).map(([k,v])=>[k,v||""])),status:d.status||"ativo",dtCadastro:d.dtCadastro||d.dtInicio||iso(TODAY),dtInicio:d.dtInicio||d.dtCadastro||"",ev:{s2300:!!s2300Enviado,s2240:false,s2399:d.status==="desligado"},...(marca||{})};
-    S.workers.push(w);await Store.put("workers",w)}
-  for(const{w,mud}of pl.atualiza){const{s2300Enviado,...m}=mud;Object.assign(w,m,marca||{});if(s2300Enviado){w.ev=w.ev||{};w.ev.s2300=true}if(m.nr33Data)w.exige33=true;if(m.status==="desligado"){w.ev=w.ev||{};w.ev.s2399=true}await Store.put("workers",w)}
+    S.workers.push(w);await Store.put("workers",w,true)}
+  for(const{w,mud}of pl.atualiza){const{s2300Enviado,...m}=mud;Object.assign(w,m,marca||{});if(s2300Enviado){w.ev=w.ev||{};w.ev.s2300=true}if(m.nr33Data)w.exige33=true;if(m.status==="desligado"){w.ev=w.ev||{};w.ev.s2399=true}await Store.put("workers",w,true)}
 }
 
 /* ---------- SINCRONIZAÇÃO AUTOMÁTICA com o Sistema eSocial (só no programa instalado) ----------
@@ -735,7 +741,7 @@ async function syncCiclo(manual){
     if(!primeira){
       for(const id of ids){const w=porOrigem[id];const p=prod[id];
         if(!w){prioridade.add(id);continue}
-        if(p){if(p.data&&w.ultimaProducao!==p.data){w.ultimaProducao=p.data;await Store.put("workers",w)}if(w.status!=="ativo"&&w.status!=="a_desligar")prioridade.add(id)}
+        if(p){if(p.data&&w.ultimaProducao!==p.data){w.ultimaProducao=p.data;await Store.put("workers",w,true)}if(w.status!=="ativo"&&w.status!=="a_desligar")prioridade.add(id)}
         else if(ATIVOS(w))prioridade.add(id)}
     }
     let fila=primeira?ids.slice():[...prioridade];
@@ -746,14 +752,14 @@ async function syncCiclo(manual){
     const gravar=()=>{const lote=pend.splice(0);if(!lote.length)return fila2;fila2=fila2.then(async()=>{
       const pl=planImport(lote);tot.novos+=pl.novos.length;tot.atualiza+=pl.atualiza.length;tot.lidos+=lote.length;
       await aplicarPlano(pl,{syncAt:agora});
-      for(const r of lote){const w=S.workers.find(x=>x.cpf===r.cpf);if(w&&w.syncAt!==agora){w.syncAt=agora;if(!w.origemId)w.origemId=r.origemId;await Store.put("workers",w)}}
-      if(primeira&&S.workers.some(w=>w.exemplo)){for(const w of S.workers.filter(w=>w.exemplo)){for(const dc of docsDe(w.id))await Store.del("docs",dc.id);await Store.del("workers",w.id)}S.workers=S.workers.filter(w=>!w.exemplo)}
+      for(const r of lote){const w=S.workers.find(x=>x.cpf===r.cpf);if(w&&w.syncAt!==agora){w.syncAt=agora;if(!w.origemId)w.origemId=r.origemId;await Store.put("workers",w,true)}}
+      if(primeira&&S.workers.some(w=>w.exemplo)){for(const w of S.workers.filter(w=>w.exemplo)){for(const dc of docsDe(w.id))await Store.del("docs",dc.id,true);await Store.del("workers",w.id,true)}S.workers=S.workers.filter(w=>!w.exemplo)}
       rerenderSeguro()});return fila2};
     const worker=async()=>{while(fila.length){const id=fila.shift();try{pend.push(await lerTrabalhador(id,prod[id]?.data))}catch(e){falhas++}Sync.feitos++;if(Sync.feitos%10===0)syncInfo();if(pend.length>=25)gravar()}};
     await Promise.all([worker(),worker(),worker()]);
     await gravar();await fila2;
     const pl={novos:{length:tot.novos},atualiza:{length:tot.atualiza}},recs={length:tot.lidos};
-    if(recs.length&&S.workers.some(w=>w.exemplo)){for(const w of S.workers.filter(w=>w.exemplo)){for(const dc of docsDe(w.id))await Store.del("docs",dc.id);await Store.del("workers",w.id)}S.workers=S.workers.filter(w=>!w.exemplo)}
+    if(recs.length&&S.workers.some(w=>w.exemplo)){for(const w of S.workers.filter(w=>w.exemplo)){for(const dc of docsDe(w.id))await Store.del("docs",dc.id,true);await Store.del("workers",w.id,true)}S.workers=S.workers.filter(w=>!w.exemplo)}
     Sync.ultima=agora;LS.set("cs_sync_ultima",agora);
     if(falhas)Sync.erro=`${falhas} fichas não carregaram; nova tentativa em 5 min`;
     if(primeira||manual)toast(`${pl.novos.length} trabalhadores importados e ${pl.atualiza.length} atualizados`);
@@ -958,7 +964,7 @@ async function convertEnt(id){const e=S.interviews.find(x=>x.id===id);const r=e.
 const GH_REPO="FerratoBRq/central-sintramomed";
 const TELAS={painel:"Painel",trabalhadores:"Trabalhadores",pendencias:"Pendências",relatorios:"Listas e inativos",fatiador:"Fatiador de PDF",entrevista:"Entrevista online",modelos:"Modelos para impressão",feedback:"Feedback",geral:"Programa em geral"};
 const fbLista=()=>{try{return JSON.parse(LS.get("cs_feedback")||"[]")}catch(e){return[]}};
-const fbSalvar=l=>LS.set("cs_feedback",JSON.stringify(l));
+const fbSalvar=l=>{LS.set("cs_feedback",JSON.stringify(l));registrarValor("feedback","lista",l)};
 const fbIssueURL=f=>`https://github.com/${GH_REPO}/issues/new?`+new URLSearchParams({title:`[${f.tipo}] ${f.texto.split(/\n/)[0].slice(0,70)}`,body:`**Tipo:** ${f.tipo}\n**Tela:** ${TELAS[f.tela]||f.tela}\n**Versão:** ${f.versao}\n**Data:** ${f.quando}\n\n${f.texto}`,labels:"feedback"}).toString();
 let ghIssues=null,ghReleases=null;
 async function vFeed(){
@@ -1011,9 +1017,9 @@ function vMod(){
   document.querySelectorAll("[data-mod]").forEach(b=>b.onclick=()=>abrirModelo(todos.find(m=>m.id===b.dataset.mod)));
   document.querySelectorAll("[data-modrm]").forEach(b=>b.onclick=async()=>{const m=todos.find(x=>x.id===b.dataset.modrm);
     if(!b.dataset.armed){b.dataset.armed="1";b.textContent="Confirmar remoção";return}
-    if(m.padrao)LS.set("cs_modelos_ocultos",JSON.stringify([...modOcultos(),m.f]));else{await Store.del("docs",m.id);S.docs=S.docs.filter(d=>d.id!==m.id)}
+    if(m.padrao){const l=[...modOcultos(),m.f];LS.set("cs_modelos_ocultos",JSON.stringify(l));registrarValor("modelos_ocultos","lista",l)}else{await Store.del("docs",m.id);S.docs=S.docs.filter(d=>d.id!==m.id)}
     toast("Modelo removido");vMod()});
-  const r=$("#modRest");if(r)r.onclick=()=>{LS.del("cs_modelos_ocultos");vMod()};
+  const r=$("#modRest");if(r)r.onclick=()=>{LS.del("cs_modelos_ocultos");registrarValor("modelos_ocultos","lista",[]);vMod()};
   $("#modNovo").onclick=()=>pickFile("application/pdf,.pdf",novoModelo);
 }
 async function novoModelo(file){
@@ -1247,6 +1253,255 @@ async function abrirEndereco(w,aoTerminar){
     catch(e){toast(String(e&&e.message||e));b.disabled=false;b.textContent="Salvar no Sistema eSocial";delete b.dataset.armed}};
 }
 
+/* ---------- COMPARTILHAMENTO ENTRE COMPUTADORES ----------
+   Toda alteração feita por uma pessoa (ficha, anexo, lista, entrevista, modelo, feedback) entra no
+   diário deste computador. Com a pasta compartilhada configurada, o diário vai para
+   <pasta>/central-dados/<pc>.jsonl e os anexos para <pasta>/central-dados/arquivos/<id>.b64.
+   A cada minuto o programa lê os diários dos outros computadores e aplica o que for mais novo.
+   Trabalhadores são identificados pelo CPF (o id interno é diferente em cada computador). */
+const Comp={erro:"",ultima:"",rodando:false};
+const pastaComp=()=>IS_TAURI?(LS.get("cs_pasta")||""):"";
+const diario=()=>{try{return JSON.parse(LS.get("cs_diario")||"[]")}catch(e){return[]}};
+const marcas=()=>{try{return JSON.parse(LS.get("cs_diario_t")||"{}")}catch(e){return{}}};
+async function blobB64(b){const u=new Uint8Array(await b.arrayBuffer());let s="";for(let i=0;i<u.length;i+=0x8000)s+=String.fromCharCode(...u.subarray(i,i+0x8000));return btoa(s)}
+const b64Blob=(s,mime)=>new Blob([Uint8Array.from(atob(s),c=>c.charCodeAt(0))],{type:mime||"application/octet-stream"});
+function anotar(col,k,d,del){
+  if(!IS_TAURI)return null;
+  const t=new Date().toISOString();
+  const dia=diario().filter(x=>!(x.col===col&&x.k===k));dia.push({t,pc:pcId(),col,k,del:!!del,d:del?null:d});
+  LS.set("cs_diario",JSON.stringify(dia));const mk=marcas();mk[col+"|"+k]=t;LS.set("cs_diario_t",JSON.stringify(mk));
+  return dia}
+let _pub=Promise.resolve();
+function publicar(blobs){
+  const pasta=pastaComp();if(!pasta)return;
+  _pub=_pub.then(async()=>{try{
+    for(const d of blobs||[])if(d&&d.blob)await tinvoke("pasta_arquivo_gravar",{pasta,nome:d.id+".b64",base64:await blobB64(d.blob)});
+    await tinvoke("pasta_gravar",{pasta,subpasta:"central-dados",nome:pcId()+".jsonl",conteudo:diario().map(x=>JSON.stringify(x)).join("\n")});Comp.erro=""}
+   catch(e){Comp.erro=String(e)}});return _pub}
+function registrar(col,o,del){
+  if(!IS_TAURI||!o||o.exemplo)return;
+  let k=o.id,d={...o};
+  if(col==="workers")k=o.cpf||o.id;
+  if(col==="docs"){delete d.blob;const w=S.workers.find(x=>x.id===o.workerId);d.dono=o.workerId===MOD_ID?MOD_ID:(w?w.cpf:"")}
+  if(!anotar(col,k,d,del))return;
+  publicar(col==="docs"&&!del?[o]:[]);
+}
+function registrarValor(col,k,valor){if(anotar(col,k,valor,false))publicar([])}
+// Aplica uma alteração vinda de outro computador. Retorna false para tentar de novo depois.
+async function aplicarRemoto(e){
+  const {col,d}=e;
+  if(col==="workers"){const w=S.workers.find(x=>x.cpf===e.k);
+    if(e.del){if(w){for(const dc of docsDe(w.id))await Store.del("docs",dc.id,true);await Store.del("workers",w.id,true)}return true}
+    if(w)await Store.put("workers",Object.assign(w,d,{id:w.id}),true);else{const n={...d,id:uid()};S.workers.push(n);await Store.put("workers",n,true)}return true}
+  if(col==="docs"){
+    if(e.del){await Store.del("docs",e.k,true);return true}
+    const dono=d.dono===MOD_ID?MOD_ID:(S.workers.find(x=>x.cpf===d.dono)||{}).id;if(!dono)return false;
+    const b=await tinvoke("pasta_arquivo_ler",{pasta:pastaComp(),nome:d.id+".b64"});if(!b)return false;
+    const doc={...d,workerId:dono,blob:b64Blob(b,d.mime)};delete doc.dono;await Store.put("docs",doc,true);return true}
+  if(col==="lists"||col==="interviews"){if(e.del)await Store.del(col,e.k,true);else await Store.put(col,d,true);return true}
+  const chaves={feedback:"cs_feedback",modelos_ocultos:"cs_modelos_ocultos",estoque_cfg:"cs_est_cfg"};
+  if(chaves[col]){LS.set(chaves[col],JSON.stringify(d));return true}
+  return true}
+async function puxarCompartilhado(){
+  const pasta=pastaComp();if(!pasta||Comp.rodando)return;Comp.rodando=true;
+  try{const arqs=await tinvoke("pasta_ler",{pasta,subpasta:"central-dados"});Comp.erro="";
+    const ents=[];for(const [nome,txt] of arqs){if(nome===pcId()+".jsonl")continue;for(const l of txt.split(/\r?\n/)){if(!l.trim())continue;try{ents.push(JSON.parse(l))}catch(e){}}}
+    ents.sort((a,b)=>a.t.localeCompare(b.t));
+    const mk=marcas();let mudou=0;
+    for(const e of ents){const key=e.col+"|"+e.k;if(mk[key]&&mk[key]>=e.t)continue;
+      try{if(await aplicarRemoto(e)){mk[key]=e.t;mudou++}}catch(err){}}
+    LS.set("cs_diario_t",JSON.stringify(mk));Comp.ultima=new Date().toISOString();
+    if(mudou){await loadAll();rerenderSeguro()}}
+  catch(e){Comp.erro=String(e)}
+  finally{Comp.rodando=false}}
+// Primeira conexão: coloca no diário o que já foi feito neste computador antes de compartilhar.
+async function publicarExistente(){
+  if(LS.get("cs_diario_inicial")===pastaComp())return;
+  const proprios=w=>w.origem!=="esocial"||w.obs&&w.obs!=="Importado do Sistema eSocial."||w.antecResultado||w.asoAltura!==undefined||w.asoConfinado!==undefined||w.status==="a_desligar"||w.entrevistaId;
+  for(const w of S.workers.filter(w=>!w.exemplo&&proprios(w)))anotar("workers",w.cpf||w.id,{...w},false);
+  const docs=S.docs.filter(d=>d.workerId===MOD_ID||S.workers.some(w=>w.id===d.workerId&&!w.exemplo));
+  for(const d of docs){const x={...d};delete x.blob;const w=S.workers.find(y=>y.id===d.workerId);x.dono=d.workerId===MOD_ID?MOD_ID:(w?w.cpf:"");anotar("docs",d.id,x,false)}
+  for(const l of S.lists)anotar("lists",l.id,l,false);for(const i of S.interviews)anotar("interviews",i.id,i,false);
+  anotar("feedback","lista",fbLista(),false);anotar("modelos_ocultos","lista",modOcultos(),false);
+  await publicar(docs);LS.set("cs_diario_inicial",pastaComp());
+}
+function compHTML(){
+  if(!IS_TAURI)return `<fieldset><legend>Compartilhar entre computadores</legend><div class="note">No programa instalado, todos os computadores podem ver as mesmas fichas, anexos, listas, entrevistas, modelos, feedback e estoque por uma pasta compartilhada.</div></fieldset>`;
+  const p=pastaComp();
+  return `<fieldset><legend>Compartilhar entre computadores</legend>
+   <div class="note">Escolha uma pasta que todos os computadores enxerguem: uma pasta do OneDrive ou do Google Drive para computador sincronizada nos dois, ou uma pasta da rede. Use o mesmo caminho em cada computador. O Central grava ali só o que foi feito neste computador e lê o que os outros gravaram.</div>
+   <div class="form-grid" style="margin-top:12px"><div class="field span4"><label for="cpPasta">Pasta compartilhada</label><input id="cpPasta" placeholder="Ex.: C:\\Users\\ferra\\OneDrive\\Central  ou  \\\\SERVIDOR\\Central" value="${esc(p)}"></div></div>
+   <div class="toolbar" style="margin-top:12px"><button class="btn primary" id="cpSalvar">${p?"Salvar":"Conectar pasta"}</button>${p?`<button class="btn" id="cpAgora">Atualizar agora</button><button class="btn danger" id="cpTirar">Parar de compartilhar</button>`:""}
+    <span class="small muted">${p?(Comp.erro?`<span style="color:var(--crit)">${esc(Comp.erro)}</span>`:Comp.ultima?`Recebido às ${hhmm(new Date(Comp.ultima))}`:"Conectada"):"Sem pasta: as informações ficam só neste computador."}</span></div></fieldset>`}
+function bindComp(redraw){
+  const s=$("#cpSalvar");if(s)s.onclick=async()=>{const p=$("#cpPasta").value.trim();if(!p){toast("Informe o caminho da pasta");return}
+    s.disabled=true;s.textContent="Conectando…";
+    try{await tinvoke("pasta_ler",{pasta:p,subpasta:"central-dados"});LS.set("cs_pasta",p);await publicarExistente();await publicar([]);await puxarCompartilhado();await estCarregar();
+      toast(Comp.erro?Comp.erro:"Pasta conectada. As informações agora são compartilhadas.")}
+    catch(e){toast(String(e))}redraw()};
+  const a=$("#cpAgora");if(a)a.onclick=async()=>{await publicar([]);await puxarCompartilhado();await estCarregar();toast(Comp.erro||"Atualizado");redraw()};
+  const t=$("#cpTirar");if(t)t.onclick=()=>{if(!t.dataset.armed){t.dataset.armed="1";t.textContent="Confirmar";return}LS.del("cs_pasta");toast("Compartilhamento desligado neste computador");redraw()};
+}
+
+/* ---------- ESTOQUE DE UNIFORMES ----------
+   Livro de movimentos que nunca apaga: entrada soma, saída subtrai, erro se desfaz com estorno.
+   Cada computador grava os próprios movimentos; com pasta compartilhada, o saldo soma os de todos. */
+const PRODUTOS=[
+  {id:"camisa-ml",nome:"Camisa manga longa",grupo:"camisa",tam:["P","M","G","GG","XG"]},
+  {id:"camisa-mc",nome:"Camisa manga curta",grupo:"camisa",tam:["P","M","G","GG","XG"]},
+  {id:"calca",nome:"Calça",grupo:"calca",tam:["36","38","40","42","44","46","48","50"]},
+  {id:"botina",nome:"Botina",grupo:"botina",tam:["37","38","39","40","41","42","43","44","45"]}];
+const PRECO_PADRAO={"camisa-ml":40,"camisa-mc":40,calca:60,botina:60};
+const MOTIVOS={compra:"Entrada (compra ou recebimento)",devolucao:"Devolução do colaborador",vale:"Vale ao colaborador",safra:"Uniforme da safra",baixa:"Baixa (perda, avaria, descarte)",estorno:"Estorno",descontado:"Vale descontado"};
+const LIMITE_SAFRA={camisa:1,calca:1}; // por colaborador, por safra
+const brl=v=>Number(v||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+const prod=id=>PRODUTOS.find(p=>p.id===id)||{nome:id,tam:[]};
+const pcId=()=>{let id=LS.get("cs_pc_id");if(!id){id="pc-"+uid();LS.set("cs_pc_id",id)}return id};
+const estCfg=()=>{let c={};try{c=JSON.parse(LS.get("cs_est_cfg")||"{}")}catch(e){}return {precos:{...PRECO_PADRAO,...(c.precos||{})},safra:c.safra||`Safra ${TODAY.getFullYear()}`}};
+const estCfgSalvar=c=>LS.set("cs_est_cfg",JSON.stringify(c));
+const Est={movs:[],erro:"",lido:0};
+const meusMovs=()=>{try{return JSON.parse(LS.get("cs_est_movs")||"[]")}catch(e){return[]}};
+async function estCarregar(){
+  const meus=meusMovs();let todos=[...meus];Est.erro="";const pasta=pastaComp();
+  if(pasta){try{const arqs=await tinvoke("pasta_ler",{pasta,subpasta:"central-estoque"});
+      for(const [nome,txt] of arqs){if(nome===pcId()+".jsonl")continue;for(const l of txt.split(/\r?\n/)){if(!l.trim())continue;try{todos.push(JSON.parse(l))}catch(e){}}}}
+    catch(e){Est.erro=String(e)}}
+  const vistos=new Set();Est.movs=todos.filter(m=>m&&m.id&&!vistos.has(m.id)&&vistos.add(m.id)).sort((a,b)=>b.q.localeCompare(a.q));Est.lido=Date.now();
+}
+async function estGravar(novos){
+  const meus=meusMovs().concat(novos);
+  if(!LS.set("cs_est_movs",JSON.stringify(meus)))throw new Error("Não foi possível guardar o movimento neste computador.");
+  const pasta=pastaComp();
+  if(pasta){try{await tinvoke("pasta_gravar",{pasta,subpasta:"central-estoque",nome:pcId()+".jsonl",conteudo:meus.map(m=>JSON.stringify(m)).join("\n")})}
+    catch(e){toast("Gravado neste computador, mas não na pasta compartilhada: "+e)}}
+  await estCarregar();
+}
+const saldo=(p,t)=>Est.movs.reduce((s,m)=>m.prod===p&&m.tam===t?s+Number(m.qtd||0):s,0);
+const estornado=id=>Est.movs.some(m=>m.motivo==="estorno"&&m.ref===id);
+const descontado=id=>Est.movs.some(m=>m.motivo==="descontado"&&m.ref===id);
+const doColab=(m,w)=>w.cpf?m.cpf===w.cpf:m.w===w.id;
+function safraUsada(w,safra,grupo){return Est.movs.filter(m=>doColab(m,w)&&m.motivo==="safra"&&m.safra===safra&&prod(m.prod).grupo===grupo&&!estornado(m.id)).reduce((s,m)=>s-Number(m.qtd),0)}
+function valesDe(w){return Est.movs.filter(m=>doColab(m,w)&&m.motivo==="vale"&&!estornado(m.id))}
+const novoMov=o=>({id:uid(),q:new Date().toISOString(),pc:pcId(),u:nomeUsuario()||"",...o});
+
+function vEst(){
+  const cfg=estCfg();
+  const tot=PRODUTOS.map(p=>({p,q:p.tam.reduce((s,t)=>s+saldo(p.id,t),0)}));
+  const zerados=PRODUTOS.reduce((n,p)=>n+p.tam.filter(t=>saldo(p.id,t)<=0).length,0);
+  const aDescontar=Est.movs.filter(m=>m.motivo==="vale"&&!estornado(m.id)&&!descontado(m.id)).reduce((s,m)=>s+Number(m.valor||0),0);
+  const busca=(ui.estBusca||"").toLowerCase();
+  const lista=Est.movs.filter(m=>m.motivo!=="descontado"&&(!busca||[m.wn,m.cpf,prod(m.prod).nome,m.tam,MOTIVOS[m.motivo]].join(" ").toLowerCase().includes(busca))).slice(0,80);
+  $("#view").innerHTML=`<div class="head"><div><h1>Estoque de uniformes</h1><p>Camisas, calças e botinas: entradas, saídas por vale ou uniforme da safra, e baixas. Cada saída fica ligada ao colaborador.</p></div>
+   <div class="toolbar"><button class="btn" id="estEnt">${ico("plus",16)} Entrada</button><button class="btn primary" id="estSai">Saída ou baixa</button></div></div>
+  ${Est.erro?`<div class="banner" style="border-left-color:var(--crit)"><span>Pasta compartilhada indisponível: ${esc(Est.erro)}. Mostrando só os movimentos deste computador.</span></div>`:""}
+  <div class="tiles">${tot.map(({p,q})=>`<div class="tile" style="cursor:default"><span class="ic">${ico("box",22)}</span><span class="n">${q}</span><span class="l">${esc(p.nome)}</span></div>`).join("")}</div>
+  <div class="grid2">
+   <section class="panel"><div class="panel-h"><h2>Saldo por tamanho</h2><span class="small muted">${zerados} tamanho${zerados===1?"":"s"} zerado${zerados===1?"":"s"}</span></div>
+    ${PRODUTOS.map(p=>`<div><div class="small" style="font-weight:600;margin-bottom:6px">${esc(p.nome)} <span class="muted">· ${brl(cfg.precos[p.id])}</span></div><div class="tams">${p.tam.map(t=>{const s=saldo(p.id,t);return `<span class="tam ${s<=0?"zero":s<=2?"baixo":""}" title="${esc(p.nome)} ${t}: ${s}"><b>${t}</b>${s}</span>`}).join("")}</div></div>`).join("")}
+   </section>
+   <section class="panel"><div class="panel-h"><h2>Vales a descontar</h2><span class="pill ${aDescontar?"warn":"ok"}">${brl(aDescontar)}</span></div>
+    ${(()=>{const v=Est.movs.filter(m=>m.motivo==="vale"&&!estornado(m.id)&&!descontado(m.id));return v.length?`<div class="list">${v.slice(0,12).map(m=>`<div class="row"><span><b>${esc(m.wn)}</b> <span class="small muted">· ${-m.qtd} ${esc(prod(m.prod).nome)} ${esc(m.tam)} · ${br(m.q.slice(0,10))}</span></span><span class="toolbar"><span class="mono">${brl(m.valor)}</span><button class="btn sm" data-desc="${m.id}">Marcar descontado</button></span></div>`).join("")}</div>`:`<div class="empty">Nenhum vale pendente.</div>`})()}
+    <div class="note">Vale: o valor é descontado do colaborador (CLT, art. 462, com autorização assinada no termo de entrega).</div>
+   </section>
+  </div>
+  <section class="panel"><div class="panel-h"><h2>Movimentos</h2><div class="search">${ico("search",16)}<input class="inp" id="estBusca" placeholder="Buscar colaborador, CPF ou item" value="${esc(ui.estBusca||"")}" aria-label="Buscar movimento"></div></div>
+   ${lista.length?`<div class="tbl-wrap" style="box-shadow:none"><table><thead><tr><th>Data</th><th>Item</th><th class="num">Qtd</th><th>Motivo</th><th>Colaborador</th><th>Por</th><th></th></tr></thead><tbody>
+    ${lista.map(m=>{const est=m.motivo==="estorno",feito=estornado(m.id);return `<tr style="${feito||est?"opacity:.55":""}"><td class="mono">${br(m.q.slice(0,10))} ${hhmm(new Date(m.q))}</td><td>${esc(prod(m.prod).nome)} <b>${esc(m.tam)}</b></td><td class="num mono" style="color:${m.qtd>0?"var(--ok)":"var(--crit)"}">${m.qtd>0?"+":""}${m.qtd}</td>
+     <td>${esc(MOTIVOS[m.motivo]||m.motivo)}${m.safra&&m.motivo==="safra"?` <span class="small muted">${esc(m.safra)}</span>`:""}${m.valor?` <span class="small muted">${brl(m.valor)}</span>`:""}${m.obs?`<div class="small muted">${esc(m.obs)}</div>`:""}</td>
+     <td>${m.wn?esc(m.wn):"—"}</td><td class="small muted">${esc(m.u||"")}</td>
+     <td>${!est&&!feito?`<button class="btn sm" data-estorno="${m.id}">Estornar</button>`:feito?`<span class="small muted">estornado</span>`:""}${m.w&&!est?` <button class="btn sm" data-termo="${m.lote||m.id}">Termo</button>`:""}</td></tr>`}).join("")}
+   </tbody></table></div>`:`<div class="empty">Nenhum movimento ainda. Comece lançando a entrada do que há no estoque.</div>`}
+  </section>
+  <section class="panel"><h2>Configurações do estoque</h2>
+   <div class="form-grid">
+    <div class="field"><label for="cfSafra">Safra atual</label><input id="cfSafra" value="${esc(cfg.safra)}"></div>
+    ${PRODUTOS.map(p=>`<div class="field"><label for="cfP_${p.id}">Preço · ${esc(p.nome)}</label><input id="cfP_${p.id}" type="number" min="0" step="0.01" value="${cfg.precos[p.id]}"></div>`).join("")}
+   </div>
+   <div class="note">Uniforme da safra: cada colaborador recebe no máximo ${LIMITE_SAFRA.calca} calça e ${LIMITE_SAFRA.camisa} camisa por safra. Mudando o nome da safra, o limite recomeça.${IS_TAURI?(pastaComp()?" Estoque compartilhado pela pasta configurada na engrenagem.":" Para usar o mesmo estoque em todos os computadores, configure a pasta compartilhada na engrenagem."):" No navegador o estoque fica só neste navegador."}</div>
+   <div class="toolbar" style="justify-content:flex-end"><button class="btn primary" id="cfSalvar">Salvar configurações</button></div>
+  </section>`;
+  $("#estEnt").onclick=()=>abrirMov("entrada");$("#estSai").onclick=()=>abrirMov("saida");
+  const b=$("#estBusca");b.oninput=()=>{ui.estBusca=b.value;const pos=b.selectionStart;vEst();const nb=$("#estBusca");nb.focus();nb.setSelectionRange(pos,pos)};
+  document.querySelectorAll("[data-estorno]").forEach(x=>x.onclick=async()=>{if(!x.dataset.armed){x.dataset.armed="1";x.textContent="Confirmar estorno";return}
+    const m=Est.movs.find(y=>y.id===x.dataset.estorno);await estGravar([novoMov({prod:m.prod,tam:m.tam,qtd:-m.qtd,motivo:"estorno",ref:m.id,w:m.w,wn:m.wn,cpf:m.cpf,obs:`Estorno de ${MOTIVOS[m.motivo]||m.motivo} de ${br(m.q.slice(0,10))}`})]);toast("Movimento estornado");vEst()});
+  document.querySelectorAll("[data-desc]").forEach(x=>x.onclick=async()=>{const m=Est.movs.find(y=>y.id===x.dataset.desc);await estGravar([novoMov({prod:m.prod,tam:m.tam,qtd:0,motivo:"descontado",ref:m.id,w:m.w,wn:m.wn})]);toast("Vale marcado como descontado");vEst()});
+  document.querySelectorAll("[data-termo]").forEach(x=>x.onclick=()=>termoEntrega(x.dataset.termo));
+  $("#cfSalvar").onclick=async()=>{const c=estCfg();c.safra=$("#cfSafra").value.trim()||c.safra;PRODUTOS.forEach(p=>{const v=parseFloat($("#cfP_"+p.id).value);if(v>=0)c.precos[p.id]=v});
+    estCfgSalvar(c);registrarValor("estoque_cfg","cfg",c);toast("Configurações salvas");await estCarregar();vEst()};
+}
+function abrirMov(tipo){
+  const entrada=tipo==="entrada";const cfg=estCfg();let quem=null;
+  const linha=()=>`<div class="mov-linha form-grid" style="grid-template-columns:2fr 1fr 1fr auto;align-items:end">
+     <div class="field"><label>Item</label><select class="inp" data-it="prod">${PRODUTOS.map(p=>`<option value="${p.id}">${esc(p.nome)}</option>`).join("")}</select></div>
+     <div class="field"><label>Tamanho</label><select class="inp" data-it="tam"></select></div>
+     <div class="field"><label>Quantidade</label><input class="inp" data-it="qtd" type="number" min="1" step="1" value="1"></div>
+     <button class="btn sm danger" type="button" data-it="rm" aria-label="Tirar item">Tirar</button></div>`;
+  const m=document.createElement("div");m.className="modal";
+  m.innerHTML=`<div class="scrim"></div><div class="modal-c" role="dialog" aria-modal="true" aria-labelledby="mvh" style="max-width:720px"><div class="drawer-h"><div><div class="eyebrow">Estoque de uniformes</div><h2 id="mvh" style="font-size:20px">${entrada?"Entrada no estoque":"Saída ou baixa"}</h2></div><button class="btn" id="mvClose">Fechar</button></div>
+   <div class="drawer-b" style="align-items:stretch">
+    <div class="field"><label for="mvMot">Motivo</label><select id="mvMot" class="inp">${(entrada?["compra","devolucao"]:["vale","safra","baixa"]).map(k=>`<option value="${k}">${MOTIVOS[k]}</option>`).join("")}</select></div>
+    <div id="mvQuem" class="field"><label for="mvBusca">Colaborador</label><input id="mvBusca" class="inp" placeholder="Digite o nome ou o CPF" autocomplete="off"><div id="mvSug" class="list"></div></div>
+    <div id="mvItens" style="display:flex;flex-direction:column;gap:10px">${linha()}</div>
+    <div><button class="btn sm" id="mvMais" type="button">${ico("plus",14)} Outro item</button></div>
+    <div class="field"><label for="mvObs">Observação (opcional)</label><input id="mvObs" class="inp" placeholder="${entrada?"Ex.: nota fiscal 1234, fornecedor":"Ex.: botina rasgada"}"></div>
+    <div id="mvAviso"></div>
+    <div class="toolbar" style="justify-content:flex-end"><button class="btn primary" id="mvSalvar">${entrada?"Lançar entrada":"Lançar saída"}</button></div>
+   </div></div>`;
+  document.body.appendChild(m);const close=()=>m.remove();m.querySelector(".scrim").onclick=close;$("#mvClose").onclick=close;
+  const ligar=()=>m.querySelectorAll(".mov-linha").forEach(l=>{const sp=l.querySelector('[data-it="prod"]'),st=l.querySelector('[data-it="tam"]');
+    const fill=()=>{const v=st.value;st.innerHTML=prod(sp.value).tam.map(t=>`<option value="${t}" ${t===v?"selected":""}>${t}</option>`).join("");if(!entrada)[...st.options].forEach(o=>o.textContent=`${o.value} (saldo ${saldo(sp.value,o.value)})`);aviso()};
+    if(!st.options.length)fill();sp.onchange=fill;st.onchange=aviso;l.querySelector('[data-it="qtd"]').oninput=aviso;
+    l.querySelector('[data-it="rm"]').onclick=()=>{if(m.querySelectorAll(".mov-linha").length>1){l.remove();aviso()}}});
+  const itens=()=>[...m.querySelectorAll(".mov-linha")].map(l=>({prod:l.querySelector('[data-it="prod"]').value,tam:l.querySelector('[data-it="tam"]').value,qtd:parseInt(l.querySelector('[data-it="qtd"]').value,10)||0}));
+  const precisaQuem=()=>["vale","safra","devolucao"].includes($("#mvMot").value);
+  // Regras: saldo suficiente; uniforme da safra no máximo 1 calça e 1 camisa por colaborador; colaborador obrigatório.
+  const problemas=()=>{const mot=$("#mvMot").value,its=itens(),p=[];
+    if(its.some(i=>i.qtd<1))p.push("Informe quantidades a partir de 1.");
+    if(precisaQuem()&&!quem)p.push("Escolha o colaborador.");
+    if(!entrada){const soma={};its.forEach(i=>{const k=i.prod+"|"+i.tam;soma[k]=(soma[k]||0)+i.qtd});
+      for(const [k,q] of Object.entries(soma)){const[pp,t]=k.split("|");const s=saldo(pp,t);if(q>s)p.push(`${prod(pp).nome} ${t}: saldo ${s}, pedido ${q}.`)}}
+    if(mot==="safra"){if(its.some(i=>prod(i.prod).grupo==="botina"))p.push("Botina não faz parte do uniforme da safra. Use Vale.");
+      if(quem)for(const g of ["camisa","calca"]){const pedido=its.filter(i=>prod(i.prod).grupo===g).reduce((s,i)=>s+i.qtd,0),usado=safraUsada(quem,cfg.safra,g);
+        if(pedido+usado>LIMITE_SAFRA[g])p.push(`${quem.nome.split(" ")[0]} já recebeu ${usado} ${g==="calca"?"calça":"camisa"} na ${cfg.safra}; o limite é ${LIMITE_SAFRA[g]}.`)}}
+    return p};
+  const aviso=()=>{const mot=$("#mvMot").value;$("#mvQuem").hidden=!precisaQuem();const p=problemas();
+    const total=mot==="vale"?itens().reduce((s,i)=>s+i.qtd*(cfg.precos[i.prod]||0),0):0;
+    $("#mvAviso").innerHTML=(p.length?`<div class="banner" style="border-left-color:var(--crit)"><span>${p.map(esc).join("<br>")}</span></div>`:"")+(mot==="vale"?`<div class="note">Valor do vale: <b>${brl(total)}</b> (a descontar do colaborador).</div>`:mot==="safra"?`<div class="note">${esc(cfg.safra)}: até 1 calça e 1 camisa por colaborador, sem desconto.</div>`:"")};
+  const sug=()=>{const q=$("#mvBusca").value.toLowerCase().trim(),qd=q.replace(/\D/g,"");if(q.length<2){$("#mvSug").innerHTML="";return}
+    const r=S.workers.filter(w=>w.status!=="desligado"&&(w.nome.toLowerCase().includes(q)||(qd.length>=3&&w.cpf.includes(qd)))).slice(0,6);
+    $("#mvSug").innerHTML=r.map(w=>`<div class="row"><span><b>${esc(w.nome)}</b> <span class="small muted mono">${esc(fmtCPF(w.cpf))}</span></span><button class="btn sm" data-pick="${w.id}">Escolher</button></div>`).join("")||`<div class="small muted">Ninguém encontrado.</div>`;
+    m.querySelectorAll("[data-pick]").forEach(b=>b.onclick=()=>{quem=S.workers.find(w=>w.id===b.dataset.pick);$("#mvBusca").value=quem.nome;$("#mvSug").innerHTML="";aviso()})};
+  $("#mvBusca").oninput=()=>{quem=null;sug();aviso()};$("#mvMot").onchange=aviso;
+  $("#mvMais").onclick=()=>{$("#mvItens").insertAdjacentHTML("beforeend",linha());ligar()};
+  ligar();aviso();
+  $("#mvSalvar").onclick=async()=>{const p=problemas();if(p.length){toast(p[0]);return}
+    const mot=$("#mvMot").value,obs=$("#mvObs").value.trim(),lote=uid();
+    const movs=itens().map(i=>novoMov({lote,prod:i.prod,tam:i.tam,qtd:entrada?i.qtd:-i.qtd,motivo:mot,obs,
+      ...(quem?{w:quem.id,wn:quem.nome,cpf:quem.cpf}:{}),...(mot==="safra"?{safra:cfg.safra}:{}),...(mot==="vale"?{valor:i.qtd*(cfg.precos[i.prod]||0)}:{})}));
+    try{await estGravar(movs)}catch(e){toast(String(e.message||e));return}
+    close();toast(entrada?"Entrada lançada":"Saída lançada");if(current==="estoque")vEst();
+    if(quem&&!entrada)termoEntrega(lote)};
+}
+function termoEntrega(lote){
+  const movs=Est.movs.filter(m=>(m.lote||m.id)===lote&&m.motivo!=="estorno");if(!movs.length)return;
+  const f=movs[0],vale=f.motivo==="vale",total=movs.reduce((s,m)=>s+Number(m.valor||0),0),dt=new Date(f.q);
+  const html=`<div class="ficha"><header><div><b>SINTRAMOMED</b><span>Sindicato dos Trabalhadores na Movimentação de Mercadorias em Geral de Dourados · CNPJ 03.682.762/0001-03</span></div><div class="fr">Termo de entrega de uniforme<br><small>${br(iso(dt))} às ${hhmm(dt)}</small></div></header>
+   <h1>${esc(f.wn||"")}</h1><p style="margin:0;color:#6e6e73">CPF ${esc(fmtCPF(f.cpf||""))} · ${esc(MOTIVOS[f.motivo])}${f.motivo==="safra"?" · "+esc(f.safra):""}</p>
+   <section><h2>Itens entregues</h2><table><tr><th>Item</th><td><b>Tamanho · Quantidade${vale?" · Valor":""}</b></td></tr>${movs.map(m=>`<tr><th>${esc(prod(m.prod).nome)}</th><td>${esc(m.tam)} · ${-m.qtd}${vale?" · "+brl(m.valor):""}</td></tr>`).join("")}${vale?`<tr><th>Total</th><td><b>${brl(total)}</b></td></tr>`:""}</table></section>
+   <p style="margin-top:18px">Declaro que recebi os itens acima em perfeito estado, comprometo-me a usá-los no trabalho e a conservá-los.${vale?` Autorizo o desconto de <b>${brl(total)}</b> dos meus créditos junto ao Sindicato, conforme o art. 462 da CLT.`:" Estou ciente de que o uniforme da safra é limitado a 1 calça e 1 camisa por safra."}</p>
+   <footer><div>__________________________________<br>${esc(f.wn||"Colaborador")}</div><div>__________________________________<br>Responsável pela entrega${f.u?" ("+esc(f.u)+")":""}</div></footer></div>`;
+  const md=document.createElement("div");md.className="modal";
+  md.innerHTML=`<div class="scrim"></div><div class="modal-c" role="dialog" aria-modal="true" aria-label="Termo de entrega"><div class="drawer-h"><div><div class="eyebrow">Termo de entrega · A4</div><h2 style="font-size:19px">${esc(f.wn||"")}</h2></div><div class="toolbar"><button class="btn primary" id="tPrint">Imprimir</button><button class="btn" id="tClose">Fechar</button></div></div><div class="drawer-b" style="background:var(--surface-2)">${html}</div></div>`;
+  document.body.appendChild(md);const close=()=>md.remove();md.querySelector(".scrim").onclick=close;$("#tClose").onclick=close;
+  $("#tPrint").onclick=()=>{$("#printArea").innerHTML=html;if(IS_TAURI)window.print();else toast("A impressão funciona no programa instalado.")};
+}
+function uniformesHTML(w){
+  const ms=Est.movs.filter(m=>doColab(m,w)&&!["estorno","descontado"].includes(m.motivo)&&!estornado(m.id));
+  if(!ms.length)return `<div class="small muted">Nenhum uniforme entregue pelo estoque.</div>`;
+  const aberto=ms.filter(m=>m.motivo==="vale"&&!descontado(m.id)).reduce((s,m)=>s+Number(m.valor||0),0);
+  return `<div class="list">${ms.slice(0,12).map(m=>`<div class="row"><span>${br(m.q.slice(0,10))} · ${esc(prod(m.prod).nome)} ${esc(m.tam)} × ${Math.abs(m.qtd)}</span><span class="small muted">${esc(MOTIVOS[m.motivo])}${m.motivo==="safra"?" · "+esc(m.safra):""}${m.valor?" · "+brl(m.valor)+(descontado(m.id)?" (descontado)":""):""}</span></div>`).join("")}</div>
+   ${aberto?`<div class="note">Vales a descontar: <b>${brl(aberto)}</b></div>`:""}`}
+
 /* ---------- FICHA DE CADASTRO (A4) ---------- */
 function fichaHTML(w){
   const L=(r,v)=>`<tr><th>${r}</th><td>${esc(v||"—")}</td></tr>`;const d=v=>v?br(v):"—";
@@ -1274,5 +1529,8 @@ function emitirFicha(w){
   if(IS_TAURI){try{Sync.cfg=await tinvoke("cred_status")}catch(e){Sync.cfg={configurado:false}}}
   else await seedIfEmpty();
   render();syncInfo();
-  if(IS_TAURI){setTimeout(()=>syncCiclo(false),2500);setInterval(()=>syncCiclo(false),SYNC_MS)}})();
+  if(IS_TAURI){setTimeout(()=>syncCiclo(false),2500);setInterval(()=>syncCiclo(false),SYNC_MS)}
+  // Estoque e pasta compartilhada: lê o que os outros computadores gravaram a cada minuto.
+  const comp=async()=>{await puxarCompartilhado();await estCarregar();if(current==="estoque"&&!document.querySelector(".modal")&&!document.querySelector("main input:focus"))vEst()};
+  await estCarregar();if(current==="estoque")render();if(IS_TAURI){setTimeout(comp,4000);setInterval(comp,60000)}})();
 </script>
