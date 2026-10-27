@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.27 — 27/10/2026
+- Botão de setas (sincronizar) ao lado da engrenagem, no topo da barra lateral: relê todos os trabalhadores no Sistema eSocial; as setas giram enquanto sincroniza e o andamento aparece embaixo, em porcentagem.
+- Ficha de EPI não entregue deixa de ser alerta nas pendências (e sai dos filtros da cadeia).
+
 ## 0.1.26 — 27/10/2026
 - A cada ciclo de 5 minutos o Central lê os ASOs de todos os trabalhadores no Sistema eSocial (relatório Atestados/Exames, admissional e periódico) e atualiza data e validade. Um ASO lançado por outro computador ou direto no sistema deixa de ficar como vencido no Central (antes podia levar mais de uma hora até a ficha ser relida).
 
