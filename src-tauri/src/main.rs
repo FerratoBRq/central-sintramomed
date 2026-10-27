@@ -34,7 +34,10 @@ fn main() {
             pasta::pasta_gravar,
             pasta::pasta_arquivo_gravar,
             pasta::pasta_arquivo_ler,
-            pasta::salvar_download
+            pasta::salvar_download,
+            pasta::pasta_downloads,
+            pasta::pdfs_listar,
+            pasta::pdf_ler
         ])
         .run(tauri::generate_context!())
         .expect("erro ao iniciar a Central Sintramomed");

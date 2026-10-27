@@ -108,3 +108,42 @@ pub fn salvar_download(app: tauri::AppHandle, nome: String, bytes: Vec<u8>) -> R
     std::fs::write(&destino, bytes).map_err(|e| format!("Não foi possível salvar em Downloads: {e}"))?;
     Ok(destino.to_string_lossy().to_string())
 }
+
+/// Pasta Downloads do Windows (onde o WhatsApp para computador salva os arquivos).
+#[tauri::command]
+pub fn pasta_downloads(app: tauri::AppHandle) -> Result<String, String> {
+    use tauri::Manager;
+    app.path().download_dir().map(|p| p.to_string_lossy().to_string()).map_err(|e| e.to_string())
+}
+
+fn nome_pdf(nome: &str) -> bool {
+    nome.len() <= 200 && nome.to_lowercase().ends_with(".pdf") && !nome.contains("..") && !nome.contains('/') && !nome.contains('\\') && !nome.contains(':')
+}
+
+/// PDFs da pasta (sem subpastas) alterados nos últimos `dias`: (nome, tamanho, modificado em ms).
+#[tauri::command]
+pub fn pdfs_listar(pasta: String, dias: u64) -> Result<Vec<(String, u64, u64)>, String> {
+    let dir = raiz(&pasta)?;
+    let limite = std::time::SystemTime::now() - std::time::Duration::from_secs(dias * 86_400);
+    let mut out = vec![];
+    for e in std::fs::read_dir(&dir).map_err(|e| format!("Não foi possível ler a pasta: {e}"))?.flatten() {
+        let nome = e.file_name().to_string_lossy().to_string();
+        let Ok(md) = e.metadata() else { continue };
+        if !md.is_file() || !nome_pdf(&nome) { continue; }
+        let Ok(m) = md.modified() else { continue };
+        if m < limite { continue; }
+        let ms = m.duration_since(std::time::UNIX_EPOCH).map(|d| d.as_millis() as u64).unwrap_or(0);
+        out.push((nome, md.len(), ms));
+    }
+    Ok(out)
+}
+
+/// Conteúdo de um PDF da pasta (até 25 MB), entregue como ArrayBuffer.
+#[tauri::command]
+pub fn pdf_ler(pasta: String, nome: String) -> Result<tauri::ipc::Response, String> {
+    if !nome_pdf(&nome) { return Err("Nome de arquivo inválido.".into()); }
+    let p = raiz(&pasta)?.join(&nome);
+    let md = std::fs::metadata(&p).map_err(|e| format!("Arquivo não encontrado: {e}"))?;
+    if md.len() > 25 * 1024 * 1024 { return Err("Arquivo grande demais (mais de 25 MB).".into()); }
+    std::fs::read(&p).map(tauri::ipc::Response::new).map_err(|e| format!("Não foi possível ler o arquivo: {e}"))
+}

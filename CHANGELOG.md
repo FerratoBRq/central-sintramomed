@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.19 — 27/10/2026
+- Nova tela ASOs recebidos: o Central olha a cada minuto a pasta onde o WhatsApp para computador salva os arquivos (normalmente Downloads), lê os PDFs dos últimos 30 dias, reconhece os ASOs (texto ou OCR quando o nome tem "ASO"), acha o trabalhador pelo CPF e deixa na fila com exame, data, resultado e liberações para altura e espaço confinado.
+- Conferir e lançar abre a tela de lançamento já com o arquivo; ao confirmar, lança no Sistema eSocial (exame, clínica, data, validade, registro anterior inativo), guarda o PDF na ficha e atualiza as liberações.
+- Também dá para arrastar vários PDFs do WhatsApp para a tela. Nada é apagado da pasta.
+
 ## 0.1.18 — 27/10/2026
 - Listas e inativos: a lista mensal de novos cadastrados virou o relatório mensal no modelo do RH (admissão, periódico e afastados/desligados), com botão Gerar Excel (A4 paisagem, salvo em Downloads).
 - Buscar no Sistema eSocial (só leitura): ASO periódicos e admissionais do mês (relatório Atestados/Exames) e a empresa de cada trabalhador pela produção (Folha Produção por trabalhador, tomadora com maior valor).
