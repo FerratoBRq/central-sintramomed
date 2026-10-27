@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.24 — 27/10/2026
+- Corrige a tela Lançar ASO ou NR: com ASO escolhido, o campo "Curso" (NR 33/35) aparecia por engano. Campos marcados como ocultos agora somem de verdade em todo o programa.
+- Nova Classificação do ASO: Simples ou Completo (altura/espaço confinado), lida do documento. No simples, as liberações ficam desmarcadas e travadas, e NR-35/NR-33 não são cobradas. A classificação vai para a ficha e já preenche o relatório mensal.
+
 ## 0.1.23 — 27/10/2026
 - Afastados e desligados vêm do Sistema eSocial: data de término (tela Término, S-2399) ou de início do afastamento e motivo (S-2230), e a data em que foram enviados. O relatório mensal coloca cada um no mês do envio (o término costuma ser retroativo) e já traz o motivo.
 - Lidos na sincronização (uma vez por trabalhador) e no botão Buscar no Sistema eSocial do relatório, para quem saiu nos últimos meses.

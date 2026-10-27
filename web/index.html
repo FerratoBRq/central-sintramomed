@@ -116,6 +116,7 @@ main{min-width:0;padding-block:36px 0;padding-left:max(16px,env(safe-area-inset-
 .btn.sm{padding:5px 12px;font-size:12.5px}
 .btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
 .field{display:flex;flex-direction:column;gap:6px;min-width:0}
+[hidden]{display:none!important}
 .field label{font-size:12.5px;font-weight:500;color:var(--muted)}
 .field input,.field select,.field textarea,.inp{border:1px solid var(--line-2);background:var(--surface);border-radius:var(--r-sm);padding:9px 12px;width:100%;min-width:0;transition:border-color .15s,box-shadow .15s}
 .field input:focus,.field select:focus,.field textarea:focus,.inp:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 22%,transparent)}
@@ -273,7 +274,7 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
       <button data-v="feedback"><span data-ico="idea"></span>Feedback</button>
     </nav>
     <div class="side-foot">
-      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.23</b></span><span id="runtime">modo navegador</span></div>
+      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.24</b></span><span id="runtime">modo navegador</span></div>
       <span id="syncInfo"></span>
       <span id="updInfo">Verificando atualizações…</span>
       <button class="link" id="btnUpdate" type="button">Verificar agora</button>
@@ -287,7 +288,7 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
 
 <script>
 "use strict";
-const APP_VERSION="0.1.23";
+const APP_VERSION="0.1.24";
 /* ---------- utilidades ---------- */
 const $=(s,r=document)=>r.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -422,7 +423,7 @@ const ATALHOS=[
   {id:"escavador",n:"Escavador",d:"Pesquisa de processos por nome",u:"https://www.escavador.com/",t:"pesquisa"},
   {id:"semaforo",n:"Semáforo eSocial",d:"Status dos web services do governo",u:"https://www.gov.br/esocial/pt-br/acesso-ao-sistema/semaforo",t:"governo",semLogin:true}
 ];
-const NOVIDADES=["Afastados e desligados lidos do Sistema eSocial (S-2399 e S-2230): data, data de envio e motivo; o relatório mensal usa o mês do envio","Relatório mensal: incluir à mão na admissão, no periódico e nos afastados/desligados (com data e motivo), editar a data do ASO e tirar linhas","Aba Aprovação: todo envio ao Sistema eSocial (ASO, NR e endereço) mostra campo a campo o que vai mudar e só é gravado depois de aprovado","Data de desligamento/afastamento lida do Sistema eSocial (preenche o término e o relatório mensal)","Pasta do Central: ASOs colocados em \"ASOs para lançar\" são lidos e lançados (um a um ou em lote, com confirmação); todo anexo fica também em Documentos\\NOME - CPF e o que for posto lá entra na ficha","ASOs recebidos: os PDFs do WhatsApp são lidos sozinhos da pasta Downloads, com o trabalhador achado pelo CPF, para conferir e lançar no Sistema eSocial","Relatório mensal de admissão, periódico e desligamentos no modelo do RH, gerado em Excel; periódicos e empresa da produção lidos do Sistema eSocial","Pendências: clique em ASO, NR-35, NR-33 e outros itens para filtrar; Críticas e Atenção mostram a quantidade","Pendências não cobram mais anexos faltando (DOC)","Atalho no painel para o Forms de consulta e inclusão da Coamo","Estoque de uniformes: camisas, calças e botinas por tamanho, vale ao colaborador, uniforme da safra (1 calça e 1 camisa) e termo de entrega","Pasta compartilhada na engrenagem: fichas, anexos, listas, entrevistas, modelos, feedback e estoque iguais em todos os computadores","S-2240 deixa de ser cobrado nas pendências (não se aplica à categoria)","A saudação usa o nome do login do Sistema eSocial de quem está usando o programa","Modelos para impressão: botão + para adicionar seus PDFs e opção de remover modelos","Corrige janelas (Importar, Lançar ASO, ficha) que ficavam atrás do fundo desfocado","Visual novo, no estilo Apple","Tela de Feedback: registre sugestões e problemas, envie ao GitHub e acompanhe o que foi implementado","Modelos para impressão abrem dentro do programa","Atualização reabre o programa sozinha","Liberação do ASO para altura e espaço confinado: sem liberação, NR-35/NR-33 não são cobradas","Lançar ASO e NR no Sistema eSocial a partir do documento anexado (lê datas e tipo)","Editar o endereço direto no Sistema eSocial","Emitir ficha de cadastro do trabalhador para imprimir","Data e hora no rodapé","Atualização sozinha pelo GitHub, sem chave: baixa, instala e reabre o programa","Trabalhadores aparecem durante a primeira importação (gravação em lotes de 25)","Corrige acentos quebrados no programa instalado","Impede abrir duas janelas do programa ao mesmo tempo","Importação automática: o programa entra sozinho no Sistema eSocial e atualiza os trabalhadores a cada 5 minutos","Senha do Sistema eSocial guardada no Windows, pedida uma única vez","Importação completa do Sistema eSocial: status, última produção, ASO, NR-33/35, EPI, documentos e endereço","Novos status: afastado e inativo no sistema","Cofre de acessos simplificado: só Sistema eSocial e Escavador","Verificação automática de atualizações a cada 5 minutos","Nova interface: tema claro e escuro, barra lateral com ícones, atalhos e indicadores redesenhados","Engrenagem de configurações com cofre de acessos (login e senha) protegido por PIN","Botões Copiar usuário e Copiar senha nos atalhos do painel","Atalho do Escavador no painel","Verificação de antecedentes na ficha e na entrevista"];
+const NOVIDADES=["Lançar ASO: o campo Curso de NR some para ASO; nova Classificação simples/completo (simples não cobra NR-35/NR-33)","Afastados e desligados lidos do Sistema eSocial (S-2399 e S-2230): data, data de envio e motivo; o relatório mensal usa o mês do envio","Relatório mensal: incluir à mão na admissão, no periódico e nos afastados/desligados (com data e motivo), editar a data do ASO e tirar linhas","Aba Aprovação: todo envio ao Sistema eSocial (ASO, NR e endereço) mostra campo a campo o que vai mudar e só é gravado depois de aprovado","Data de desligamento/afastamento lida do Sistema eSocial (preenche o término e o relatório mensal)","Pasta do Central: ASOs colocados em \"ASOs para lançar\" são lidos e lançados (um a um ou em lote, com confirmação); todo anexo fica também em Documentos\\NOME - CPF e o que for posto lá entra na ficha","ASOs recebidos: os PDFs do WhatsApp são lidos sozinhos da pasta Downloads, com o trabalhador achado pelo CPF, para conferir e lançar no Sistema eSocial","Relatório mensal de admissão, periódico e desligamentos no modelo do RH, gerado em Excel; periódicos e empresa da produção lidos do Sistema eSocial","Pendências: clique em ASO, NR-35, NR-33 e outros itens para filtrar; Críticas e Atenção mostram a quantidade","Pendências não cobram mais anexos faltando (DOC)","Atalho no painel para o Forms de consulta e inclusão da Coamo","Estoque de uniformes: camisas, calças e botinas por tamanho, vale ao colaborador, uniforme da safra (1 calça e 1 camisa) e termo de entrega","Pasta compartilhada na engrenagem: fichas, anexos, listas, entrevistas, modelos, feedback e estoque iguais em todos os computadores","S-2240 deixa de ser cobrado nas pendências (não se aplica à categoria)","A saudação usa o nome do login do Sistema eSocial de quem está usando o programa","Modelos para impressão: botão + para adicionar seus PDFs e opção de remover modelos","Corrige janelas (Importar, Lançar ASO, ficha) que ficavam atrás do fundo desfocado","Visual novo, no estilo Apple","Tela de Feedback: registre sugestões e problemas, envie ao GitHub e acompanhe o que foi implementado","Modelos para impressão abrem dentro do programa","Atualização reabre o programa sozinha","Liberação do ASO para altura e espaço confinado: sem liberação, NR-35/NR-33 não são cobradas","Lançar ASO e NR no Sistema eSocial a partir do documento anexado (lê datas e tipo)","Editar o endereço direto no Sistema eSocial","Emitir ficha de cadastro do trabalhador para imprimir","Data e hora no rodapé","Atualização sozinha pelo GitHub, sem chave: baixa, instala e reabre o programa","Trabalhadores aparecem durante a primeira importação (gravação em lotes de 25)","Corrige acentos quebrados no programa instalado","Impede abrir duas janelas do programa ao mesmo tempo","Importação automática: o programa entra sozinho no Sistema eSocial e atualiza os trabalhadores a cada 5 minutos","Senha do Sistema eSocial guardada no Windows, pedida uma única vez","Importação completa do Sistema eSocial: status, última produção, ASO, NR-33/35, EPI, documentos e endereço","Novos status: afastado e inativo no sistema","Cofre de acessos simplificado: só Sistema eSocial e Escavador","Verificação automática de atualizações a cada 5 minutos","Nova interface: tema claro e escuro, barra lateral com ícones, atalhos e indicadores redesenhados","Engrenagem de configurações com cofre de acessos (login e senha) protegido por PIN","Botões Copiar usuário e Copiar senha nos atalhos do painel","Atalho do Escavador no painel","Verificação de antecedentes na ficha e na entrevista"];
 
 /* ---------- cofre de acessos: AES-GCM com chave derivada do PIN (PBKDF2). A chave fica só na memória; recarregar a página tranca. ---------- */
 const b64e=u=>btoa(String.fromCharCode(...u));const b64d=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
@@ -915,11 +916,11 @@ function relLinhas(r){
   const mes=r.mes,nm=porNome(),o=r.over,fora=new Set(r.ocultos),porCpf=c=>c&&S.workers.find(w=>w.cpf===c);
   const ex=sec=>r.extras.filter(e=>e.sec===sec).map(e=>({e,w:porCpf(e.cpf)||null}));
   const linhaAdm=(w,k,manual)=>{const x=o[k]||{};const asoAdm=w?((r.admissionais.find(e=>e.nome===normNome(w.nome))||{}).d||w.asoData||""):"";
-    return {k,w,manual,nome:w?nomeRel(w):normNome(manual.nome),cad:w?w.dtCadastro:manual.d,matr:w?w.matricula:"",antec:x.antec??!!(w&&w.antecResultado),classe:x.classe||"",aso:x.aso??asoAdm,
+    return {k,w,manual,nome:w?nomeRel(w):normNome(manual.nome),cad:w?w.dtCadastro:manual.d,matr:w?w.matricula:"",antec:x.antec??!!(w&&w.antecResultado),classe:x.classe||(w&&w.asoClasse&&w.asoData===asoAdm?w.asoClasse:""),aso:x.aso??asoAdm,
       esoc:x.esoc??!!(w&&(w.ev?.s2300||w.s2300Enviado)),dom:!!x.dom,empresa:x.empresa??(w&&r.empresas[w.cpf]||"")}};
   const adm=[...S.workers.filter(w=>!w.exemplo&&(w.dtCadastro||"").startsWith(mes)).map(w=>linhaAdm(w,"a:"+w.cpf,null)),
     ...ex("a").map(({e,w})=>linhaAdm(w,"a:"+(e.cpf||e.id),e))].filter((x,i,a)=>!fora.has(x.k)&&a.findIndex(y=>y.k===x.k)===i).sort((a,b)=>(a.cad||"").localeCompare(b.cad||""));
-  const linhaPer=(w,nome,d,k,manual)=>{const x=o[k]||{};return {k,w,manual,nome:w?nomeRel(w):nome,cad:w?w.dtCadastro:"",matr:w?w.matricula:"",d,dom:!!x.dom,classe:x.classe||"",empresa:x.empresa??(w&&r.empresas[w.cpf]||"")}};
+  const linhaPer=(w,nome,d,k,manual)=>{const x=o[k]||{};return {k,w,manual,nome:w?nomeRel(w):nome,cad:w?w.dtCadastro:"",matr:w?w.matricula:"",d,dom:!!x.dom,classe:x.classe||(w&&w.asoClasse&&w.asoData===d?w.asoClasse:""),empresa:x.empresa??(w&&r.empresas[w.cpf]||"")}};
   const per=[...r.periodicos.filter(e=>e.d.startsWith(mes)).map(e=>{const w=nm[e.nome];return linhaPer(w,e.nome,e.d,"p:"+(w?w.cpf:e.nome)+":"+e.d,null)}),
     ...ex("p").map(({e,w})=>linhaPer(w,normNome(e.nome),e.d,"p:"+(e.cpf||e.id)+":"+e.d,e))].filter((x,i,a)=>!fora.has(x.k)&&a.findIndex(y=>y.k===x.k)===i).sort((a,b)=>a.d.localeCompare(b.d));
   const linhaSai=(w,k,manual)=>{const x=o[k]||{};return {k,w,manual,nome:w?nomeRel(w):normNome(manual.nome),matr:w?w.matricula:"",d:w?(w.dtSaida||w.dtTermino||w.saidaEm||""):(manual.d||""),motivo:x.motivo??(manual&&manual.motivo)??(w?motivoPadrao(w):"")}};
@@ -1273,7 +1274,7 @@ function lerDocumentoTexto(txt){
     const av=((t.match(/Avalia\S*\s*:?\s*([A-Za-zÀ-ú]+)/i)||[])[1]||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toUpperCase();
     out.exame=/DEMISS/.test(av+t.slice(0,0))?"DEMISSIONAL":/^RETORNO/.test(av)?"RETORNO":/^MUDAN/.test(av)?"MUDANCA":/^PERI/.test(av)?"PERIODICO":/^ADMIS/.test(av)?"ADMISSIONAL":(/demissional/i.test(t)?"DEMISSIONAL":/peri\S*dico/i.test(t)?"PERIODICO":"ADMISSIONAL");
     out.resultado=marcado("Inapto")?"INAPTO":marcado("Apto")?"APTO":(/\binapto\b/i.test(t)&&!/\bapto\b/i.test(t.replace(/inapto/ig,""))?"INAPTO":"");
-    out.altura=marcado("Para Trabalho em Altura");out.confinado=marcado("Para Espa\\S*o Confinado");
+    out.altura=marcado("Para Trabalho em Altura");out.confinado=marcado("Para Espa\\S*o Con\\S*nado");
     const crm=t.match(/CRM[\s\/-]*([A-Z]{2})?[\s\/-]*(\d{3,7})/i);out.crm=crm?`CRM ${crm[1]||""} ${crm[2]}`.replace(/\s+/g," ").trim():"";
     const cl=t.match(/cl[ií]nica\s+[^\d,.;:\n]{3,50}/i);out.clinica=/AESMT|ASSESSORIA EM MEDICINA/i.test(t)?"AESMT":(cl?cl[0].trim():"");
     const dExame=dIso((t.match(/\bData\s*(?:do exame|de realiza\S*)?\s*:\s*(\d{2}[\/.-]\d{2}[\/.-]\d{4})/i)||[])[1]);
@@ -1341,7 +1342,7 @@ async function ocr(src){
   _tess=_tess||await Tesseract.createWorker("por");const r=await _tess.recognize(src);return r.data.text||""}
 // ASO ou NR conferido: atualiza a ficha e anexa o documento (que também vai para a pasta do trabalhador).
 async function registrarNoCentral(alvo,y,arquivo){const wk=S.workers.find(z=>z.id===alvo.id);if(!wk)return;
-      if(y.tipo==="aso"){Object.assign(wk,{asoData:y.data,asoValidade:y.validade,asoAltura:!!y.altura,asoConfinado:!!y.confinado,exige35:!!y.altura,exige33:!!y.confinado})}
+      if(y.tipo==="aso"){Object.assign(wk,{asoData:y.data,asoValidade:y.validade,asoClasse:y.classe||(y.altura||y.confinado?"COMPLETO":"SIMPLES"),asoAltura:!!y.altura,asoConfinado:!!y.confinado,exige35:!!y.altura,exige33:!!y.confinado})}
       else if(y.nr==="NR 35")Object.assign(wk,{nr35Data:y.data,nr35Validade:y.validade});else if(y.nr==="NR 33")Object.assign(wk,{nr33Data:y.data,nr33Validade:y.validade});
       await Store.put("workers",wk);
       if(arquivo)await saveDoc(wk.id,y.tipo==="aso"?"ASO":(y.nr==="NR 35"?"NR-35":y.nr==="NR 33"?"NR-33":"Outro"),arquivo.name,arquivo,arquivo.type)}
@@ -1368,18 +1369,22 @@ function abrirLancamento(w0,aoTerminar,arquivoInicial){let w=w0;
       <div class="field span2"><label for="lEmp">${aso?"Clínica / médico":"Empresa do curso"}</label><input id="lEmp" value="${esc(aso?(x.clinica||x.crm||""):(x.empresa||""))}"></div>
       <div class="field"><label for="lData">Data de realização</label><input id="lData" type="date" value="${x.data||""}"></div>
       <div class="field"><label for="lVal">Validade</label><input id="lVal" type="date" value="${x.validade||""}"></div>
-      ${aso?`<div class="span4 toolbar"><label class="chk"><input type="checkbox" id="lAlt" ${x.altura?"checked":""}> Apto para trabalho em altura (NR-35)</label><label class="chk"><input type="checkbox" id="lConf" ${x.confinado?"checked":""}> Apto para espaço confinado (NR-33)</label></div>`:""}
+      <div class="field" ${aso?"":"hidden"} id="lClsW"><label for="lCls">Classificação do ASO</label><select id="lCls"><option value="SIMPLES" ${x.altura||x.confinado?"":"selected"}>Simples</option><option value="COMPLETO" ${x.altura||x.confinado?"selected":""}>Completo (altura / confinado)</option></select></div>
+      <div class="span3 toolbar" ${aso?"":"hidden"} id="lLib"><label class="chk"><input type="checkbox" id="lAlt" ${x.altura?"checked":""}> Apto para trabalho em altura (NR-35)</label><label class="chk"><input type="checkbox" id="lConf" ${x.confinado?"checked":""}> Apto para espaço confinado (NR-33)</label></div>
+      <div class="span4 note" id="lClsNota" ${aso?"":"hidden"}>ASO simples: sem liberação para altura nem espaço confinado, então NR-35 e NR-33 não são cobradas nas pendências.</div>
       ${aso&&x.resultado?`<div class="field span2"><label>Resultado lido</label><span class="pill ${x.resultado==="APTO"?"ok":"crit"}">${x.resultado}</span></div>`:""}
       <div class="span4"><label class="chk"><input type="checkbox" id="lInat" checked> Marcar o registro anterior como INATIVO (como já é feito no sistema)</label></div>
      </div>
      ${x.resultado==="INAPTO"?`<div class="banner" style="background:var(--crit-soft)">O documento indica INAPTO. Confira com o responsável antes de lançar.</div>`:""}
      <div class="toolbar" style="justify-content:flex-end"><button class="btn" id="lLocal">Só registrar no Central</button><button class="btn primary" id="lGo">Enviar para aprovação</button></div></div>`;
-    $("#lTipo").onchange=()=>{const a=$("#lTipo").value==="aso";$("#lExW").hidden=!a;$("#lNrW").hidden=a};
+    const cls=()=>{const a=$("#lTipo").value==="aso",s=$("#lCls").value==="SIMPLES";["lAlt","lConf"].forEach(k=>{const c=$("#"+k);c.disabled=s;if(s)c.checked=false});$("#lClsNota").hidden=!(a&&s)};
+    $("#lTipo").onchange=()=>{const a=$("#lTipo").value==="aso";$("#lExW").hidden=!a;$("#lNrW").hidden=a;$("#lClsW").hidden=!a;$("#lLib").hidden=!a;cls()};
+    $("#lCls").onchange=cls;cls();
     const wk=$("#lWk");if(wk)wk.onchange=()=>{w=S.workers.find(z=>z.id===wk.value)||null;$("#lWho").textContent=w?w.nome:"Escolha o trabalhador"};
     if(w)$("#lWho").textContent=w.nome;
     if(outro){$("#lGo").disabled=true;$("#lGo").textContent="CPF do documento não confere"}
     const lerForm=()=>({tipo:$("#lTipo").value,exameCod:$("#lEx").value,nr:$("#lNr").value,empresa:$("#lEmp").value,data:$("#lData").value,validade:$("#lVal").value,inativarAnterior:$("#lInat").checked,
-      altura:$("#lAlt")?$("#lAlt").checked:undefined,confinado:$("#lConf")?$("#lConf").checked:undefined});
+      classe:$("#lTipo").value==="aso"?$("#lCls").value:undefined,altura:$("#lTipo").value==="aso"?$("#lAlt").checked:undefined,confinado:$("#lTipo").value==="aso"?$("#lConf").checked:undefined});
     $("#lLocal").onclick=async()=>{const y=lerForm();if(!w){toast("Escolha o trabalhador");return}if(!y.data||!y.validade){toast("Informe a data de realização e a validade");return}
       if(outro)return;await registrarNoCentral(w,y,arquivo);close();toast("Registrado no Central (sem lançar no Sistema eSocial)");aoTerminar&&aoTerminar("local")};
     $("#lGo").onclick=async()=>{const y=lerForm();
@@ -1726,7 +1731,7 @@ async function asoConcluir(chave,status){
   asoFilaSalvar(l);asoBadge()}
 // Pronto para lançar em lote: trabalhador sincronizado, clínica, data e validade lidas, e não INAPTO.
 const asoPronto=it=>{const w=asoTrab(it),x=it.x||{};return !!(w&&w.origemId&&x.data&&x.validade>x.data&&(x.clinica||x.crm)&&x.resultado!=="INAPTO")};
-const asoDados=x=>({tipo:"aso",exameCod:x.exame==="ADMISSIONAL"?"1":"2",empresa:x.clinica||x.crm||"",data:x.data,validade:x.validade,inativarAnterior:true,altura:!!x.altura,confinado:!!x.confinado});
+const asoDados=x=>({classe:x.altura||x.confinado?"COMPLETO":"SIMPLES",tipo:"aso",exameCod:x.exame==="ADMISSIONAL"?"1":"2",empresa:x.clinica||x.crm||"",data:x.data,validade:x.validade,inativarAnterior:true,altura:!!x.altura,confinado:!!x.confinado});
 /* Documentos: anexo do programa vira arquivo na pasta do trabalhador; arquivo posto lá vira anexo. */
 async function docsSincronizar(){
   if(!Pasta.base)return;const base=Pasta.base,vistos=jLS("cs_docs_vistos",{});let entrou=0;
@@ -1808,7 +1813,7 @@ function aprovDiffDoc(w,y){
   const atual=aso?[w.asoData,w.asoValidade]:y.nr==="NR 35"?[w.nr35Data,w.nr35Validade]:y.nr==="NR 33"?[w.nr33Data,w.nr33Validade]:["",""];
   return [["Aba do sistema",aso?"Atestados/Exames":"Cursos",aso?"Atestados/Exames":"Cursos"],
     ["Operação","—","Inserir registro novo"],
-    [aso?"Exame":"Curso","",aso?EXAME_NOME[y.exameCod]||"ASO":y.nr],
+    [aso?"Exame":"Curso","",aso?(EXAME_NOME[y.exameCod]||"ASO")+(y.classe?` (${y.classe.toLowerCase()})`:""):y.nr],
     [aso?"Clínica / médico":"Empresa do curso","",semAcento(y.empresa)],
     ["Data de realização",atual[0]?br(atual[0]):"",br(y.data)],
     ["Validade",atual[1]?br(atual[1]):"",br(y.validade)],
