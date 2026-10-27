@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.22 — 27/10/2026
+- Relatório mensal: campo para incluir à mão em Admissão (data do cadastro), Periódico (data do periódico) e Afastados/desligados (data e motivo), escolhendo o trabalhador pela busca ou digitando o nome de quem não está no Central.
+- Data do ASO da admissão editável; botão Tirar em qualquer linha (as automáticas deixam de aparecer naquele mês).
+- Afastados/desligados mostram a data.
+
 ## 0.1.21 — 27/10/2026
 - Nova aba Aprovação: lançar ASO/NR e editar endereço não gravam mais direto no Sistema eSocial; viram um pedido que mostra cada alteração (aba do sistema, operação, campo, como está hoje e como vai ficar, e quais registros ativos serão marcados INATIVO). Aprovar e enviar (um ou todos) grava e confere relendo o sistema; também dá para recusar. Histórico com quem pediu e quem enviou. Os pedidos são compartilhados entre os computadores.
 - ASOs prontos em lote vão para a Aprovação.

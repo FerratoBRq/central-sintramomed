@@ -273,7 +273,7 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
       <button data-v="feedback"><span data-ico="idea"></span>Feedback</button>
     </nav>
     <div class="side-foot">
-      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.21</b></span><span id="runtime">modo navegador</span></div>
+      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.22</b></span><span id="runtime">modo navegador</span></div>
       <span id="syncInfo"></span>
       <span id="updInfo">Verificando atualizações…</span>
       <button class="link" id="btnUpdate" type="button">Verificar agora</button>
@@ -287,7 +287,7 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
 
 <script>
 "use strict";
-const APP_VERSION="0.1.21";
+const APP_VERSION="0.1.22";
 /* ---------- utilidades ---------- */
 const $=(s,r=document)=>r.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -422,7 +422,7 @@ const ATALHOS=[
   {id:"escavador",n:"Escavador",d:"Pesquisa de processos por nome",u:"https://www.escavador.com/",t:"pesquisa"},
   {id:"semaforo",n:"Semáforo eSocial",d:"Status dos web services do governo",u:"https://www.gov.br/esocial/pt-br/acesso-ao-sistema/semaforo",t:"governo",semLogin:true}
 ];
-const NOVIDADES=["Aba Aprovação: todo envio ao Sistema eSocial (ASO, NR e endereço) mostra campo a campo o que vai mudar e só é gravado depois de aprovado","Data de desligamento/afastamento lida do Sistema eSocial (preenche o término e o relatório mensal)","Pasta do Central: ASOs colocados em \"ASOs para lançar\" são lidos e lançados (um a um ou em lote, com confirmação); todo anexo fica também em Documentos\\NOME - CPF e o que for posto lá entra na ficha","ASOs recebidos: os PDFs do WhatsApp são lidos sozinhos da pasta Downloads, com o trabalhador achado pelo CPF, para conferir e lançar no Sistema eSocial","Relatório mensal de admissão, periódico e desligamentos no modelo do RH, gerado em Excel; periódicos e empresa da produção lidos do Sistema eSocial","Pendências: clique em ASO, NR-35, NR-33 e outros itens para filtrar; Críticas e Atenção mostram a quantidade","Pendências não cobram mais anexos faltando (DOC)","Atalho no painel para o Forms de consulta e inclusão da Coamo","Estoque de uniformes: camisas, calças e botinas por tamanho, vale ao colaborador, uniforme da safra (1 calça e 1 camisa) e termo de entrega","Pasta compartilhada na engrenagem: fichas, anexos, listas, entrevistas, modelos, feedback e estoque iguais em todos os computadores","S-2240 deixa de ser cobrado nas pendências (não se aplica à categoria)","A saudação usa o nome do login do Sistema eSocial de quem está usando o programa","Modelos para impressão: botão + para adicionar seus PDFs e opção de remover modelos","Corrige janelas (Importar, Lançar ASO, ficha) que ficavam atrás do fundo desfocado","Visual novo, no estilo Apple","Tela de Feedback: registre sugestões e problemas, envie ao GitHub e acompanhe o que foi implementado","Modelos para impressão abrem dentro do programa","Atualização reabre o programa sozinha","Liberação do ASO para altura e espaço confinado: sem liberação, NR-35/NR-33 não são cobradas","Lançar ASO e NR no Sistema eSocial a partir do documento anexado (lê datas e tipo)","Editar o endereço direto no Sistema eSocial","Emitir ficha de cadastro do trabalhador para imprimir","Data e hora no rodapé","Atualização sozinha pelo GitHub, sem chave: baixa, instala e reabre o programa","Trabalhadores aparecem durante a primeira importação (gravação em lotes de 25)","Corrige acentos quebrados no programa instalado","Impede abrir duas janelas do programa ao mesmo tempo","Importação automática: o programa entra sozinho no Sistema eSocial e atualiza os trabalhadores a cada 5 minutos","Senha do Sistema eSocial guardada no Windows, pedida uma única vez","Importação completa do Sistema eSocial: status, última produção, ASO, NR-33/35, EPI, documentos e endereço","Novos status: afastado e inativo no sistema","Cofre de acessos simplificado: só Sistema eSocial e Escavador","Verificação automática de atualizações a cada 5 minutos","Nova interface: tema claro e escuro, barra lateral com ícones, atalhos e indicadores redesenhados","Engrenagem de configurações com cofre de acessos (login e senha) protegido por PIN","Botões Copiar usuário e Copiar senha nos atalhos do painel","Atalho do Escavador no painel","Verificação de antecedentes na ficha e na entrevista"];
+const NOVIDADES=["Relatório mensal: incluir à mão na admissão, no periódico e nos afastados/desligados (com data e motivo), editar a data do ASO e tirar linhas","Aba Aprovação: todo envio ao Sistema eSocial (ASO, NR e endereço) mostra campo a campo o que vai mudar e só é gravado depois de aprovado","Data de desligamento/afastamento lida do Sistema eSocial (preenche o término e o relatório mensal)","Pasta do Central: ASOs colocados em \"ASOs para lançar\" são lidos e lançados (um a um ou em lote, com confirmação); todo anexo fica também em Documentos\\NOME - CPF e o que for posto lá entra na ficha","ASOs recebidos: os PDFs do WhatsApp são lidos sozinhos da pasta Downloads, com o trabalhador achado pelo CPF, para conferir e lançar no Sistema eSocial","Relatório mensal de admissão, periódico e desligamentos no modelo do RH, gerado em Excel; periódicos e empresa da produção lidos do Sistema eSocial","Pendências: clique em ASO, NR-35, NR-33 e outros itens para filtrar; Críticas e Atenção mostram a quantidade","Pendências não cobram mais anexos faltando (DOC)","Atalho no painel para o Forms de consulta e inclusão da Coamo","Estoque de uniformes: camisas, calças e botinas por tamanho, vale ao colaborador, uniforme da safra (1 calça e 1 camisa) e termo de entrega","Pasta compartilhada na engrenagem: fichas, anexos, listas, entrevistas, modelos, feedback e estoque iguais em todos os computadores","S-2240 deixa de ser cobrado nas pendências (não se aplica à categoria)","A saudação usa o nome do login do Sistema eSocial de quem está usando o programa","Modelos para impressão: botão + para adicionar seus PDFs e opção de remover modelos","Corrige janelas (Importar, Lançar ASO, ficha) que ficavam atrás do fundo desfocado","Visual novo, no estilo Apple","Tela de Feedback: registre sugestões e problemas, envie ao GitHub e acompanhe o que foi implementado","Modelos para impressão abrem dentro do programa","Atualização reabre o programa sozinha","Liberação do ASO para altura e espaço confinado: sem liberação, NR-35/NR-33 não são cobradas","Lançar ASO e NR no Sistema eSocial a partir do documento anexado (lê datas e tipo)","Editar o endereço direto no Sistema eSocial","Emitir ficha de cadastro do trabalhador para imprimir","Data e hora no rodapé","Atualização sozinha pelo GitHub, sem chave: baixa, instala e reabre o programa","Trabalhadores aparecem durante a primeira importação (gravação em lotes de 25)","Corrige acentos quebrados no programa instalado","Impede abrir duas janelas do programa ao mesmo tempo","Importação automática: o programa entra sozinho no Sistema eSocial e atualiza os trabalhadores a cada 5 minutos","Senha do Sistema eSocial guardada no Windows, pedida uma única vez","Importação completa do Sistema eSocial: status, última produção, ASO, NR-33/35, EPI, documentos e endereço","Novos status: afastado e inativo no sistema","Cofre de acessos simplificado: só Sistema eSocial e Escavador","Verificação automática de atualizações a cada 5 minutos","Nova interface: tema claro e escuro, barra lateral com ícones, atalhos e indicadores redesenhados","Engrenagem de configurações com cofre de acessos (login e senha) protegido por PIN","Botões Copiar usuário e Copiar senha nos atalhos do painel","Atalho do Escavador no painel","Verificação de antecedentes na ficha e na entrevista"];
 
 /* ---------- cofre de acessos: AES-GCM com chave derivada do PIN (PBKDF2). A chave fica só na memória; recarregar a página tranca. ---------- */
 const b64e=u=>btoa(String.fromCharCode(...u));const b64d=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
@@ -895,19 +895,25 @@ const nomeRel=w=>(codigoTrab(w)?codigoTrab(w)+" - ":"")+normNome(w.nome);
 const ultimoDia=mes=>{const[a,b]=mes.split("-").map(Number);return iso(new Date(a,b,0))};
 const abrevEmpresa=n=>{const fora=new Set(["AGROINDUSTRIAL","AGROIND","COOPERATIVA","COOP","CENTRAL","LTDA","SA","S/A","ME","EIRELI","COMERCIO","COM","DE","DO","DA","DOS","DAS","E","ALIMENTOS","DISTR","PROD","AGROP","REPRES"]);
   return String(n||"").replace(/^\s*\d+\s*-\s*/,"").split(/\s+/).filter(p=>p&&!fora.has(p)).map(p=>p==="INDUSTRIA"?"Inds.":p==="DDOS"?"Dourados":p.length<=3?p:p[0]+p.slice(1).toLowerCase()).join(" ")};
-function relDoc(mes){let r=S.lists.find(l=>l.id==="rel-"+mes);if(!r){r={id:"rel-"+mes,tipo:"relatorio",mes,periodicos:[],admissionais:[],empresas:{},over:{},saidas:[],buscadoEm:""};S.lists.push(r)}r.over=r.over||{};r.empresas=r.empresas||{};r.saidas=r.saidas||[];return r}
+function relDoc(mes){let r=S.lists.find(l=>l.id==="rel-"+mes);if(!r){r={id:"rel-"+mes,tipo:"relatorio",mes,periodicos:[],admissionais:[],empresas:{},over:{},saidas:[],buscadoEm:""};S.lists.push(r)}r.over=r.over||{};r.empresas=r.empresas||{};r.extras=r.extras||[];r.ocultos=r.ocultos||[];
+  if(r.saidas&&r.saidas.length){r.saidas.forEach(cpf=>r.extras.push({id:uid(),sec:"s",cpf}));r.saidas=[]}return r}
 const relSalvar=r=>Store.put("lists",r);
 const porNome=()=>{const m={};S.workers.forEach(w=>{m[normNome(w.nome)]=w});return m};
 const motivoPadrao=w=>w.motivoSaida||(w.status==="afastado"?"Trabalhador foi afastado":w.status==="desligado"||w.status==="a_desligar"?`Trabalhador foi desligado, pois está a mais de ${INATIVO_DIAS} dias sem produção`:"");
 function relLinhas(r){
-  const mes=r.mes,nm=porNome(),o=r.over;
-  const adm=S.workers.filter(w=>!w.exemplo&&(w.dtCadastro||"").startsWith(mes)).sort((a,b)=>a.dtCadastro.localeCompare(b.dtCadastro)).map(w=>{const k="a:"+w.cpf,x=o[k]||{};
-    const asoAdm=(r.admissionais.find(e=>e.nome===normNome(w.nome))||{}).d||w.asoData||"";
-    return {k,w,nome:nomeRel(w),cad:w.dtCadastro,matr:w.matricula,antec:x.antec??!!w.antecResultado,classe:x.classe||"",aso:asoAdm,esoc:x.esoc??!!(w.ev?.s2300||w.s2300Enviado),dom:!!x.dom,empresa:x.empresa??(r.empresas[w.cpf]||"")}});
-  const per=r.periodicos.filter(e=>e.d.startsWith(mes)).sort((a,b)=>a.d.localeCompare(b.d)).map(e=>{const w=nm[e.nome],k="p:"+(w?w.cpf:e.nome)+":"+e.d,x=o[k]||{};
-    return {k,w,nome:w?nomeRel(w):e.nome,cad:w?w.dtCadastro:"",matr:w?w.matricula:"",d:e.d,dom:!!x.dom,classe:x.classe||"",empresa:x.empresa??(w?r.empresas[w.cpf]||"":"")}});
-  const cpfs=new Set([...S.workers.filter(w=>(w.dtSaida||w.dtTermino||w.saidaEm||"").startsWith(mes)).map(w=>w.cpf),...r.saidas]);
-  const sai=[...cpfs].map(c=>S.workers.find(w=>w.cpf===c)).filter(Boolean).map(w=>{const k="s:"+w.cpf,x=o[k]||{};return {k,w,nome:nomeRel(w),matr:w.matricula,motivo:x.motivo??motivoPadrao(w),manual:r.saidas.includes(w.cpf)}});
+  const mes=r.mes,nm=porNome(),o=r.over,fora=new Set(r.ocultos),porCpf=c=>c&&S.workers.find(w=>w.cpf===c);
+  const ex=sec=>r.extras.filter(e=>e.sec===sec).map(e=>({e,w:porCpf(e.cpf)||null}));
+  const linhaAdm=(w,k,manual)=>{const x=o[k]||{};const asoAdm=w?((r.admissionais.find(e=>e.nome===normNome(w.nome))||{}).d||w.asoData||""):"";
+    return {k,w,manual,nome:w?nomeRel(w):normNome(manual.nome),cad:w?w.dtCadastro:manual.d,matr:w?w.matricula:"",antec:x.antec??!!(w&&w.antecResultado),classe:x.classe||"",aso:x.aso??asoAdm,
+      esoc:x.esoc??!!(w&&(w.ev?.s2300||w.s2300Enviado)),dom:!!x.dom,empresa:x.empresa??(w&&r.empresas[w.cpf]||"")}};
+  const adm=[...S.workers.filter(w=>!w.exemplo&&(w.dtCadastro||"").startsWith(mes)).map(w=>linhaAdm(w,"a:"+w.cpf,null)),
+    ...ex("a").map(({e,w})=>linhaAdm(w,"a:"+(e.cpf||e.id),e))].filter((x,i,a)=>!fora.has(x.k)&&a.findIndex(y=>y.k===x.k)===i).sort((a,b)=>(a.cad||"").localeCompare(b.cad||""));
+  const linhaPer=(w,nome,d,k,manual)=>{const x=o[k]||{};return {k,w,manual,nome:w?nomeRel(w):nome,cad:w?w.dtCadastro:"",matr:w?w.matricula:"",d,dom:!!x.dom,classe:x.classe||"",empresa:x.empresa??(w&&r.empresas[w.cpf]||"")}};
+  const per=[...r.periodicos.filter(e=>e.d.startsWith(mes)).map(e=>{const w=nm[e.nome];return linhaPer(w,e.nome,e.d,"p:"+(w?w.cpf:e.nome)+":"+e.d,null)}),
+    ...ex("p").map(({e,w})=>linhaPer(w,normNome(e.nome),e.d,"p:"+(e.cpf||e.id)+":"+e.d,e))].filter((x,i,a)=>!fora.has(x.k)&&a.findIndex(y=>y.k===x.k)===i).sort((a,b)=>a.d.localeCompare(b.d));
+  const linhaSai=(w,k,manual)=>{const x=o[k]||{};return {k,w,manual,nome:w?nomeRel(w):normNome(manual.nome),matr:w?w.matricula:"",d:w?(w.dtSaida||w.dtTermino||w.saidaEm||""):(manual.d||""),motivo:x.motivo??(manual&&manual.motivo)??(w?motivoPadrao(w):"")}};
+  const sai=[...S.workers.filter(w=>!w.exemplo&&(w.dtSaida||w.dtTermino||w.saidaEm||"").startsWith(mes)).map(w=>linhaSai(w,"s:"+w.cpf,null)),
+    ...ex("s").map(({e,w})=>linhaSai(w,"s:"+(e.cpf||e.id),e))].filter((x,i,a)=>!fora.has(x.k)&&a.findIndex(y=>y.k===x.k)===i);
   return {adm,per,sai}}
 async function relBuscar(r){
   const lerExames=async cod=>{const d=dom(await spost("/register/rel_colabexames.php",[["acao","Visualizar"],["exam_codigo",cod],["tipo","0"]]));
@@ -994,20 +1000,30 @@ function relHTML(){
   const cls=x=>`<select class="inp" data-rk="${esc(x.k)}" data-rf="classe" style="width:auto;padding:4px 8px"><option value=""></option>${["SIMPLES","COMPLETO"].map(o=>`<option ${x.classe===o?"selected":""}>${o}</option>`).join("")}</select>`;
   const txt=(x,f,w)=>`<input class="inp" data-rk="${esc(x.k)}" data-rf="${f}" value="${esc(x[f])}" style="min-width:${w}px;padding:4px 8px">`;
   const matr=m=>m?`<span class="mono">${esc(m)}</span>`:`<span class="small muted">sem matrícula</span>`;
+  const nomeCel=x=>x.w?`<a href="#" data-w="${x.w.id}" style="color:inherit;text-decoration:none;font-size:13.5px;display:block;min-width:220px"><b>${esc(x.nome)}</b></a>`:`<b style="font-size:13.5px">${esc(x.nome)}</b> <span class="small muted">${x.manual?"incluído à mão":"não encontrado no Central"}</span>`;
+  const tirar=x=>`<button class="btn sm" data-rtira="${esc(x.k)}" data-rman="${x.manual?x.manual.id:""}" title="Tirar do relatório">Tirar</button>`;
+  // Inclusão manual: escolhe o trabalhador pela busca ou digita um nome que não está no Central.
+  const incluir=(sec,tit,lab)=>`<div class="form-grid rel-inc" data-sec="${sec}" style="grid-template-columns:2fr 1fr ${sec==="s"?"2fr ":""}auto;align-items:end">
+     <div class="field"><label>${tit}</label><input class="inp" data-q placeholder="Nome ou CPF (ou digite o nome)" autocomplete="off"><div class="list" data-sug></div></div>
+     <div class="field"><label>${lab}</label><input class="inp" type="date" data-d></div>
+     ${sec==="s"?`<div class="field"><label>Motivo</label><input class="inp" data-m placeholder="Ex.: desligado a pedido"></div>`:""}
+     <button class="btn sm" data-incl>Incluir</button></div>`;
   return `<section class="panel"><div class="panel-h"><div><h2>Relatório mensal: admissão, periódico e desligamentos</h2><span class="small muted">No modelo do RH, para gerar em Excel</span></div>
    <div class="toolbar"><label class="small muted" for="relMes">Mês</label><select class="inp" id="relMes" style="width:auto">${meses.reverse().map(m=>`<option value="${m}" ${m===mes?"selected":""}>${ymLabel(m)}</option>`).join("")}</select>
     ${IS_TAURI?`<button class="btn" id="relBuscar">Buscar no Sistema eSocial</button>`:""}<button class="btn primary" id="relExcel">${ico("upload",16)} Gerar Excel</button></div></div>
    <div class="note">${IS_TAURI?(r.buscadoEm?`Periódicos, ASO e empresa da produção lidos do Sistema eSocial às ${hhmm(new Date(r.buscadoEm))} de ${br(r.buscadoEm.slice(0,10))}.`:"Clique em <b>Buscar no Sistema eSocial</b> para trazer os periódicos do mês e a empresa de cada trabalhador pela produção."):"No programa instalado, os periódicos e a empresa vêm do Sistema eSocial."} Classificação do ASO, envio à DOM e motivo são marcados aqui e ficam guardados.</div>
    <h3 class="eyebrow" style="margin:4px 0 -4px">Admissão · ${adm.length}</h3>
-   ${adm.length?`<div class="tbl-wrap" style="box-shadow:none"><table><thead><tr><th>Trabalhador</th><th>Cadastro</th><th>Matrícula</th><th>Antec.</th><th>Classificação</th><th>ASO</th><th>eSocial</th><th>DOM</th><th>Empresa</th></tr></thead><tbody>
-    ${adm.map(x=>`<tr><td><a href="#" data-w="${x.w.id}" style="color:inherit;text-decoration:none;font-size:13.5px;display:block;min-width:220px"><b>${esc(x.nome)}</b></a></td><td class="mono">${br(x.cad)}</td><td>${matr(x.matr)}</td><td>${ck(x,"antec")}</td><td>${cls(x)}</td><td class="mono">${x.aso?br(x.aso):"—"}</td><td>${ck(x,"esoc")}</td><td>${ck(x,"dom")}</td><td>${txt(x,"empresa",140)}</td></tr>`).join("")}</tbody></table></div>`:`<div class="empty">Ninguém cadastrado em ${ymLabel(mes)}.</div>`}
+   ${adm.length?`<div class="tbl-wrap" style="box-shadow:none"><table><thead><tr><th>Trabalhador</th><th>Cadastro</th><th>Matrícula</th><th>Antec.</th><th>Classificação</th><th>ASO</th><th>eSocial</th><th>DOM</th><th>Empresa</th><th></th></tr></thead><tbody>
+    ${adm.map(x=>`<tr><td>${nomeCel(x)}</td><td class="mono">${x.cad?br(x.cad):"—"}</td><td>${matr(x.matr)}</td><td>${ck(x,"antec")}</td><td>${cls(x)}</td><td><input type="date" class="inp" data-rk="${esc(x.k)}" data-rf="aso" value="${esc(x.aso||"")}" style="padding:4px 6px" aria-label="Data do ASO"></td><td>${ck(x,"esoc")}</td><td>${ck(x,"dom")}</td><td>${txt(x,"empresa",140)}</td><td>${tirar(x)}</td></tr>`).join("")}</tbody></table></div>`:`<div class="empty">Ninguém cadastrado em ${ymLabel(mes)}.</div>`}
+   ${incluir("a","Incluir na admissão","Data do cadastro")}
    <h3 class="eyebrow" style="margin:4px 0 -4px">Periódico · ${per.length}</h3>
-   ${per.length?`<div class="tbl-wrap" style="box-shadow:none"><table><thead><tr><th>Trabalhador</th><th>Cadastro</th><th>Matrícula</th><th>Periódico</th><th>DOM</th><th>Classificação</th><th>Empresa</th></tr></thead><tbody>
-    ${per.map(x=>`<tr><td>${x.w?`<a href="#" data-w="${x.w.id}" style="color:inherit;text-decoration:none;font-size:13.5px;display:block;min-width:220px"><b>${esc(x.nome)}</b></a>`:`<b>${esc(x.nome)}</b> <span class="small muted">não encontrado no Central</span>`}</td><td class="mono">${x.cad?br(x.cad):"—"}</td><td>${matr(x.matr)}</td><td class="mono">${br(x.d)}</td><td>${ck(x,"dom")}</td><td>${cls(x)}</td><td>${txt(x,"empresa",140)}</td></tr>`).join("")}</tbody></table></div>`:`<div class="empty">${IS_TAURI&&!r.buscadoEm?"Busque no Sistema eSocial para ver os periódicos do mês.":"Nenhum periódico registrado no mês."}</div>`}
+   ${per.length?`<div class="tbl-wrap" style="box-shadow:none"><table><thead><tr><th>Trabalhador</th><th>Cadastro</th><th>Matrícula</th><th>Periódico</th><th>DOM</th><th>Classificação</th><th>Empresa</th><th></th></tr></thead><tbody>
+    ${per.map(x=>`<tr><td>${nomeCel(x)}</td><td class="mono">${x.cad?br(x.cad):"—"}</td><td>${matr(x.matr)}</td><td class="mono">${br(x.d)}</td><td>${ck(x,"dom")}</td><td>${cls(x)}</td><td>${txt(x,"empresa",140)}</td><td>${tirar(x)}</td></tr>`).join("")}</tbody></table></div>`:`<div class="empty">${IS_TAURI&&!r.buscadoEm?"Busque no Sistema eSocial para ver os periódicos do mês.":"Nenhum periódico registrado no mês."}</div>`}
+   ${incluir("p","Incluir periódico","Data do periódico")}
    <h3 class="eyebrow" style="margin:4px 0 -4px">Afastados e desligados · ${sai.length}</h3>
-   ${sai.length?`<div class="tbl-wrap" style="box-shadow:none"><table><thead><tr><th>Trabalhador</th><th>Matrícula</th><th>Motivo</th><th></th></tr></thead><tbody>
-    ${sai.map(x=>`<tr><td><a href="#" data-w="${x.w.id}" style="color:inherit;text-decoration:none;font-size:13.5px;display:block;min-width:220px"><b>${esc(x.nome)}</b></a></td><td>${matr(x.matr)}</td><td style="width:55%">${txt(x,"motivo",320)}</td><td>${x.manual?`<button class="btn sm" data-rsai="${x.w.cpf}">Tirar</button>`:""}</td></tr>`).join("")}</tbody></table></div>`:`<div class="empty">Ninguém afastado ou desligado em ${ymLabel(mes)} pelo Central.</div>`}
-   <div class="field" style="max-width:420px"><label for="relAdd">Incluir afastado ou desligado</label><input id="relAdd" class="inp" placeholder="Digite o nome ou o CPF" autocomplete="off"><div id="relSug" class="list"></div></div>
+   ${sai.length?`<div class="tbl-wrap" style="box-shadow:none"><table><thead><tr><th>Trabalhador</th><th>Matrícula</th><th>Data</th><th>Motivo</th><th></th></tr></thead><tbody>
+    ${sai.map(x=>`<tr><td>${nomeCel(x)}</td><td>${matr(x.matr)}</td><td class="mono">${x.d?br(x.d):"—"}</td><td style="width:50%">${txt(x,"motivo",300)}</td><td>${tirar(x)}</td></tr>`).join("")}</tbody></table></div>`:`<div class="empty">Ninguém afastado ou desligado em ${ymLabel(mes)}.</div>`}
+   ${incluir("s","Incluir afastado ou desligado","Data")}
   </section>`}
 function bindRel(){
   const mes=ui.relMes||prevYm(ym(TODAY)),r=relDoc(mes);
@@ -1015,11 +1031,17 @@ function bindRel(){
   document.querySelectorAll("[data-rk]").forEach(el=>el.onchange=async()=>{const k=el.dataset.rk,f=el.dataset.rf;r.over[k]={...(r.over[k]||{}),[f]:el.type==="checkbox"?el.checked:el.value.trim()};await relSalvar(r)});
   const bb=$("#relBuscar");if(bb)bb.onclick=async()=>{bb.disabled=true;bb.textContent="Buscando…";try{await relBuscar(r);toast("Relatório atualizado com o Sistema eSocial")}catch(e){toast("Não consegui ler o Sistema eSocial: "+(e.message||e))}vRel()};
   $("#relExcel").onclick=async()=>{try{await baixarArquivo(relExcel(r),`Relatorio admissao periodico ${ymLabel(mes).replace("/","-")}.xlsx`)}catch(e){toast(String(e.message||e))}};
-  document.querySelectorAll("[data-rsai]").forEach(b=>b.onclick=async()=>{r.saidas=r.saidas.filter(c=>c!==b.dataset.rsai);await relSalvar(r);vRel()});
-  const ad=$("#relAdd");ad.oninput=()=>{const q=ad.value.toLowerCase().trim(),qd=q.replace(/\D/g,"");if(q.length<2){$("#relSug").innerHTML="";return}
-    const res=S.workers.filter(w=>!w.exemplo&&(w.nome.toLowerCase().includes(q)||(qd.length>=3&&w.cpf.includes(qd)))).slice(0,6);
-    $("#relSug").innerHTML=res.map(w=>`<div class="row"><span><b>${esc(w.nome)}</b> <span class="small muted mono">${esc(fmtCPF(w.cpf))}</span></span><button class="btn sm" data-radd="${w.cpf}">Incluir</button></div>`).join("")||`<div class="small muted">Ninguém encontrado.</div>`;
-    document.querySelectorAll("[data-radd]").forEach(b=>b.onclick=async()=>{if(!r.saidas.includes(b.dataset.radd))r.saidas.push(b.dataset.radd);await relSalvar(r);vRel()})};
+  document.querySelectorAll("[data-rtira]").forEach(b=>b.onclick=async()=>{if(b.dataset.rman)r.extras=r.extras.filter(e=>e.id!==b.dataset.rman);else r.ocultos.push(b.dataset.rtira);await relSalvar(r);vRel()});
+  document.querySelectorAll(".rel-inc").forEach(box=>{const q=box.querySelector("[data-q]"),sug=box.querySelector("[data-sug]");let cpf="";
+    q.oninput=()=>{cpf="";const t=q.value.toLowerCase().trim(),td=t.replace(/\D/g,"");if(t.length<2){sug.innerHTML="";return}
+      const res=S.workers.filter(w=>!w.exemplo&&(w.nome.toLowerCase().includes(t)||(td.length>=3&&w.cpf.includes(td)))).slice(0,6);
+      sug.innerHTML=res.map(w=>`<div class="row"><span><b>${esc(w.nome)}</b> <span class="small muted mono">${esc(fmtCPF(w.cpf))}</span></span><button class="btn sm" type="button" data-pk="${w.cpf}">Escolher</button></div>`).join("");
+      sug.querySelectorAll("[data-pk]").forEach(x=>x.onclick=()=>{cpf=x.dataset.pk;const w=S.workers.find(z=>z.cpf===cpf);q.value=w.nome;sug.innerHTML="";const d=box.querySelector("[data-d]");
+        if(box.dataset.sec==="a"&&!d.value)d.value=w.dtCadastro||"";if(box.dataset.sec==="s"&&!d.value)d.value=w.dtSaida||w.dtTermino||""})};
+    box.querySelector("[data-incl]").onclick=async()=>{const sec=box.dataset.sec,nome=q.value.trim(),d=box.querySelector("[data-d]").value,m=box.querySelector("[data-m]");
+      if(!cpf&&nome.length<5){toast("Escolha o trabalhador ou digite o nome completo");return}
+      if(sec==="p"&&!d){toast("Informe a data do periódico");return}
+      r.extras.push({id:uid(),sec,cpf,nome:cpf?"":nome,d,motivo:m?m.value.trim():""});await relSalvar(r);vRel()}});
 }
 
 /* ---------- ENTREVISTA ONLINE (protótipo da Ficha de Triagem) ---------- */
