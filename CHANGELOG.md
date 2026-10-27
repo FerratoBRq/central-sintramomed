@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.26 — 27/10/2026
+- A cada ciclo de 5 minutos o Central lê os ASOs de todos os trabalhadores no Sistema eSocial (relatório Atestados/Exames, admissional e periódico) e atualiza data e validade. Um ASO lançado por outro computador ou direto no sistema deixa de ficar como vencido no Central (antes podia levar mais de uma hora até a ficha ser relida).
+
 ## 0.1.25 — 27/10/2026
 - Corrige a sincronização: dados alterados no Sistema eSocial (nome, telefone, e-mail, endereço, matrícula, RG, CTPS, CNH, datas) só entravam no Central quando o campo estava vazio; agora o Sistema eSocial é a fonte e toda mudança é trazida.
 - Botão Sincronizar tudo agora (barra lateral e engrenagem): relê todas as fichas de uma vez, com andamento em porcentagem, sem precisar esperar o ciclo automático (que lê 50 fichas a cada 5 minutos).
