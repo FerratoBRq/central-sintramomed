@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.36 — 27/10/2026
+- Estoque de EPIs: luvas e capa de chuva sem tamanho (tirados G (9), G (11), T (10), P e EXGG); o tamanho deixa de aparecer em negrito. A cinta ergonômica mantém G e XG.
+
 ## 0.1.35 — 27/10/2026
 - Relatório mensal: em Afastados e desligados a coluna passa a ser "Desligado em", com a data em que o desligamento ou afastamento foi lançado no Sistema eSocial (sempre dentro do mês escolhido). A data de término retroativa deixa de aparecer.
 
