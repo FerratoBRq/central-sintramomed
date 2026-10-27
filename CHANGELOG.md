@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.28 — 27/10/2026
+- Relatório mensal: abre parado em "Mês/Ano", sem escolher um mês sozinho; o relatório aparece depois que o mês é selecionado.
+
 ## 0.1.27 — 27/10/2026
 - Botão de setas (sincronizar) ao lado da engrenagem, no topo da barra lateral: relê todos os trabalhadores no Sistema eSocial; as setas giram enquanto sincroniza e o andamento aparece embaixo, em porcentagem.
 - Ficha de EPI não entregue deixa de ser alerta nas pendências (e sai dos filtros da cadeia).
