@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.31 — 27/10/2026
+- Estoque com os itens e tamanhos da planilha "Controle de uniforme no estoque" (sem as quantidades, que estavam desatualizadas): camisetas manga longa e curta M, G, GG, EG e E2G; calça 36 a 50; botina 36 a 45; e 20 EPIs com CA (luvas tátil, petroleira, vaqueta, solda, nitrílica e látex, mangote, toca de soldador, máscara, respirador e filtro RC 203, óculos, protetor auditivo, abafador, protetor facial, capacete, suporte com visor, lanterna, capa de chuva e cinta ergonômica).
+- Novo motivo de saída Entrega de EPI (sem desconto), com termo de entrega conforme a NR-6. EPI não entra no uniforme da safra.
+- Tela do estoque separada em Uniformes (saldo por tamanho) e EPIs (tabela de saldo).
+
 ## 0.1.30 — 27/10/2026
 - Compartilhar pelo GitHub (engrenagem): com um repositório PRIVADO só de dados e um token (Contents: Read and write), cada computador envia o que fez (fichas, anexos, aprovações, listas, relatório, entrevistas, modelos, feedback e estoque) e recebe o dos outros a cada minuto. Mão dupla, sem pasta compartilhada.
 - O token e o repositório ficam no Gerenciador de Credenciais do Windows; repositório público é recusado (LGPD); o programa só acessa a área de conteúdo desse repositório.
