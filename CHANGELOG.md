@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.23 — 27/10/2026
+- Afastados e desligados vêm do Sistema eSocial: data de término (tela Término, S-2399) ou de início do afastamento e motivo (S-2230), e a data em que foram enviados. O relatório mensal coloca cada um no mês do envio (o término costuma ser retroativo) e já traz o motivo.
+- Lidos na sincronização (uma vez por trabalhador) e no botão Buscar no Sistema eSocial do relatório, para quem saiu nos últimos meses.
+- Corrige: a versão 0.1.21 lia a data de cadastro como se fosse a de desligamento.
+
 ## 0.1.22 — 27/10/2026
 - Relatório mensal: campo para incluir à mão em Admissão (data do cadastro), Periódico (data do periódico) e Afastados/desligados (data e motivo), escolhendo o trabalhador pela busca ou digitando o nome de quem não está no Central.
 - Data do ASO da admissão editável; botão Tirar em qualquer linha (as automáticas deixam de aparecer naquele mês).
