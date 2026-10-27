@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.30 — 27/10/2026
+- Compartilhar pelo GitHub (engrenagem): com um repositório PRIVADO só de dados e um token (Contents: Read and write), cada computador envia o que fez (fichas, anexos, aprovações, listas, relatório, entrevistas, modelos, feedback e estoque) e recebe o dos outros a cada minuto. Mão dupla, sem pasta compartilhada.
+- O token e o repositório ficam no Gerenciador de Credenciais do Windows; repositório público é recusado (LGPD); o programa só acessa a área de conteúdo desse repositório.
+
 ## 0.1.29 — 27/10/2026
 - Relatório mensal: afastados e desligados entram só no mês da data do término (S-2399) ou do início do afastamento (S-2230) no Sistema eSocial, como a admissão (data do cadastro) e o periódico (data do exame). Deixa de usar a data de envio e a data em que o Central percebeu a mudança.
 
