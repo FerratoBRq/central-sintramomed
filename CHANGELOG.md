@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.15 — 27/10/2026
+- Atalho no painel para o Forms de consulta e inclusão de colaboradores da Coamo.
+
 ## 0.1.14 — 27/10/2026
 - Nova aba Estoque: camisa manga longa e manga curta (P a XG), calça (36 a 50) e botina (37 a 45), com saldo por tamanho.
 - Entradas (compra, devolução) e saídas ligadas ao colaborador: Vale (valor a descontar, com autorização do art. 462 da CLT no termo) e Uniforme da safra (no máximo 1 calça e 1 camisa por colaborador na safra; botina só por vale). Baixa para perda ou avaria.
