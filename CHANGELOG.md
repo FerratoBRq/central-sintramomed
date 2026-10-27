@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.33 — 27/10/2026
+- Compartilhar pelo GitHub: o repositório FerratoBRq/central-sintramomed-dados já vem preenchido. O token continua sendo colado uma vez em cada computador (fica no Gerenciador de Credenciais; nunca vai no programa, que é público).
+
 ## 0.1.32 — 27/10/2026
 - Corrige o relatório mensal: os desligados não apareciam em Afastados e desligados porque a busca só olhava quem teve produção nos últimos meses (e desligado não aparece no relatório de produção). Agora Buscar no Sistema eSocial lê a data do término de todos os desligados e afastados que ainda não a têm (só na primeira vez; depois fica guardada) e mostra o andamento no botão.
 - Corrige a compilação da 0.1.30 (troca pelo GitHub).
