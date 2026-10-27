@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.32 — 27/10/2026
+- Corrige o relatório mensal: os desligados não apareciam em Afastados e desligados porque a busca só olhava quem teve produção nos últimos meses (e desligado não aparece no relatório de produção). Agora Buscar no Sistema eSocial lê a data do término de todos os desligados e afastados que ainda não a têm (só na primeira vez; depois fica guardada) e mostra o andamento no botão.
+- Corrige a compilação da 0.1.30 (troca pelo GitHub).
+
 ## 0.1.31 — 27/10/2026
 - Estoque com os itens e tamanhos da planilha "Controle de uniforme no estoque" (sem as quantidades, que estavam desatualizadas): camisetas manga longa e curta M, G, GG, EG e E2G; calça 36 a 50; botina 36 a 45; e 20 EPIs com CA (luvas tátil, petroleira, vaqueta, solda, nitrílica e látex, mangote, toca de soldador, máscara, respirador e filtro RC 203, óculos, protetor auditivo, abafador, protetor facial, capacete, suporte com visor, lanterna, capa de chuva e cinta ergonômica).
 - Novo motivo de saída Entrega de EPI (sem desconto), com termo de entrega conforme a NR-6. EPI não entra no uniforme da safra.
