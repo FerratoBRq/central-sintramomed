@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.18 — 27/10/2026
+- Listas e inativos: a lista mensal de novos cadastrados virou o relatório mensal no modelo do RH (admissão, periódico e afastados/desligados), com botão Gerar Excel (A4 paisagem, salvo em Downloads).
+- Buscar no Sistema eSocial (só leitura): ASO periódicos e admissionais do mês (relatório Atestados/Exames) e a empresa de cada trabalhador pela produção (Folha Produção por trabalhador, tomadora com maior valor).
+- Classificação do ASO, envio à DOM Assessoria, antecedentes, empresa e motivo podem ser marcados na tela e ficam guardados (e compartilhados pela pasta).
+- Desligados e afastados entram no mês em que o Central percebe a mudança de situação ou em que são marcados para desligar; outros podem ser incluídos à mão.
+
 ## 0.1.17 — 27/10/2026
 - Pendências: os itens da cadeia (Início, ASO, NR-35, NR-33, Ficha EPI, Produção, Término) viram filtros; clicando, a lista mostra só os trabalhadores com aquela pendência. Todas, Críticas e Atenção mostram a quantidade.
 

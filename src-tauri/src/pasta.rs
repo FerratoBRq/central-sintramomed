@@ -92,3 +92,19 @@ pub fn pasta_arquivo_ler(pasta: String, nome: String) -> Result<Option<String>, 
     }
     std::fs::read_to_string(p).map(Some).map_err(|e| format!("Não foi possível ler o anexo: {e}"))
 }
+
+/// Salva um arquivo gerado pelo programa (ex.: relatório em Excel) na pasta Downloads e devolve o caminho.
+#[tauri::command]
+pub fn salvar_download(app: tauri::AppHandle, nome: String, bytes: Vec<u8>) -> Result<String, String> {
+    use tauri::Manager;
+    let ok = nome.len() <= 120
+        && !nome.contains("..")
+        && nome.chars().all(|c| c.is_alphanumeric() || " -_.()".contains(c));
+    if !ok || !nome.ends_with(".xlsx") {
+        return Err("Nome de arquivo inválido.".into());
+    }
+    let dir = app.path().download_dir().map_err(|e| format!("Pasta Downloads não encontrada: {e}"))?;
+    let destino = dir.join(&nome);
+    std::fs::write(&destino, bytes).map_err(|e| format!("Não foi possível salvar em Downloads: {e}"))?;
+    Ok(destino.to_string_lossy().to_string())
+}

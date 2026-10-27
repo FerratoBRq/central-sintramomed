@@ -271,7 +271,7 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
       <button data-v="feedback"><span data-ico="idea"></span>Feedback</button>
     </nav>
     <div class="side-foot">
-      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.17</b></span><span id="runtime">modo navegador</span></div>
+      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.18</b></span><span id="runtime">modo navegador</span></div>
       <span id="syncInfo"></span>
       <span id="updInfo">Verificando atualizações…</span>
       <button class="link" id="btnUpdate" type="button">Verificar agora</button>
@@ -285,7 +285,7 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
 
 <script>
 "use strict";
-const APP_VERSION="0.1.17";
+const APP_VERSION="0.1.18";
 /* ---------- utilidades ---------- */
 const $=(s,r=document)=>r.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -398,7 +398,7 @@ async function limparExemplos(){for(const w of S.workers.filter(w=>w.exemplo)){f
 /* ---------- roteamento ---------- */
 const VIEWS=["painel","trabalhadores","pendencias","fatiador","relatorios","entrevista","modelos","feedback","estoque"];
 let current=VIEWS.includes(location.hash.slice(1))?location.hash.slice(1):"painel";
-let ui={filtro:"todos",busca:"",nivelPend:"todos",listaAlvo:ym(TODAY)};
+let ui={filtro:"todos",busca:"",nivelPend:"todos"};
 function go(v){current=v;try{history.replaceState(null,"","#"+v)}catch(e){}render();window.scrollTo(0,0)}
 $("#nav").addEventListener("click",e=>{const b=e.target.closest("button[data-v]");if(b)go(b.dataset.v)});
 function render(){
@@ -419,7 +419,7 @@ const ATALHOS=[
   {id:"escavador",n:"Escavador",d:"Pesquisa de processos por nome",u:"https://www.escavador.com/",t:"pesquisa"},
   {id:"semaforo",n:"Semáforo eSocial",d:"Status dos web services do governo",u:"https://www.gov.br/esocial/pt-br/acesso-ao-sistema/semaforo",t:"governo",semLogin:true}
 ];
-const NOVIDADES=["Pendências: clique em ASO, NR-35, NR-33 e outros itens para filtrar; Críticas e Atenção mostram a quantidade","Pendências não cobram mais anexos faltando (DOC)","Atalho no painel para o Forms de consulta e inclusão da Coamo","Estoque de uniformes: camisas, calças e botinas por tamanho, vale ao colaborador, uniforme da safra (1 calça e 1 camisa) e termo de entrega","Pasta compartilhada na engrenagem: fichas, anexos, listas, entrevistas, modelos, feedback e estoque iguais em todos os computadores","S-2240 deixa de ser cobrado nas pendências (não se aplica à categoria)","A saudação usa o nome do login do Sistema eSocial de quem está usando o programa","Modelos para impressão: botão + para adicionar seus PDFs e opção de remover modelos","Corrige janelas (Importar, Lançar ASO, ficha) que ficavam atrás do fundo desfocado","Visual novo, no estilo Apple","Tela de Feedback: registre sugestões e problemas, envie ao GitHub e acompanhe o que foi implementado","Modelos para impressão abrem dentro do programa","Atualização reabre o programa sozinha","Liberação do ASO para altura e espaço confinado: sem liberação, NR-35/NR-33 não são cobradas","Lançar ASO e NR no Sistema eSocial a partir do documento anexado (lê datas e tipo)","Editar o endereço direto no Sistema eSocial","Emitir ficha de cadastro do trabalhador para imprimir","Data e hora no rodapé","Atualização sozinha pelo GitHub, sem chave: baixa, instala e reabre o programa","Trabalhadores aparecem durante a primeira importação (gravação em lotes de 25)","Corrige acentos quebrados no programa instalado","Impede abrir duas janelas do programa ao mesmo tempo","Importação automática: o programa entra sozinho no Sistema eSocial e atualiza os trabalhadores a cada 5 minutos","Senha do Sistema eSocial guardada no Windows, pedida uma única vez","Importação completa do Sistema eSocial: status, última produção, ASO, NR-33/35, EPI, documentos e endereço","Novos status: afastado e inativo no sistema","Cofre de acessos simplificado: só Sistema eSocial e Escavador","Verificação automática de atualizações a cada 5 minutos","Nova interface: tema claro e escuro, barra lateral com ícones, atalhos e indicadores redesenhados","Engrenagem de configurações com cofre de acessos (login e senha) protegido por PIN","Botões Copiar usuário e Copiar senha nos atalhos do painel","Atalho do Escavador no painel","Verificação de antecedentes na ficha e na entrevista"];
+const NOVIDADES=["Relatório mensal de admissão, periódico e desligamentos no modelo do RH, gerado em Excel; periódicos e empresa da produção lidos do Sistema eSocial","Pendências: clique em ASO, NR-35, NR-33 e outros itens para filtrar; Críticas e Atenção mostram a quantidade","Pendências não cobram mais anexos faltando (DOC)","Atalho no painel para o Forms de consulta e inclusão da Coamo","Estoque de uniformes: camisas, calças e botinas por tamanho, vale ao colaborador, uniforme da safra (1 calça e 1 camisa) e termo de entrega","Pasta compartilhada na engrenagem: fichas, anexos, listas, entrevistas, modelos, feedback e estoque iguais em todos os computadores","S-2240 deixa de ser cobrado nas pendências (não se aplica à categoria)","A saudação usa o nome do login do Sistema eSocial de quem está usando o programa","Modelos para impressão: botão + para adicionar seus PDFs e opção de remover modelos","Corrige janelas (Importar, Lançar ASO, ficha) que ficavam atrás do fundo desfocado","Visual novo, no estilo Apple","Tela de Feedback: registre sugestões e problemas, envie ao GitHub e acompanhe o que foi implementado","Modelos para impressão abrem dentro do programa","Atualização reabre o programa sozinha","Liberação do ASO para altura e espaço confinado: sem liberação, NR-35/NR-33 não são cobradas","Lançar ASO e NR no Sistema eSocial a partir do documento anexado (lê datas e tipo)","Editar o endereço direto no Sistema eSocial","Emitir ficha de cadastro do trabalhador para imprimir","Data e hora no rodapé","Atualização sozinha pelo GitHub, sem chave: baixa, instala e reabre o programa","Trabalhadores aparecem durante a primeira importação (gravação em lotes de 25)","Corrige acentos quebrados no programa instalado","Impede abrir duas janelas do programa ao mesmo tempo","Importação automática: o programa entra sozinho no Sistema eSocial e atualiza os trabalhadores a cada 5 minutos","Senha do Sistema eSocial guardada no Windows, pedida uma única vez","Importação completa do Sistema eSocial: status, última produção, ASO, NR-33/35, EPI, documentos e endereço","Novos status: afastado e inativo no sistema","Cofre de acessos simplificado: só Sistema eSocial e Escavador","Verificação automática de atualizações a cada 5 minutos","Nova interface: tema claro e escuro, barra lateral com ícones, atalhos e indicadores redesenhados","Engrenagem de configurações com cofre de acessos (login e senha) protegido por PIN","Botões Copiar usuário e Copiar senha nos atalhos do painel","Atalho do Escavador no painel","Verificação de antecedentes na ficha e na entrevista"];
 
 /* ---------- cofre de acessos: AES-GCM com chave derivada do PIN (PBKDF2). A chave fica só na memória; recarregar a página tranca. ---------- */
 const b64e=u=>btoa(String.fromCharCode(...u));const b64d=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
@@ -684,7 +684,7 @@ async function aplicarPlano(pl,marca){
   for(const d of pl.novos){const{s2300Enviado,...rest}=d;const w={id:uid(),origem:"esocial",categoria:"202",funcao:"Movimentador de mercadorias",dtTermino:"",exige35:true,exige33:!!d.nr33Data,obs:"Importado do Sistema eSocial.",
       ...Object.fromEntries(Object.entries(rest).map(([k,v])=>[k,v||""])),status:d.status||"ativo",dtCadastro:d.dtCadastro||d.dtInicio||iso(TODAY),dtInicio:d.dtInicio||d.dtCadastro||"",ev:{s2300:!!s2300Enviado,s2240:false,s2399:d.status==="desligado"},...(marca||{})};
     S.workers.push(w);await Store.put("workers",w,true)}
-  for(const{w,mud}of pl.atualiza){const{s2300Enviado,...m}=mud;Object.assign(w,m,marca||{});if(s2300Enviado){w.ev=w.ev||{};w.ev.s2300=true}if(m.nr33Data)w.exige33=true;if(m.status==="desligado"){w.ev=w.ev||{};w.ev.s2399=true}await Store.put("workers",w,true)}
+  for(const{w,mud}of pl.atualiza){const{s2300Enviado,...m}=mud;if(["desligado","afastado"].includes(m.status)&&m.status!==w.status&&!(w.status==="a_desligar"&&w.saidaEm))w.saidaEm=iso(TODAY);Object.assign(w,m,marca||{});if(s2300Enviado){w.ev=w.ev||{};w.ev.s2300=true}if(m.nr33Data)w.exige33=true;if(m.status==="desligado"){w.ev=w.ev||{};w.ev.s2399=true}await Store.put("workers",w,true)}
 }
 
 /* ---------- SINCRONIZAÇÃO AUTOMÁTICA com o Sistema eSocial (só no programa instalado) ----------
@@ -862,12 +862,8 @@ async function saveFat(){
 /* ---------- LISTAS E INATIVOS ---------- */
 function vRel(){
   const inat=S.workers.filter(w=>w.status==="ativo"&&diasSemProducao(w)>INATIVO_DIAS).sort((a,b)=>diasSemProducao(b)-diasSemProducao(a));
-  const alvo=ui.listaAlvo,origem=prevYm(alvo);
-  const cands=S.workers.filter(w=>(w.dtCadastro||"").startsWith(origem)).sort((a,b)=>a.dtCadastro.localeCompare(b.dtCadastro));
-  const jaExiste=S.lists.find(l=>l.mes===alvo);
-  const meses=[];for(let k=-6;k<=2;k++){const d=new Date(TODAY.getFullYear(),TODAY.getMonth()+k,1);meses.push(ym(d))}
   $("#view").innerHTML=`
-  <div class="head"><div><h1>Listas e inativos</h1><p>Quem pode ser desligado por falta de produção e a lista mensal dos novos cadastrados.</p></div></div>
+  <div class="head"><div><h1>Listas e inativos</h1><p>Quem pode ser desligado por falta de produção e o relatório mensal de admissão, periódico e desligamentos.</p></div></div>
   ${exBanner()}
   <section class="panel"><div class="panel-h"><div><h2>Sem produção há mais de 3 meses</h2><span class="small muted">Base: última produção (ou data de cadastro, se nunca produziu) há mais de ${INATIVO_DIAS} dias</span></div>
    <button class="btn primary" id="markDes" ${inat.length?"":"disabled"}>Marcar selecionados para desligar</button></div>
@@ -875,27 +871,151 @@ function vRel(){
    ${inat.map(w=>`<tr><td><input type="checkbox" class="selI" value="${w.id}" aria-label="Selecionar ${esc(w.nome)}"></td><td><a href="#" data-w="${w.id}" style="color:inherit"><b>${esc(w.nome)}</b></a></td><td class="mono">${esc(fmtCPF(w.cpf))}</td><td class="mono">${w.ultimaProducao?br(w.ultimaProducao):"nunca"}</td><td class="num mono"><span class="pill warn">${diasSemProducao(w)}</span></td></tr>`).join("")}
    </tbody></table></div><div class="note">Marcar para desligar não envia nada. O trabalhador passa a aparecer em Pendências até você enviar o <span class="evt">S-2399</span> no sistema eSocial e marcar na ficha.</div>`:`<div class="empty">Nenhum trabalhador ativo sem produção há mais de 3 meses.</div>`}
   </section>
-  <section class="panel"><div class="panel-h"><div><h2>Lista mensal de novos cadastrados</h2><span class="small muted">Os cadastrados em um mês entram na lista do mês seguinte</span></div>
-   <div class="toolbar"><label class="small muted" for="alvo">Lista de</label><select class="inp" id="alvo" style="width:auto">${meses.map(m=>`<option value="${m}" ${m===alvo?"selected":""}>${ymLabel(m)}</option>`).join("")}</select></div></div>
-   <p class="muted" style="margin:0">A lista de <b>${ymLabel(alvo)}</b> reúne quem foi cadastrado em <b>${ymLabel(origem)}</b>: <b class="mono">${cands.length}</b> trabalhador${cands.length===1?"":"es"}.</p>
-   ${cands.length?`<div class="tbl-wrap"><table><thead><tr><th>Nome</th><th>CPF</th><th>Cadastro</th><th>Situação</th></tr></thead><tbody>${cands.map(w=>`<tr><td>${esc(w.nome)}</td><td class="mono">${esc(fmtCPF(w.cpf))}</td><td class="mono">${br(w.dtCadastro)}</td><td>${pillsHTML(pendencias(w),1)}</td></tr>`).join("")}</tbody></table></div>`:""}
-   <div class="toolbar"><button class="btn primary" id="criarLista" ${cands.length?"":"disabled"}>${jaExiste?"Recriar":"Criar"} lista de ${ymLabel(alvo)}</button>${jaExiste?`<span class="small muted">Criada em ${br(jaExiste.criadoEm)}</span>`:""}</div>
-   <h3 class="eyebrow" style="margin:6px 0 0">Listas criadas</h3>
-   ${S.lists.length?`<div class="list">${S.lists.slice().sort((a,b)=>b.mes.localeCompare(a.mes)).map(l=>`<div class="row"><span><b>${ymLabel(l.mes)}</b> <span class="small muted">· ${l.itens.length} nomes · criada em ${br(l.criadoEm)}</span></span><span class="toolbar"><button class="btn sm" data-copy="${l.id}">Copiar lista</button><button class="btn sm" data-show="${l.id}">Ver</button></span></div><pre class="note mono" id="pre_${l.id}" hidden style="white-space:pre-wrap;margin:0">${esc(listaTexto(l))}</pre>`).join("")}</div>`:`<div class="empty">Nenhuma lista criada ainda.</div>`}
-  </section>`;
+  ${relHTML()}`;
   bindBanner();
   document.querySelectorAll("[data-w]").forEach(a=>a.onclick=e=>{e.preventDefault();openWorker(a.dataset.w)});
   const sa=$("#selAll");if(sa)sa.onchange=()=>document.querySelectorAll(".selI").forEach(c=>c.checked=sa.checked);
   $("#markDes").onclick=async()=>{const ids=[...document.querySelectorAll(".selI:checked")].map(c=>c.value);if(!ids.length){toast("Selecione pelo menos um trabalhador");return}
-    for(const id of ids){const w=S.workers.find(x=>x.id===id);w.status="a_desligar";await Store.put("workers",w)}toast(`${ids.length} marcado${ids.length>1?"s":""} para desligar`);render()};
-  $("#alvo").onchange=e=>{ui.listaAlvo=e.target.value;vRel()};
-  $("#criarLista").onclick=async()=>{const l=jaExiste||{id:uid(),mes:alvo};l.criadoEm=iso(TODAY);l.origem=origem;l.itens=cands.map(w=>({id:w.id,nome:w.nome,cpf:w.cpf,dtCadastro:w.dtCadastro}));
-    await Store.put("lists",l);if(!jaExiste)S.lists.push(l);toast(`Lista de ${ymLabel(alvo)} criada com ${l.itens.length} nomes`);vRel()};
-  document.querySelectorAll("[data-show]").forEach(b=>b.onclick=()=>{const p=$("#pre_"+b.dataset.show);p.hidden=!p.hidden});
-  document.querySelectorAll("[data-copy]").forEach(b=>b.onclick=()=>{const l=S.lists.find(x=>x.id===b.dataset.copy);const t=listaTexto(l);
-    navigator.clipboard?.writeText(t).then(()=>toast("Lista copiada"),()=>{const p=$("#pre_"+l.id);p.hidden=false;const r=document.createRange();r.selectNodeContents(p);const s=getSelection();s.removeAllRanges();s.addRange(r);toast("Texto selecionado. Use Ctrl+C.")})});
+    for(const id of ids){const w=S.workers.find(x=>x.id===id);w.status="a_desligar";w.saidaEm=iso(TODAY);await Store.put("workers",w)}toast(`${ids.length} marcado${ids.length>1?"s":""} para desligar`);render()};
+  bindRel();
 }
-function listaTexto(l){return `SINTRAMOMED - Lista de ${ymLabel(l.mes)} (cadastrados em ${ymLabel(l.origem||prevYm(l.mes))})\n`+l.itens.map((x,i)=>`${String(i+1).padStart(2,"0")}. ${x.nome} - CPF ${fmtCPF(x.cpf)} - cadastro ${br(x.dtCadastro)}`).join("\n")}
+/* ---------- RELATÓRIO MENSAL (admissão, periódico, afastados/desligados) ----------
+   Modelo do RH: "RELATÓRIO PARA CONTROLE DE ADMISSÃO / PERIÓDICO DOS TRABALHADORES AVULSOS".
+   Do Sistema eSocial (só leitura): ASO periódico e admissional (rel_colabexames) e a empresa da produção
+   (rel_folhaproducao, por trabalhador). O que o sistema não tem (classificação do ASO, envio à DOM,
+   motivo) é marcado na tela e fica guardado no registro do mês (coleção lists, id rel-AAAA-MM). */
+const normNome=s=>String(s||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toUpperCase().replace(/\s+/g," ").trim();
+const codigoTrab=w=>w&&w.origemId?String(w.origemId).padStart(4,"0"):"";
+const nomeRel=w=>(codigoTrab(w)?codigoTrab(w)+" - ":"")+normNome(w.nome);
+const ultimoDia=mes=>{const[a,b]=mes.split("-").map(Number);return iso(new Date(a,b,0))};
+const abrevEmpresa=n=>{const fora=new Set(["AGROINDUSTRIAL","AGROIND","COOPERATIVA","COOP","CENTRAL","LTDA","SA","S/A","ME","EIRELI","COMERCIO","COM","DE","DO","DA","DOS","DAS","E","ALIMENTOS","DISTR","PROD","AGROP","REPRES"]);
+  return String(n||"").replace(/^\s*\d+\s*-\s*/,"").split(/\s+/).filter(p=>p&&!fora.has(p)).map(p=>p==="INDUSTRIA"?"Inds.":p==="DDOS"?"Dourados":p.length<=3?p:p[0]+p.slice(1).toLowerCase()).join(" ")};
+function relDoc(mes){let r=S.lists.find(l=>l.id==="rel-"+mes);if(!r){r={id:"rel-"+mes,tipo:"relatorio",mes,periodicos:[],admissionais:[],empresas:{},over:{},saidas:[],buscadoEm:""};S.lists.push(r)}r.over=r.over||{};r.empresas=r.empresas||{};r.saidas=r.saidas||[];return r}
+const relSalvar=r=>Store.put("lists",r);
+const porNome=()=>{const m={};S.workers.forEach(w=>{m[normNome(w.nome)]=w});return m};
+const motivoPadrao=w=>w.motivoSaida||(w.status==="afastado"?"Trabalhador foi afastado":w.status==="desligado"||w.status==="a_desligar"?`Trabalhador foi desligado, pois está a mais de ${INATIVO_DIAS} dias sem produção`:"");
+function relLinhas(r){
+  const mes=r.mes,nm=porNome(),o=r.over;
+  const adm=S.workers.filter(w=>!w.exemplo&&(w.dtCadastro||"").startsWith(mes)).sort((a,b)=>a.dtCadastro.localeCompare(b.dtCadastro)).map(w=>{const k="a:"+w.cpf,x=o[k]||{};
+    const asoAdm=(r.admissionais.find(e=>e.nome===normNome(w.nome))||{}).d||w.asoData||"";
+    return {k,w,nome:nomeRel(w),cad:w.dtCadastro,matr:w.matricula,antec:x.antec??!!w.antecResultado,classe:x.classe||"",aso:asoAdm,esoc:x.esoc??!!(w.ev?.s2300||w.s2300Enviado),dom:!!x.dom,empresa:x.empresa??(r.empresas[w.cpf]||"")}});
+  const per=r.periodicos.filter(e=>e.d.startsWith(mes)).sort((a,b)=>a.d.localeCompare(b.d)).map(e=>{const w=nm[e.nome],k="p:"+(w?w.cpf:e.nome)+":"+e.d,x=o[k]||{};
+    return {k,w,nome:w?nomeRel(w):e.nome,cad:w?w.dtCadastro:"",matr:w?w.matricula:"",d:e.d,dom:!!x.dom,classe:x.classe||"",empresa:x.empresa??(w?r.empresas[w.cpf]||"":"")}});
+  const cpfs=new Set([...S.workers.filter(w=>(w.saidaEm||"").startsWith(mes)).map(w=>w.cpf),...r.saidas]);
+  const sai=[...cpfs].map(c=>S.workers.find(w=>w.cpf===c)).filter(Boolean).map(w=>{const k="s:"+w.cpf,x=o[k]||{};return {k,w,nome:nomeRel(w),matr:w.matricula,motivo:x.motivo??motivoPadrao(w),manual:r.saidas.includes(w.cpf)}});
+  return {adm,per,sai}}
+async function relBuscar(r){
+  const lerExames=async cod=>{const d=dom(await spost("/register/rel_colabexames.php",[["acao","Visualizar"],["exam_codigo",cod],["tipo","0"]]));
+    return [...d.querySelectorAll("tr")].map(tr=>[...tr.children].map(c=>c.textContent.replace(/\s+/g," ").trim())).filter(c=>c.length>=4&&/ASO/i.test(c[1])).map(c=>({nome:normNome(c[0]),d:XS.d2i(c[3])})).filter(e=>e.d)};
+  const mes=r.mes;
+  r.periodicos=(await lerExames("2")).filter(e=>e.d.startsWith(mes));
+  r.admissionais=(await lerExames("1")).filter(e=>e.d>=mes);
+  // Empresa: tomadora com maior valor na produção do trabalhador, do 1º dia do mês até o fim do mês seguinte.
+  const[a,b]=mes.split("-").map(Number),fim=[ultimoDia(ym(new Date(a,b,1))),iso(TODAY)].sort()[0];
+  const {adm,per}=relLinhas(r);
+  for(const w of [...adm,...per].map(x=>x.w).filter(w=>w&&w.origemId)){
+    const d=dom(await spost("/register/rel_folhaproducao.php",[["acao","Visualizar"],["codempresa",""],["cod_empresa",""],["empset_codigo",""],["codcolaborador",w.origemId],["cod_colaborador",w.origemId],["dt_ini",br(mes+"-01")],["dt_fim",br(fim)],["tipo","3"],["opcaoAgrup","2"],["via","trabalhador"],["opcaoFiscal","1"]]));
+    const soma={};d.querySelectorAll("tr").forEach(tr=>{const c=[...tr.children].map(x=>x.textContent.replace(/\s+/g," ").trim());if(/^\d{3,5} - /.test(c[0]||"")){const v=parseFloat((c[c.length-1]||"").replace(/\./g,"").replace(",","."))||0;soma[c[0]]=(soma[c[0]]||0)+v}});
+    const top=Object.entries(soma).sort((x,y)=>y[1]-x[1])[0];if(top)r.empresas[w.cpf]=abrevEmpresa(top[0])}
+  r.buscadoEm=new Date().toISOString();await relSalvar(r)}
+
+/* Excel (.xlsx) sem bibliotecas: zip sem compressão + SpreadsheetML com estilos do modelo. */
+const CRC_T=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+const crc32=b=>{let c=0xFFFFFFFF;for(const x of b)c=CRC_T[(c^x)&0xFF]^(c>>>8);return(c^0xFFFFFFFF)>>>0};
+function zipStore(files){const enc=new TextEncoder(),parts=[],cen=[];let off=0;
+  for(const[nome,txt]of files){const d=enc.encode(txt),n=enc.encode(nome),c=crc32(d);
+    const h=new DataView(new ArrayBuffer(30));h.setUint32(0,0x04034b50,true);h.setUint16(4,20,true);h.setUint16(6,0x0800,true);h.setUint32(14,c,true);h.setUint32(18,d.length,true);h.setUint32(22,d.length,true);h.setUint16(26,n.length,true);
+    const e=new DataView(new ArrayBuffer(46));e.setUint32(0,0x02014b50,true);e.setUint16(4,20,true);e.setUint16(6,20,true);e.setUint16(8,0x0800,true);e.setUint32(16,c,true);e.setUint32(20,d.length,true);e.setUint32(24,d.length,true);e.setUint16(28,n.length,true);e.setUint32(42,off,true);
+    parts.push(h.buffer,n,d);cen.push(e.buffer,n);off+=30+n.length+d.length}
+  const tam=cen.reduce((s,x)=>s+(x.byteLength),0),f=new DataView(new ArrayBuffer(22));f.setUint32(0,0x06054b50,true);f.setUint16(8,files.length,true);f.setUint16(10,files.length,true);f.setUint32(12,tam,true);f.setUint32(16,off,true);
+  return new Blob([...parts,...cen,f.buffer],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"})}
+const xe=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])).replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g,"");
+// cells: [{r,c,v,s:{b,sz,cor,fundo,al,borda,wrap},rich:[{t,b,sz,cor,u}]}]; merges: ["A1:I1"]
+function xlsxFolha({nome,larguras,alturas,cells,merges}){
+  const fonts=[],fills=['<fill><patternFill patternType="none"/></fill>','<fill><patternFill patternType="gray125"/></fill>'],xfs=[];
+  const idx=(arr,x)=>{let i=arr.indexOf(x);if(i<0){arr.push(x);i=arr.length-1}return i};
+  const fontXml=f=>`<font>${f.b?"<b/>":""}${f.u?"<u/>":""}<sz val="${f.sz||10}"/><color rgb="FF${f.cor||"000000"}"/><name val="Calibri"/></font>`;
+  idx(fonts,fontXml({}));xfs.push('<xf xfId="0" fontId="0" fillId="0" borderId="0"/>');
+  const estilo=s=>{if(!s)return 0;const f=idx(fonts,fontXml(s)),fi=s.fundo?idx(fills,`<fill><patternFill patternType="solid"><fgColor rgb="FF${s.fundo}"/></patternFill></fill>`):0;
+    return idx(xfs,`<xf xfId="0" fontId="${f}" fillId="${fi}" borderId="${s.borda?1:0}" applyFont="1" applyFill="1" applyBorder="1" applyAlignment="1"><alignment horizontal="${s.al||"left"}" vertical="center"${s.wrap?' wrapText="1"':""}/></xf>`)};
+  const col=i=>String.fromCharCode(65+i),porLinha={};
+  for(const c of cells){(porLinha[c.r]=porLinha[c.r]||[]).push(c)}
+  const linhas=Object.keys(porLinha).map(Number).sort((a,b)=>a-b).map(r=>`<row r="${r}"${alturas[r]?` ht="${alturas[r]}" customHeight="1"`:""}>${porLinha[r].sort((a,b)=>a.c-b.c).map(c=>{const ref=col(c.c)+r,s=estilo(c.s);
+    if(c.rich)return `<c r="${ref}" s="${s}" t="inlineStr"><is>${c.rich.map(p=>`<r><rPr>${p.b?"<b/>":""}${p.u?"<u/>":""}<sz val="${p.sz||10}"/><color rgb="FF${p.cor||"000000"}"/><rFont val="Calibri"/></rPr><t xml:space="preserve">${xe(p.t)}</t></r>`).join("")}</is></c>`;
+    return c.v===undefined||c.v===""?`<c r="${ref}" s="${s}"/>`:`<c r="${ref}" s="${s}" t="inlineStr"><is><t xml:space="preserve">${xe(c.v)}</t></is></c>`}).join("")}</row>`).join("");
+  const ws=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetPr><pageSetUpPr fitToPage="1"/></sheetPr><sheetViews><sheetView workbookViewId="0" showGridLines="0"/></sheetViews><cols>${larguras.map((w,i)=>`<col min="${i+1}" max="${i+1}" width="${w}" customWidth="1"/>`).join("")}</cols><sheetData>${linhas}</sheetData>${merges.length?`<mergeCells count="${merges.length}">${merges.map(m=>`<mergeCell ref="${m}"/>`).join("")}</mergeCells>`:""}<pageMargins left="0.3" right="0.3" top="0.4" bottom="0.4" header="0.2" footer="0.2"/><pageSetup paperSize="9" orientation="landscape" fitToWidth="1" fitToHeight="0"/></worksheet>`;
+  const styles=`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="${fonts.length}">${fonts.join("")}</fonts><fills count="${fills.length}">${fills.join("")}</fills><borders count="2"><border/><border><left style="thin"><color rgb="FF808080"/></left><right style="thin"><color rgb="FF808080"/></right><top style="thin"><color rgb="FF808080"/></top><bottom style="thin"><color rgb="FF808080"/></bottom></border></borders><cellStyleXfs count="1"><xf/></cellStyleXfs><cellXfs count="${xfs.length}">${xfs.join("")}</cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>`;
+  const X='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
+  return zipStore([["[Content_Types].xml",X+'<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/><Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/></Types>'],
+    ["_rels/.rels",X+'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>'],
+    ["xl/workbook.xml",X+`<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets><sheet name="${xe(nome.slice(0,31))}" sheetId="1" r:id="rId1"/></sheets></workbook>`],
+    ["xl/_rels/workbook.xml.rels",X+'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/><Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>'],
+    ["xl/styles.xml",styles],["xl/worksheets/sheet1.xml",ws]])}
+function relExcel(r){
+  const {adm,per,sai}=relLinhas(r),mesTxt=ymLabel(r.mes).toUpperCase().replace("/"," /");
+  const cells=[],merges=[],alturas={};let L=1;
+  const AZUL="B4C6E7",LARANJA="ED7D31",VERM="C00000",AZULT="2F75B5",VERDE="70AD47";
+  const put=(c,v,s,extra)=>cells.push({r:L,c,v,s,...(extra||{})});
+  const T={b:true,sz:9,al:"center",borda:true,wrap:true},D={sz:9,borda:true},DC={sz:9,borda:true,al:"center"},DB={sz:9,borda:true,b:true};
+  const titulo=(palavra,cor)=>{for(let c=0;c<9;c++)put(c,"",{fundo:AZUL,borda:true});cells.find(x=>x.r===L&&x.c===0).rich=[{t:"RELATÓRIO PARA CONTROLE DE ",b:true,sz:14},{t:palavra,b:true,sz:14,cor},{t:" DOS TRABALHADORES AVULSOS   ",b:true,sz:14},{t:`MÊS ${mesTxt}`,b:true,sz:14,u:true}];
+    cells.find(x=>x.r===L&&x.c===0).s={fundo:AZUL,borda:true,al:"center"};merges.push(`A${L}:I${L}`);alturas[L]=22;L++};
+  const matri=m=>m?{rich:[{t:"Matri. ",sz:8,cor:VERDE},{t:m,sz:9,b:true}]}:{v:"SEM MATRICULA"};
+  // Admissão
+  titulo("ADMISSÃO",LARANJA);
+  [["NOME TRABALHADOR:"],["DATA CADASTRO"],["MATRICULA DO E-SOCIAL"],["ANTECEDENTES CRIMINAIS"],["CLASSIFICAÇÃO",[{t:"CLASSIFICAÇÃO\n",b:true,sz:9},{t:"ASO SIMPLES OU COMPLETO",b:true,sz:7,cor:VERM}]],["ASO"],["ENVIO CADASTRO E-SOCIAL"],["ENVIO",[{t:"ENVIO\n",b:true,sz:9},{t:"DOM ASSESSORIA",b:true,sz:8,cor:AZULT}]],["EMPRESA"]].forEach(([t,rich],c)=>put(c,rich?undefined:t,{...T,al:c?"center":"left"},rich?{rich}:{}));alturas[L]=26;L++;
+  for(const x of adm){put(0,x.nome,DB);put(1,br(x.cad),{...D,al:"right"});put(2,undefined,DC,matri(x.matr));put(3,x.antec?"X":"",DC);put(4,x.classe,DC);put(5,x.aso?br(x.aso):"",DC);put(6,x.esoc?"X":"",DC);put(7,x.dom?"X":"",DC);put(8,x.empresa,DC);L++}
+  if(!adm.length){put(0,"Nenhum cadastro no mês",D);for(let c=1;c<9;c++)put(c,"",D);L++}
+  L++;
+  // Periódico
+  titulo("PERIODICO",VERM);
+  [["NOME TRABALHADOR:"],["DATA CADASTRO"],["MATRICULA DO E-SOCIAL"],["PERÍODICO"],["ENVIO",[{t:"ENVIO\n",b:true,sz:9},{t:"DOM ASSESSORIA",b:true,sz:8,cor:AZULT}]],["CLASSIFICAÇÃO",[{t:"CLASSIFICAÇÃO\n",b:true,sz:9},{t:"ASO SIMPLES OU COMPLETO",b:true,sz:7,cor:VERM}]],[""],["EMPRESA"],[""]].forEach(([t,rich],c)=>put(c,rich?undefined:t,{...T,al:c?"center":"left"},rich?{rich}:{}));merges.push(`F${L}:G${L}`,`H${L}:I${L}`);alturas[L]=26;L++;
+  for(const x of per){put(0,x.nome,DB);put(1,x.cad?br(x.cad):"",{...D,al:"right"});put(2,undefined,DC,matri(x.matr));put(3,br(x.d),DC);put(4,x.dom?"X":"",DC);put(5,x.classe,DC);put(6,"",DC);put(7,x.empresa,DC);put(8,"",DC);merges.push(`F${L}:G${L}`,`H${L}:I${L}`);L++}
+  if(!per.length){put(0,"Nenhum periódico no mês",D);for(let c=1;c<9;c++)put(c,"",D);L++}
+  L++;
+  // Afastados / desligados
+  for(let c=0;c<9;c++)put(c,c?"":"MOTIVO DO AFASTAMENTO/DESLIGADO",{b:true,sz:10,al:"center",fundo:LARANJA,borda:true});merges.push(`A${L}:I${L}`);L++;
+  [["NOME TRABALHADOR:",0],["MATRICULA DO E-SOCIAL",1],["MOTIVO",3]].forEach(([t,c])=>put(c,t,{b:true,sz:9,al:c?"center":"left",fundo:"F8CBAD",borda:true}));for(const c of [2,4,5,6,7,8])put(c,"",{fundo:"F8CBAD",borda:true});merges.push(`B${L}:C${L}`,`D${L}:I${L}`);L++;
+  for(const x of sai){put(0,x.nome,DB);put(1,x.matr?`Matricula: ${x.matr}`:"SEM MATRICULA",DC);put(2,"",DC);put(3,x.motivo,DC);for(const c of [4,5,6,7,8])put(c,"",DC);merges.push(`B${L}:C${L}`,`D${L}:I${L}`);L++}
+  if(!sai.length){put(0,"Nenhum afastamento ou desligamento no mês",D);for(let c=1;c<9;c++)put(c,"",D);merges.push(`B${L}:C${L}`,`D${L}:I${L}`);L++}
+  return xlsxFolha({nome:"Relatório "+ymLabel(r.mes).replace("/","-"),larguras:[44,13,22,13,22,12,14,16,22],alturas,cells,merges})}
+async function baixarArquivo(blob,nome){
+  if(IS_TAURI){const bytes=[...new Uint8Array(await blob.arrayBuffer())];const p=await tinvoke("salvar_download",{nome,bytes});
+    try{await window.__TAURI__.opener.revealItemInDir(p)}catch(e){}toast("Salvo em Downloads: "+nome);return}
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=nome;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),5000)}
+function relHTML(){
+  const mes=ui.relMes||prevYm(ym(TODAY)),r=relDoc(mes),{adm,per,sai}=relLinhas(r);
+  const meses=[];for(let k=-12;k<=0;k++)meses.push(ym(new Date(TODAY.getFullYear(),TODAY.getMonth()+k,1)));
+  const ck=(x,f)=>`<input type="checkbox" data-rk="${esc(x.k)}" data-rf="${f}" ${x[f]?"checked":""} aria-label="${f}">`;
+  const cls=x=>`<select class="inp" data-rk="${esc(x.k)}" data-rf="classe" style="width:auto;padding:4px 8px"><option value=""></option>${["SIMPLES","COMPLETO"].map(o=>`<option ${x.classe===o?"selected":""}>${o}</option>`).join("")}</select>`;
+  const txt=(x,f,w)=>`<input class="inp" data-rk="${esc(x.k)}" data-rf="${f}" value="${esc(x[f])}" style="min-width:${w}px;padding:4px 8px">`;
+  const matr=m=>m?`<span class="mono">${esc(m)}</span>`:`<span class="small muted">sem matrícula</span>`;
+  return `<section class="panel"><div class="panel-h"><div><h2>Relatório mensal: admissão, periódico e desligamentos</h2><span class="small muted">No modelo do RH, para gerar em Excel</span></div>
+   <div class="toolbar"><label class="small muted" for="relMes">Mês</label><select class="inp" id="relMes" style="width:auto">${meses.reverse().map(m=>`<option value="${m}" ${m===mes?"selected":""}>${ymLabel(m)}</option>`).join("")}</select>
+    ${IS_TAURI?`<button class="btn" id="relBuscar">Buscar no Sistema eSocial</button>`:""}<button class="btn primary" id="relExcel">${ico("upload",16)} Gerar Excel</button></div></div>
+   <div class="note">${IS_TAURI?(r.buscadoEm?`Periódicos, ASO e empresa da produção lidos do Sistema eSocial às ${hhmm(new Date(r.buscadoEm))} de ${br(r.buscadoEm.slice(0,10))}.`:"Clique em <b>Buscar no Sistema eSocial</b> para trazer os periódicos do mês e a empresa de cada trabalhador pela produção."):"No programa instalado, os periódicos e a empresa vêm do Sistema eSocial."} Classificação do ASO, envio à DOM e motivo são marcados aqui e ficam guardados.</div>
+   <h3 class="eyebrow" style="margin:4px 0 -4px">Admissão · ${adm.length}</h3>
+   ${adm.length?`<div class="tbl-wrap" style="box-shadow:none"><table><thead><tr><th>Trabalhador</th><th>Cadastro</th><th>Matrícula</th><th>Antec.</th><th>Classificação</th><th>ASO</th><th>eSocial</th><th>DOM</th><th>Empresa</th></tr></thead><tbody>
+    ${adm.map(x=>`<tr><td><a href="#" data-w="${x.w.id}" style="color:inherit;text-decoration:none;font-size:13.5px;display:block;min-width:220px"><b>${esc(x.nome)}</b></a></td><td class="mono">${br(x.cad)}</td><td>${matr(x.matr)}</td><td>${ck(x,"antec")}</td><td>${cls(x)}</td><td class="mono">${x.aso?br(x.aso):"—"}</td><td>${ck(x,"esoc")}</td><td>${ck(x,"dom")}</td><td>${txt(x,"empresa",140)}</td></tr>`).join("")}</tbody></table></div>`:`<div class="empty">Ninguém cadastrado em ${ymLabel(mes)}.</div>`}
+   <h3 class="eyebrow" style="margin:4px 0 -4px">Periódico · ${per.length}</h3>
+   ${per.length?`<div class="tbl-wrap" style="box-shadow:none"><table><thead><tr><th>Trabalhador</th><th>Cadastro</th><th>Matrícula</th><th>Periódico</th><th>DOM</th><th>Classificação</th><th>Empresa</th></tr></thead><tbody>
+    ${per.map(x=>`<tr><td>${x.w?`<a href="#" data-w="${x.w.id}" style="color:inherit;text-decoration:none;font-size:13.5px;display:block;min-width:220px"><b>${esc(x.nome)}</b></a>`:`<b>${esc(x.nome)}</b> <span class="small muted">não encontrado no Central</span>`}</td><td class="mono">${x.cad?br(x.cad):"—"}</td><td>${matr(x.matr)}</td><td class="mono">${br(x.d)}</td><td>${ck(x,"dom")}</td><td>${cls(x)}</td><td>${txt(x,"empresa",140)}</td></tr>`).join("")}</tbody></table></div>`:`<div class="empty">${IS_TAURI&&!r.buscadoEm?"Busque no Sistema eSocial para ver os periódicos do mês.":"Nenhum periódico registrado no mês."}</div>`}
+   <h3 class="eyebrow" style="margin:4px 0 -4px">Afastados e desligados · ${sai.length}</h3>
+   ${sai.length?`<div class="tbl-wrap" style="box-shadow:none"><table><thead><tr><th>Trabalhador</th><th>Matrícula</th><th>Motivo</th><th></th></tr></thead><tbody>
+    ${sai.map(x=>`<tr><td><a href="#" data-w="${x.w.id}" style="color:inherit;text-decoration:none;font-size:13.5px;display:block;min-width:220px"><b>${esc(x.nome)}</b></a></td><td>${matr(x.matr)}</td><td style="width:55%">${txt(x,"motivo",320)}</td><td>${x.manual?`<button class="btn sm" data-rsai="${x.w.cpf}">Tirar</button>`:""}</td></tr>`).join("")}</tbody></table></div>`:`<div class="empty">Ninguém afastado ou desligado em ${ymLabel(mes)} pelo Central.</div>`}
+   <div class="field" style="max-width:420px"><label for="relAdd">Incluir afastado ou desligado</label><input id="relAdd" class="inp" placeholder="Digite o nome ou o CPF" autocomplete="off"><div id="relSug" class="list"></div></div>
+  </section>`}
+function bindRel(){
+  const mes=ui.relMes||prevYm(ym(TODAY)),r=relDoc(mes);
+  $("#relMes").onchange=e=>{ui.relMes=e.target.value;vRel()};
+  document.querySelectorAll("[data-rk]").forEach(el=>el.onchange=async()=>{const k=el.dataset.rk,f=el.dataset.rf;r.over[k]={...(r.over[k]||{}),[f]:el.type==="checkbox"?el.checked:el.value.trim()};await relSalvar(r)});
+  const bb=$("#relBuscar");if(bb)bb.onclick=async()=>{bb.disabled=true;bb.textContent="Buscando…";try{await relBuscar(r);toast("Relatório atualizado com o Sistema eSocial")}catch(e){toast("Não consegui ler o Sistema eSocial: "+(e.message||e))}vRel()};
+  $("#relExcel").onclick=async()=>{try{await baixarArquivo(relExcel(r),`Relatorio admissao periodico ${ymLabel(mes).replace("/","-")}.xlsx`)}catch(e){toast(String(e.message||e))}};
+  document.querySelectorAll("[data-rsai]").forEach(b=>b.onclick=async()=>{r.saidas=r.saidas.filter(c=>c!==b.dataset.rsai);await relSalvar(r);vRel()});
+  const ad=$("#relAdd");ad.oninput=()=>{const q=ad.value.toLowerCase().trim(),qd=q.replace(/\D/g,"");if(q.length<2){$("#relSug").innerHTML="";return}
+    const res=S.workers.filter(w=>!w.exemplo&&(w.nome.toLowerCase().includes(q)||(qd.length>=3&&w.cpf.includes(qd)))).slice(0,6);
+    $("#relSug").innerHTML=res.map(w=>`<div class="row"><span><b>${esc(w.nome)}</b> <span class="small muted mono">${esc(fmtCPF(w.cpf))}</span></span><button class="btn sm" data-radd="${w.cpf}">Incluir</button></div>`).join("")||`<div class="small muted">Ninguém encontrado.</div>`;
+    document.querySelectorAll("[data-radd]").forEach(b=>b.onclick=async()=>{if(!r.saidas.includes(b.dataset.radd))r.saidas.push(b.dataset.radd);await relSalvar(r);vRel()})};
+}
 
 /* ---------- ENTREVISTA ONLINE (protótipo da Ficha de Triagem) ---------- */
 const QS=[
