@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.13 — 26/10/2026
+- S-2240 (condições ambientais) não é mais cobrado nas pendências, na cadeia do trabalhador nem na ficha, porque não se aplica à categoria (sugestão #1).
+
 ## 0.1.12 — 23/10/2026
 - "Boa tarde, …" usa o primeiro nome do login do Sistema eSocial salvo no computador, para cada pessoa que usa o programa ver o próprio nome.
 
