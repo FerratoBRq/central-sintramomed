@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.17 — 27/10/2026
+- Pendências: os itens da cadeia (Início, ASO, NR-35, NR-33, Ficha EPI, Produção, Término) viram filtros; clicando, a lista mostra só os trabalhadores com aquela pendência. Todas, Críticas e Atenção mostram a quantidade.
+
 ## 0.1.16 — 27/10/2026
 - Pendências não mostram mais o aviso DOC "Faltam anexos".
 
