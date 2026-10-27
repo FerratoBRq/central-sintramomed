@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.21 — 27/10/2026
+- Nova aba Aprovação: lançar ASO/NR e editar endereço não gravam mais direto no Sistema eSocial; viram um pedido que mostra cada alteração (aba do sistema, operação, campo, como está hoje e como vai ficar, e quais registros ativos serão marcados INATIVO). Aprovar e enviar (um ou todos) grava e confere relendo o sistema; também dá para recusar. Histórico com quem pediu e quem enviou. Os pedidos são compartilhados entre os computadores.
+- ASOs prontos em lote vão para a Aprovação.
+- Desligamento e afastamento: a data que aparece no status do Sistema eSocial é lida na sincronização, preenche a data de término da ficha e coloca o trabalhador no relatório mensal do mês certo.
+
 ## 0.1.20 — 27/10/2026
 - O Central cria a própria pasta (Documentos\Central Sintramomed, ou a escolhida/compartilhada) com "ASOs para lançar", "ASOs lançados" e "Documentos", e mostra onde salvar os ASOs baixados do WhatsApp (botão Abrir a pasta).
 - Botão Anexar ASOs no Painel e na tela ASOs recebidos: os arquivos vão para a pasta e são lidos na hora (texto ou OCR), com o trabalhador achado pelo CPF.
