@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.25 — 27/10/2026
+- Corrige a sincronização: dados alterados no Sistema eSocial (nome, telefone, e-mail, endereço, matrícula, RG, CTPS, CNH, datas) só entravam no Central quando o campo estava vazio; agora o Sistema eSocial é a fonte e toda mudança é trazida.
+- Botão Sincronizar tudo agora (barra lateral e engrenagem): relê todas as fichas de uma vez, com andamento em porcentagem, sem precisar esperar o ciclo automático (que lê 50 fichas a cada 5 minutos).
+- Botão Atualizar esta ficha do Sistema eSocial na ficha do trabalhador.
+
 ## 0.1.24 — 27/10/2026
 - Corrige a tela Lançar ASO ou NR: com ASO escolhido, o campo "Curso" (NR 33/35) aparecia por engano. Campos marcados como ocultos agora somem de verdade em todo o programa.
 - Nova Classificação do ASO: Simples ou Completo (altura/espaço confinado), lida do documento. No simples, as liberações ficam desmarcadas e travadas, e NR-35/NR-33 não são cobradas. A classificação vai para a ficha e já preenche o relatório mensal.
