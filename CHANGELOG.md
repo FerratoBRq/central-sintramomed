@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.35 — 27/10/2026
+- Relatório mensal: em Afastados e desligados a coluna passa a ser "Desligado em", com a data em que o desligamento ou afastamento foi lançado no Sistema eSocial (sempre dentro do mês escolhido). A data de término retroativa deixa de aparecer.
+
 ## 0.1.34 — 27/10/2026
 - Relatório mensal: afastados e desligados entram no mês em que foram lançados no Sistema eSocial (como na 0.1.23). A data do término do desligamento é retroativa (90 dias sem produção), por isso, pela data do término, os desligados caíam em meses anteriores e o mês ficava só com afastados. A tela mostra a data do término e, abaixo, quando foi lançado.
 
