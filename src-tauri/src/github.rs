@@ -44,7 +44,7 @@ pub async fn gh_cred_salvar(repo: String, token: String) -> Result<(), String> {
     let r = cliente()?.get(format!("{API}{repo}")).bearer_auth(&token).header("Accept", "application/vnd.github+json").send().await.map_err(|e| format!("Sem conexão com o GitHub: {e}"))?;
     if r.status().as_u16() == 404 || r.status().as_u16() == 401 { return Err("Repositório não encontrado ou token sem acesso a ele.".into()); }
     if !r.status().is_success() { return Err(format!("GitHub respondeu {}", r.status())); }
-    let v: serde_json::Value = r.json().await.map_err(|e| e.to_string())?;
+    let v: serde_json::Value = serde_json::from_str(&r.text().await.map_err(|e| e.to_string())?).map_err(|e| e.to_string())?;
     if v["private"].as_bool() != Some(true) { return Err("Esse repositório é público. Os dados dos trabalhadores só podem ir para um repositório PRIVADO.".into()); }
     if v["permissions"]["push"].as_bool() == Some(false) { return Err("O token não tem permissão de escrita nesse repositório (Contents: Read and write).".into()); }
     let s = serde_json::to_string(&Cred { repo, token }).map_err(|e| e.to_string())?;
