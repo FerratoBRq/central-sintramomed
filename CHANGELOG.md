@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.16 — 27/10/2026
+- Pendências não mostram mais o aviso DOC "Faltam anexos".
+
 ## 0.1.15 — 27/10/2026
 - Atalho no painel para o Forms de consulta e inclusão de colaboradores da Coamo.
 
