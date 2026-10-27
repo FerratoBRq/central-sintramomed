@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.29 — 27/10/2026
+- Relatório mensal: afastados e desligados entram só no mês da data do término (S-2399) ou do início do afastamento (S-2230) no Sistema eSocial, como a admissão (data do cadastro) e o periódico (data do exame). Deixa de usar a data de envio e a data em que o Central percebeu a mudança.
+
 ## 0.1.28 — 27/10/2026
 - Relatório mensal: abre parado em "Mês/Ano", sem escolher um mês sozinho; o relatório aparece depois que o mês é selecionado.
 
