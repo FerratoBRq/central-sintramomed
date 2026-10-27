@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.20 — 27/10/2026
+- O Central cria a própria pasta (Documentos\Central Sintramomed, ou a escolhida/compartilhada) com "ASOs para lançar", "ASOs lançados" e "Documentos", e mostra onde salvar os ASOs baixados do WhatsApp (botão Abrir a pasta).
+- Botão Anexar ASOs no Painel e na tela ASOs recebidos: os arquivos vão para a pasta e são lidos na hora (texto ou OCR), com o trabalhador achado pelo CPF.
+- Lançar em lote no Sistema eSocial os ASOs prontos (trabalhador, clínica, data e validade lidos, sem INAPTO), com uma confirmação; os demais, Conferir e lançar.
+- Depois de lançado, o ASO é anexado à ficha, o arquivo vai para "ASOs lançados" e uma cópia fica em Documentos\NOME - CPF.
+- Retroalimentação: todo anexo da ficha também fica na pasta do trabalhador, e um arquivo colocado à mão nessa pasta entra como anexo (tipo pelo nome: ASO, RG, CPF, CNH, NR-35...). Anexo removido no programa vai para Documentos\_removidos.
+- Deixa de vigiar a pasta Downloads (substituído pela pasta do Central).
+
 ## 0.1.19 — 27/10/2026
 - Nova tela ASOs recebidos: o Central olha a cada minuto a pasta onde o WhatsApp para computador salva os arquivos (normalmente Downloads), lê os PDFs dos últimos 30 dias, reconhece os ASOs (texto ou OCR quando o nome tem "ASO"), acha o trabalhador pelo CPF e deixa na fila com exame, data, resultado e liberações para altura e espaço confinado.
 - Conferir e lançar abre a tela de lançamento já com o arquivo; ao confirmar, lança no Sistema eSocial (exame, clínica, data, validade, registro anterior inativo), guarda o PDF na ficha e atualiza as liberações.

@@ -109,41 +109,88 @@ pub fn salvar_download(app: tauri::AppHandle, nome: String, bytes: Vec<u8>) -> R
     Ok(destino.to_string_lossy().to_string())
 }
 
-/// Pasta Downloads do Windows (onde o WhatsApp para computador salva os arquivos).
+/// Pasta de trabalho do Central: a escolhida (ex.: a pasta compartilhada) ou Documentos\Central Sintramomed.
+/// Cria as subpastas "ASOs para lançar", "ASOs lançados" e "Documentos" e devolve o caminho.
 #[tauri::command]
-pub fn pasta_downloads(app: tauri::AppHandle) -> Result<String, String> {
+pub fn central_pasta(app: tauri::AppHandle, base: String) -> Result<String, String> {
     use tauri::Manager;
-    app.path().download_dir().map(|p| p.to_string_lossy().to_string()).map_err(|e| e.to_string())
-}
-
-fn nome_pdf(nome: &str) -> bool {
-    nome.len() <= 200 && nome.to_lowercase().ends_with(".pdf") && !nome.contains("..") && !nome.contains('/') && !nome.contains('\\') && !nome.contains(':')
-}
-
-/// PDFs da pasta (sem subpastas) alterados nos últimos `dias`: (nome, tamanho, modificado em ms).
-#[tauri::command]
-pub fn pdfs_listar(pasta: String, dias: u64) -> Result<Vec<(String, u64, u64)>, String> {
-    let dir = raiz(&pasta)?;
-    let limite = std::time::SystemTime::now() - std::time::Duration::from_secs(dias * 86_400);
-    let mut out = vec![];
-    for e in std::fs::read_dir(&dir).map_err(|e| format!("Não foi possível ler a pasta: {e}"))?.flatten() {
-        let nome = e.file_name().to_string_lossy().to_string();
-        let Ok(md) = e.metadata() else { continue };
-        if !md.is_file() || !nome_pdf(&nome) { continue; }
-        let Ok(m) = md.modified() else { continue };
-        if m < limite { continue; }
-        let ms = m.duration_since(std::time::UNIX_EPOCH).map(|d| d.as_millis() as u64).unwrap_or(0);
-        out.push((nome, md.len(), ms));
+    let b = if base.trim().is_empty() {
+        app.path().document_dir().map_err(|e| format!("Pasta Documentos não encontrada: {e}"))?.join("Central Sintramomed")
+    } else {
+        let p = PathBuf::from(base.trim());
+        if !p.is_absolute() { return Err("Informe o caminho completo da pasta.".into()); }
+        p
+    };
+    for s in ["ASOs para lançar", "ASOs lançados", "Documentos"] {
+        std::fs::create_dir_all(b.join(s)).map_err(|e| format!("Não foi possível criar a pasta {s}: {e}"))?;
     }
+    Ok(b.to_string_lossy().to_string())
+}
+
+/// Caminho relativo seguro dentro da pasta do Central ("Documentos/NOME - CPF/ASO.pdf").
+fn rel_seguro(base: &str, rel: &str) -> Result<PathBuf, String> {
+    let b = raiz(base)?;
+    let partes: Vec<&str> = rel.split('/').collect();
+    let ok = !rel.is_empty() && rel.len() <= 400 && partes.len() <= 4
+        && partes.iter().all(|p| !p.is_empty() && *p != "." && *p != ".." && !p.chars().any(|c| "\\:<>\"|?*".contains(c) || c.is_control()));
+    if !ok { return Err("Caminho de arquivo inválido.".into()); }
+    Ok(partes.iter().fold(b, |acc, p| acc.join(p)))
+}
+
+/// Se o arquivo já existir, usa "nome (2).pdf", "nome (3).pdf"...
+fn nome_livre(base: &str, rel: &str) -> Result<(PathBuf, String), String> {
+    let mut p = rel_seguro(base, rel)?;
+    let mut r = rel.to_string();
+    let (a, ext) = match rel.rfind('.') { Some(i) if i > rel.rfind('/').unwrap_or(0) => (&rel[..i], &rel[i..]), _ => (rel, "") };
+    let mut n = 2;
+    while p.exists() { r = format!("{a} ({n}){ext}"); p = rel_seguro(base, &r)?; n += 1; }
+    Ok((p, r))
+}
+
+/// Arquivos dentro de uma subpasta (até 2 níveis): (caminho relativo com "/", tamanho, modificado em ms).
+#[tauri::command]
+pub fn arq_listar(base: String, sub: String) -> Result<Vec<(String, u64, u64)>, String> {
+    let dir = rel_seguro(&base, &sub)?;
+    let mut out = vec![];
+    fn andar(d: &std::path::Path, rel: &str, nivel: u8, out: &mut Vec<(String, u64, u64)>) {
+        let Ok(rd) = std::fs::read_dir(d) else { return };
+        for e in rd.flatten() {
+            let nome = e.file_name().to_string_lossy().to_string();
+            if nome.starts_with('.') || nome.starts_with('~') || nome.ends_with(".tmp") { continue; }
+            let r = format!("{rel}/{nome}");
+            let Ok(md) = e.metadata() else { continue };
+            if md.is_dir() { if nivel < 2 { andar(&e.path(), &r, nivel + 1, out); } continue; }
+            let ms = md.modified().ok().and_then(|m| m.duration_since(std::time::UNIX_EPOCH).ok()).map(|d| d.as_millis() as u64).unwrap_or(0);
+            out.push((r, md.len(), ms));
+        }
+    }
+    andar(&dir, &sub, 1, &mut out);
     Ok(out)
 }
 
-/// Conteúdo de um PDF da pasta (até 25 MB), entregue como ArrayBuffer.
+/// Conteúdo de um arquivo (até 25 MB), entregue como ArrayBuffer.
 #[tauri::command]
-pub fn pdf_ler(pasta: String, nome: String) -> Result<tauri::ipc::Response, String> {
-    if !nome_pdf(&nome) { return Err("Nome de arquivo inválido.".into()); }
-    let p = raiz(&pasta)?.join(&nome);
+pub fn arq_ler(base: String, rel: String) -> Result<tauri::ipc::Response, String> {
+    let p = rel_seguro(&base, &rel)?;
     let md = std::fs::metadata(&p).map_err(|e| format!("Arquivo não encontrado: {e}"))?;
     if md.len() > 25 * 1024 * 1024 { return Err("Arquivo grande demais (mais de 25 MB).".into()); }
     std::fs::read(&p).map(tauri::ipc::Response::new).map_err(|e| format!("Não foi possível ler o arquivo: {e}"))
+}
+
+/// Grava um arquivo (cria as pastas). Não sobrescreve: se o nome existir, devolve o nome livre usado.
+#[tauri::command]
+pub fn arq_gravar(base: String, rel: String, bytes: Vec<u8>) -> Result<String, String> {
+    let (p, r) = nome_livre(&base, &rel)?;
+    gravar_seguro(p, &bytes)?;
+    Ok(r)
+}
+
+/// Move um arquivo dentro da pasta do Central (ex.: de "ASOs para lançar" para "ASOs lançados").
+#[tauri::command]
+pub fn arq_mover(base: String, de: String, para: String) -> Result<String, String> {
+    let o = rel_seguro(&base, &de)?;
+    let (d, r) = nome_livre(&base, &para)?;
+    if let Some(pai) = d.parent() { std::fs::create_dir_all(pai).map_err(|e| e.to_string())?; }
+    std::fs::rename(&o, &d).map_err(|e| format!("Não foi possível mover o arquivo: {e}"))?;
+    Ok(r)
 }

@@ -272,7 +272,7 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
       <button data-v="feedback"><span data-ico="idea"></span>Feedback</button>
     </nav>
     <div class="side-foot">
-      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.19</b></span><span id="runtime">modo navegador</span></div>
+      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.20</b></span><span id="runtime">modo navegador</span></div>
       <span id="syncInfo"></span>
       <span id="updInfo">Verificando atualizações…</span>
       <button class="link" id="btnUpdate" type="button">Verificar agora</button>
@@ -286,7 +286,7 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
 
 <script>
 "use strict";
-const APP_VERSION="0.1.19";
+const APP_VERSION="0.1.20";
 /* ---------- utilidades ---------- */
 const $=(s,r=document)=>r.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -338,7 +338,7 @@ const Store={db:null,mem:{workers:new Map(),docs:new Map(),lists:new Map(),inter
   async all(s){if(!this.db)return[...this.mem[s].values()];try{return await new Promise((res,rej)=>{const q=this.db.transaction(s).objectStore(s).getAll();q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error)})}catch(e){return[...this.mem[s].values()]}},
   // local=true: gravação que veio do Sistema eSocial ou de outro computador (não vai para o diário compartilhado).
   async put(s,o,local){this.mem[s].set(o.id,o);if(!local)registrar(s,o,false);if(!this.db)return;try{await new Promise((res,rej)=>{const t=this.db.transaction(s,"readwrite");t.objectStore(s).put(o);t.oncomplete=res;t.onerror=()=>rej(t.error)})}catch(e){}},
-  async del(s,id,local){if(!local){const o=(S[s]||[]).find(x=>x.id===id)||this.mem[s].get(id);if(o)registrar(s,o,true)}this.mem[s].delete(id);if(!this.db)return;try{await new Promise((res,rej)=>{const t=this.db.transaction(s,"readwrite");t.objectStore(s).delete(id);t.oncomplete=res;t.onerror=()=>rej(t.error)})}catch(e){}}
+  async del(s,id,local){if(!local){const o=(S[s]||[]).find(x=>x.id===id)||this.mem[s].get(id);if(o){registrar(s,o,true);if(s==="docs")docArquivoRemovido(o)}}this.mem[s].delete(id);if(!this.db)return;try{await new Promise((res,rej)=>{const t=this.db.transaction(s,"readwrite");t.objectStore(s).delete(id);t.oncomplete=res;t.onerror=()=>rej(t.error)})}catch(e){}}
 };
 const S={workers:[],docs:[],lists:[],interviews:[]};
 async function loadAll(){for(const k of Object.keys(S))S[k]=await Store.all(k)}
@@ -421,7 +421,7 @@ const ATALHOS=[
   {id:"escavador",n:"Escavador",d:"Pesquisa de processos por nome",u:"https://www.escavador.com/",t:"pesquisa"},
   {id:"semaforo",n:"Semáforo eSocial",d:"Status dos web services do governo",u:"https://www.gov.br/esocial/pt-br/acesso-ao-sistema/semaforo",t:"governo",semLogin:true}
 ];
-const NOVIDADES=["ASOs recebidos: os PDFs do WhatsApp são lidos sozinhos da pasta Downloads, com o trabalhador achado pelo CPF, para conferir e lançar no Sistema eSocial","Relatório mensal de admissão, periódico e desligamentos no modelo do RH, gerado em Excel; periódicos e empresa da produção lidos do Sistema eSocial","Pendências: clique em ASO, NR-35, NR-33 e outros itens para filtrar; Críticas e Atenção mostram a quantidade","Pendências não cobram mais anexos faltando (DOC)","Atalho no painel para o Forms de consulta e inclusão da Coamo","Estoque de uniformes: camisas, calças e botinas por tamanho, vale ao colaborador, uniforme da safra (1 calça e 1 camisa) e termo de entrega","Pasta compartilhada na engrenagem: fichas, anexos, listas, entrevistas, modelos, feedback e estoque iguais em todos os computadores","S-2240 deixa de ser cobrado nas pendências (não se aplica à categoria)","A saudação usa o nome do login do Sistema eSocial de quem está usando o programa","Modelos para impressão: botão + para adicionar seus PDFs e opção de remover modelos","Corrige janelas (Importar, Lançar ASO, ficha) que ficavam atrás do fundo desfocado","Visual novo, no estilo Apple","Tela de Feedback: registre sugestões e problemas, envie ao GitHub e acompanhe o que foi implementado","Modelos para impressão abrem dentro do programa","Atualização reabre o programa sozinha","Liberação do ASO para altura e espaço confinado: sem liberação, NR-35/NR-33 não são cobradas","Lançar ASO e NR no Sistema eSocial a partir do documento anexado (lê datas e tipo)","Editar o endereço direto no Sistema eSocial","Emitir ficha de cadastro do trabalhador para imprimir","Data e hora no rodapé","Atualização sozinha pelo GitHub, sem chave: baixa, instala e reabre o programa","Trabalhadores aparecem durante a primeira importação (gravação em lotes de 25)","Corrige acentos quebrados no programa instalado","Impede abrir duas janelas do programa ao mesmo tempo","Importação automática: o programa entra sozinho no Sistema eSocial e atualiza os trabalhadores a cada 5 minutos","Senha do Sistema eSocial guardada no Windows, pedida uma única vez","Importação completa do Sistema eSocial: status, última produção, ASO, NR-33/35, EPI, documentos e endereço","Novos status: afastado e inativo no sistema","Cofre de acessos simplificado: só Sistema eSocial e Escavador","Verificação automática de atualizações a cada 5 minutos","Nova interface: tema claro e escuro, barra lateral com ícones, atalhos e indicadores redesenhados","Engrenagem de configurações com cofre de acessos (login e senha) protegido por PIN","Botões Copiar usuário e Copiar senha nos atalhos do painel","Atalho do Escavador no painel","Verificação de antecedentes na ficha e na entrevista"];
+const NOVIDADES=["Pasta do Central: ASOs colocados em \"ASOs para lançar\" são lidos e lançados (um a um ou em lote, com confirmação); todo anexo fica também em Documentos\\NOME - CPF e o que for posto lá entra na ficha","ASOs recebidos: os PDFs do WhatsApp são lidos sozinhos da pasta Downloads, com o trabalhador achado pelo CPF, para conferir e lançar no Sistema eSocial","Relatório mensal de admissão, periódico e desligamentos no modelo do RH, gerado em Excel; periódicos e empresa da produção lidos do Sistema eSocial","Pendências: clique em ASO, NR-35, NR-33 e outros itens para filtrar; Críticas e Atenção mostram a quantidade","Pendências não cobram mais anexos faltando (DOC)","Atalho no painel para o Forms de consulta e inclusão da Coamo","Estoque de uniformes: camisas, calças e botinas por tamanho, vale ao colaborador, uniforme da safra (1 calça e 1 camisa) e termo de entrega","Pasta compartilhada na engrenagem: fichas, anexos, listas, entrevistas, modelos, feedback e estoque iguais em todos os computadores","S-2240 deixa de ser cobrado nas pendências (não se aplica à categoria)","A saudação usa o nome do login do Sistema eSocial de quem está usando o programa","Modelos para impressão: botão + para adicionar seus PDFs e opção de remover modelos","Corrige janelas (Importar, Lançar ASO, ficha) que ficavam atrás do fundo desfocado","Visual novo, no estilo Apple","Tela de Feedback: registre sugestões e problemas, envie ao GitHub e acompanhe o que foi implementado","Modelos para impressão abrem dentro do programa","Atualização reabre o programa sozinha","Liberação do ASO para altura e espaço confinado: sem liberação, NR-35/NR-33 não são cobradas","Lançar ASO e NR no Sistema eSocial a partir do documento anexado (lê datas e tipo)","Editar o endereço direto no Sistema eSocial","Emitir ficha de cadastro do trabalhador para imprimir","Data e hora no rodapé","Atualização sozinha pelo GitHub, sem chave: baixa, instala e reabre o programa","Trabalhadores aparecem durante a primeira importação (gravação em lotes de 25)","Corrige acentos quebrados no programa instalado","Impede abrir duas janelas do programa ao mesmo tempo","Importação automática: o programa entra sozinho no Sistema eSocial e atualiza os trabalhadores a cada 5 minutos","Senha do Sistema eSocial guardada no Windows, pedida uma única vez","Importação completa do Sistema eSocial: status, última produção, ASO, NR-33/35, EPI, documentos e endereço","Novos status: afastado e inativo no sistema","Cofre de acessos simplificado: só Sistema eSocial e Escavador","Verificação automática de atualizações a cada 5 minutos","Nova interface: tema claro e escuro, barra lateral com ícones, atalhos e indicadores redesenhados","Engrenagem de configurações com cofre de acessos (login e senha) protegido por PIN","Botões Copiar usuário e Copiar senha nos atalhos do painel","Atalho do Escavador no painel","Verificação de antecedentes na ficha e na entrevista"];
 
 /* ---------- cofre de acessos: AES-GCM com chave derivada do PIN (PBKDF2). A chave fica só na memória; recarregar a página tranca. ---------- */
 const b64e=u=>btoa(String.fromCharCode(...u));const b64d=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
@@ -493,7 +493,7 @@ function vPainel(){
   const mes=ym(TODAY);const novos=S.workers.filter(w=>(w.dtCadastro||"").startsWith(mes));
   $("#view").innerHTML=`
   <div class="head"><div><div class="eyebrow">${esc(TODAY.toLocaleDateString("pt-BR",{weekday:"long",day:"numeric",month:"long"}))}</div><h1>${saudacao()}${nomeUsuario()?", "+esc(nomeUsuario()):""}</h1><p>Veja o que precisa de atenção hoje e acesse os sistemas das tomadoras.</p></div>
-  <button class="btn primary" id="novoTrab">${ico("plus",16)} Novo trabalhador</button></div>
+  <div class="toolbar"><button class="btn" id="anexAsos">${ico("upload",16)} Anexar ASOs${asoPendentes()?` <span class="count">${asoPendentes()}</span>`:""}</button><button class="btn primary" id="novoTrab">${ico("plus",16)} Novo trabalhador</button></div></div>
   ${IS_TAURI&&Sync.cfg&&!Sync.cfg.configurado?`<div class="banner" style="background:var(--accent-soft)"><span><b>Conecte o Sistema eSocial uma vez.</b> Depois disso os trabalhadores entram e se atualizam sozinhos a cada 5 minutos.</span><button class="btn sm primary" id="bnCx">Conectar agora</button></div>`:exBanner()}
   <div class="tiles">
     <button class="tile" data-go="trabalhadores"><span class="ic">${ico("users",22)}</span><span class="n">${ativos.length}</span><span class="l">Trabalhadores ativos</span></button>
@@ -516,6 +516,7 @@ function vPainel(){
   bindBanner();bindSc();const bx=$("#bnCx");if(bx)bx.onclick=openConfig;
   const ov=$("#okVer");if(ov)ov.onclick=()=>{LS.set("cs_ver_visto",APP_VERSION);vPainel()};
   const us=$("#unlockSc")||$("#setupSc");if(us)us.onclick=openConfig;
+  $("#anexAsos").onclick=()=>{go("asos");setTimeout(()=>{const f=$("#aFiles");if(f)f.click()},50)};
   $("#novoTrab").onclick=()=>openWorker(null);
   document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>go(b.dataset.go));
   document.querySelectorAll("[data-w]").forEach(a=>a.onclick=e=>{e.preventDefault();openWorker(a.dataset.w)});
@@ -1299,6 +1300,12 @@ let _tess=null;
 async function ocr(src){
   if(!window.Tesseract)await new Promise((ok,err)=>{const s=document.createElement("script");s.src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js";s.onload=ok;s.onerror=()=>err(new Error("Não foi possível carregar o leitor de imagens. Confira a internet."));document.head.appendChild(s)});
   _tess=_tess||await Tesseract.createWorker("por");const r=await _tess.recognize(src);return r.data.text||""}
+// ASO ou NR conferido: atualiza a ficha e anexa o documento (que também vai para a pasta do trabalhador).
+async function registrarNoCentral(alvo,y,arquivo){const wk=S.workers.find(z=>z.id===alvo.id);if(!wk)return;
+      if(y.tipo==="aso"){Object.assign(wk,{asoData:y.data,asoValidade:y.validade,asoAltura:!!y.altura,asoConfinado:!!y.confinado,exige35:!!y.altura,exige33:!!y.confinado})}
+      else if(y.nr==="NR 35")Object.assign(wk,{nr35Data:y.data,nr35Validade:y.validade});else if(y.nr==="NR 33")Object.assign(wk,{nr33Data:y.data,nr33Validade:y.validade});
+      await Store.put("workers",wk);
+      if(arquivo)await saveDoc(wk.id,y.tipo==="aso"?"ASO":(y.nr==="NR 35"?"NR-35":y.nr==="NR 33"?"NR-33":"Outro"),arquivo.name,arquivo,arquivo.type)}
 function abrirLancamento(w0,aoTerminar,arquivoInicial){let w=w0;
   const m=document.createElement("div");m.className="modal";
   m.innerHTML=`<div class="scrim"></div><div class="modal-c" role="dialog" aria-modal="true" aria-labelledby="lh"><div class="drawer-h"><div><div class="eyebrow" id="lWho">${esc(w?w.nome:"Trabalhador identificado pelo CPF do documento")}</div><h2 id="lh" style="font-size:20px">Lançar ASO ou NR no Sistema eSocial</h2></div><button class="btn" id="lClose">Fechar</button></div>
@@ -1334,13 +1341,8 @@ function abrirLancamento(w0,aoTerminar,arquivoInicial){let w=w0;
     if(outro){$("#lGo").disabled=true;$("#lGo").textContent="CPF do documento não confere"}
     const lerForm=()=>({tipo:$("#lTipo").value,exameCod:$("#lEx").value,nr:$("#lNr").value,empresa:$("#lEmp").value,data:$("#lData").value,validade:$("#lVal").value,inativarAnterior:$("#lInat").checked,
       altura:$("#lAlt")?$("#lAlt").checked:undefined,confinado:$("#lConf")?$("#lConf").checked:undefined});
-    const registrarNoCentral=async(alvo,y)=>{const wk=S.workers.find(z=>z.id===alvo.id);if(!wk)return;
-      if(y.tipo==="aso"){Object.assign(wk,{asoData:y.data,asoValidade:y.validade,asoAltura:!!y.altura,asoConfinado:!!y.confinado,exige35:!!y.altura,exige33:!!y.confinado})}
-      else if(y.nr==="NR 35")Object.assign(wk,{nr35Data:y.data,nr35Validade:y.validade});else if(y.nr==="NR 33")Object.assign(wk,{nr33Data:y.data,nr33Validade:y.validade});
-      await Store.put("workers",wk);
-      if(arquivo)await saveDoc(wk.id,y.tipo==="aso"?"ASO":(y.nr==="NR 35"?"NR-35":y.nr==="NR 33"?"NR-33":"Outro"),arquivo.name,arquivo,arquivo.type)};
     $("#lLocal").onclick=async()=>{const y=lerForm();if(!w){toast("Escolha o trabalhador");return}if(!y.data||!y.validade){toast("Informe a data de realização e a validade");return}
-      if(outro)return;await registrarNoCentral(w,y);close();toast("Registrado no Central (sem lançar no Sistema eSocial)");aoTerminar&&aoTerminar("local")};
+      if(outro)return;await registrarNoCentral(w,y,arquivo);close();toast("Registrado no Central (sem lançar no Sistema eSocial)");aoTerminar&&aoTerminar("local")};
     $("#lGo").onclick=async()=>{const b=$("#lGo");
       const y=lerForm();
       if(!w){toast("Escolha o trabalhador");return}
@@ -1348,7 +1350,7 @@ function abrirLancamento(w0,aoTerminar,arquivoInicial){let w=w0;
       if(y.validade<=y.data){toast("A validade precisa ser depois da data de realização");return}
       if(!b.dataset.armed){b.dataset.armed="1";b.textContent=`Confirmar: lançar ${y.tipo==="aso"?"ASO":y.nr} de ${br(y.data)} para ${w.nome.split(" ")[0]}`;return}
       b.disabled=true;b.textContent="Lançando…";
-      try{const r=await lancarNoSistema(w,y);await registrarNoCentral(w,y);
+      try{const r=await lancarNoSistema(w,y);await registrarNoCentral(w,y,arquivo);
         close();toast(`Lançado no Sistema eSocial${r.inativados?` · ${r.inativados} anterior(es) marcado(s) como inativo`:""}`);aoTerminar&&aoTerminar()}
       catch(e){toast(String(e&&e.message||e));b.disabled=false;b.textContent="Lançar no Sistema eSocial";delete b.dataset.armed}}};
   const ler=async f=>{arquivo=f;if(!arquivo)return;$("#lRes").innerHTML=`<div class="empty">Lendo o documento…</div>`;
@@ -1631,93 +1633,129 @@ function uniformesHTML(w){
   return `<div class="list">${ms.slice(0,12).map(m=>`<div class="row"><span>${br(m.q.slice(0,10))} · ${esc(prod(m.prod).nome)} ${esc(m.tam)} × ${Math.abs(m.qtd)}</span><span class="small muted">${esc(MOTIVOS[m.motivo])}${m.motivo==="safra"?" · "+esc(m.safra):""}${m.valor?" · "+brl(m.valor)+(descontado(m.id)?" (descontado)":""):""}</span></div>`).join("")}</div>
    ${aberto?`<div class="note">Vales a descontar: <b>${brl(aberto)}</b></div>`:""}`}
 
-/* ---------- ASOs RECEBIDOS (WhatsApp) ----------
-   A clínica manda o ASO em PDF pelo WhatsApp. No WhatsApp para computador, ao baixar, o arquivo vai
-   para a pasta Downloads (ou outra escolhida). O Central olha essa pasta a cada minuto, lê os PDFs novos,
-   reconhece os ASOs, acha o trabalhador pelo CPF e deixa na fila para conferir e lançar no Sistema eSocial
-   (mesma tela de "Lançar ASO ou NR", com confirmação). Também aceita arrastar os PDFs para a tela. */
-const AsoIn={rodando:false,erro:"",ultima:""};
-const asoPasta=()=>IS_TAURI?(LS.get("cs_aso_pasta")||""):"";
-const asoFila=()=>{try{return JSON.parse(LS.get("cs_aso_fila")||"[]")}catch(e){return[]}};
+/* ---------- PASTA DO CENTRAL, ASOs RECEBIDOS E DOCUMENTOS ----------
+   O programa cria a própria pasta (Documentos\Central Sintramomed, ou a escolhida) com:
+   - "ASOs para lançar": onde se colocam os ASOs baixados do WhatsApp (ou anexados pelo programa);
+   - "ASOs lançados": para onde o arquivo vai depois de lançado;
+   - "Documentos/NOME - CPF": todo anexo do trabalhador vira arquivo aqui, e o arquivo posto aqui à mão
+     vira anexo na ficha (retroalimentação). Lançar no Sistema eSocial continua exigindo confirmação. */
+const ENTRADA="ASOs para lançar",LANCADOS="ASOs lançados",DOCS="Documentos";
+const Pasta={base:"",erro:"",rodando:false,ultima:""};
+async function centralPasta(){if(!IS_TAURI)return "";
+  try{Pasta.base=await tinvoke("central_pasta",{base:LS.get("cs_central_base")||""});Pasta.erro=""}catch(e){Pasta.base="";Pasta.erro=String(e)}return Pasta.base}
+const nomeArq=s=>String(s||"").replace(/[\\/:*?"<>|\x00-\x1f]/g," ").replace(/\s+/g," ").trim().slice(0,80);
+const pastaDoTrab=w=>`${DOCS}/${nomeArq(w.nome)} - ${w.cpf||w.id}`;
+const extDe=(nome,mime)=>(String(nome).match(/\.[a-z0-9]{2,5}$/i)||[""])[0].toLowerCase()||(/pdf/.test(mime)?".pdf":/png/.test(mime)?".png":/jpe?g/.test(mime)?".jpg":"");
+const mimeDe=n=>/\.pdf$/i.test(n)?"application/pdf":/\.png$/i.test(n)?"image/png":/\.jpe?g$/i.test(n)?"image/jpeg":"application/octet-stream";
+const tipoPorNome=n=>/\baso\b|atestado/i.test(n)?"ASO":/nr.?35/i.test(n)?"NR-35":/nr.?33/i.test(n)?"NR-33":/\bcnh\b/i.test(n)?"CNH":/ctps|carteira de trabalho/i.test(n)?"CTPS":/\brg\b|identidade/i.test(n)?"RG":/\bcpf\b/i.test(n)?"CPF":/epi/i.test(n)?"Ficha de EPI":/entrevista|triagem/i.test(n)?"Ficha de entrevista":/resid/i.test(n)?"Comprovante de residência":/ficha|cadastro/i.test(n)?"Ficha de cadastro":"Outro";
+const bytesDe=async b=>[...new Uint8Array(await b.arrayBuffer())];
+const jLS=(k,d)=>{try{return JSON.parse(LS.get(k)||"")||d}catch(e){return d}};
+const asoFila=()=>jLS("cs_aso_fila",[]);
 const asoFilaSalvar=l=>LS.set("cs_aso_fila",JSON.stringify(l.slice(-300)));
-const asoVistos=()=>{try{return JSON.parse(LS.get("cs_aso_vistos")||"{}")}catch(e){return{}}};
 const asoPendentes=()=>asoFila().filter(x=>x.status==="novo").length;
 function asoBadge(){const el=$("#navAso");if(!el)return;const n=asoPendentes();el.hidden=!n;el.textContent=n}
-// Lê um arquivo e, se for ASO, coloca na fila. Retorna true se entrou na fila.
-async function asoAnalisar(file,origem,chave,forcar){
-  let txt="";try{txt=await textoDoArquivo(file,()=>{})}catch(e){txt=""}
-  const x=lerDocumentoTexto(txt);
-  // Arquivo escolhido à mão: entra na fila se parecer ASO, se tiver "ASO" no nome ou se for digitalizado sem texto (preenche-se ao conferir).
-  if(x.tipo!=="aso"&&!(forcar&&(/aso/i.test(file.name)||txt.replace(/\s/g,"").length<40)))return false;
-  if(x.tipo!=="aso")x.tipo="aso";
+const asoTrab=it=>S.workers.find(z=>z.id===it.wid)||S.workers.find(z=>it.wcpf&&z.cpf===it.wcpf)||null;
+// Lê o arquivo e coloca na fila (tudo que chega pela pasta ou pelo botão é tratado como ASO; o que não for se ignora na tela).
+async function asoAnalisar(file,chave,extra){
+  let txt="";try{txt=await textoDoArquivo(file,()=>{})}catch(e){}
+  const x=lerDocumentoTexto(txt);x.tipo="aso";
   const w=x.cpf?S.workers.find(z=>z.cpf===x.cpf):S.workers.find(z=>x.nome&&normNome(z.nome)===normNome(x.nome));
   const l=asoFila().filter(y=>y.chave!==chave);
-  l.push({chave,arquivo:file.name,origem,recebido:new Date().toISOString(),status:"novo",x,wid:w?w.id:"",wcpf:w?w.cpf:""});asoFilaSalvar(l);return true}
+  l.push({chave,arquivo:file.name,recebido:new Date().toISOString(),status:"novo",x,wid:w?w.id:"",wcpf:w?w.cpf:"",...extra});asoFilaSalvar(l)}
 async function asoVerificarPasta(manual){
-  const pasta=asoPasta();if(!pasta||AsoIn.rodando)return;AsoIn.rodando=true;let novos=0;
-  try{const vistos=asoVistos();const arqs=await tinvoke("pdfs_listar",{pasta,dias:30});AsoIn.erro="";
-    for(const[nome,tam,ms]of arqs.sort((a,b)=>a[2]-b[2])){const chave=`${nome}|${tam}|${ms}`;if(vistos[chave])continue;
-      try{const buf=await tinvoke("pdf_ler",{pasta,nome});
-        // ponytail: OCR só em PDF digitalizado com "ASO" no nome, para não ler a imagem de todo PDF da pasta.
-        const f=new File([buf],nome,{type:"application/pdf"});
-        const ehAso=/aso/i.test(nome)?await asoAnalisar(f,"pasta",chave):await asoAnalisarSemOcr(f,chave);
-        if(ehAso)novos++;vistos[chave]=ehAso?"aso":"outro"}
-      catch(e){vistos[chave]="erro"}
+  if(!Pasta.base||Pasta.rodando)return;Pasta.rodando=true;let novos=0;
+  try{const vistos=jLS("cs_aso_vistos",{});const arqs=await tinvoke("arq_listar",{base:Pasta.base,sub:ENTRADA});
+    for(const[rel,tam,ms]of arqs.sort((a,b)=>a[2]-b[2])){if(!/\.(pdf|png|jpe?g)$/i.test(rel))continue;const chave=`${rel}|${tam}|${ms}`;if(vistos[chave])continue;
+      try{const buf=await tinvoke("arq_ler",{base:Pasta.base,rel});const nome=rel.split("/").pop();
+        await asoAnalisar(new File([buf],nome,{type:mimeDe(nome)}),chave,{rel});novos++;vistos[chave]=1}catch(e){vistos[chave]="erro"}
       LS.set("cs_aso_vistos",JSON.stringify(vistos))}
-    AsoIn.ultima=new Date().toISOString()}
-  catch(e){AsoIn.erro=String(e.message||e)}
-  finally{AsoIn.rodando=false}
-  asoBadge();if(novos){toast(`${novos} ASO${novos>1?"s":""} recebido${novos>1?"s":""} para conferir`);if(current==="asos"&&!document.querySelector(".modal"))vAsos()}
-  else if(manual)toast(AsoIn.erro||"Nenhum ASO novo na pasta")}
-async function asoAnalisarSemOcr(file,chave){
-  const pdf=await pdfjsLib.getDocument({data:new Uint8Array(await file.arrayBuffer())}).promise;let txt="";
-  for(let i=1;i<=Math.min(pdf.numPages,3);i++){const c=await (await pdf.getPage(i)).getTextContent();txt+=" "+c.items.map(it=>it.str).join(" ")}
-  if(!/A\.?S\.?O\.?\b|sa\S*de ocupacional/i.test(txt))return false;
-  return asoAnalisar(file,"pasta",chave)}
-async function asoArquivo(item){
-  if(item.origem==="pasta"){const buf=await tinvoke("pdf_ler",{pasta:asoPasta(),nome:item.arquivo});return new File([buf],item.arquivo,{type:"application/pdf"})}
-  const d=S.docs.find(z=>z.id===item.docId);return d?new File([d.blob],item.arquivo,{type:d.mime||"application/pdf"}):null}
+    Pasta.ultima=new Date().toISOString();Pasta.erro=""}
+  catch(e){Pasta.erro=String(e.message||e)}
+  finally{Pasta.rodando=false}
+  asoBadge();if(novos){toast(`${novos} ASO${novos>1?"s":""} para conferir`);if(current==="asos"&&!document.querySelector(".modal"))vAsos()}
+  else if(manual)toast(Pasta.erro||"Nenhum ASO novo na pasta")}
+async function asoArquivo(it){
+  if(it.rel){const buf=await tinvoke("arq_ler",{base:Pasta.base,rel:it.rel});return new File([buf],it.arquivo,{type:mimeDe(it.arquivo)})}
+  const d=S.docs.find(z=>z.id===it.docId);return d?new File([d.blob],it.arquivo,{type:d.mime||"application/pdf"}):null}
+// Depois de lançado (ou registrado/ignorado), o arquivo sai de "ASOs para lançar".
+async function asoConcluir(chave,status){
+  const l=asoFila(),it=l.find(y=>y.chave===chave);if(!it)return;it.status=status;it.feito=new Date().toISOString();
+  if(it.rel&&Pasta.base){try{it.rel=await tinvoke("arq_mover",{base:Pasta.base,de:it.rel,para:`${LANCADOS}/${status==="ignorado"?"ignorados/":""}${it.arquivo}`})}catch(e){}}
+  if(it.docId){await Store.del("docs",it.docId,true);S.docs=S.docs.filter(d=>d.id!==it.docId);delete it.docId}
+  asoFilaSalvar(l);asoBadge()}
+// Pronto para lançar em lote: trabalhador sincronizado, clínica, data e validade lidas, e não INAPTO.
+const asoPronto=it=>{const w=asoTrab(it),x=it.x||{};return !!(w&&w.origemId&&x.data&&x.validade>x.data&&(x.clinica||x.crm)&&x.resultado!=="INAPTO")};
+const asoDados=x=>({tipo:"aso",exameCod:x.exame==="ADMISSIONAL"?"1":"2",empresa:x.clinica||x.crm||"",data:x.data,validade:x.validade,inativarAnterior:true,altura:!!x.altura,confinado:!!x.confinado});
+/* Documentos: anexo do programa vira arquivo na pasta do trabalhador; arquivo posto lá vira anexo. */
+async function docsSincronizar(){
+  if(!Pasta.base)return;const base=Pasta.base,vistos=jLS("cs_docs_vistos",{});let entrou=0;
+  try{
+    const existentes=new Set((await tinvoke("arq_listar",{base,sub:DOCS})).map(a=>a[0]));
+    for(const d of S.docs){if(vistos["doc:"+d.id]||!d.blob)continue;const w=S.workers.find(x=>x.id===d.workerId);if(!w||w.exemplo)continue;
+      if(!(d.arquivo&&existentes.has(d.arquivo))){
+        const rel=`${pastaDoTrab(w)}/${nomeArq(d.tipo)} ${br(d.data||iso(TODAY)).replace(/\//g,"-")}${extDe(d.nome,d.mime)}`;
+        d.arquivo=await tinvoke("arq_gravar",{base,rel,bytes:await bytesDe(d.blob)});existentes.add(d.arquivo);await Store.put("docs",d,true)}
+      vistos["doc:"+d.id]=1;vistos[d.arquivo]=1}
+    const ref=new Set(S.docs.map(d=>d.arquivo).filter(Boolean));
+    for(const rel of existentes){if(ref.has(rel)||vistos[rel])continue;
+      const cpf=((rel.split("/")[1]||"").match(/(\d{11})\s*$/)||[])[1],w=cpf&&S.workers.find(x=>x.cpf===cpf);if(!w)continue;
+      const buf=await tinvoke("arq_ler",{base,rel}),nome=rel.split("/").pop(),mime=mimeDe(nome);
+      const d={id:uid(),workerId:w.id,tipo:tipoPorNome(nome),nome,blob:new Blob([buf],{type:mime}),mime,data:iso(TODAY),arquivo:rel};
+      await Store.put("docs",d);S.docs.push(d);vistos[rel]=1;vistos["doc:"+d.id]=1;entrou++}
+  }catch(e){Pasta.erro=String(e.message||e)}
+  LS.set("cs_docs_vistos",JSON.stringify(vistos));if(entrou){toast(`${entrou} documento${entrou>1?"s":""} da pasta anexado${entrou>1?"s":""} às fichas`);rerenderSeguro()}}
+// Anexo removido no programa: o arquivo vai para Documentos/_removidos (não volta como anexo).
+function docArquivoRemovido(d){if(IS_TAURI&&Pasta.base&&d&&d.arquivo)tinvoke("arq_mover",{base:Pasta.base,de:d.arquivo,para:`${DOCS}/_removidos/${d.arquivo.split("/").pop()}`}).catch(()=>{})}
+const abrirNaPasta=sub=>{const p=Pasta.base+"\\"+sub;try{window.__TAURI__.opener.revealItemInDir(p)}catch(e){toast(p)}};
 function vAsos(){
-  const l=asoFila().sort((a,b)=>b.recebido.localeCompare(a.recebido)),novos=l.filter(x=>x.status==="novo"),feitos=l.filter(x=>x.status!=="novo").slice(0,20);
-  const pasta=asoPasta();
-  const linha=it=>{const w=S.workers.find(z=>z.id===it.wid)||S.workers.find(z=>it.wcpf&&z.cpf===it.wcpf),x=it.x||{};
+  const l=asoFila().sort((a,b)=>b.recebido.localeCompare(a.recebido)),novos=l.filter(x=>x.status==="novo"),feitos=l.filter(x=>x.status!=="novo").slice(0,20),prontos=novos.filter(asoPronto);
+  const linha=it=>{const w=asoTrab(it),x=it.x||{};
     return `<tr><td><b>${w?esc(w.nome):esc(x.nome||"—")}</b><div class="small muted">${w?"CPF "+esc(fmtCPF(w.cpf)):x.cpf?`CPF ${esc(fmtCPF(x.cpf))} não encontrado no Central`:"CPF não lido no documento"}</div></td>
-     <td>${esc(x.exame?x.exame.toLowerCase():"—")}</td><td class="mono">${x.data?br(x.data):"—"}</td>
+     <td>${esc(x.exame?x.exame.toLowerCase():"—")}</td><td class="mono">${x.data?br(x.data):"—"}</td><td class="small">${esc(x.clinica||x.crm||"—")}</td>
      <td>${x.resultado?`<span class="pill ${x.resultado==="APTO"?"ok":"crit"}">${x.resultado}</span>`:"—"}${x.altura?` <span class="pill info">altura</span>`:""}${x.confinado?` <span class="pill info">confinado</span>`:""}</td>
-     <td class="small muted" style="max-width:220px;overflow-wrap:anywhere">${esc(it.arquivo)}</td>
-     <td>${it.status==="novo"?`<span class="toolbar" style="flex-wrap:nowrap"><button class="btn sm primary" data-alanc="${esc(it.chave)}">Conferir e lançar</button><button class="btn sm" data-aign="${esc(it.chave)}">Ignorar</button></span>`:`<span class="small muted">${it.status==="lancado"?"lançado":it.status==="registrado"?"só no Central":"ignorado"} em ${br((it.feito||"").slice(0,10))}</span>`}</td></tr>`};
-  $("#view").innerHTML=`<div class="head"><div><h1>ASOs recebidos</h1><p>ASOs em PDF que chegam pelo WhatsApp: o Central lê o documento, acha o trabalhador pelo CPF e você confere antes de lançar no Sistema eSocial.</p></div>
-    ${IS_TAURI&&pasta?`<div class="toolbar"><button class="btn" id="aVer">Verificar agora</button></div>`:""}</div>
-   <section class="panel"><div class="panel-h"><h2>Para conferir · ${novos.length}</h2></div>
-    <label class="drop" for="aFiles" id="aDrop" style="padding:18px"><span class="ic">${ico("upload",22)}</span><b>Arraste os PDFs do WhatsApp para cá</b><span class="muted small">ou clique para escolher · vários de uma vez</span></label><input type="file" id="aFiles" accept=".pdf,image/*" multiple hidden>
+     <td class="small muted" style="max-width:200px;overflow-wrap:anywhere">${esc(it.arquivo)}</td>
+     <td>${it.status==="novo"?`<span class="toolbar" style="flex-wrap:nowrap"><button class="btn sm primary" data-alanc="${esc(it.chave)}">Conferir e lançar</button><button class="btn sm" data-aign="${esc(it.chave)}">Não é ASO</button></span>`:`<span class="small muted">${it.status==="lancado"?"lançado no sistema":it.status==="registrado"?"só no Central":"ignorado"} em ${br((it.feito||"").slice(0,10))}</span>`}</td></tr>`};
+  const cab=`<thead><tr><th>Trabalhador</th><th>Exame</th><th>Data</th><th>Clínica</th><th>Resultado</th><th>Arquivo</th><th></th></tr></thead>`;
+  $("#view").innerHTML=`<div class="head"><div><h1>ASOs recebidos</h1><p>Os ASOs que chegam pelo WhatsApp: o Central lê, acha o trabalhador pelo CPF, lança no Sistema eSocial depois da sua confirmação e anexa na ficha.</p></div>
+    <div class="toolbar"><button class="btn primary" id="aAnexar">${ico("upload",16)} Anexar ASOs</button>${IS_TAURI&&Pasta.base?`<button class="btn" id="aVer">Verificar agora</button>`:""}</div></div>
+   ${IS_TAURI?(Pasta.base?`<div class="banner" style="background:var(--accent-soft)"><span><b>Coloque os ASOs baixados do WhatsApp nesta pasta:</b><br><span class="mono" style="overflow-wrap:anywhere">${esc(Pasta.base)}\\${ENTRADA}</span><br><span class="small">No WhatsApp para computador: clique com o botão direito no PDF › Salvar como › escolha a pasta acima. O Central lê a cada minuto.</span></span><button class="btn sm" id="aAbrir">Abrir a pasta</button></div>`
+     :`<div class="banner" style="background:var(--crit-soft)"><span>Não foi possível criar a pasta do Central: ${esc(Pasta.erro)}</span></div>`):`<div class="note">No programa instalado, o Central cria uma pasta para os ASOs e lê sozinho o que for colocado nela. Aqui no navegador, use Anexar ASOs.</div>`}
+   <input type="file" id="aFiles" accept=".pdf,image/*" multiple hidden>
+   <section class="panel" id="aDrop"><div class="panel-h"><h2>Para conferir · ${novos.length}</h2>${prontos.length?`<button class="btn primary" id="aLote">Lançar ${prontos.length} pronto${prontos.length>1?"s":""} no Sistema eSocial</button>`:""}</div>
     <div id="aMsg"></div>
-    ${novos.length?`<div class="tbl-wrap" style="box-shadow:none"><table><thead><tr><th>Trabalhador</th><th>Exame</th><th>Data</th><th>Resultado</th><th>Arquivo</th><th></th></tr></thead><tbody>${novos.map(linha).join("")}</tbody></table></div>`:`<div class="empty">Nenhum ASO esperando conferência.</div>`}
+    ${novos.length?`<div class="tbl-wrap" style="box-shadow:none"><table>${cab}<tbody>${novos.map(linha).join("")}</tbody></table></div>
+     <div class="note">Prontos são os ASOs com trabalhador encontrado, clínica, data e validade lidas e sem INAPTO. Os demais: Conferir e lançar, um a um. Também dá para arrastar os PDFs para este quadro.</div>`:`<div class="empty">Nenhum ASO esperando. Arraste os PDFs para cá ou use Anexar ASOs.</div>`}
    </section>
-   <section class="panel"><h2>Receber automaticamente do WhatsApp</h2>
-    ${IS_TAURI?`<div class="note">No WhatsApp para computador, clique no PDF do ASO para baixar: ele vai para a pasta abaixo (normalmente Downloads). O Central olha essa pasta a cada minuto e traz para cá só os ASOs dos últimos 30 dias. Os outros PDFs são ignorados e nada é apagado da pasta.</div>
-     <div class="form-grid" style="margin-top:10px"><div class="field span4"><label for="aPasta">Pasta onde o WhatsApp salva os arquivos</label><input id="aPasta" value="${esc(pasta)}" placeholder="Ex.: C:\\Users\\voce\\Downloads"></div></div>
-     <div class="toolbar"><button class="btn primary" id="aSalvar">${pasta?"Salvar pasta":"Ligar recebimento automático"}</button>${pasta?`<button class="btn" id="aDesl">Desligar</button>`:""}<span class="small muted">${pasta?(AsoIn.erro?`<span style="color:var(--crit)">${esc(AsoIn.erro)}</span>`:AsoIn.ultima?`Verificada às ${hhmm(new Date(AsoIn.ultima))}`:"Ligado"):"Desligado"}</span></div>`
-    :`<div class="note">No programa instalado, o Central olha sozinho a pasta onde o WhatsApp salva os PDFs. Aqui no navegador, arraste os arquivos para o quadro acima.</div>`}
-   </section>
-   ${feitos.length?`<section class="panel"><h2>Já tratados</h2><div class="tbl-wrap" style="box-shadow:none"><table><thead><tr><th>Trabalhador</th><th>Exame</th><th>Data</th><th>Resultado</th><th>Arquivo</th><th></th></tr></thead><tbody>${feitos.map(linha).join("")}</tbody></table></div></section>`:""}`;
-  const marcar=(chave,status)=>{const l2=asoFila();const it=l2.find(y=>y.chave===chave);if(it){it.status=status;it.feito=new Date().toISOString()}asoFilaSalvar(l2);asoBadge()};
-  const receber=async files=>{let n=0,out=0;$("#aMsg").innerHTML=`<div class="empty">Lendo ${files.length} arquivo${files.length>1?"s":""}…</div>`;
-    for(const f of files){const chave="arq|"+f.name+"|"+f.size+"|"+f.lastModified;
-      if(await asoAnalisar(f,"arquivo",chave,true)){const l2=asoFila(),it=l2.find(y=>y.chave===chave);const d=await saveDoc("__recebido","ASO",f.name,f,f.type||"application/pdf");it.docId=d.id;asoFilaSalvar(l2);n++}else out++}
-    asoBadge();vAsos();toast(`${n} ASO${n===1?"":"s"} na fila${out?` · ${out} arquivo${out>1?"s":""} não parece${out>1?"m":""} ASO`:""}`)};
+   ${feitos.length?`<section class="panel"><h2>Já tratados</h2><div class="tbl-wrap" style="box-shadow:none"><table>${cab}<tbody>${feitos.map(linha).join("")}</tbody></table></div></section>`:""}
+   ${IS_TAURI?`<section class="panel"><h2>Pasta do Central</h2><div class="note">Todo documento anexado ao trabalhador também fica em <b>${DOCS}\\NOME - CPF</b>. Um arquivo colocado à mão na pasta de um trabalhador entra como anexo na ficha dele. Para os dois computadores usarem a mesma pasta, escolha aqui uma pasta compartilhada (OneDrive, Google Drive ou rede).</div>
+     <div class="form-grid" style="margin-top:10px"><div class="field span4"><label for="aBase">Pasta do Central</label><input id="aBase" value="${esc(LS.get("cs_central_base")||"")}" placeholder="${esc(Pasta.base||"Documentos\\Central Sintramomed")}"></div></div>
+     <div class="toolbar"><button class="btn" id="aBaseSalvar">Usar esta pasta</button><button class="btn" id="aDocs">Abrir Documentos</button><span class="small muted">${Pasta.erro?`<span style="color:var(--crit)">${esc(Pasta.erro)}</span>`:Pasta.ultima?`Lida às ${hhmm(new Date(Pasta.ultima))}`:""}</span></div></section>`:""}`;
+  const receber=async files=>{if(!files.length)return;$("#aMsg").innerHTML=`<div class="empty">Lendo ${files.length} arquivo${files.length>1?"s":""}…</div>`;
+    for(const f of files){
+      if(IS_TAURI&&Pasta.base){await tinvoke("arq_gravar",{base:Pasta.base,rel:`${ENTRADA}/${nomeArq(f.name)}`,bytes:await bytesDe(f)});continue}
+      const chave="arq|"+f.name+"|"+f.size+"|"+f.lastModified;await asoAnalisar(f,chave,{});
+      const l2=asoFila(),it=l2.find(y=>y.chave===chave);const d=await saveDoc("__recebido","ASO",f.name,f,f.type||"application/pdf");it.docId=d.id;asoFilaSalvar(l2)}
+    if(IS_TAURI&&Pasta.base)await asoVerificarPasta(false);asoBadge();vAsos()};
+  $("#aAnexar").onclick=()=>$("#aFiles").click();
   $("#aFiles").onchange=e=>receber([...e.target.files]);
-  const dz=$("#aDrop");dz.ondragover=e=>{e.preventDefault();dz.classList.add("over")};dz.ondragleave=()=>dz.classList.remove("over");
-  dz.ondrop=e=>{e.preventDefault();dz.classList.remove("over");receber([...e.dataTransfer.files].filter(f=>/pdf$|^image\//i.test(f.type)||/\.pdf$/i.test(f.name)))};
-  document.querySelectorAll("[data-aign]").forEach(b=>b.onclick=()=>{marcar(b.dataset.aign,"ignorado");vAsos()});
+  const dz=$("#aDrop");dz.ondragover=e=>{e.preventDefault();dz.style.outline="2px dashed var(--accent)"};dz.ondragleave=()=>dz.style.outline="";
+  dz.ondrop=e=>{e.preventDefault();dz.style.outline="";receber([...e.dataTransfer.files].filter(f=>/\.(pdf|png|jpe?g)$/i.test(f.name)))};
+  document.querySelectorAll("[data-aign]").forEach(b=>b.onclick=async()=>{await asoConcluir(b.dataset.aign,"ignorado");vAsos()});
   document.querySelectorAll("[data-alanc]").forEach(b=>b.onclick=async()=>{const it=asoFila().find(y=>y.chave===b.dataset.alanc);let f;
     try{f=await asoArquivo(it)}catch(e){toast("Não encontrei o arquivo: "+(e.message||e));return}if(!f){toast("Arquivo não encontrado");return}
-    const w=S.workers.find(z=>z.id===it.wid)||S.workers.find(z=>it.wcpf&&z.cpf===it.wcpf)||null;
-    abrirLancamento(w,r=>{marcar(it.chave,r==="local"?"registrado":"lancado");if(it.docId){Store.del("docs",it.docId);S.docs=S.docs.filter(d=>d.id!==it.docId)}vAsos()},f)});
-  const sv=$("#aSalvar");if(sv)sv.onclick=async()=>{const p=$("#aPasta").value.trim();if(!p){toast("Informe a pasta");return}
-    try{await tinvoke("pdfs_listar",{pasta:p,dias:1})}catch(e){toast(String(e));return}LS.set("cs_aso_pasta",p);toast("Recebimento automático ligado");vAsos();asoVerificarPasta(true)};
-  const ds=$("#aDesl");if(ds)ds.onclick=()=>{LS.del("cs_aso_pasta");toast("Recebimento automático desligado");vAsos()};
-  const vr=$("#aVer");if(vr)vr.onclick=()=>asoVerificarPasta(true);
-  if(IS_TAURI&&!pasta&&!$("#aPasta").value)tinvoke("pasta_downloads").then(p=>{const i=$("#aPasta");if(i&&!i.value)i.value=p}).catch(()=>{});
+    abrirLancamento(asoTrab(it),async r=>{await asoConcluir(it.chave,r==="local"?"registrado":"lancado");await docsSincronizar();vAsos()},f)});
+  const lo=$("#aLote");if(lo)lo.onclick=async()=>{
+    if(!lo.dataset.armed){lo.dataset.armed="1";lo.textContent=`Confirmar: lançar ${prontos.length} ASO${prontos.length>1?"s":""} no Sistema eSocial`;return}
+    lo.disabled=true;let ok=0;const erros=[];
+    for(const it of prontos){const w=asoTrab(it),y=asoDados(it.x);lo.textContent=`Lançando ${ok+erros.length+1} de ${prontos.length}…`;
+      try{const f=await asoArquivo(it);await lancarNoSistema(w,y);await registrarNoCentral(w,y,f);await asoConcluir(it.chave,"lancado");ok++}
+      catch(e){erros.push(`${w.nome.split(" ")[0]}: ${e.message||e}`)}}
+    await docsSincronizar();vAsos();toast(`${ok} lançado${ok===1?"":"s"} no Sistema eSocial${erros.length?` · ${erros.length} com erro: ${erros[0]}`:""}`)};
+  const ab=$("#aAbrir");if(ab)ab.onclick=()=>abrirNaPasta(ENTRADA);
+  const ad=$("#aDocs");if(ad)ad.onclick=()=>abrirNaPasta(DOCS);
+  const vr=$("#aVer");if(vr)vr.onclick=async()=>{await asoVerificarPasta(true);await docsSincronizar()};
+  const bs=$("#aBaseSalvar");if(bs)bs.onclick=async()=>{const v=$("#aBase").value.trim();if(v)LS.set("cs_central_base",v);else LS.del("cs_central_base");
+    await centralPasta();toast(Pasta.erro||"Pasta do Central: "+Pasta.base);vAsos();if(Pasta.base){await asoVerificarPasta(false);await docsSincronizar()}};
 }
 
 /* ---------- FICHA DE CADASTRO (A4) ---------- */
@@ -1749,6 +1787,6 @@ function emitirFicha(w){
   render();syncInfo();
   if(IS_TAURI){setTimeout(()=>syncCiclo(false),2500);setInterval(()=>syncCiclo(false),SYNC_MS)}
   // Estoque e pasta compartilhada: lê o que os outros computadores gravaram a cada minuto.
-  const comp=async()=>{asoVerificarPasta(false);await puxarCompartilhado();await estCarregar();if(current==="estoque"&&!document.querySelector(".modal")&&!document.querySelector("main input:focus"))vEst()};
-  await estCarregar();if(current==="estoque")render();if(IS_TAURI){setTimeout(comp,4000);setInterval(comp,60000)}})();
+  const comp=async()=>{await asoVerificarPasta(false);await puxarCompartilhado();await docsSincronizar();await estCarregar();if(current==="estoque"&&!document.querySelector(".modal")&&!document.querySelector("main input:focus"))vEst()};
+  await centralPasta();await estCarregar();if(current==="estoque"||current==="asos")render();if(IS_TAURI){setTimeout(comp,4000);setInterval(comp,60000)}})();
 </script>
