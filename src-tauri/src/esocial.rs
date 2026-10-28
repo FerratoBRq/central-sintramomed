@@ -184,11 +184,13 @@ pub async fn esocial_post(st: State<'_, Esocial>, caminho: String, campos: Vec<(
     pedir(&st, || st.client.post(&u).form(&campos)).await
 }
 
-/// Formulários em que o Central pode gravar (ASO, cursos de NR e endereço).
-const GRAVAVEIS: [&str; 3] = [
+/// Formulários em que o Central pode gravar (ASO, cursos de NR, endereço e desconto do vale uniforme).
+const GRAVAVEIS: [&str; 4] = [
     "/register/cad_colabexames.php",
     "/register/cad_colabcursos.php",
     "/register/cad_colabEndereco.php",
+    // Desconto do vale uniforme na folha (Lançamentos › Crédito/Desconto), autorizado pelo Gabriel em 28/10/2026.
+    "/register/cad_desconto.php",
 ];
 
 #[tauri::command]

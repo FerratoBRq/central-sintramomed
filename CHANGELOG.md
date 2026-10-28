@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.45 — 28/10/2026
+- Vale uniforme na folha: ao lançar a saída por vale, cada parcela vira um pedido na aba Aprovação para Lançamentos › Crédito/Desconto do Sistema eSocial, com tipo ADIANTAMENTO SALARIAL (enquanto não existe a rubrica VALE UNIFORME), data (a 2ª parcela no mês seguinte), valor e histórico "VALE UNIFORME - itens - parcela x/n". Depois de aprovado, o Central grava e confere no relatório de Descontos/Créditos.
+- O papel do vale passa a ser o Recibo de vale uniforme, com o texto de autorização do desconto em folha (à vista ou em 2 parcelas).
+- O Central agora pode gravar também em Crédito/Desconto (só Inserir, sempre pela Aprovação), autorizado pelo Gabriel.
+
 ## 0.1.44 — 28/10/2026
 - Estoque: o vale pode ser à vista ou em 2 parcelas (valores exatos em centavos).
 - Impressão do vale no modelo do sindicato (VALE / VALOR, NOME, DESCRIÇÃO, EMPRESA, DATA dia DE mês DE ano, ASSINATURA): 1 folha A4 com 2 vias e linha de recorte no meio. Vem preenchido com o nome, a descrição dos uniformes com tamanho/número, a empresa da última produção (editável ou em branco), a data da retirada e o valor (com as parcelas); a assinatura fica em branco. Opção de imprimir ou não o valor no cabeçalho.
