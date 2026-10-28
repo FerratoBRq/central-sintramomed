@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.49 — 28/10/2026
+- Novo visual no estilo Liquid Glass (Apple HIG, Materials): o vidro fica só na camada de navegação (menu lateral flutuante, busca rápida); o conteúdo continua em cartões sólidos para manter o contraste. Respeita "reduzir transparência" e "aumentar contraste" do sistema.
+- Menu reorganizado por tarefa, com no máximo 2 níveis: Painel; Pessoas (Trabalhadores, Pendências, Vencimentos); Documentos e eSocial (ASOs recebidos, Aprovação); Gestão (Relatório mensal, Estoque e EPIs); Ferramentas (recolhida por padrão). Os grupos recolhem e o programa lembra a escolha neste computador.
+- As ações saíram do meio da navegação: botão **Lançar** (ASO, NR-33/NR-35, entrega do estoque), com teclado.
+- **Busca rápida** (botão Buscar ou Ctrl+K): trabalhador por nome ou CPF, telas e ações.
+- Login do Sistema eSocial: a cidade vai só como "Dourados"; o acesso já salvo como "Dourados MS" é corrigido sozinho.
+
 ## 0.1.48 — 28/10/2026
 - Revisão jurídica do desconto de uniforme:
   - "Vale" passa a se chamar **Fornecimento com desconto autorizado**. O papel impresso agora é o **Termo de autorização de desconto · Uniforme**, com CPF, preço de custo, autorização prévia, expressa e sem coação (Súmula 342 do TST), parcelas e datas, limite de 70% do valor a receber no período (OJ 18 da SDC do TST) e a declaração de que EPIs e botina são gratuitos.

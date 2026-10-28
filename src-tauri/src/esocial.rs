@@ -73,12 +73,20 @@ fn e_tela_login(html: &str) -> bool {
     html.contains("name=\"userSenha\"") || html.contains("name='userSenha'")
 }
 
+/// O Sistema eSocial espera só o nome da cidade ("Dourados"); tira a UF do fim ("Dourados MS", "Dourados/MS", "Dourados - MS").
+fn so_cidade(c: &str) -> String {
+    let t = c.trim();
+    let sem = t.strip_suffix("MS").or_else(|| t.strip_suffix("ms")).map(|r| r.trim_end_matches(|ch: char| ch == ' ' || ch == '/' || ch == '-')).unwrap_or(t);
+    if sem.is_empty() { t.to_string() } else { sem.trim().to_string() }
+}
+
 async fn fazer_login(st: &Esocial) -> Result<(), String> {
     let c = ler_cred()?.ok_or("Acesso ao Sistema eSocial não configurado. Abra a engrenagem e salve login, senha e cidade.")?;
+    let cidade = so_cidade(&c.cidade);
     let form = [
         ("userLogin", c.login.as_str()),
         ("userSenha", c.senha.as_str()),
-        ("userCidade", c.cidade.as_str()),
+        ("userCidade", cidade.as_str()),
         ("btnAcessar", "Acessar"),
     ];
     st.client
@@ -138,7 +146,7 @@ fn url(caminho: &str) -> Result<String, String> {
 
 #[tauri::command]
 pub fn cred_salvar(login: String, senha: String, cidade: String) -> Result<(), String> {
-    let c = Credenciais { login: login.trim().into(), senha, cidade: cidade.trim().into() };
+    let c = Credenciais { login: login.trim().into(), senha, cidade: so_cidade(&cidade) };
     if c.login.is_empty() || c.senha.is_empty() || c.cidade.is_empty() {
         return Err("Preencha login, senha e cidade.".into());
     }
@@ -148,7 +156,7 @@ pub fn cred_salvar(login: String, senha: String, cidade: String) -> Result<(), S
 #[tauri::command]
 pub fn cred_status() -> Result<StatusCred, String> {
     Ok(match ler_cred()? {
-        Some(c) => StatusCred { configurado: true, login: c.login, cidade: c.cidade },
+        Some(c) => StatusCred { configurado: true, login: c.login, cidade: so_cidade(&c.cidade) },
         None => StatusCred { configurado: false, login: String::new(), cidade: String::new() },
     })
 }
@@ -205,4 +213,12 @@ pub async fn esocial_gravar(st: State<'_, Esocial>, caminho: String, campos: Vec
     }
     let u = url(&caminho)?;
     pedir(&st, || st.client.post(&u).form(&campos)).await
+}
+
+#[cfg(test)]
+mod testes {
+    #[test]
+    fn cidade_sem_uf() {
+        for e in ["Dourados MS", "Dourados/MS", "Dourados - MS", "Dourados", " Dourados ms "] { assert_eq!(super::so_cidade(e), "Dourados"); }
+    }
 }

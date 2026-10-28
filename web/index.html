@@ -267,35 +267,108 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
   .hist,.q .opts,.q .law{padding-left:0} .hist{grid-template-columns:minmax(0,1fr)}
   .tiles{gap:10px} .tile{padding:14px}
 }
+
+/* ===== Liquid Glass (0.1.49) =====
+   Regras (Apple HIG, Materials): o vidro fica só na camada de navegação e controles — barra lateral, menus, cabeçalhos de janelas,
+   busca rápida, avisos e rodapé. O conteúdo (cartões, tabelas, formulários) usa superfícies sólidas para não perder contraste.
+   Base sólida primeiro; o vidro só entra com @supports e sem "reduzir transparência"; alto contraste reforça as bordas. */
+:root{--glass:rgba(255,255,255,.62);--glass-2:rgba(255,255,255,.78);--glass-brd:rgba(255,255,255,.75);--glass-hi:rgba(255,255,255,.9);--glass-sh:0 1px 0 rgba(255,255,255,.6) inset,0 10px 34px rgba(30,40,70,.12),0 1px 2px rgba(30,40,70,.06);
+  --mesh:radial-gradient(1100px 620px at 8% -8%,rgba(64,140,255,.20),transparent 60%),radial-gradient(900px 560px at 100% 0%,rgba(52,199,175,.14),transparent 62%),radial-gradient(900px 700px at 60% 110%,rgba(175,82,222,.10),transparent 60%);--r:20px}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--glass:rgba(38,38,42,.58);--glass-2:rgba(44,44,48,.78);--glass-brd:rgba(255,255,255,.12);--glass-hi:rgba(255,255,255,.18);--glass-sh:0 1px 0 rgba(255,255,255,.08) inset,0 14px 40px rgba(0,0,0,.5);
+  --mesh:radial-gradient(1100px 620px at 8% -8%,rgba(10,132,255,.22),transparent 60%),radial-gradient(900px 560px at 100% 0%,rgba(48,209,180,.12),transparent 62%),radial-gradient(900px 700px at 60% 110%,rgba(191,90,242,.12),transparent 60%)}}
+:root[data-theme="dark"]{--glass:rgba(38,38,42,.58);--glass-2:rgba(44,44,48,.78);--glass-brd:rgba(255,255,255,.12);--glass-hi:rgba(255,255,255,.18);--glass-sh:0 1px 0 rgba(255,255,255,.08) inset,0 14px 40px rgba(0,0,0,.5);
+  --mesh:radial-gradient(1100px 620px at 8% -8%,rgba(10,132,255,.22),transparent 60%),radial-gradient(900px 560px at 100% 0%,rgba(48,209,180,.12),transparent 62%),radial-gradient(900px 700px at 60% 110%,rgba(191,90,242,.12),transparent 60%)}
+body{background:var(--mesh),var(--bg);background-attachment:fixed}
+.app{grid-template-columns:268px minmax(0,1fr)}
+/* barra lateral flutuante */
+.side{margin:12px 0 12px 12px;height:calc(100vh - 24px);top:12px;border-radius:24px;border:1px solid var(--glass-brd);background:var(--glass-2);box-shadow:var(--glass-sh);padding:16px 10px 12px;overflow:hidden}
+.brand{padding:2px 6px 14px}
+.side-acoes{display:flex;flex-direction:column;gap:8px;padding:0 4px 8px}
+.lancar-w{position:relative}
+.btn.lancar{width:100%;justify-content:center;padding:10px 16px;font-weight:600;font-size:14.5px;background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 88%,#fff),var(--accent));box-shadow:0 1px 0 rgba(255,255,255,.35) inset,0 6px 18px color-mix(in srgb,var(--accent) 35%,transparent)}
+.menu-g{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:30;border-radius:18px;padding:6px;display:flex;flex-direction:column;gap:2px;background:var(--surface);border:1px solid var(--line-2);box-shadow:var(--shadow-lg);animation:pop .18s cubic-bezier(.2,.8,.2,1)}
+.menu-g button{all:unset;cursor:pointer;display:flex;gap:10px;align-items:center;padding:9px 10px;border-radius:12px}
+.menu-g button .ico{color:var(--accent)}.menu-g button span{display:flex;flex-direction:column;line-height:1.25}.menu-g small{font-size:11.5px;color:var(--muted)}
+.menu-g button:hover,.menu-g button:focus-visible{background:color-mix(in srgb,var(--accent) 12%,transparent);outline:none}
+.busca-g{all:unset;cursor:pointer;display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:980px;background:color-mix(in srgb,var(--ink) 6%,transparent);color:var(--muted);font-size:13.5px}
+.busca-g:hover{background:color-mix(in srgb,var(--ink) 10%,transparent)}.busca-g kbd{margin-left:auto;font:11px var(--f-mono);border:1px solid var(--line-2);border-radius:6px;padding:1px 5px}
+.busca-g:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 45%,transparent)}
+.nav{overflow-y:auto;flex:1;gap:2px;padding:2px 2px 8px;scrollbar-width:thin}
+.nav-g{display:flex;flex-direction:column}
+.nav .nav-l{all:unset;cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-size:11.5px;font-weight:600;color:var(--faint);padding:12px 10px 4px;border-radius:6px}
+.nav .nav-l::after{content:"";width:6px;height:6px;border-right:1.6px solid currentColor;border-bottom:1.6px solid currentColor;transform:rotate(45deg);transition:transform .2s;margin-right:4px}
+.nav-g.fechado .nav-l::after{transform:rotate(-45deg)}.nav-g.fechado .nav-i{display:none}
+.nav .nav-l:hover{color:var(--ink)}.nav .nav-l:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 45%,transparent)}
+.nav-i{display:flex;flex-direction:column;gap:2px}
+.nav button[data-v]{padding:8px 10px;border-radius:12px;min-height:22px}
+.nav button[aria-current="page"]{background:color-mix(in srgb,var(--accent) 15%,transparent);color:var(--accent);box-shadow:0 0 0 1px color-mix(in srgb,var(--accent) 22%,transparent) inset}
+.nav button[aria-current="page"] .ico{color:var(--accent)}
+.nav button[aria-current="page"] .count{background:var(--crit);color:#fff}
+.side-foot{border-top:1px solid color-mix(in srgb,var(--ink) 8%,transparent);padding:10px 8px 2px}
+/* conteúdo: superfícies sólidas com borda fina */
+.panel,.tile,fieldset,.tbl-wrap,.banner,.page{border:1px solid color-mix(in srgb,var(--ink) 6%,transparent)}
+.head h1{letter-spacing:-.035em}
+/* janelas e folhas: cabeçalho e rodapé em vidro, corpo sólido */
+.modal-c{border-radius:26px;border:1px solid var(--glass-brd)}
+.drawer{border-radius:26px 0 0 26px;overflow:hidden}
+.scrim{background:rgba(10,14,25,.22)}
+.toast{border-radius:980px;border:1px solid var(--glass-brd)}
+.busca-r .modal-c{max-width:620px;align-self:flex-start;margin-top:10vh;background:var(--glass-2);box-shadow:var(--glass-sh),var(--shadow-lg)}
+.busca-r .search{flex:none}.busca-r .search .ico{left:14px}.brand-t span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.busca-r .list{max-height:52vh;overflow:auto;padding:0 8px}
+.br-i{all:unset;box-sizing:border-box;cursor:pointer;width:100%;padding:10px 10px!important;border-radius:12px;border-bottom:0!important}
+.br-i[aria-selected="true"],.br-i:hover{background:color-mix(in srgb,var(--accent) 12%,transparent)}
+.rodape{border-top:1px solid color-mix(in srgb,var(--ink) 6%,transparent)}
+@supports ((-webkit-backdrop-filter:blur(1px)) or (backdrop-filter:blur(1px))){
+ @media (prefers-reduced-transparency:no-preference){
+  .side,.busca-r .modal-c{background:var(--glass);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%)}
+ }
+}
+@media (prefers-reduced-transparency:reduce){.side,.menu-g,.busca-r .modal-c{background:var(--surface)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}body{background:var(--bg)}}
+@media (prefers-contrast:more){.side,.menu-g,.modal-c,.panel,.tile,fieldset,.tbl-wrap{border:1.5px solid var(--ink)!important}.nav button[aria-current="page"]{background:var(--accent);color:#fff}.nav button[aria-current="page"] .ico{color:#fff}}
+@media (max-width:780px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  .side{margin:8px;height:auto;top:8px;border-radius:20px;padding:10px 0 0;overflow:visible}
+  .side-acoes{flex-direction:row;padding:0 12px 8px}.lancar-w{flex:1}.busca-g kbd{display:none}.menu-g{right:0}
+  .nav{flex-direction:row;overflow-x:auto;padding:0 10px 10px}.nav-g,.nav-i{flex-direction:row;display:flex!important;gap:4px}.nav .nav-l{display:none}
+}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 
 <div class="app">
   <aside class="side">
-    <div class="brand"><img class="mark-logo" src="logo.png" alt="Logo do SINTRAMOMED" width="40" height="40"><div class="brand-t"><b>Central Sintramomed</b><span>Gestão de Pessoas · Dourados/MS</span></div>
+    <div class="brand"><img class="mark-logo" src="logo.png" alt="Logo do SINTRAMOMED" width="40" height="40"><div class="brand-t"><b>Central Sintramomed</b><span>Gestão de Pessoas · Dourados</span></div>
       <button class="gear" id="btnSyncTopo" type="button" aria-label="Sincronizar os trabalhadores com o Sistema eSocial" title="Sincronizar os trabalhadores com o Sistema eSocial" style="margin-left:auto"><span data-ico="sync"></span></button>
       <button class="gear" id="btnCfg" type="button" aria-label="Configurações e acessos" title="Configurações e acessos"><span data-ico="gear"></span></button></div>
+    <div class="side-acoes">
+      <div class="lancar-w"><button class="btn primary lancar" id="btnLancar" type="button" aria-haspopup="menu" aria-expanded="false" aria-controls="menuLancar"><span data-ico="plus"></span>Lançar</button>
+        <div class="menu-g" id="menuLancar" role="menu" hidden>
+          <button role="menuitem" id="navLancAso" type="button"><span data-ico="upload"></span><span><b>ASO</b><small>Anexar e enviar para aprovação</small></span></button>
+          <button role="menuitem" id="navLancNr" type="button"><span data-ico="upload"></span><span><b>NR-33 / NR-35</b><small>Certificado de formação ou reciclagem</small></span></button>
+          <button role="menuitem" type="button" data-ir="estoque"><span data-ico="box"></span><span><b>Entrega do estoque</b><small>Uniforme, EPI ou desconto autorizado</small></span></button>
+        </div></div>
+      <button class="busca-g" id="btnBusca" type="button" aria-label="Buscar trabalhador, tela ou ação (Ctrl+K)"><span data-ico="search"></span><span>Buscar</span><kbd>Ctrl K</kbd></button>
+    </div>
     <nav class="nav" id="nav" aria-label="Seções">
-      <div class="nav-l">Rotina</div>
       <button data-v="painel"><span data-ico="home"></span>Painel</button>
-      <button data-v="trabalhadores"><span data-ico="users"></span>Trabalhadores</button>
-      <button data-v="pendencias"><span data-ico="alert"></span>Pendências <span class="count" id="navCount" hidden></span></button>
-      <button id="navLancAso" type="button"><span data-ico="plus"></span>Lançar ASO</button>
-      <button id="navLancNr" type="button"><span data-ico="plus"></span>Lançar NR-33 / NR-35</button>
-      <button data-v="previsao"><span data-ico="clock"></span>Previsão de vencimentos</button>
-      <button data-v="asos"><span data-ico="upload"></span>ASOs recebidos <span class="count" id="navAso" hidden></span></button>
-      <button data-v="aprovacao"><span data-ico="list"></span>Aprovação <span class="count" id="navAprov" hidden></span></button>
-      <button data-v="relatorios"><span data-ico="list"></span>Listas e inativos</button>
-      <button data-v="estoque"><span data-ico="box"></span>Estoque</button>
-      <div class="nav-l">Ferramentas</div>
-      <button data-v="fatiador"><span data-ico="scissors"></span>Fatiador de PDF</button>
-      <button data-v="entrevista"><span data-ico="chat"></span>Entrevista online</button>
-      <button data-v="modelos"><span data-ico="print"></span>Modelos para impressão</button>
-      <div class="nav-l">Programa</div>
-      <button data-v="feedback"><span data-ico="idea"></span>Feedback</button>
+      <div class="nav-g" data-g="pessoas"><button class="nav-l" type="button" aria-expanded="true">Pessoas</button><div class="nav-i">
+        <button data-v="trabalhadores"><span data-ico="users"></span>Trabalhadores</button>
+        <button data-v="pendencias"><span data-ico="alert"></span>Pendências <span class="count" id="navCount" hidden></span></button>
+        <button data-v="previsao"><span data-ico="clock"></span>Vencimentos</button></div></div>
+      <div class="nav-g" data-g="esocial"><button class="nav-l" type="button" aria-expanded="true">Documentos e eSocial</button><div class="nav-i">
+        <button data-v="asos"><span data-ico="upload"></span>ASOs recebidos <span class="count" id="navAso" hidden></span></button>
+        <button data-v="aprovacao"><span data-ico="list"></span>Aprovação <span class="count" id="navAprov" hidden></span></button></div></div>
+      <div class="nav-g" data-g="gestao"><button class="nav-l" type="button" aria-expanded="true">Gestão</button><div class="nav-i">
+        <button data-v="relatorios"><span data-ico="list"></span>Relatório mensal</button>
+        <button data-v="estoque"><span data-ico="box"></span>Estoque e EPIs</button></div></div>
+      <div class="nav-g" data-g="ferramentas"><button class="nav-l" type="button" aria-expanded="true">Ferramentas</button><div class="nav-i">
+        <button data-v="fatiador"><span data-ico="scissors"></span>Fatiador de PDF</button>
+        <button data-v="entrevista"><span data-ico="chat"></span>Entrevista online</button>
+        <button data-v="modelos"><span data-ico="print"></span>Modelos para impressão</button>
+        <button data-v="feedback"><span data-ico="idea"></span>Feedback e novidades</button></div></div>
     </nav>
     <div class="side-foot">
-      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.48</b></span><span id="runtime">modo navegador</span></div>
+      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.49</b></span><span id="runtime">modo navegador</span></div>
       <span id="syncInfo"></span>
       <button class="link" id="btnSync" type="button" hidden>Sincronizar tudo agora</button>
       <span id="updInfo">Verificando atualizações…</span>
@@ -310,7 +383,7 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
 
 <script>
 "use strict";
-const APP_VERSION="0.1.48";
+const APP_VERSION="0.1.49";
 /* ---------- utilidades ---------- */
 const $=(s,r=document)=>r.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -426,9 +499,38 @@ let current=VIEWS.includes(location.hash.slice(1))?location.hash.slice(1):"paine
 let ui={filtro:"todos",busca:"",nivelPend:"todos"};
 function go(v){current=v;try{history.replaceState(null,"","#"+v)}catch(e){}render();window.scrollTo(0,0)}
 $("#nav").addEventListener("click",e=>{const b=e.target.closest("button[data-v]");if(b)go(b.dataset.v)});
-$("#navLancAso").onclick=()=>abrirLancamento(null,()=>render());$("#navLancNr").onclick=()=>abrirNR(null,()=>render());
+$("#navLancAso").onclick=()=>{fecharLancar();abrirLancamento(null,()=>render())};$("#navLancNr").onclick=()=>{fecharLancar();abrirNR(null,()=>render())};
+/* Menu lateral: grupos por tarefa (até 2 níveis, HIG/Apple), recolhíveis e lembrados neste PC; o grupo da tela aberta sempre abre. */
+const navFechados=()=>{try{return JSON.parse(LS.get("cs_nav_fechados")||'["ferramentas"]')}catch(e){return[]}};
+function navGrupos(){const f=navFechados();document.querySelectorAll(".nav-g").forEach(g=>{const ativo=!!g.querySelector(`[data-v="${current}"]`),aberto=ativo||!f.includes(g.dataset.g);
+  g.classList.toggle("fechado",!aberto);g.querySelector(".nav-l").setAttribute("aria-expanded",String(aberto))})}
+document.querySelectorAll(".nav-g>.nav-l").forEach(b=>b.onclick=()=>{const g=b.parentElement.dataset.g,f=navFechados(),i=f.indexOf(g);if(i<0)f.push(g);else f.splice(i,1);LS.set("cs_nav_fechados",JSON.stringify(f));
+  const ab=b.getAttribute("aria-expanded")==="true";b.parentElement.classList.toggle("fechado",ab);b.setAttribute("aria-expanded",String(!ab))});
+/* Botão Lançar: ações separadas da navegação (menu com teclado: setas, Esc). */
+function fecharLancar(){$("#menuLancar").hidden=true;$("#btnLancar").setAttribute("aria-expanded","false")}
+$("#btnLancar").onclick=e=>{e.stopPropagation();const m=$("#menuLancar"),abrir=m.hidden;m.hidden=!abrir;$("#btnLancar").setAttribute("aria-expanded",String(abrir));if(abrir)m.querySelector("button").focus()};
+$("#menuLancar").addEventListener("keydown",e=>{const its=[...$("#menuLancar").querySelectorAll("button")],i=its.indexOf(document.activeElement);
+  if(e.key==="ArrowDown"||e.key==="ArrowUp"){e.preventDefault();its[(i+(e.key==="ArrowDown"?1:its.length-1))%its.length].focus()}if(e.key==="Escape"){fecharLancar();$("#btnLancar").focus()}});
+$("#menuLancar").querySelector("[data-ir]").onclick=()=>{fecharLancar();go("estoque")};
+document.addEventListener("click",e=>{if(!e.target.closest(".lancar-w"))fecharLancar()});
+/* Busca rápida (Ctrl+K): telas, ações e trabalhadores por nome ou CPF num só lugar. */
+function buscaRapida(){if($("#busca-r"))return;const telas=[...document.querySelectorAll("#nav [data-v]")].map(b=>({t:"Tela",n:b.textContent.trim(),f:()=>go(b.dataset.v)}));
+  const acoes=[{t:"Ação",n:"Lançar ASO",f:()=>abrirLancamento(null,()=>render())},{t:"Ação",n:"Lançar NR-33 / NR-35",f:()=>abrirNR(null,()=>render())},{t:"Ação",n:"Sincronizar com o Sistema eSocial",f:()=>$("#btnSyncTopo").click()},{t:"Ação",n:"Configurações e acessos",f:()=>$("#btnCfg").click()}];
+  const m=document.createElement("div");m.className="modal busca-r";m.id="busca-r";
+  m.innerHTML=`<div class="scrim"></div><div class="modal-c" role="dialog" aria-modal="true" aria-label="Busca rápida"><div class="search" style="max-width:none;margin:14px"><span data-ico="search"></span><input class="inp" id="brQ" placeholder="Trabalhador (nome ou CPF), tela ou ação" autocomplete="off" role="combobox" aria-expanded="true" aria-controls="brL"></div><div class="list" id="brL" role="listbox"></div><div class="small muted" style="padding:8px 16px 14px">↑ ↓ para escolher · Enter para abrir · Esc para fechar</div></div>`;
+  document.body.appendChild(m);m.querySelectorAll("[data-ico]").forEach(x=>x.outerHTML=ico(x.dataset.ico));let sel=0,res=[];const close=()=>m.remove();m.querySelector(".scrim").onclick=close;
+  const tira=t=>t.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase();
+  const draw=()=>{const q=tira($("#brQ").value.trim()),qd=q.replace(/\D/g,"");
+    const ws=q.length<2?[]:S.workers.filter(w=>tira(w.nome).includes(q)||(qd.length>=3&&(w.cpf||"").includes(qd))).slice(0,8).map(w=>({t:STATUS[w.status]||"Trabalhador",n:w.nome,d:fmtCPF(w.cpf),f:()=>openWorker(w.id)}));
+    res=[...ws,...[...telas,...acoes].filter(x=>!q||tira(x.n).includes(q))].slice(0,12);sel=Math.min(sel,Math.max(0,res.length-1));
+    $("#brL").innerHTML=res.length?res.map((r,i)=>`<button class="row br-i" role="option" aria-selected="${i===sel}" data-i="${i}" type="button"><span><b>${esc(r.n)}</b>${r.d?` <span class="small muted mono">${esc(r.d)}</span>`:""}</span><span class="pill info">${esc(r.t)}</span></button>`).join(""):`<div class="empty">Nada encontrado.</div>`;
+    $("#brL").querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>{close();res[b.dataset.i].f()})};
+  $("#brQ").oninput=()=>{sel=0;draw()};$("#brQ").onkeydown=e=>{if(e.key==="ArrowDown"||e.key==="ArrowUp"){e.preventDefault();sel=(sel+(e.key==="ArrowDown"?1:res.length-1))%Math.max(1,res.length);draw()}
+    if(e.key==="Enter"&&res[sel]){close();res[sel].f()}if(e.key==="Escape")close()};draw();$("#brQ").focus()}
+$("#btnBusca").onclick=buscaRapida;
+document.addEventListener("keydown",e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="k"){e.preventDefault();buscaRapida()}});
 function render(){
-  document.querySelectorAll("#nav button").forEach(b=>b.setAttribute("aria-current",b.dataset.v===current?"page":"false"));
+  document.querySelectorAll("#nav button[data-v]").forEach(b=>b.setAttribute("aria-current",b.dataset.v===current?"page":"false"));navGrupos();
   const crit=S.workers.filter(w=>nivel(w)==="crit").length;const nc=$("#navCount");nc.hidden=!crit;nc.textContent=crit;
   ({painel:vPainel,trabalhadores:vTrab,pendencias:vPend,fatiador:vFat,relatorios:vRel,entrevista:vEnt,modelos:vMod,feedback:vFeed,estoque:vEst,asos:vAsos,aprovacao:vAprov,previsao:vPrev})[current]();
   asoBadge();aprovBadge();
@@ -446,7 +548,7 @@ const ATALHOS=[
   {id:"escavador",n:"Escavador",d:"Pesquisa de processos por nome",u:"https://www.escavador.com/",t:"pesquisa"},
   {id:"semaforo",n:"Semáforo eSocial",d:"Status dos web services do governo",u:"https://www.gov.br/esocial/pt-br/acesso-ao-sistema/semaforo",t:"governo",semLogin:true}
 ];
-const NOVIDADES=["Revisão jurídica: o \"vale\" virou Fornecimento com desconto autorizado e o papel é o Termo de autorização de desconto (preço de custo, autorização prévia sem coação, limite de 70%, CPF); termo do uniforme da safra traz o compromisso de reposição por culpa; entrevista e antecedentes com avisos da Lei 9.029/1995, LGPD e TST Tema 1","Vale de uniforme dentro da lei: botina e EPIs nunca são cobrados; o vale vale só para peça extra pedida pelo trabalhador ou reposição por perda/dano","Vale uniforme: as parcelas caem no 5º dia útil das próximas quinzenas (pagamento quinzenal)","Vale uniforme descontado na folha: cada parcela vira um lançamento em Crédito/Desconto (Adiantamento salarial) pela aba Aprovação; o papel passa a ser o Recibo de vale uniforme","Estoque: vale em até 2 parcelas e impressão do vale em 1 folha com 2 vias para recorte","Lista para emissão de certificados de NR-33 e NR-35 no modelo do sindicato (Word), uma por NR, com folhas duplicadas quando passa de 13 nomes","Previsão de vencimentos: clique no calendário para marcar as datas das turmas; o Central distribui os vencidos e a vencer entre elas","Logo do SINTRAMOMED no programa, no ícone e nas folhas impressas","Previsão de vencimentos: ASO, NR-35 e NR-33 que vencem até o meio do mês seguinte ao próximo, com calendário de turmas às quartas, quintas e sextas e lista para marcar","Lançar NR: sem o campo Data da assinatura","Menu lateral com os botões Lançar ASO e Lançar NR-33 / NR-35","Botão próprio para NR-33 e NR-35: lê o certificado (até digitalizado de lado), separa Formação e Reciclagem, carga horária e data da assinatura, e vai para a Aprovação","Estoque de EPIs: sem os tamanhos entre parênteses e sem negrito; a cinta ergonômica mantém G e XG","Relatório mensal: afastados e desligados mostram só a data em que foram lançados no sistema, dentro do mês escolhido","Relatório mensal: desligados voltam a aparecer no mês em que o desligamento foi lançado no Sistema eSocial","Compartilhar pelo GitHub: o repositório de dados já vem preenchido; só falta colar o token uma vez em cada computador","Relatório mensal: desligados voltam a aparecer (lidos do Sistema eSocial mesmo sem produção recente)","Estoque com os itens da planilha: camisetas M a E2G, botina 36 a 45 e os EPIs (luvas, óculos, protetores, capacete, respirador e outros), com entrega de EPI sem desconto","Compartilhar pelo GitHub: com um repositório privado de dados, tudo o que é feito em um computador vai e volta entre todos os que usam o Central","Relatório mensal: afastados e desligados só do mês escolhido, pela data do término ou do afastamento no Sistema eSocial","Relatório mensal abre em Mês/Ano, sem mês escolhido, até você selecionar","Botão de setas ao lado da engrenagem: sincroniza todos os trabalhadores com o Sistema eSocial (gira enquanto sincroniza)","Ficha de EPI deixa de ser alerta nas pendências","ASO lançado no Sistema eSocial (inclusive por outro computador) aparece no Central em até 5 minutos","Botão Sincronizar tudo agora (barra lateral e engrenagem) e Atualizar esta ficha; nome, telefone, endereço, matrícula e documentos alterados no Sistema eSocial agora atualizam no Central","Lançar ASO: o campo Curso de NR some para ASO; nova Classificação simples/completo (simples não cobra NR-35/NR-33)","Afastados e desligados lidos do Sistema eSocial (S-2399 e S-2230): data, data de envio e motivo; o relatório mensal usa o mês do envio","Relatório mensal: incluir à mão na admissão, no periódico e nos afastados/desligados (com data e motivo), editar a data do ASO e tirar linhas","Aba Aprovação: todo envio ao Sistema eSocial (ASO, NR e endereço) mostra campo a campo o que vai mudar e só é gravado depois de aprovado","Data de desligamento/afastamento lida do Sistema eSocial (preenche o término e o relatório mensal)","Pasta do Central: ASOs colocados em \"ASOs para lançar\" são lidos e lançados (um a um ou em lote, com confirmação); todo anexo fica também em Documentos\\NOME - CPF e o que for posto lá entra na ficha","ASOs recebidos: os PDFs do WhatsApp são lidos sozinhos da pasta Downloads, com o trabalhador achado pelo CPF, para conferir e lançar no Sistema eSocial","Relatório mensal de admissão, periódico e desligamentos no modelo do RH, gerado em Excel; periódicos e empresa da produção lidos do Sistema eSocial","Pendências: clique em ASO, NR-35, NR-33 e outros itens para filtrar; Críticas e Atenção mostram a quantidade","Pendências não cobram mais anexos faltando (DOC)","Atalho no painel para o Forms de consulta e inclusão da Coamo","Estoque de uniformes: camisas, calças e botinas por tamanho, vale ao colaborador, uniforme da safra (1 calça e 1 camisa) e termo de entrega","Pasta compartilhada na engrenagem: fichas, anexos, listas, entrevistas, modelos, feedback e estoque iguais em todos os computadores","S-2240 deixa de ser cobrado nas pendências (não se aplica à categoria)","A saudação usa o nome do login do Sistema eSocial de quem está usando o programa","Modelos para impressão: botão + para adicionar seus PDFs e opção de remover modelos","Corrige janelas (Importar, Lançar ASO, ficha) que ficavam atrás do fundo desfocado","Visual novo, no estilo Apple","Tela de Feedback: registre sugestões e problemas, envie ao GitHub e acompanhe o que foi implementado","Modelos para impressão abrem dentro do programa","Atualização reabre o programa sozinha","Liberação do ASO para altura e espaço confinado: sem liberação, NR-35/NR-33 não são cobradas","Lançar ASO e NR no Sistema eSocial a partir do documento anexado (lê datas e tipo)","Editar o endereço direto no Sistema eSocial","Emitir ficha de cadastro do trabalhador para imprimir","Data e hora no rodapé","Atualização sozinha pelo GitHub, sem chave: baixa, instala e reabre o programa","Trabalhadores aparecem durante a primeira importação (gravação em lotes de 25)","Corrige acentos quebrados no programa instalado","Impede abrir duas janelas do programa ao mesmo tempo","Importação automática: o programa entra sozinho no Sistema eSocial e atualiza os trabalhadores a cada 5 minutos","Senha do Sistema eSocial guardada no Windows, pedida uma única vez","Importação completa do Sistema eSocial: status, última produção, ASO, NR-33/35, EPI, documentos e endereço","Novos status: afastado e inativo no sistema","Cofre de acessos simplificado: só Sistema eSocial e Escavador","Verificação automática de atualizações a cada 5 minutos","Nova interface: tema claro e escuro, barra lateral com ícones, atalhos e indicadores redesenhados","Engrenagem de configurações com cofre de acessos (login e senha) protegido por PIN","Botões Copiar usuário e Copiar senha nos atalhos do painel","Atalho do Escavador no painel","Verificação de antecedentes na ficha e na entrevista"];
+const NOVIDADES=["Novo visual (estilo Liquid Glass da Apple): menu lateral flutuante em vidro, organizado por tarefa (Pessoas, Documentos e eSocial, Gestão, Ferramentas) e com grupos que recolhem; botão Lançar com ASO, NR e entrega do estoque; busca rápida de trabalhador, tela ou ação pelo botão Buscar ou Ctrl+K","Login do Sistema eSocial: a cidade vai só como Dourados (sem MS), inclusive para o acesso já salvo","Revisão jurídica: o \"vale\" virou Fornecimento com desconto autorizado e o papel é o Termo de autorização de desconto (preço de custo, autorização prévia sem coação, limite de 70%, CPF); termo do uniforme da safra traz o compromisso de reposição por culpa; entrevista e antecedentes com avisos da Lei 9.029/1995, LGPD e TST Tema 1","Vale de uniforme dentro da lei: botina e EPIs nunca são cobrados; o vale vale só para peça extra pedida pelo trabalhador ou reposição por perda/dano","Vale uniforme: as parcelas caem no 5º dia útil das próximas quinzenas (pagamento quinzenal)","Vale uniforme descontado na folha: cada parcela vira um lançamento em Crédito/Desconto (Adiantamento salarial) pela aba Aprovação; o papel passa a ser o Recibo de vale uniforme","Estoque: vale em até 2 parcelas e impressão do vale em 1 folha com 2 vias para recorte","Lista para emissão de certificados de NR-33 e NR-35 no modelo do sindicato (Word), uma por NR, com folhas duplicadas quando passa de 13 nomes","Previsão de vencimentos: clique no calendário para marcar as datas das turmas; o Central distribui os vencidos e a vencer entre elas","Logo do SINTRAMOMED no programa, no ícone e nas folhas impressas","Previsão de vencimentos: ASO, NR-35 e NR-33 que vencem até o meio do mês seguinte ao próximo, com calendário de turmas às quartas, quintas e sextas e lista para marcar","Lançar NR: sem o campo Data da assinatura","Menu lateral com os botões Lançar ASO e Lançar NR-33 / NR-35","Botão próprio para NR-33 e NR-35: lê o certificado (até digitalizado de lado), separa Formação e Reciclagem, carga horária e data da assinatura, e vai para a Aprovação","Estoque de EPIs: sem os tamanhos entre parênteses e sem negrito; a cinta ergonômica mantém G e XG","Relatório mensal: afastados e desligados mostram só a data em que foram lançados no sistema, dentro do mês escolhido","Relatório mensal: desligados voltam a aparecer no mês em que o desligamento foi lançado no Sistema eSocial","Compartilhar pelo GitHub: o repositório de dados já vem preenchido; só falta colar o token uma vez em cada computador","Relatório mensal: desligados voltam a aparecer (lidos do Sistema eSocial mesmo sem produção recente)","Estoque com os itens da planilha: camisetas M a E2G, botina 36 a 45 e os EPIs (luvas, óculos, protetores, capacete, respirador e outros), com entrega de EPI sem desconto","Compartilhar pelo GitHub: com um repositório privado de dados, tudo o que é feito em um computador vai e volta entre todos os que usam o Central","Relatório mensal: afastados e desligados só do mês escolhido, pela data do término ou do afastamento no Sistema eSocial","Relatório mensal abre em Mês/Ano, sem mês escolhido, até você selecionar","Botão de setas ao lado da engrenagem: sincroniza todos os trabalhadores com o Sistema eSocial (gira enquanto sincroniza)","Ficha de EPI deixa de ser alerta nas pendências","ASO lançado no Sistema eSocial (inclusive por outro computador) aparece no Central em até 5 minutos","Botão Sincronizar tudo agora (barra lateral e engrenagem) e Atualizar esta ficha; nome, telefone, endereço, matrícula e documentos alterados no Sistema eSocial agora atualizam no Central","Lançar ASO: o campo Curso de NR some para ASO; nova Classificação simples/completo (simples não cobra NR-35/NR-33)","Afastados e desligados lidos do Sistema eSocial (S-2399 e S-2230): data, data de envio e motivo; o relatório mensal usa o mês do envio","Relatório mensal: incluir à mão na admissão, no periódico e nos afastados/desligados (com data e motivo), editar a data do ASO e tirar linhas","Aba Aprovação: todo envio ao Sistema eSocial (ASO, NR e endereço) mostra campo a campo o que vai mudar e só é gravado depois de aprovado","Data de desligamento/afastamento lida do Sistema eSocial (preenche o término e o relatório mensal)","Pasta do Central: ASOs colocados em \"ASOs para lançar\" são lidos e lançados (um a um ou em lote, com confirmação); todo anexo fica também em Documentos\\NOME - CPF e o que for posto lá entra na ficha","ASOs recebidos: os PDFs do WhatsApp são lidos sozinhos da pasta Downloads, com o trabalhador achado pelo CPF, para conferir e lançar no Sistema eSocial","Relatório mensal de admissão, periódico e desligamentos no modelo do RH, gerado em Excel; periódicos e empresa da produção lidos do Sistema eSocial","Pendências: clique em ASO, NR-35, NR-33 e outros itens para filtrar; Críticas e Atenção mostram a quantidade","Pendências não cobram mais anexos faltando (DOC)","Atalho no painel para o Forms de consulta e inclusão da Coamo","Estoque de uniformes: camisas, calças e botinas por tamanho, vale ao colaborador, uniforme da safra (1 calça e 1 camisa) e termo de entrega","Pasta compartilhada na engrenagem: fichas, anexos, listas, entrevistas, modelos, feedback e estoque iguais em todos os computadores","S-2240 deixa de ser cobrado nas pendências (não se aplica à categoria)","A saudação usa o nome do login do Sistema eSocial de quem está usando o programa","Modelos para impressão: botão + para adicionar seus PDFs e opção de remover modelos","Corrige janelas (Importar, Lançar ASO, ficha) que ficavam atrás do fundo desfocado","Visual novo, no estilo Apple","Tela de Feedback: registre sugestões e problemas, envie ao GitHub e acompanhe o que foi implementado","Modelos para impressão abrem dentro do programa","Atualização reabre o programa sozinha","Liberação do ASO para altura e espaço confinado: sem liberação, NR-35/NR-33 não são cobradas","Lançar ASO e NR no Sistema eSocial a partir do documento anexado (lê datas e tipo)","Editar o endereço direto no Sistema eSocial","Emitir ficha de cadastro do trabalhador para imprimir","Data e hora no rodapé","Atualização sozinha pelo GitHub, sem chave: baixa, instala e reabre o programa","Trabalhadores aparecem durante a primeira importação (gravação em lotes de 25)","Corrige acentos quebrados no programa instalado","Impede abrir duas janelas do programa ao mesmo tempo","Importação automática: o programa entra sozinho no Sistema eSocial e atualiza os trabalhadores a cada 5 minutos","Senha do Sistema eSocial guardada no Windows, pedida uma única vez","Importação completa do Sistema eSocial: status, última produção, ASO, NR-33/35, EPI, documentos e endereço","Novos status: afastado e inativo no sistema","Cofre de acessos simplificado: só Sistema eSocial e Escavador","Verificação automática de atualizações a cada 5 minutos","Nova interface: tema claro e escuro, barra lateral com ícones, atalhos e indicadores redesenhados","Engrenagem de configurações com cofre de acessos (login e senha) protegido por PIN","Botões Copiar usuário e Copiar senha nos atalhos do painel","Atalho do Escavador no painel","Verificação de antecedentes na ficha e na entrevista"];
 
 /* ---------- cofre de acessos: AES-GCM com chave derivada do PIN (PBKDF2). A chave fica só na memória; recarregar a página tranca. ---------- */
 const b64e=u=>btoa(String.fromCharCode(...u));const b64d=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
@@ -455,7 +557,7 @@ const Vault={key:null,salt:null,data:null,
   exists(){return !!LS.get("cs_vault")},
   get open(){return !!this.data},
   async derive(pin,salt){const base=await crypto.subtle.importKey("raw",new TextEncoder().encode(pin),"PBKDF2",false,["deriveKey"]);return crypto.subtle.deriveKey({name:"PBKDF2",salt,iterations:250000,hash:"SHA-256"},base,{name:"AES-GCM",length:256},false,["encrypt","decrypt"])},
-  async create(pin){this.salt=crypto.getRandomValues(new Uint8Array(16));this.key=await this.derive(pin,this.salt);this.data={esocial:{user:"Gabriel",extra:"Dourados MS",pass:""}};return this.save()},
+  async create(pin){this.salt=crypto.getRandomValues(new Uint8Array(16));this.key=await this.derive(pin,this.salt);this.data={esocial:{user:"Gabriel",extra:"Dourados",pass:""}};return this.save()},
   async unlock(pin){const raw=JSON.parse(LS.get("cs_vault"));const salt=b64d(raw.s);const key=await this.derive(pin,salt);const pt=await crypto.subtle.decrypt({name:"AES-GCM",iv:b64d(raw.i)},key,b64d(raw.c));this.key=key;this.salt=salt;this.data=JSON.parse(new TextDecoder().decode(pt))},
   async save(){const iv=crypto.getRandomValues(new Uint8Array(12));const ct=await crypto.subtle.encrypt({name:"AES-GCM",iv},this.key,new TextEncoder().encode(JSON.stringify(this.data)));return LS.set("cs_vault",JSON.stringify({s:b64e(this.salt),i:b64e(iv),c:b64e(new Uint8Array(ct))}))},
   lock(){this.key=null;this.data=null},
@@ -825,7 +927,7 @@ function conexaoHTML(){
   return `<fieldset><legend>Sistema eSocial · importação automática</legend><div class="note">Informe o acesso uma única vez. O Central entra sozinho e importa os trabalhadores a cada 5 minutos, só lendo os dados.</div>
     <div class="form-grid" style="margin-top:12px"><div class="field"><label for="esL">Login</label><input id="esL" autocomplete="off" value="${esc(c.login||"Gabriel")}"></div>
     <div class="field"><label for="esS">Senha</label><input id="esS" type="password" autocomplete="new-password"></div>
-    <div class="field span2"><label for="esC">Cidade</label><input id="esC" autocomplete="off" value="${esc(c.cidade||"Dourados MS")}"></div></div>
+    <div class="field span2"><label for="esC">Cidade</label><input id="esC" autocomplete="off" value="${esc(c.cidade||"Dourados")}"></div></div>
     <div class="toolbar" style="margin-top:12px"><button class="btn primary" id="cfgSalvar">Salvar e conectar</button></div></fieldset>`;
 }
 function bindConexao(redraw){
