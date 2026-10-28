@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.41 — 28/10/2026
+- Logo do SINTRAMOMED na barra lateral, no ícone do programa (atalho, barra de tarefas, instalador) e no cabeçalho das folhas impressas (ficha de cadastro, termo de entrega, previsão de vencimentos).
+
 ## 0.1.40 — 28/10/2026
 - Previsão de vencimentos (cartão no Painel e item no menu): ASO, NR-35 e NR-33 dos trabalhadores ativos que vencem de hoje até o dia 15 do mês depois do próximo (em outubro, até 15/12), mais os já vencidos.
 - Calendário dos 3 meses com as turmas sugeridas só em quarta, quinta e sexta: cada um vai para a data mais tarde possível até 3 dias antes de vencer, juntando o máximo de pessoas por turma (vagas por turma ajustáveis; vencidos vão para a primeira data). Clicar no dia filtra a lista.
