@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.46 — 28/10/2026
+- Vale uniforme: as datas do desconto seguem o pagamento quinzenal. Cada parcela cai no 5º dia útil (segunda a sexta) da quinzena seguinte: a 1ª na próxima quinzena depois da retirada e a 2ª na quinzena depois dessa. As datas aparecem ao lançar o vale, no recibo e nos pedidos da Aprovação. Feriados não são considerados.
+
 ## 0.1.45 — 28/10/2026
 - Vale uniforme na folha: ao lançar a saída por vale, cada parcela vira um pedido na aba Aprovação para Lançamentos › Crédito/Desconto do Sistema eSocial, com tipo ADIANTAMENTO SALARIAL (enquanto não existe a rubrica VALE UNIFORME), data (a 2ª parcela no mês seguinte), valor e histórico "VALE UNIFORME - itens - parcela x/n". Depois de aprovado, o Central grava e confere no relatório de Descontos/Créditos.
 - O papel do vale passa a ser o Recibo de vale uniforme, com o texto de autorização do desconto em folha (à vista ou em 2 parcelas).
