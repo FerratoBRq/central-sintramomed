@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.53 — 28/10/2026
+- Programação de pagamento: opção de impressão "Uma folha por empresa", "Empresas marcadas na mesma folha" (o nome de cada empresa vem antes dos seus trabalhadores e a linha EMPRESA lista todas) ou "Folha em branco" (só o modelo, com a data para preencher).
+
 ## 0.1.52 — 28/10/2026
 - Documentos pessoais (CNH, RG, CPF) não geram mais aviso de vencimento em Pendências nem no Painel. Os vencimentos avisados são só ASO, NR-33 e NR-35.
 
