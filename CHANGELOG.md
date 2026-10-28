@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.44 — 28/10/2026
+- Estoque: o vale pode ser à vista ou em 2 parcelas (valores exatos em centavos).
+- Impressão do vale no modelo do sindicato (VALE / VALOR, NOME, DESCRIÇÃO, EMPRESA, DATA dia DE mês DE ano, ASSINATURA): 1 folha A4 com 2 vias e linha de recorte no meio. Vem preenchido com o nome, a descrição dos uniformes com tamanho/número, a empresa da última produção (editável ou em branco), a data da retirada e o valor (com as parcelas); a assinatura fica em branco. Opção de imprimir ou não o valor no cabeçalho.
+- Corrige a folha em branco que saía no fim das impressões.
+- O vale abre logo depois de lançar a saída por vale e pelo botão Vale na lista de movimentos.
+
 ## 0.1.43 — 28/10/2026
 - Previsão de vencimentos: botões Lista de certificados NR-35 e NR-33, que geram em Word o modelo "Lista para emissão de certificados" do sindicato (cabeçalho, termo e assinaturas iguais), uma lista por NR. Cada folha mantém as 13 linhas do modelo; com mais nomes, a folha é duplicada com os próximos. Classificação: Reciclagem para quem já tem a NR registrada, Formação para quem não tem. Com uma turma escolhida, sai só ela e com a data da turma.
 
