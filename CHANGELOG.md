@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.51 — 28/10/2026
+- Nova ferramenta **Programação de pagamento**: mês e quinzena (1 a 15 ou 16 ao fim), busca no Sistema eSocial (só leitura) das empresas que tiveram produção no período e de quem produziu em cada uma, com os dados bancários de cada trabalhador (conta corrente, poupança ou PIX). As empresas com produção já vêm marcadas; dá para desmarcar. Imprime a folha A4 no modelo do sindicato (DOURADOS-MS, data, responsável, empresa e período, valores recebidos, DISCRIMINAÇÃO, C/CORRENTE, C/POUPANÇA, VALOR em branco, TOTAL), uma por empresa: poupança, depois corrente, depois PIX e, no fim, quem não tem conta cadastrada. Mais de 27 nomes continuam numa segunda folha.
+
 ## 0.1.50 — 28/10/2026
 - Nova tela **NRs recebidas** (menu Documentos e eSocial), igual a ASOs recebidos: pasta "NRs para lançar" lida a cada minuto, botão Anexar NRs e arrastar PDFs, leitura do certificado (NR-33 ou NR-35, formação ou reciclagem, carga horária, realização, validade, empresa), trabalhador pelo CPF, "Conferir e lançar" um a um ou "Enviar prontos para aprovação" em lote (prontos = carga no mínimo da norma), contador no menu. Lançados vão para "NRs lançadas".
 - ASO colocado na pasta das NRs, ou certificado de NR na pasta dos ASOs, é movido sozinho para a pasta certa.
