@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.38 — 28/10/2026
+- Menu lateral (Rotina) com os botões Lançar ASO e Lançar NR-33 / NR-35, abertos de qualquer tela.
+
 ## 0.1.37 — 28/10/2026
 - Botão próprio Lançar NR-33 / NR-35 (Trabalhadores e ficha), separado do Lançar ASO. Lê o certificado em PDF ou foto, inclusive digitalizado de lado (gira a imagem para o OCR), acha o trabalhador pelo CPF e traz NR, Formação ou Reciclagem, carga horária, data de realização, data da assinatura e empresa; validade automática (NR-33 1 ano, NR-35 2 anos).
 - Aviso quando a carga não bate com o tipo (NR-33 formação pede 16 h; reciclagem 8 h; NR-35 8 h).
