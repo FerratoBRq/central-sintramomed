@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.42 — 28/10/2026
+- Previsão de vencimentos: o calendário agora é clicável. Clicar num dia marca (ou desmarca) a turma; com um item escolhido (ASO, NR-35 ou NR-33) marca só dele, em Todos marca para os três. As datas marcadas ficam guardadas e compartilhadas.
+- Com datas marcadas, o Central distribui os trabalhadores: vencidos e quem vence antes da 1ª data vão para a 1ª; quem vence depois da 2ª data vai para a 2ª, e assim por diante (sempre a última data marcada antes do vencimento). Sem datas marcadas, continua a sugestão automática.
+- Abaixo do calendário, um botão por turma com a quantidade de pessoas, para filtrar a lista.
+
 ## 0.1.41 — 28/10/2026
 - Logo do SINTRAMOMED na barra lateral, no ícone do programa (atalho, barra de tarefas, instalador) e no cabeçalho das folhas impressas (ficha de cadastro, termo de entrega, previsão de vencimentos).
 
