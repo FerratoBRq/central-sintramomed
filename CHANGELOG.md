@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.52 — 28/10/2026
+- Documentos pessoais (CNH, RG, CPF) não geram mais aviso de vencimento em Pendências nem no Painel. Os vencimentos avisados são só ASO, NR-33 e NR-35.
+
 ## 0.1.51 — 28/10/2026
 - Nova ferramenta **Programação de pagamento**: mês e quinzena (1 a 15 ou 16 ao fim), busca no Sistema eSocial (só leitura) das empresas que tiveram produção no período e de quem produziu em cada uma, com os dados bancários de cada trabalhador (conta corrente, poupança ou PIX). As empresas com produção já vêm marcadas; dá para desmarcar. Imprime a folha A4 no modelo do sindicato (DOURADOS-MS, data, responsável, empresa e período, valores recebidos, DISCRIMINAÇÃO, C/CORRENTE, C/POUPANÇA, VALOR em branco, TOTAL), uma por empresa: poupança, depois corrente, depois PIX e, no fim, quem não tem conta cadastrada. Mais de 27 nomes continuam numa segunda folha.
 
