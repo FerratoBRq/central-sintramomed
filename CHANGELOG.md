@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.40 — 28/10/2026
+- Previsão de vencimentos (cartão no Painel e item no menu): ASO, NR-35 e NR-33 dos trabalhadores ativos que vencem de hoje até o dia 15 do mês depois do próximo (em outubro, até 15/12), mais os já vencidos.
+- Calendário dos 3 meses com as turmas sugeridas só em quarta, quinta e sexta: cada um vai para a data mais tarde possível até 3 dias antes de vencer, juntando o máximo de pessoas por turma (vagas por turma ajustáveis; vencidos vão para a primeira data). Clicar no dia filtra a lista.
+- Lista para marcar com telefone, data de vencimento, turma sugerida e campo da data marcada (guardado e compartilhado), e Imprimir lista agrupada por turma.
+
 ## 0.1.39 — 28/10/2026
 - Lançar NR-33 / NR-35: retirado o campo Data da assinatura (em alguns certificados vinha a data de nascimento).
 
