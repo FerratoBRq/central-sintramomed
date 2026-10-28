@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.39 — 28/10/2026
+- Lançar NR-33 / NR-35: retirado o campo Data da assinatura (em alguns certificados vinha a data de nascimento).
+
 ## 0.1.38 — 28/10/2026
 - Menu lateral (Rotina) com os botões Lançar ASO e Lançar NR-33 / NR-35, abertos de qualquer tela.
 
