@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.47 — 28/10/2026
+- Vale de uniforme ajustado à lei (trabalhador avulso não portuário, Lei 12.023/2009):
+  - Botina de segurança e EPIs não podem entrar em vale (CLT art. 166, NR-6 e Lei 12.023/2009 art. 9º: fornecimento gratuito, dever do tomador). Saem por Entrega de EPI, sem custo.
+  - O vale exige o motivo: peça extra pedida pelo trabalhador além do uniforme gratuito (autorização prévia por escrito, Súmula 342 do TST) ou reposição por perda/dano causado por ele (CLT art. 462 § 1º). Para peça extra, o trabalhador precisa já ter recebido a calça e a camisa gratuitas da safra.
+  - O recibo traz o texto de autorização conforme o motivo e a declaração de que EPIs e botina são sem custo.
+
 ## 0.1.46 — 28/10/2026
 - Vale uniforme: as datas do desconto seguem o pagamento quinzenal. Cada parcela cai no 5º dia útil (segunda a sexta) da quinzena seguinte: a 1ª na próxima quinzena depois da retirada e a 2ª na quinzena depois dessa. As datas aparecem ao lançar o vale, no recibo e nos pedidos da Aprovação. Feriados não são considerados.
 
