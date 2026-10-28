@@ -110,7 +110,7 @@ pub fn salvar_download(app: tauri::AppHandle, nome: String, bytes: Vec<u8>) -> R
 }
 
 /// Pasta de trabalho do Central: a escolhida (ex.: a pasta compartilhada) ou Documentos\Central Sintramomed.
-/// Cria as subpastas "ASOs para lançar", "ASOs lançados" e "Documentos" e devolve o caminho.
+/// Cria as subpastas "ASOs para lançar", "ASOs lançados", "NRs para lançar", "NRs lançadas" e "Documentos" e devolve o caminho.
 #[tauri::command]
 pub fn central_pasta(app: tauri::AppHandle, base: String) -> Result<String, String> {
     use tauri::Manager;
@@ -121,7 +121,7 @@ pub fn central_pasta(app: tauri::AppHandle, base: String) -> Result<String, Stri
         if !p.is_absolute() { return Err("Informe o caminho completo da pasta.".into()); }
         p
     };
-    for s in ["ASOs para lançar", "ASOs lançados", "Documentos"] {
+    for s in ["ASOs para lançar", "ASOs lançados", "NRs para lançar", "NRs lançadas", "Documentos"] {
         std::fs::create_dir_all(b.join(s)).map_err(|e| format!("Não foi possível criar a pasta {s}: {e}"))?;
     }
     Ok(b.to_string_lossy().to_string())

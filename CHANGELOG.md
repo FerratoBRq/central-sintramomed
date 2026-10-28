@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.50 — 28/10/2026
+- Nova tela **NRs recebidas** (menu Documentos e eSocial), igual a ASOs recebidos: pasta "NRs para lançar" lida a cada minuto, botão Anexar NRs e arrastar PDFs, leitura do certificado (NR-33 ou NR-35, formação ou reciclagem, carga horária, realização, validade, empresa), trabalhador pelo CPF, "Conferir e lançar" um a um ou "Enviar prontos para aprovação" em lote (prontos = carga no mínimo da norma), contador no menu. Lançados vão para "NRs lançadas".
+- ASO colocado na pasta das NRs, ou certificado de NR na pasta dos ASOs, é movido sozinho para a pasta certa.
+
 ## 0.1.49 — 28/10/2026
 - Novo visual no estilo Liquid Glass (Apple HIG, Materials): o vidro fica só na camada de navegação (menu lateral flutuante, busca rápida); o conteúdo continua em cartões sólidos para manter o contraste. Respeita "reduzir transparência" e "aumentar contraste" do sistema.
 - Menu reorganizado por tarefa, com no máximo 2 níveis: Painel; Pessoas (Trabalhadores, Pendências, Vencimentos); Documentos e eSocial (ASOs recebidos, Aprovação); Gestão (Relatório mensal, Estoque e EPIs); Ferramentas (recolhida por padrão). Os grupos recolhem e o programa lembra a escolha neste computador.
