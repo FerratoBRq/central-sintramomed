@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.1.48 — 28/10/2026
+- Revisão jurídica do desconto de uniforme:
+  - "Vale" passa a se chamar **Fornecimento com desconto autorizado**. O papel impresso agora é o **Termo de autorização de desconto · Uniforme**, com CPF, preço de custo, autorização prévia, expressa e sem coação (Súmula 342 do TST), parcelas e datas, limite de 70% do valor a receber no período (OJ 18 da SDC do TST) e a declaração de que EPIs e botina são gratuitos.
+  - Reposição por perda ou dano exige descrever o que aconteceu; desgaste natural de uso não pode ser descontado (CLT art. 462, § 1º).
+  - O termo de entrega do uniforme da safra traz o compromisso prévio de reposição por culpa, que o art. 462, § 1º, da CLT exige.
+  - Histórico na folha: "DESC AUTORIZADO UNIFORME". Preços passam a ser "preço de custo"; botina saiu da tabela de preços.
+- Entrevista e antecedentes: avisos da Lei 9.029/1995 (estado civil, filhos e saúde não podem ser critério de seleção), da LGPD (saúde é dado sensível; resposta voluntária) e da tese do TST (Tema 1) sobre quando pedir antecedentes.
+- Texto do desligamento corrigido ("há mais de 90 dias sem produção") e cargas mínimas das NRs atualizadas no código.
+
 ## 0.1.47 — 28/10/2026
 - Vale de uniforme ajustado à lei (trabalhador avulso não portuário, Lei 12.023/2009):
   - Botina de segurança e EPIs não podem entrar em vale (CLT art. 166, NR-6 e Lei 12.023/2009 art. 9º: fornecimento gratuito, dever do tomador). Saem por Entrega de EPI, sem custo.
