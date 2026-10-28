@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.43 — 28/10/2026
+- Previsão de vencimentos: botões Lista de certificados NR-35 e NR-33, que geram em Word o modelo "Lista para emissão de certificados" do sindicato (cabeçalho, termo e assinaturas iguais), uma lista por NR. Cada folha mantém as 13 linhas do modelo; com mais nomes, a folha é duplicada com os próximos. Classificação: Reciclagem para quem já tem a NR registrada, Formação para quem não tem. Com uma turma escolhida, sai só ela e com a data da turma.
+
 ## 0.1.42 — 28/10/2026
 - Previsão de vencimentos: o calendário agora é clicável. Clicar num dia marca (ou desmarca) a turma; com um item escolhido (ASO, NR-35 ou NR-33) marca só dele, em Todos marca para os três. As datas marcadas ficam guardadas e compartilhadas.
 - Com datas marcadas, o Central distribui os trabalhadores: vencidos e quem vence antes da 1ª data vão para a 1ª; quem vence depois da 2ª data vai para a 2ª, e assim por diante (sempre a última data marcada antes do vencimento). Sem datas marcadas, continua a sugestão automática.

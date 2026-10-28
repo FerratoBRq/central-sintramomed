@@ -100,7 +100,7 @@ pub fn salvar_download(app: tauri::AppHandle, nome: String, bytes: Vec<u8>) -> R
     let ok = nome.len() <= 120
         && !nome.contains("..")
         && nome.chars().all(|c| c.is_alphanumeric() || " -_.()".contains(c));
-    if !ok || !nome.ends_with(".xlsx") {
+    if !ok || !(nome.ends_with(".xlsx") || nome.ends_with(".docx")) {
         return Err("Nome de arquivo inválido.".into());
     }
     let dir = app.path().download_dir().map_err(|e| format!("Pasta Downloads não encontrada: {e}"))?;
