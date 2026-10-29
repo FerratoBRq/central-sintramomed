@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.62 — 29/10/2026
+- Fichas do Guia: o e-mail aparecia como "[email protected]" (proteção do Cloudflare no site do Guia, que depende de um script). Agora o Central decodifica e imprime o e-mail de verdade, do sindicato e do trabalhador.
+
 ## 0.1.61 — 29/10/2026
 - Emitir ficha: escolha entre a **Ficha do Trabalhador** e o **Termo de EPI** do próprio Sistema eSocial (Guia Campo Grande), mostrados como o Guia emite e impressos pelo Central, ou a ficha do Central.
 - Estoque: ao entregar camiseta, calça ou botina (EPI, safra ou desconto autorizado), opção "Lançar também na aba EPI's do Sistema eSocial" (Data, Quantidade e Equipamento, os mesmos campos do Guia). Vai para a Aprovação e, depois de aprovado, é gravado e conferido relendo a aba. Pedido do Gabriel em 29/10/2026.

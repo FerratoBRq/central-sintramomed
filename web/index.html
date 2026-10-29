@@ -387,7 +387,7 @@ td .btn{white-space:nowrap}.busca-r .search{flex:none}.busca-r .search .ico{left
     </nav>
     <button class="tema-b" id="btnTema" type="button"></button>
     <div class="side-foot">
-      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.61</b></span><span id="runtime">modo navegador</span></div>
+      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.62</b></span><span id="runtime">modo navegador</span></div>
       <span id="syncInfo"></span>
       <button class="link" id="btnSync" type="button" hidden>Sincronizar tudo agora</button>
       <span id="updInfo">Verificando atualizações…</span>
@@ -405,7 +405,7 @@ td .btn{white-space:nowrap}.busca-r .search{flex:none}.busca-r .search .ico{left
 /* Tema: claro, escuro ou automático (segue o Windows). O botão de lua/sol fixa o modo neste computador. */
 const temaEscuro=()=>{const t=document.documentElement.dataset.theme;return t?t==="dark":matchMedia("(prefers-color-scheme: dark)").matches};
 try{const t=localStorage.getItem("cs_tema");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}
-const APP_VERSION="0.1.61";
+const APP_VERSION="0.1.62";
 /* ---------- utilidades ---------- */
 const $=(s,r=document)=>r.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -590,6 +590,7 @@ const ATALHOS=[
 /* Novidades curtas por versão (aparecem na engrenagem, no aviso de atualização e em Feedback). Uma linha por versão;
    o detalhe fica no CHANGELOG.md. Ao lançar versão, acrescente a linha nova no topo. */
 const VERSOES=[
+ ["0.1.62","E-mail correto nas fichas do Guia"],
  ["0.1.61","Fichas do Guia e lançamento de EPI no Sistema eSocial"],
  ["0.1.60","Novidades resumidas na engrenagem e em Feedback"],
  ["0.1.59","Listas em páginas e telas longas em abas"],
@@ -2652,9 +2653,13 @@ function fichaHTML(w){
 /* Fichas do Sistema eSocial (Guia Campo Grande), só leitura: Doc's › Ficha Trabalhador (imp_colaborador.php) e o
    Termo de Responsabilidade de EPI (imp_epi.php, mesma impressão da aba EPI's). A página do Guia é mostrada como vem,
    sem os scripts e o formulário de busca, e impressa daqui. A ficha do Central continua como opção. */
+// E-mail protegido pelo Cloudflare: hex em que o 1º byte é a chave (XOR) dos demais.
+const cfEmail=h=>{const k=parseInt(String(h).slice(0,2),16);let o="";for(let i=2;i+1<String(h).length;i+=2)o+=String.fromCharCode(parseInt(h.slice(i,i+2),16)^k);return o};
 async function fichaGuiaHTML(tipo,w){
   const hoje=br(iso(TODAY)),cam=tipo==="epi"?`/register/imp_epi.php?cod_colaborador=${w.origemId}&dt1=01/01/2000&dt2=${hoje}`:`/register/imp_colaborador.php?acao=Visualizar&cod_colaborador=${w.origemId}`;
   const d=dom(await sget(cam));d.querySelectorAll("script,form").forEach(x=>x.remove());
+  // O Guia passa por Cloudflare, que troca e-mails por "[email protected]" e só os mostra com um script: decodifica aqui.
+  d.querySelectorAll("[data-cfemail]").forEach(el=>{const t=d.createTextNode(cfEmail(el.getAttribute("data-cfemail")));(el.closest('a[href*="email-protection"]')||el).replaceWith(t)});
   const base=d.createElement("base");base.href="https://sistemaesocial.guiacampogrande.com/register/";d.head.prepend(base);
   return "<!doctype html>"+d.documentElement.outerHTML}
 function emitirFicha(w){
