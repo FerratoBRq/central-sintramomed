@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.60 — 29/10/2026
+- Novidades resumidas: a engrenagem e o aviso de atualização mostram só uma linha da versão atual; Feedback mostra uma linha por versão. O detalhe fica no histórico completo.
+
 ## 0.1.59 — 29/10/2026
 - Listas longas em páginas, com 15, 30, 45 ou 60 itens por tela (escolha lembrada) e botões 1, 2, 3…: Trabalhadores, Pendências, Previsão de vencimentos, ASOs e NRs recebidos, Aprovação, Movimentos do estoque, NR-01 e Sem produção.
 - Telas longas separadas em abas: Estoque (Saldo, Movimentos, Descontos, Configurações), ASOs/NRs recebidos (Para conferir, Já tratados, Pasta do Central), Aprovação (Esperando aprovação, Histórico) e Listas e inativos (Relatório mensal, Sem produção há +3 meses).
