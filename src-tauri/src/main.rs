@@ -2,6 +2,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 mod atualizacao;
+mod dom;
 mod esocial;
 mod github;
 mod pasta;
@@ -22,6 +23,7 @@ fn main() {
         .plugin(tauri_plugin_process::init())
         .plugin(tauri_plugin_opener::init())
         .manage(esocial::Esocial::new())
+        .manage(dom::Dom::new())
         .invoke_handler(tauri::generate_handler![
             esocial::cred_salvar,
             esocial::cred_status,
@@ -44,7 +46,11 @@ fn main() {
             github::gh_cred_salvar,
             github::gh_cred_status,
             github::gh_cred_apagar,
-            github::gh_conteudo
+            github::gh_conteudo,
+            dom::dom_cred_salvar,
+            dom::dom_cred_status,
+            dom::dom_cred_apagar,
+            dom::dom_get
         ])
         .run(tauri::generate_context!())
         .expect("erro ao iniciar a Central Sintramomed");

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.57 — 29/10/2026
+- NR-01 · Portal DOM: acesso ao portal dentro do Central (e-mail e senha guardados no Gerenciador de Credenciais do Windows; só consulta). Sincroniza a lista de Trabalhadores do portal (na hora e a cada hora) e mostra, para cada ativo: fora do portal, convidado, em treinamento ou concluído, situação do convite e itens feitos. Botão para gerar a planilha só dos que faltam no portal.
+- Programação de pagamento e NR-01: textos mais curtos (detalhes ao passar o mouse).
+
 ## 0.1.56 — 29/10/2026
 - Programação de pagamento: opção "Preencher o VALOR com a produção da quinzena". O valor é o Total do extrato de produção (bruto, sem descontos). Quem produziu em mais de uma empresa fica só na empresa onde teve mais diárias (empate: maior valor), com a soma de todas e, logo abaixo, a linha "* Rubrica: soma da produção" com a parte e as diárias de cada empresa. A folha calcula subtotal e total. Precisa clicar em Buscar de novo para trazer os valores.
 
