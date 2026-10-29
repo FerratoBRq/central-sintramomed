@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.66 — 29/10/2026
+- Estoque: novo motivo de saída **Primeiro uniforme (sem custo)**, já com 1 camiseta manga longa, 1 calça e 1 par de botina; só escolher o colaborador e os tamanhos. Uma vez por trabalhador (avisa se já recebeu). Imprime o Termo de entrega do primeiro uniforme e pode lançar na aba EPI's do Sistema eSocial pela Aprovação.
+
 ## 0.1.65 — 29/10/2026
 - Vencimento das NRs (antes Previsão de vencimentos): só NR-35 e NR-33; o ASO saiu dessa tela (continua em Pendências).
 - Calendário com cada mês num cartão com fundo e cabeçalho colorido, dias maiores e o dia de hoje destacado.

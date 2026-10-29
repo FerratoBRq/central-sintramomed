@@ -389,7 +389,7 @@ td .btn{white-space:nowrap}.busca-r .search,.modal .search{flex:none}.busca-r .s
     </nav>
     <button class="tema-b" id="btnTema" type="button"></button>
     <div class="side-foot">
-      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.65</b></span><span id="runtime">Modo navegador</span></div>
+      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.66</b></span><span id="runtime">Modo navegador</span></div>
       <span id="syncInfo"></span>
       <button class="link" id="btnSync" type="button" hidden>Sincronizar tudo agora</button>
       <span id="updInfo">Verificando atualizações…</span>
@@ -407,7 +407,7 @@ td .btn{white-space:nowrap}.busca-r .search,.modal .search{flex:none}.busca-r .s
 /* Tema: claro, escuro ou automático (segue o Windows). O botão de lua/sol fixa o modo neste computador. */
 const temaEscuro=()=>{const t=document.documentElement.dataset.theme;return t?t==="dark":matchMedia("(prefers-color-scheme: dark)").matches};
 try{const t=localStorage.getItem("cs_tema");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}
-const APP_VERSION="0.1.65";
+const APP_VERSION="0.1.66";
 /* ---------- utilidades ---------- */
 const $=(s,r=document)=>r.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -541,7 +541,7 @@ const MANUAL=[
  {t:"ASOs e NRs recebidos",p:["Salve os PDFs que chegam pelo WhatsApp na pasta ASOs para lançar ou NRs para lançar (Documentos > Central Sintramomed). O Central lê a cada minuto. Se o arquivo for para a pasta errada, ele muda sozinho.","Também dá para usar Anexar ou arrastar os PDFs para a tela.","Na aba Para conferir: Conferir e lançar abre o documento lido para conferir. Enviar prontos para aprovação manda de uma vez os que estão completos.","Depois de lançado, o arquivo vai para ASOs lançados ou NRs lançadas e fica anexado na ficha."]},
  {t:"Aprovação",p:["Tudo o que o Central vai gravar no Sistema eSocial (ASO, NR, endereço, desconto autorizado, EPI) aparece aqui com o que muda: como está no sistema e como vai ficar.","Aprovar e enviar pede uma segunda confirmação, grava no Guia e confere relendo a página. Recusar descarta o pedido.","A aba Histórico guarda o que foi enviado, recusado ou deu erro."]},
  {t:"Relatório mensal e sem produção",p:["Relatório mensal: escolha o mês e clique em Buscar no Sistema eSocial. Vêm admissões, periódicos (com a empresa da produção) e afastados/desligados (pelo mês do lançamento).","Marque classificação do ASO, envio à DOM e antecedentes; inclua pessoas à mão se precisar; clique em Gerar Excel.","Aba Sem produção há +3 meses: marque quem deve ser desligado. Marcar não envia nada ao sistema."]},
- {t:"Estoque e EPIs",p:["Aba Saldo mostra uniformes por tamanho e EPIs. Contagem: digite o que há de fato e o Central lança só a diferença.","Entrada: compra ou devolução. Saída ou baixa: Entrega de EPI (sem custo), Uniforme da safra (1 calça e 1 camisa por safra, sem custo), Fornecimento com desconto autorizado ou Baixa.","Desconto autorizado só vale para peça extra pedida pelo trabalhador ou reposição por perda/dano por culpa dele. Botina e EPIs nunca são cobrados. Imprima o Termo de autorização de desconto e colha a assinatura antes.","Ao entregar camiseta, calça ou botina, a opção Lançar também na aba EPI's do Sistema eSocial cria o pedido na Aprovação.","Estorno: o botão Estornar desfaz um movimento. Ele pede confirmação, e um clique duplo não lança duas vezes.","Limpar histórico do estoque (aba Configurações): zera saldos e movimentos até agora em todos os computadores; depois lance a Contagem."]},
+ {t:"Estoque e EPIs",p:["Aba Saldo mostra uniformes por tamanho e EPIs. Contagem: digite o que há de fato e o Central lança só a diferença.","Entrada: compra ou devolução. Saída ou baixa: Primeiro uniforme (kit pronto e sem custo: 1 camiseta manga longa, 1 calça e 1 botina; só escolher os tamanhos, uma vez por trabalhador), Entrega de EPI (sem custo), Uniforme da safra (1 calça e 1 camisa por safra, sem custo), Fornecimento com desconto autorizado ou Baixa.","Desconto autorizado só vale para peça extra pedida pelo trabalhador ou reposição por perda/dano por culpa dele. Botina e EPIs nunca são cobrados. Imprima o Termo de autorização de desconto e colha a assinatura antes.","Ao entregar camiseta, calça ou botina, a opção Lançar também na aba EPI's do Sistema eSocial cria o pedido na Aprovação.","Estorno: o botão Estornar desfaz um movimento. Ele pede confirmação, e um clique duplo não lança duas vezes.","Limpar histórico do estoque (aba Configurações): zera saldos e movimentos até agora em todos os computadores; depois lance a Contagem."]},
  {t:"NR-01 · Portal DOM",p:["Conecte o Portal DOM uma vez na engrenagem (e-mail e senha do portal). O Central consulta o portal a cada 10 minutos.","Aba Situação: quem está fora do portal, convidado, em treinamento ou concluiu, com os itens feitos.","Aba Importar: salva a planilha dos que faltam e abre a tela de importação do portal; arraste o arquivo e confirme lá.","Aba Faltam dados: quem não entra na planilha por falta de CPF, WhatsApp (celular com DDD) ou data de início."]},
  {t:"Programação de pagamento",p:["Escolha o mês e a quinzena e clique em Buscar produção e contas. As empresas com produção vêm marcadas.","Puxar o valor da produção preenche o VALOR com a produção bruta; quem trabalhou em mais de uma empresa fica na de mais diárias, com a soma (*).","Usar PIX para quem não tem conta: usa a chave do Guia; sem ela, o celular ou e-mail do cadastro marcado (conferir).","Imprima uma folha por empresa, as empresas marcadas juntas ou a folha em branco."]},
  {t:"Ferramentas",p:["Fatiador de PDF: separa um PDF digitalizado em páginas e anexa cada uma na ficha certa.","Entrevista online: ficha de triagem do candidato; Converter em cadastro cria o trabalhador.","Modelos para impressão: fichas e documentos prontos para imprimir.","Feedback e novidades: registre sugestões ou problemas e veja o que mudou em cada versão."]},
@@ -621,6 +621,7 @@ const ATALHOS=[
 /* Novidades curtas por versão (aparecem na engrenagem, no aviso de atualização e em Feedback). Uma linha por versão;
    o detalhe fica no CHANGELOG.md. Ao lançar versão, acrescente a linha nova no topo. */
 const VERSOES=[
+ ["0.1.66","Primeiro uniforme pronto e sem custo no estoque"],
  ["0.1.65","Calendário das NRs com turmas e vínculo de trabalhadores"],
  ["0.1.64","Manual do usuário, limpar histórico do estoque e sem clique duplicado"],
  ["0.1.63","Contagem do estoque e avisos nos grupos do menu"],
@@ -2052,7 +2053,7 @@ const PRODUTOS=[
   {id:"cinta",nome:"Cinta ergonômica com suspensório (preta)",grupo:"epi",tam:["G","XG"]}];
 const unDe=id=>(PRODUTOS.find(p=>p.id===id)||{}).un||"un";
 const PRECO_PADRAO={"camisa-ml":40,"camisa-mc":40,calca:60,botina:60};
-const MOTIVOS={compra:"Entrada (compra ou recebimento)",epi:"Entrega de EPI (sem desconto)",devolucao:"Devolução do colaborador",vale:"Fornecimento com desconto autorizado",safra:"Uniforme da safra",baixa:"Baixa (perda, avaria, descarte)",ajuste:"Ajuste de inventário",estorno:"Estorno",descontado:"Desconto efetuado"};
+const MOTIVOS={compra:"Entrada (compra ou recebimento)",primeiro:"Primeiro uniforme (sem custo)",epi:"Entrega de EPI (sem desconto)",devolucao:"Devolução do colaborador",vale:"Fornecimento com desconto autorizado",safra:"Uniforme da safra",baixa:"Baixa (perda, avaria, descarte)",ajuste:"Ajuste de inventário",estorno:"Estorno",descontado:"Desconto efetuado"};
 const LIMITE_SAFRA={camisa:1,calca:1}; // por colaborador, por safra
 const brl=v=>Number(v||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
 const prod=id=>PRODUTOS.find(p=>p.id===id)||{nome:id,tam:[]};
@@ -2151,17 +2152,19 @@ function abrirInventario(){const m=document.createElement("div");m.className="mo
     if(!movs.length){toast("Nenhuma diferença para lançar");bt.disabled=false;return}try{await estGravar(movs)}catch(e){toast(String(e.message||e));bt.disabled=false;return}close();toast(`${movs.length} ajuste${movs.length>1?"s":""} lançado${movs.length>1?"s":""}`);if(current==="estoque")vEst()}}
 function abrirMov(tipo){
   const entrada=tipo==="entrada";const cfg=estCfg();let quem=null;
-  const linha=()=>`<div class="mov-linha form-grid" style="grid-template-columns:2fr 1fr 1fr auto;align-items:end">
-     <div class="field"><label>Item</label><select class="inp" data-it="prod"><optgroup label="Uniformes">${PRODUTOS.filter(p=>p.grupo!=="epi").map(p=>`<option value="${p.id}">${esc(p.nome)}</option>`).join("")}</optgroup><optgroup label="EPIs">${PRODUTOS.filter(p=>p.grupo==="epi").map(p=>`<option value="${p.id}">${esc(p.nome)}</option>`).join("")}</optgroup></select></div>
+  // Primeiro uniforme: kit pronto, sem custo (1 camiseta manga longa, 1 calça e 1 par de botina); só os tamanhos são escolhidos.
+  const KIT_PRIMEIRO=["camisa-ml","calca","botina"];
+  const linha=(pid)=>`<div class="mov-linha form-grid" style="grid-template-columns:2fr 1fr 1fr auto;align-items:end">
+     <div class="field"><label>Item</label><select class="inp" data-it="prod"><optgroup label="Uniformes">${PRODUTOS.filter(p=>p.grupo!=="epi").map(p=>`<option value="${p.id}" ${p.id===pid?"selected":""}>${esc(p.nome)}</option>`).join("")}</optgroup><optgroup label="EPIs">${PRODUTOS.filter(p=>p.grupo==="epi").map(p=>`<option value="${p.id}">${esc(p.nome)}</option>`).join("")}</optgroup></select></div>
      <div class="field"><label>Tamanho</label><select class="inp" data-it="tam"></select></div>
      <div class="field"><label>Quantidade</label><input class="inp" data-it="qtd" type="number" min="1" step="1" value="1"></div>
      <button class="btn sm danger" type="button" data-it="rm" aria-label="Tirar item">Tirar</button></div>`;
   const m=document.createElement("div");m.className="modal";
   m.innerHTML=`<div class="scrim"></div><div class="modal-c" role="dialog" aria-modal="true" aria-labelledby="mvh" style="max-width:720px"><div class="drawer-h"><div><div class="eyebrow">Estoque de uniformes</div><h2 id="mvh" style="font-size:20px">${entrada?"Entrada no estoque":"Saída ou baixa"}</h2></div><button class="btn" id="mvClose">Fechar</button></div>
    <div class="drawer-b" style="align-items:stretch">
-    <div class="field"><label for="mvMot">Motivo</label><select id="mvMot" class="inp">${(entrada?["compra","devolucao"]:["epi","vale","safra","baixa"]).map(k=>`<option value="${k}">${MOTIVOS[k]}</option>`).join("")}</select></div>
+    <div class="field"><label for="mvMot">Motivo</label><select id="mvMot" class="inp">${(entrada?["compra","devolucao"]:["primeiro","epi","safra","vale","baixa"]).map(k=>`<option value="${k}">${MOTIVOS[k]}</option>`).join("")}</select></div>
     <div id="mvQuem" class="field"><label for="mvBusca">Colaborador</label><input id="mvBusca" class="inp" placeholder="Digite o nome ou o CPF" autocomplete="off"><div id="mvSug" class="list"></div></div>
-    <div id="mvItens" style="display:flex;flex-direction:column;gap:10px">${linha()}</div>
+    <div id="mvItens" style="display:flex;flex-direction:column;gap:10px">${entrada?linha():KIT_PRIMEIRO.map(linha).join("")}</div>
     <div><button class="btn sm" id="mvMais" type="button">${ico("plus",14)} Outro item</button></div>
     <div class="field" id="mvVmW" hidden><label for="mvVm">Motivo do desconto (base legal)</label><select id="mvVm" class="inp"><option value="extra">Peça extra pedida pelo trabalhador, além do uniforme gratuito (autorização prévia por escrito – Súmula 342 do TST)</option><option value="dano">Reposição de peça perdida ou danificada por culpa ou dolo do trabalhador, fora do desgaste natural (art. 462, § 1º, da CLT)</option></select></div>
     <div class="field" id="mvParcW" hidden><label for="mvParc">Parcelamento do desconto</label><select id="mvParc" class="inp"><option value="1">À vista (1x)</option><option value="2">Em 2 vezes</option></select></div>
@@ -2176,7 +2179,7 @@ function abrirMov(tipo){
     if(!st.options.length)fill();sp.onchange=fill;st.onchange=aviso;l.querySelector('[data-it="qtd"]').oninput=aviso;
     l.querySelector('[data-it="rm"]').onclick=()=>{if(m.querySelectorAll(".mov-linha").length>1){l.remove();aviso()}}});
   const itens=()=>[...m.querySelectorAll(".mov-linha")].map(l=>({prod:l.querySelector('[data-it="prod"]').value,tam:l.querySelector('[data-it="tam"]').value,qtd:parseInt(l.querySelector('[data-it="qtd"]').value,10)||0}));
-  const precisaQuem=()=>["epi","vale","safra","devolucao"].includes($("#mvMot").value);
+  const precisaQuem=()=>["primeiro","epi","vale","safra","devolucao"].includes($("#mvMot").value);
   // Regras: saldo suficiente; uniforme da safra no máximo 1 calça e 1 camisa por colaborador; colaborador obrigatório.
   const problemas=()=>{const mot=$("#mvMot").value,its=itens(),p=[];
     if(its.some(i=>i.qtd<1))p.push("Informe quantidades a partir de 1.");
@@ -2189,18 +2192,19 @@ function abrirMov(tipo){
     if(mot==="vale"&&its.some(i=>["botina","epi"].includes(prod(i.prod).grupo)))p.push("Botina e EPIs não podem ser cobrados do trabalhador (CLT art. 166, NR-6 e Lei 12.023/2009 art. 9º). Use Entrega de EPI.");
     if(mot==="vale"&&quem&&$("#mvVm").value==="extra")for(const g of ["camisa","calca"])if(its.some(i=>prod(i.prod).grupo===g)&&safraUsada(quem,cfg.safra,g)<LIMITE_SAFRA[g])p.push(`${quem.nome.split(" ")[0]} ainda não recebeu ${g==="calca"?"a calça":"a camisa"} gratuita da ${cfg.safra}. Entregue primeiro como Uniforme da safra (sem custo); o desconto só vale para peça extra.`);
     if(mot==="vale"&&$("#mvVm").value==="dano"&&!$("#mvObs").value.trim())p.push("Descreva na observação o que aconteceu com a peça (perda ou dano). Desgaste natural de uso não pode ser descontado.");
+    if(mot==="primeiro"&&quem){const ja=Est.movs.find(x=>doColab(x,quem)&&x.motivo==="primeiro"&&!estornado(x.id));if(ja)p.push(`${quem.nome.split(" ")[0]} já recebeu o primeiro uniforme em ${br(ja.q.slice(0,10))}. Use Uniforme da safra, Entrega de EPI ou Fornecimento com desconto autorizado.`)}
     if(mot==="safra"){if(its.some(i=>prod(i.prod).grupo==="botina"))p.push("Botina não faz parte do uniforme da safra: é EPI. Use Entrega de EPI (sem custo).");if(its.some(i=>prod(i.prod).grupo==="epi"))p.push("EPI não faz parte do uniforme da safra. Use Entrega de EPI.");
       if(quem)for(const g of ["camisa","calca"]){const pedido=its.filter(i=>prod(i.prod).grupo===g).reduce((s,i)=>s+i.qtd,0),usado=safraUsada(quem,cfg.safra,g);
         if(pedido+usado>LIMITE_SAFRA[g])p.push(`${quem.nome.split(" ")[0]} já recebeu ${usado} ${g==="calca"?"calça":"camisa"} na ${cfg.safra}; o limite é ${LIMITE_SAFRA[g]}.`)}}
     return p};
-  const aviso=()=>{const mot=$("#mvMot").value;$("#mvQuem").hidden=!precisaQuem();$("#mvParcW").hidden=mot!=="vale";$("#mvGuiaW").hidden=!(quem&&["epi","safra","vale"].includes(mot)&&itens().some(i=>EPI_GUIA[i.prod]));$("#mvVmW").hidden=mot!=="vale";const p=problemas();
+  const aviso=()=>{const mot=$("#mvMot").value;$("#mvQuem").hidden=!precisaQuem();$("#mvParcW").hidden=mot!=="vale";$("#mvGuiaW").hidden=!(quem&&["primeiro","epi","safra","vale"].includes(mot)&&itens().some(i=>EPI_GUIA[i.prod]));$("#mvVmW").hidden=mot!=="vale";const p=problemas();
     const total=mot==="vale"?itens().reduce((s,i)=>s+i.qtd*(cfg.precos[i.prod]||0),0):0;
     $("#mvAviso").innerHTML=(p.length?`<div class="banner" style="border-left-color:var(--crit)"><span>${p.map(esc).join("<br>")}</span></div>`:"")+(mot==="vale"?`<div class="note">Valor a descontar (preço de custo): <b>${brl(total)}</b>${$("#mvParc").value==="2"?` em 2 parcelas de ${parcelas(total,2).map(brl).join(" e ")}`:""} (a descontar do colaborador). Desconto na folha: ${Array.from({length:Number($("#mvParc").value)||1},(_,i)=>br(dataDescontoQuinzena(iso(TODAY),i))).join(" e ")} (5º dia útil da${$("#mvParc").value==="2"?"s próximas quinzenas":" próxima quinzena"}).</div>`:mot==="safra"?`<div class="note">${esc(cfg.safra)}: até 1 calça e 1 camisa por colaborador, sem desconto.</div>`:"")};
   const sug=()=>{const q=$("#mvBusca").value.toLowerCase().trim(),qd=q.replace(/\D/g,"");if(q.length<2){$("#mvSug").innerHTML="";return}
     const r=S.workers.filter(w=>w.status!=="desligado"&&(w.nome.toLowerCase().includes(q)||(qd.length>=3&&w.cpf.includes(qd)))).slice(0,6);
     $("#mvSug").innerHTML=r.map(w=>`<div class="row"><span><b>${esc(w.nome)}</b> <span class="small muted mono">${esc(fmtCPF(w.cpf))}</span></span><button class="btn sm" data-pick="${w.id}">Escolher</button></div>`).join("")||`<div class="small muted">Ninguém encontrado.</div>`;
     m.querySelectorAll("[data-pick]").forEach(b=>b.onclick=()=>{quem=S.workers.find(w=>w.id===b.dataset.pick);$("#mvBusca").value=quem.nome;$("#mvSug").innerHTML="";aviso()})};
-  $("#mvBusca").oninput=()=>{quem=null;sug();aviso()};$("#mvMot").onchange=aviso;$("#mvParc").onchange=aviso;$("#mvVm").onchange=aviso;$("#mvObs").oninput=aviso;
+  $("#mvBusca").oninput=()=>{quem=null;sug();aviso()};$("#mvMot").onchange=()=>{if($("#mvMot").value==="primeiro"){$("#mvItens").innerHTML=KIT_PRIMEIRO.map(linha).join("");ligar()}aviso()};$("#mvParc").onchange=aviso;$("#mvVm").onchange=aviso;$("#mvObs").oninput=aviso;
   $("#mvMais").onclick=()=>{$("#mvItens").insertAdjacentHTML("beforeend",linha());ligar()};
   ligar();aviso();
   // Um clique só: o botão trava enquanto grava (clique duplo não lança duas vezes).
@@ -2276,10 +2280,10 @@ function imprimirVale(lote){
 function termoEntrega(lote){
   const movs=Est.movs.filter(m=>(m.lote||m.id)===lote&&m.motivo!=="estorno");if(!movs.length)return;
   const f=movs[0],vale=false,total=movs.reduce((s,m)=>s+Number(m.valor||0),0),dt=new Date(f.q);
-  const html=`<div class="ficha"><header><div style="flex-direction:row;align-items:center;gap:0"><img class="logo-f" src="logo.png" alt=""><div style="display:flex;flex-direction:column;gap:2px"><b>SINTRAMOMED</b><span>Sindicato dos Trabalhadores na Movimentação de Mercadorias em Geral de Dourados · CNPJ 03.682.762/0001-03</span></div></div><div class="fr">Termo de entrega ${f.motivo==="epi"?"de EPI":"de uniforme"}<br><small>${br(iso(dt))} às ${hhmm(dt)}</small></div></header>
+  const html=`<div class="ficha"><header><div style="flex-direction:row;align-items:center;gap:0"><img class="logo-f" src="logo.png" alt=""><div style="display:flex;flex-direction:column;gap:2px"><b>SINTRAMOMED</b><span>Sindicato dos Trabalhadores na Movimentação de Mercadorias em Geral de Dourados · CNPJ 03.682.762/0001-03</span></div></div><div class="fr">Termo de entrega ${f.motivo==="epi"?"de EPI":f.motivo==="primeiro"?"do primeiro uniforme":"de uniforme"}<br><small>${br(iso(dt))} às ${hhmm(dt)}</small></div></header>
    <h1>${esc(f.wn||"")}</h1><p style="margin:0;color:#6e6e73">CPF ${esc(fmtCPF(f.cpf||""))} · ${esc(MOTIVOS[f.motivo])}${f.motivo==="safra"?" · "+esc(f.safra):""}</p>
    <section><h2>Itens entregues</h2><table><tr><th>Item</th><td><b>Tamanho · Quantidade${vale?" · Valor":""}</b></td></tr>${movs.map(m=>`<tr><th>${esc(prod(m.prod).nome)}</th><td>${esc(m.tam)} · ${-m.qtd}${vale?" · "+brl(m.valor):""}</td></tr>`).join("")}${vale?`<tr><th>Total</th><td><b>${brl(total)}</b></td></tr>`:""}</table></section>
-   <p style="margin-top:18px">Declaro que recebi os itens acima em perfeito estado, comprometo-me a usá-los no trabalho e a conservá-los.${f.motivo==="epi"?" Comprometo-me a usar os EPIs durante o trabalho, guardá-los e conservá-los e a comunicar qualquer dano, conforme a NR-6.":" O uniforme é fornecido sem custo e limitado a 1 calça e 1 camisa por safra. Em caso de perda ou dano por culpa minha, fora do desgaste natural de uso, concordo que a reposição seja descontada pelo preço de custo, mediante termo assinado (art. 462, § 1º, da CLT)."}</p>
+   <p style="margin-top:18px">Declaro que recebi os itens acima em perfeito estado, comprometo-me a usá-los no trabalho e a conservá-los.${f.motivo==="epi"?" Comprometo-me a usar os EPIs durante o trabalho, guardá-los e conservá-los e a comunicar qualquer dano, conforme a NR-6.":f.motivo==="primeiro"?" Recebi o primeiro uniforme sem custo (camiseta, calça e botina de segurança). A botina é EPI: comprometo-me a usá-la no trabalho, conservá-la e comunicar qualquer dano, conforme a NR-6. Em caso de perda ou dano do uniforme por culpa minha, fora do desgaste natural de uso, concordo que a reposição seja descontada pelo preço de custo, mediante termo assinado (art. 462, § 1º, da CLT).":" O uniforme é fornecido sem custo e limitado a 1 calça e 1 camisa por safra. Em caso de perda ou dano por culpa minha, fora do desgaste natural de uso, concordo que a reposição seja descontada pelo preço de custo, mediante termo assinado (art. 462, § 1º, da CLT)."}</p>
    <footer><div>__________________________________<br>${esc(f.wn||"Colaborador")}</div><div>__________________________________<br>Responsável pela entrega${f.u?" ("+esc(f.u)+")":""}</div></footer></div>`;
   const md=document.createElement("div");md.className="modal";
   md.innerHTML=`<div class="scrim"></div><div class="modal-c" role="dialog" aria-modal="true" aria-label="Termo de entrega"><div class="drawer-h"><div><div class="eyebrow">Termo de entrega · A4</div><h2 style="font-size:19px">${esc(f.wn||"")}</h2></div><div class="toolbar"><button class="btn primary" id="tPrint">Imprimir</button><button class="btn" id="tClose">Fechar</button></div></div><div class="drawer-b" style="background:var(--surface-2)">${html}</div></div>`;
