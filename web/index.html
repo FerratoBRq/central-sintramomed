@@ -387,7 +387,7 @@ td .btn{white-space:nowrap}.busca-r .search{flex:none}.busca-r .search .ico{left
     </nav>
     <button class="tema-b" id="btnTema" type="button"></button>
     <div class="side-foot">
-      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.62</b></span><span id="runtime">modo navegador</span></div>
+      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.63</b></span><span id="runtime">modo navegador</span></div>
       <span id="syncInfo"></span>
       <button class="link" id="btnSync" type="button" hidden>Sincronizar tudo agora</button>
       <span id="updInfo">Verificando atualizações…</span>
@@ -405,7 +405,7 @@ td .btn{white-space:nowrap}.busca-r .search{flex:none}.busca-r .search .ico{left
 /* Tema: claro, escuro ou automático (segue o Windows). O botão de lua/sol fixa o modo neste computador. */
 const temaEscuro=()=>{const t=document.documentElement.dataset.theme;return t?t==="dark":matchMedia("(prefers-color-scheme: dark)").matches};
 try{const t=localStorage.getItem("cs_tema");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}
-const APP_VERSION="0.1.62";
+const APP_VERSION="0.1.63";
 /* ---------- utilidades ---------- */
 const $=(s,r=document)=>r.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -539,7 +539,10 @@ $("#navLancAso").onclick=()=>{fecharLancar();abrirLancamento(null,()=>render())}
 /* Menu lateral: grupos por tarefa (até 2 níveis, HIG/Apple), recolhíveis e lembrados neste PC; o grupo da tela aberta sempre abre. */
 const navFechados=()=>{try{return JSON.parse(LS.get("cs_nav_fechados")||'["ferramentas"]')}catch(e){return[]}};
 function navGrupos(){const f=navFechados();document.querySelectorAll(".nav-g").forEach(g=>{const ativo=!!g.querySelector(`[data-v="${current}"]`),aberto=ativo||!f.includes(g.dataset.g);
-  g.classList.toggle("fechado",!aberto);g.querySelector(".nav-l").setAttribute("aria-expanded",String(aberto))})}
+  g.classList.toggle("fechado",!aberto);const l=g.querySelector(".nav-l");l.setAttribute("aria-expanded",String(aberto));
+  // Grupo recolhido: mostra a soma dos contadores de dentro, para o aviso não sumir.
+  const n=[...g.querySelectorAll(".nav-i .count")].filter(c=>!c.hidden).reduce((t,c)=>t+(parseInt(c.textContent,10)||0),0);let b=l.querySelector(".count");
+  if(!aberto&&n){if(!b){b=document.createElement("span");b.className="count";b.style.marginRight="6px";l.insertBefore(b,l.firstChild.nextSibling)}b.textContent=n}else if(b)b.remove()})}
 document.querySelectorAll(".nav-g>.nav-l").forEach(b=>b.onclick=()=>{const g=b.parentElement.dataset.g,f=navFechados(),i=f.indexOf(g);if(i<0)f.push(g);else f.splice(i,1);LS.set("cs_nav_fechados",JSON.stringify(f));
   const ab=b.getAttribute("aria-expanded")==="true";b.parentElement.classList.toggle("fechado",ab);b.setAttribute("aria-expanded",String(!ab))});
 /* Botão Lançar: ações separadas da navegação (menu com teclado: setas, Esc). */
@@ -590,6 +593,7 @@ const ATALHOS=[
 /* Novidades curtas por versão (aparecem na engrenagem, no aviso de atualização e em Feedback). Uma linha por versão;
    o detalhe fica no CHANGELOG.md. Ao lançar versão, acrescente a linha nova no topo. */
 const VERSOES=[
+ ["0.1.63","Contagem do estoque e avisos nos grupos do menu"],
  ["0.1.62","E-mail correto nas fichas do Guia"],
  ["0.1.61","Fichas do Guia e lançamento de EPI no Sistema eSocial"],
  ["0.1.60","Novidades resumidas na engrenagem e em Feedback"],
@@ -1991,7 +1995,7 @@ const PRODUTOS=[
   {id:"cinta",nome:"Cinta ergonômica com suspensório (preta)",grupo:"epi",tam:["G","XG"]}];
 const unDe=id=>(PRODUTOS.find(p=>p.id===id)||{}).un||"un";
 const PRECO_PADRAO={"camisa-ml":40,"camisa-mc":40,calca:60,botina:60};
-const MOTIVOS={compra:"Entrada (compra ou recebimento)",epi:"Entrega de EPI (sem desconto)",devolucao:"Devolução do colaborador",vale:"Fornecimento com desconto autorizado",safra:"Uniforme da safra",baixa:"Baixa (perda, avaria, descarte)",estorno:"Estorno",descontado:"Desconto efetuado"};
+const MOTIVOS={compra:"Entrada (compra ou recebimento)",epi:"Entrega de EPI (sem desconto)",devolucao:"Devolução do colaborador",vale:"Fornecimento com desconto autorizado",safra:"Uniforme da safra",baixa:"Baixa (perda, avaria, descarte)",ajuste:"Ajuste de inventário",estorno:"Estorno",descontado:"Desconto efetuado"};
 const LIMITE_SAFRA={camisa:1,calca:1}; // por colaborador, por safra
 const brl=v=>Number(v||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
 const prod=id=>PRODUTOS.find(p=>p.id===id)||{nome:id,tam:[]};
@@ -2032,13 +2036,13 @@ function vEst(){
   const lista=Est.movs.filter(m=>m.motivo!=="descontado"&&(!busca||[m.wn,m.cpf,prod(m.prod).nome,m.tam,MOTIVOS[m.motivo]].join(" ").toLowerCase().includes(busca)));
   const aba=ui.estAba||"saldo",H=k=>aba===k?"":"hidden",pgM=paginar(lista,"estPg"),nDesc=Est.movs.filter(m=>m.motivo==="vale"&&!estornado(m.id)&&!descontado(m.id)).length;
   $("#view").innerHTML=`<div class="head"><div><h1>Estoque de uniformes e EPIs</h1><p>Camisetas, calças, botinas e EPIs: entradas, entregas de EPI, vales, uniforme da safra e baixas. Cada saída fica ligada ao colaborador.</p></div>
-   <div class="toolbar"><button class="btn" id="estEnt">${ico("plus",16)} Entrada</button><button class="btn primary" id="estSai">Saída ou baixa</button></div></div>
+   <div class="toolbar"><button class="btn" id="estInv">${ico("list",16)} Contagem</button><button class="btn" id="estEnt">${ico("plus",16)} Entrada</button><button class="btn primary" id="estSai">Saída ou baixa</button></div></div>
   ${Est.erro?`<div class="banner" style="border-left-color:var(--crit)"><span>Pasta compartilhada indisponível: ${esc(Est.erro)}. Mostrando só os movimentos deste computador.</span></div>`:""}
   ${abasHTML("estAba",[["saldo","Saldo"],["movimentos",`Movimentos (${lista.length})`],["descontos",`Descontos${nDesc?" ("+nDesc+")":""}`],["config","Configurações"]],aba)}
   <div class="tiles" ${H("saldo")}>${tot.filter(({p})=>p.grupo!=="epi").map(({p,q})=>`<div class="tile" style="cursor:default"><span class="ic">${ico("box",22)}</span><span class="n">${q}</span><span class="l">${esc(p.nome)}</span></div>`).join("")}</div>
   <div class="grid2" ${aba==="saldo"?"":"hidden"}>
    <section class="panel"><div class="panel-h"><h2>Uniformes · saldo por tamanho</h2><span class="small muted">${zerados} ${zerados===1?"item zerado":"itens zerados"}</span></div>
-    ${PRODUTOS.filter(p=>p.grupo!=="epi").map(p=>`<div><div class="small" style="font-weight:600;margin-bottom:6px">${esc(p.nome)} <span class="muted">· ${brl(cfg.precos[p.id])}</span></div><div class="tams">${p.tam.map(t=>{const s=saldo(p.id,t);return `<span class="tam ${s<=0?"zero":s<=2?"baixo":""}" title="${esc(p.nome)} ${t}: ${s}"><b>${t}</b>${s}</span>`}).join("")}</div></div>`).join("")}
+    ${PRODUTOS.filter(p=>p.grupo!=="epi").map(p=>`<div><div class="small" style="font-weight:600;margin-bottom:6px">${esc(p.nome)} <span class="muted">· ${p.grupo==="botina"?"EPI, sem custo":brl(cfg.precos[p.id])}</span></div><div class="tams">${p.tam.map(t=>{const s=saldo(p.id,t);return `<span class="tam ${s<=0?"zero":s<=2?"baixo":""}" title="${esc(p.nome)} ${t}: ${s}"><b>${t}</b>${s}</span>`}).join("")}</div></div>`).join("")}
    </section>
    <section class="panel"><div class="panel-h"><h2>EPIs · saldo</h2></div>
     <div class="list">${PRODUTOS.filter(p=>p.grupo==="epi").flatMap(p=>p.tam.map(t=>{const s=saldo(p.id,t);return `<div class="row"><span class="small">${esc(p.nome)}${t==="Único"?"":` · ${esc(t)}`}</span><span class="pill ${s<=0?"crit":s<=2?"warn":"ok"}" style="white-space:nowrap">${s} ${unDe(p.id)}</span></div>`})).join("")}</div>
@@ -2065,7 +2069,7 @@ function vEst(){
    <div class="toolbar" style="justify-content:flex-end"><button class="btn primary" id="cfSalvar">Salvar configurações</button></div>
   </section>`;
   abasBind(vEst);paginarBind(vEst);
-  $("#estEnt").onclick=()=>abrirMov("entrada");$("#estSai").onclick=()=>abrirMov("saida");
+  $("#estInv").onclick=abrirInventario;$("#estEnt").onclick=()=>abrirMov("entrada");$("#estSai").onclick=()=>abrirMov("saida");
   const b=$("#estBusca");b.oninput=()=>{ui.estBusca=b.value;ui.estPg=1;const pos=b.selectionStart;vEst();const nb=$("#estBusca");nb.focus();nb.setSelectionRange(pos,pos)};
   document.querySelectorAll("[data-estorno]").forEach(x=>x.onclick=async()=>{if(!x.dataset.armed){x.dataset.armed="1";x.textContent="Confirmar estorno";return}
     const m=Est.movs.find(y=>y.id===x.dataset.estorno);await estGravar([novoMov({prod:m.prod,tam:m.tam,qtd:-m.qtd,motivo:"estorno",ref:m.id,w:m.w,wn:m.wn,cpf:m.cpf,obs:`Estorno de ${MOTIVOS[m.motivo]||m.motivo} de ${br(m.q.slice(0,10))}`})]);toast("Movimento estornado");vEst()});
@@ -2075,6 +2079,14 @@ function vEst(){
   $("#cfSalvar").onclick=async()=>{const c=estCfg();c.safra=$("#cfSafra").value.trim()||c.safra;PRODUTOS.forEach(p=>{const el=$("#cfP_"+p.id);const v=el?parseFloat(el.value):NaN;if(v>=0)c.precos[p.id]=v});
     estCfgSalvar(c);registrarValor("estoque_cfg","cfg",c);toast("Configurações salvas");await estCarregar();vEst()};
 }
+/* Contagem (inventário): digita o que há de fato em cada tamanho; o Central lança a diferença como "Ajuste de inventário". */
+function abrirInventario(){const m=document.createElement("div");m.className="modal";
+  m.innerHTML=`<div class="scrim"></div><div class="modal-c" role="dialog" aria-modal="true" aria-labelledby="invH" style="max-width:820px"><div class="drawer-h"><div><div class="eyebrow">Estoque</div><h2 id="invH" style="font-size:20px">Contagem do estoque</h2></div><div class="toolbar"><button class="btn primary" id="invSalvar">Lançar ajustes</button><button class="btn" id="invClose">Fechar</button></div></div>
+   <div class="drawer-b" style="align-items:stretch"><div class="small muted">Digite a quantidade contada. Só o que mudar vira ajuste; campo em branco fica como está.</div>
+   ${PRODUTOS.map(p=>`<fieldset><legend>${esc(p.nome)}</legend><div class="tams">${p.tam.map(t=>`<label class="tam" style="gap:4px"><span class="small">${esc(t)}</span><input class="inp" type="number" min="0" data-inv="${p.id}|${esc(t)}" placeholder="${saldo(p.id,t)}" style="width:64px;padding:4px 6px;text-align:center" aria-label="${esc(p.nome)} ${esc(t)}"></label>`).join("")}</div></fieldset>`).join("")}</div></div>`;
+  document.body.appendChild(m);const close=()=>m.remove();m.querySelector(".scrim").onclick=close;$("#invClose").onclick=close;
+  $("#invSalvar").onclick=async()=>{const lote=uid(),movs=[];m.querySelectorAll("[data-inv]").forEach(i=>{if(i.value==="")return;const[pp,t]=i.dataset.inv.split("|"),d=Math.max(0,parseInt(i.value,10)||0)-saldo(pp,t);if(d)movs.push(novoMov({lote,prod:pp,tam:t,qtd:d,motivo:"ajuste"}))});
+    if(!movs.length){toast("Nenhuma diferença para lançar");return}try{await estGravar(movs)}catch(e){toast(String(e.message||e));return}close();toast(`${movs.length} ajuste${movs.length>1?"s":""} lançado${movs.length>1?"s":""}`);if(current==="estoque")vEst()}}
 function abrirMov(tipo){
   const entrada=tipo==="entrada";const cfg=estCfg();let quem=null;
   const linha=()=>`<div class="mov-linha form-grid" style="grid-template-columns:2fr 1fr 1fr auto;align-items:end">
@@ -2246,7 +2258,7 @@ const qFilaSalvar=(k,l)=>LS.set(FILAS[k].fila,JSON.stringify(l.slice(-300)));
 const qPend=k=>qFila(k).filter(x=>x.status==="novo").length;
 function qBadge(k){const el=$("#"+FILAS[k].badge);if(!el)return;const n=qPend(k);el.hidden=!n;el.textContent=n}
 const asoFila=()=>qFila("aso"),asoFilaSalvar=l=>qFilaSalvar("aso",l),asoPendentes=()=>qPend("aso");
-function asoBadge(){qBadge("aso");qBadge("nr")}
+function asoBadge(){qBadge("aso");qBadge("nr");if(typeof navGrupos==="function")navGrupos()}
 const asoTrab=it=>S.workers.find(z=>z.id===it.wid)||S.workers.find(z=>it.wcpf&&z.cpf===it.wcpf)||null;
 // Lê o arquivo e coloca na fila do tipo k. Devolve o tipo que o texto parece ser ("aso", "curso" ou "").
 async function qAnalisar(k,file,chave,extra){

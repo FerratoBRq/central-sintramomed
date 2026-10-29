@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.63 — 29/10/2026
+- Estoque: botão **Contagem** para lançar o inventário. Digita o que há em cada tamanho e o Central lança só a diferença como "Ajuste de inventário".
+- Menu: grupo recolhido mostra a soma dos avisos de dentro (ex.: ASOs e NRs esperando em Documentos e eSocial).
+- Estoque: botina aparece como "EPI, sem custo" no saldo, sem preço.
+
 ## 0.1.62 — 29/10/2026
 - Fichas do Guia: o e-mail aparecia como "[email protected]" (proteção do Cloudflare no site do Guia, que depende de um script). Agora o Central decodifica e imprime o e-mail de verdade, do sindicato e do trabalhador.
 
