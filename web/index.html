@@ -387,7 +387,7 @@ td .btn{white-space:nowrap}.busca-r .search{flex:none}.busca-r .search .ico{left
     </nav>
     <button class="tema-b" id="btnTema" type="button"></button>
     <div class="side-foot">
-      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.60</b></span><span id="runtime">modo navegador</span></div>
+      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.61</b></span><span id="runtime">modo navegador</span></div>
       <span id="syncInfo"></span>
       <button class="link" id="btnSync" type="button" hidden>Sincronizar tudo agora</button>
       <span id="updInfo">Verificando atualizações…</span>
@@ -405,7 +405,7 @@ td .btn{white-space:nowrap}.busca-r .search{flex:none}.busca-r .search .ico{left
 /* Tema: claro, escuro ou automático (segue o Windows). O botão de lua/sol fixa o modo neste computador. */
 const temaEscuro=()=>{const t=document.documentElement.dataset.theme;return t?t==="dark":matchMedia("(prefers-color-scheme: dark)").matches};
 try{const t=localStorage.getItem("cs_tema");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}
-const APP_VERSION="0.1.60";
+const APP_VERSION="0.1.61";
 /* ---------- utilidades ---------- */
 const $=(s,r=document)=>r.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -590,6 +590,7 @@ const ATALHOS=[
 /* Novidades curtas por versão (aparecem na engrenagem, no aviso de atualização e em Feedback). Uma linha por versão;
    o detalhe fica no CHANGELOG.md. Ao lançar versão, acrescente a linha nova no topo. */
 const VERSOES=[
+ ["0.1.61","Fichas do Guia e lançamento de EPI no Sistema eSocial"],
  ["0.1.60","Novidades resumidas na engrenagem e em Feedback"],
  ["0.1.59","Listas em páginas e telas longas em abas"],
  ["0.1.58","NR-01 em abas; login do Portal DOM na engrenagem"],
@@ -2089,6 +2090,7 @@ function abrirMov(tipo){
     <div><button class="btn sm" id="mvMais" type="button">${ico("plus",14)} Outro item</button></div>
     <div class="field" id="mvVmW" hidden><label for="mvVm">Motivo do desconto (base legal)</label><select id="mvVm" class="inp"><option value="extra">Peça extra pedida pelo trabalhador, além do uniforme gratuito (autorização prévia por escrito – Súmula 342 do TST)</option><option value="dano">Reposição de peça perdida ou danificada por culpa ou dolo do trabalhador, fora do desgaste natural (art. 462, § 1º, da CLT)</option></select></div>
     <div class="field" id="mvParcW" hidden><label for="mvParc">Parcelamento do desconto</label><select id="mvParc" class="inp"><option value="1">À vista (1x)</option><option value="2">Em 2 vezes</option></select></div>
+    <label class="chk" id="mvGuiaW" hidden><input type="checkbox" id="mvGuia" checked> Lançar também na aba EPI's do Sistema eSocial (vai para a Aprovação)</label>
     <div class="field"><label for="mvObs">Observação (opcional)</label><input id="mvObs" class="inp" placeholder="${entrada?"Ex.: nota fiscal 1234, fornecedor":"Ex.: botina rasgada"}"></div>
     <div id="mvAviso"></div>
     <div class="toolbar" style="justify-content:flex-end"><button class="btn primary" id="mvSalvar">${entrada?"Lançar entrada":"Lançar saída"}</button></div>
@@ -2116,7 +2118,7 @@ function abrirMov(tipo){
       if(quem)for(const g of ["camisa","calca"]){const pedido=its.filter(i=>prod(i.prod).grupo===g).reduce((s,i)=>s+i.qtd,0),usado=safraUsada(quem,cfg.safra,g);
         if(pedido+usado>LIMITE_SAFRA[g])p.push(`${quem.nome.split(" ")[0]} já recebeu ${usado} ${g==="calca"?"calça":"camisa"} na ${cfg.safra}; o limite é ${LIMITE_SAFRA[g]}.`)}}
     return p};
-  const aviso=()=>{const mot=$("#mvMot").value;$("#mvQuem").hidden=!precisaQuem();$("#mvParcW").hidden=mot!=="vale";$("#mvVmW").hidden=mot!=="vale";const p=problemas();
+  const aviso=()=>{const mot=$("#mvMot").value;$("#mvQuem").hidden=!precisaQuem();$("#mvParcW").hidden=mot!=="vale";$("#mvGuiaW").hidden=!(quem&&["epi","safra","vale"].includes(mot)&&itens().some(i=>EPI_GUIA[i.prod]));$("#mvVmW").hidden=mot!=="vale";const p=problemas();
     const total=mot==="vale"?itens().reduce((s,i)=>s+i.qtd*(cfg.precos[i.prod]||0),0):0;
     $("#mvAviso").innerHTML=(p.length?`<div class="banner" style="border-left-color:var(--crit)"><span>${p.map(esc).join("<br>")}</span></div>`:"")+(mot==="vale"?`<div class="note">Valor a descontar (preço de custo): <b>${brl(total)}</b>${$("#mvParc").value==="2"?` em 2 parcelas de ${parcelas(total,2).map(brl).join(" e ")}`:""} (a descontar do colaborador). Desconto na folha: ${Array.from({length:Number($("#mvParc").value)||1},(_,i)=>br(dataDescontoQuinzena(iso(TODAY),i))).join(" e ")} (5º dia útil da${$("#mvParc").value==="2"?"s próximas quinzenas":" próxima quinzena"}).</div>`:mot==="safra"?`<div class="note">${esc(cfg.safra)}: até 1 calça e 1 camisa por colaborador, sem desconto.</div>`:"")};
   const sug=()=>{const q=$("#mvBusca").value.toLowerCase().trim(),qd=q.replace(/\D/g,"");if(q.length<2){$("#mvSug").innerHTML="";return}
@@ -2127,11 +2129,15 @@ function abrirMov(tipo){
   $("#mvMais").onclick=()=>{$("#mvItens").insertAdjacentHTML("beforeend",linha());ligar()};
   ligar();aviso();
   $("#mvSalvar").onclick=async()=>{const p=problemas();if(p.length){toast(p[0]);return}
-    const mot=$("#mvMot").value,obs=$("#mvObs").value.trim(),lote=uid();
+    const mot=$("#mvMot").value,obs=$("#mvObs").value.trim(),lote=uid(),guiaEpi=!$("#mvGuiaW").hidden&&$("#mvGuia").checked,itensEpi=itens().filter(i=>EPI_GUIA[i.prod]);
     const movs=itens().map(i=>novoMov({lote,prod:i.prod,tam:i.tam,qtd:entrada?i.qtd:-i.qtd,motivo:mot,obs,
       ...(quem?{w:quem.id,wn:quem.nome,cpf:quem.cpf}:{}),...(mot==="safra"?{safra:cfg.safra}:{}),...(mot==="vale"?{valor:i.qtd*(cfg.precos[i.prod]||0),parcelas:Number($("#mvParc").value)||1,valeMotivo:$("#mvVm").value}:{})}));
     try{await estGravar(movs)}catch(e){toast(String(e.message||e));return}
     close();toast(entrada?"Entrada lançada":"Saída lançada");if(current==="estoque")vEst();
+    if(quem&&guiaEpi){let n=0;const w=S.workers.find(x=>x.id===quem.id)||quem;
+      for(const i of itensEpi){const[cod,nome]=EPI_GUIA[i.prod],dados={data:iso(TODAY),equip_cod:cod,equip:nome,qtd:i.qtd};
+        await aprovCriar("epi",w,dados,[["Aba do sistema","Trabalhador › EPI's","Trabalhador › EPI's"],["Operação","—","Inserir lançamento novo"],["Data","",br(dados.data)],["Equipamento","",nome],["Quantidade","",String(i.qtd)]]);n++}
+      if(n)toast(`${n} lançamento${n>1?"s":""} de EPI enviado${n>1?"s":""} para Aprovação`)}
     if(quem&&mot==="vale"){const n=await pedirDescontoVale(lote);if(n)toast(`Saída lançada · ${n} desconto${n>1?"s":""} na folha enviado${n>1?"s":""} para Aprovação`)}
     if(quem&&!entrada)(mot==="vale"?imprimirVale:termoEntrega)(lote)};
 }
@@ -2582,18 +2588,29 @@ function aprovDiffDoc(w,y){
 async function aprovCriar(acao,w,dados,diff){
   const p={id:"aprov-"+uid(),tipo:"aprovacao",acao,wcpf:w.cpf,wnome:w.nome,dados,diff,status:"pendente",criadoEm:new Date().toISOString(),criadoPor:nomeUsuario()||""};
   S.lists.push(p);await Store.put("lists",p);aprovBadge();return p}
+/* Aba EPI's do trabalhador no Sistema eSocial (cad_coleq.php): Data, Quantidade e Equipamento (1 CAMISETA, 2 CALCA, 3 BOTINA).
+   Só esses três existem lá; os outros EPIs ficam só no estoque do Central. Confere relendo a lista da aba. */
+const EPI_GUIA={"camisa-ml":["1","CAMISETA"],"camisa-mc":["1","CAMISETA"],calca:["2","CALCA"],botina:["3","BOTINA"]};
+async function enviarEpi(w,d){
+  if(!w.origemId)throw new Error("Este trabalhador ainda não foi sincronizado com o Sistema eSocial.");
+  const pg=`/register/cad_coleq.php?acao=Procurar&cod_colaborador=${w.origemId}`;
+  const conta=html=>[...dom(html).querySelectorAll("tr")].map(tr=>[...tr.children].map(c=>c.textContent.replace(/\s+/g," ").trim())).filter(c=>c.includes(br(d.data))&&c.includes(d.equip)&&c.includes(String(d.qtd))).length;
+  const antes=conta(await sget(pg));
+  const r=await gravarForm(pg,{cod_colaborador:w.origemId,coleq_dt:br(d.data),coleq_qtd:String(d.qtd),equip_cod:d.equip_cod},"Inserir");
+  const txt=dom(r).body?dom(r).body.textContent:"";if(/\+\+\s*Erro(?!: Registro nao localizado)/i.test(txt))throw new Error("O Sistema eSocial recusou o lançamento: "+(txt.match(/\+\+[^\n]{0,120}/)||[""])[0]);
+  if(conta(await sget(pg))<=antes)throw new Error("Lançado, mas a aba EPI's ainda não mostrou o registro. Confira no Sistema eSocial antes de lançar de novo.")}
 async function aprovEnviar(p){
   const w=S.workers.find(z=>z.cpf===p.wcpf);if(!w)throw new Error("Trabalhador não encontrado no Central.");
-  if(p.acao==="endereco")await enviarEndereco(w,p.dados);else if(p.acao==="desconto")await enviarDesconto(w,p.dados);else await lancarNoSistema(w,p.dados);
+  if(p.acao==="endereco")await enviarEndereco(w,p.dados);else if(p.acao==="epi")await enviarEpi(w,p.dados);else if(p.acao==="desconto")await enviarDesconto(w,p.dados);else await lancarNoSistema(w,p.dados);
   p.status="enviado";p.enviadoEm=new Date().toISOString();p.enviadoPor=nomeUsuario()||"";delete p.erro;await Store.put("lists",p)}
 function vAprov(){
   const ps=aprovPedidos().sort((a,b)=>b.criadoEm.localeCompare(a.criadoEm)),pend=ps.filter(p=>p.status==="pendente"),hist=ps.filter(p=>p.status!=="pendente"),aba=ui.aprAba||"pendentes",pgA=paginar(aba==="pendentes"?pend:hist,"aprPg"+aba);
-  const titulo=p=>p.acao==="endereco"?"Endereço":p.acao==="aso"?"ASO":p.acao==="desconto"?`Desconto autorizado de uniforme${p.dados.de>1?` (parcela ${p.dados.parcela}/${p.dados.de})`:""}`:"Curso "+(p.dados&&p.dados.nr||"");
+  const titulo=p=>p.acao==="epi"?`EPI/uniforme · ${p.dados.equip}`:p.acao==="endereco"?"Endereço":p.acao==="aso"?"ASO":p.acao==="desconto"?`Desconto autorizado de uniforme${p.dados.de>1?` (parcela ${p.dados.parcela}/${p.dados.de})`:""}`:"Curso "+(p.dados&&p.dados.nr||"");
   const cartao=p=>`<section class="panel" data-pid="${p.id}"><div class="panel-h"><div><h2>${esc(titulo(p))} · ${esc(p.wnome)}</h2><span class="small muted">CPF ${esc(fmtCPF(p.wcpf))} · pedido ${p.criadoPor?"por "+esc(p.criadoPor)+" ":""}em ${br(p.criadoEm.slice(0,10))} ${hhmm(new Date(p.criadoEm))}</span></div>
      ${p.status==="pendente"?`<div class="toolbar"><button class="btn" data-recusa="${p.id}">Recusar</button><button class="btn primary" data-aprova="${p.id}">Aprovar e enviar</button></div>`:`<span class="pill ${p.status==="enviado"?"ok":p.status==="erro"?"crit":"warn"}">${p.status==="enviado"?"enviado":p.status==="erro"?"erro":"recusado"}</span>`}</div>
     <div class="tbl-wrap" style="box-shadow:none"><table><thead><tr><th>Campo</th><th>No sistema hoje</th><th>Vai ficar</th></tr></thead><tbody>
      ${p.diff.map(([c,a,n])=>`<tr><td>${esc(c)}</td><td class="muted">${a?esc(a):"—"}</td><td>${a!==n?`<b>${esc(n||"—")}</b>`:esc(n||"—")}</td></tr>`).join("")}</tbody></table></div>
-    ${p.status==="pendente"&&p.acao!=="endereco"&&p.acao!=="desconto"&&p.dados.inativarAnterior?`<div class="note" data-ant="${p.id}">Registros que serão marcados INATIVO: ${IS_TAURI?"consultando o sistema…":"consultados no programa instalado."}</div>`:""}
+    ${p.status==="pendente"&&!["endereco","desconto","epi"].includes(p.acao)&&p.dados.inativarAnterior?`<div class="note" data-ant="${p.id}">Registros que serão marcados INATIVO: ${IS_TAURI?"consultando o sistema…":"consultados no programa instalado."}</div>`:""}
     ${p.erro?`<div class="banner" style="background:var(--crit-soft)">${esc(p.erro)}</div>`:""}
     ${p.status==="enviado"?`<div class="small muted">Enviado ${p.enviadoPor?"por "+esc(p.enviadoPor)+" ":""}em ${br(p.enviadoEm.slice(0,10))} ${hhmm(new Date(p.enviadoEm))} e conferido relendo o sistema.</div>`:""}</section>`;
   $("#view").innerHTML=`<div class="head"><div><h1>Aprovação de atualização</h1><p>Tudo o que o Central vai gravar no Sistema eSocial (Guia Campo Grande) passa por aqui, com cada alteração mostrada antes de enviar.</p></div>
@@ -2632,11 +2649,33 @@ function fichaHTML(w){
    <section><h2>Saúde e segurança</h2><table>${L("ASO",w.asoData?`${br(w.asoData)} · validade ${d(w.asoValidade)}`:"")}${L("NR-35",w.nr35Data?`${br(w.nr35Data)} · validade ${d(w.nr35Validade)}`:"")}${L("NR-33",w.nr33Data?`${br(w.nr33Data)} · validade ${d(w.nr33Validade)}`:"")}${L("Liberações do ASO",w.asoAltura===undefined&&w.asoConfinado===undefined?"":`Altura: ${w.asoAltura?"apto":"não liberado"} · Espaço confinado: ${w.asoConfinado?"apto":"não liberado"}`)}${L("Ficha de EPI",d(w.epiEntrega))}</table></section>
    <section><h2>Anexos e pendências</h2><table>${L("Anexos",docs.join("; "))}${L("Pendências",p.map(x=>`${x.evt}: ${x.t}`).join("; ")||"Nenhuma")}${w.obs?L("Observações",w.obs):""}</table></section>
    <footer><div>__________________________________<br>Assinatura do trabalhador</div><div>__________________________________<br>Responsável do sindicato</div></footer></div>`}
+/* Fichas do Sistema eSocial (Guia Campo Grande), só leitura: Doc's › Ficha Trabalhador (imp_colaborador.php) e o
+   Termo de Responsabilidade de EPI (imp_epi.php, mesma impressão da aba EPI's). A página do Guia é mostrada como vem,
+   sem os scripts e o formulário de busca, e impressa daqui. A ficha do Central continua como opção. */
+async function fichaGuiaHTML(tipo,w){
+  const hoje=br(iso(TODAY)),cam=tipo==="epi"?`/register/imp_epi.php?cod_colaborador=${w.origemId}&dt1=01/01/2000&dt2=${hoje}`:`/register/imp_colaborador.php?acao=Visualizar&cod_colaborador=${w.origemId}`;
+  const d=dom(await sget(cam));d.querySelectorAll("script,form").forEach(x=>x.remove());
+  const base=d.createElement("base");base.href="https://sistemaesocial.guiacampogrande.com/register/";d.head.prepend(base);
+  return "<!doctype html>"+d.documentElement.outerHTML}
 function emitirFicha(w){
-  const m=document.createElement("div");m.className="modal";
-  m.innerHTML=`<div class="scrim"></div><div class="modal-c" role="dialog" aria-modal="true" aria-label="Ficha de cadastro"><div class="drawer-h"><div><div class="eyebrow">Ficha de cadastro · A4</div><h2 style="font-size:20px">${esc(w.nome)}</h2></div><div class="toolbar"><button class="btn primary" id="fPrint">${ico("print",16)} Imprimir</button><button class="btn" id="fClose">Fechar</button></div></div><div class="drawer-b" style="background:var(--surface-2)">${fichaHTML(w)}</div></div>`;
+  const guia=IS_TAURI&&!!w.origemId,m=document.createElement("div");m.className="modal";let tipo=guia?"ficha":"central";
+  m.innerHTML=`<div class="scrim"></div><div class="modal-c" role="dialog" aria-modal="true" aria-label="Emitir ficha" style="max-width:900px"><div class="drawer-h"><div><div class="eyebrow">Emitir ficha · A4</div><h2 style="font-size:20px">${esc(w.nome)}</h2></div><div class="toolbar"><button class="btn primary" id="fPrint">${ico("print",16)} Imprimir</button><button class="btn" id="fClose">Fechar</button></div></div>
+   <div class="drawer-b" style="background:var(--surface-2);align-items:stretch">
+    ${abasHTML("fichaTipo",[...(guia?[["ficha","Ficha do Trabalhador (Guia)"],["epi","Termo de EPI (Guia)"]]:[]),["central","Ficha do Central"]],tipo)}
+    ${guia?"":`<div class="small muted">As fichas do Sistema eSocial aparecem no programa instalado, para trabalhadores já sincronizados.</div>`}
+    <div id="fPrev"></div></div></div>`;
   document.body.appendChild(m);const close=()=>m.remove();m.querySelector(".scrim").onclick=close;$("#fClose").onclick=close;
-  $("#fPrint").onclick=()=>{const pa=$("#printArea");pa.innerHTML=fichaHTML(w);if(IS_TAURI)window.print();else toast("A impressão funciona no programa instalado. No navegador, use a ficha na tela.")};
+  let html="";
+  const mostrar=async()=>{m.querySelectorAll("[data-aba]").forEach(b=>{const on=b.dataset.aba==="fichaTipo:"+tipo;b.setAttribute("aria-pressed",on);b.setAttribute("aria-selected",on)});
+    const pv=$("#fPrev");if(tipo==="central"){html="";pv.innerHTML=fichaHTML(w);return}
+    pv.innerHTML=`<div class="empty">Buscando no Sistema eSocial…</div>`;
+    try{html=await fichaGuiaHTML(tipo,w);pv.innerHTML=`<iframe id="fIframe" title="Ficha do Sistema eSocial" style="width:100%;height:68vh;border:0;border-radius:8px;background:#fff"></iframe>`;$("#fIframe").srcdoc=html}
+    catch(e){html="";pv.innerHTML=`<div class="banner" style="border-left-color:var(--crit)"><span>Não foi possível buscar no Sistema eSocial: ${esc(String(e.message||e))}</span></div>`}};
+  m.querySelectorAll("[data-aba]").forEach(b=>b.onclick=()=>{tipo=b.dataset.aba.split(":")[1];mostrar()});
+  $("#fPrint").onclick=()=>{if(!IS_TAURI){toast("A impressão funciona no programa instalado. No navegador, use a ficha na tela.");return}
+    if(tipo==="central"){$("#printArea").innerHTML=fichaHTML(w);window.print();return}
+    const f=$("#fIframe");if(!f||!html){toast("Aguarde a ficha carregar");return}f.contentWindow.focus();f.contentWindow.print()};
+  mostrar();
 }
 
 /* ---------- rodapé: data e hora ---------- */

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.61 — 29/10/2026
+- Emitir ficha: escolha entre a **Ficha do Trabalhador** e o **Termo de EPI** do próprio Sistema eSocial (Guia Campo Grande), mostrados como o Guia emite e impressos pelo Central, ou a ficha do Central.
+- Estoque: ao entregar camiseta, calça ou botina (EPI, safra ou desconto autorizado), opção "Lançar também na aba EPI's do Sistema eSocial" (Data, Quantidade e Equipamento, os mesmos campos do Guia). Vai para a Aprovação e, depois de aprovado, é gravado e conferido relendo a aba. Pedido do Gabriel em 29/10/2026.
+
 ## 0.1.60 — 29/10/2026
 - Novidades resumidas: a engrenagem e o aviso de atualização mostram só uma linha da versão atual; Feedback mostra uma linha por versão. O detalhe fica no histórico completo.
 

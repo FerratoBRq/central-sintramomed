@@ -5,7 +5,7 @@
 //! - O programa faz o login sozinho, guarda o cookie da sessão em memória e entra de
 //!   novo quando a sessão expira.
 //! - Leituras (GET) e POST de relatório. Gravação só pelos formulários da lista
-//!   GRAVAVEIS (exames/ASO, cursos/NR, endereço), com ação Inserir ou Alterar — nunca Remover —
+//!   GRAVAVEIS (exames/ASO, cursos/NR, endereço, desconto, EPI), com ação Inserir ou Alterar — nunca Remover —
 //!   e sempre depois de confirmação na tela.
 
 use serde::{Deserialize, Serialize};
@@ -193,12 +193,14 @@ pub async fn esocial_post(st: State<'_, Esocial>, caminho: String, campos: Vec<(
 }
 
 /// Formulários em que o Central pode gravar (ASO, cursos de NR, endereço e desconto do vale uniforme).
-const GRAVAVEIS: [&str; 4] = [
+const GRAVAVEIS: [&str; 5] = [
     "/register/cad_colabexames.php",
     "/register/cad_colabcursos.php",
     "/register/cad_colabEndereco.php",
     // Desconto do vale uniforme na folha (Lançamentos › Crédito/Desconto), autorizado pelo Gabriel em 28/10/2026.
     "/register/cad_desconto.php",
+    // Aba EPI's do trabalhador (entrega de camiseta, calça e botina), pedido do Gabriel em 29/10/2026.
+    "/register/cad_coleq.php",
 ];
 
 #[tauri::command]
