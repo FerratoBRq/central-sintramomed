@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.58 — 29/10/2026
+- NR-01 · Portal DOM em abas (Situação, Importar, Faltam dados), com páginas de 15 ou 30 trabalhadores e botões 1, 2, 3…
+- Login do Portal DOM saiu da tela da NR-01 e foi para a engrenagem. Na NR-01 ficam o aviso de sincronia ativa, a última leitura e o botão Sincronizar agora.
+- Sincronia com o Portal DOM a cada 10 minutos (antes, 1 hora).
+- Botão Importar: salva a planilha (só quem falta no portal) e já abre a tela de importação do portal, para arrastar o arquivo e confirmar.
+
 ## 0.1.57 — 29/10/2026
 - NR-01 · Portal DOM: acesso ao portal dentro do Central (e-mail e senha guardados no Gerenciador de Credenciais do Windows; só consulta). Sincroniza a lista de Trabalhadores do portal (na hora e a cada hora) e mostra, para cada ativo: fora do portal, convidado, em treinamento ou concluído, situação do convite e itens feitos. Botão para gerar a planilha só dos que faltam no portal.
 - Programação de pagamento e NR-01: textos mais curtos (detalhes ao passar o mouse).
