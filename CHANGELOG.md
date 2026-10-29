@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.79 — 29/10/2026
+- Adiantamentos: "Registrar adiantamento" só grava; o termo sai pelo botão "Imprimir termo" de cada adiantamento da lista, a qualquer momento.
+
 ## 0.1.78 — 29/10/2026
 - Ferramentas › **Adiantamentos**: registra o adiantamento salarial (trabalhador pelo nome, valor, data, 1 a 4 parcelas quinzenais), imprime o termo de adiantamento e autorização de desconto (2 vias; CLT art. 462 c/c CF art. 7º, XXXIV; sem juros; limite de 70% do líquido), a **Programação de adiantamentos** (mesma folha A4 da programação, com conta/PIX) e lança cada parcela no Guia como Crédito/Desconto 116 ADIANTAMENTO SALARIAL pela Aprovação.
 - Programação de pagamento: quem tem ADIANTAMENTO no holerite sai com "− Adiantamento" no nome (o líquido já vem descontado); parcela da quinzena não lançada no Guia, ou lançada e fora do holerite, vira aviso.
