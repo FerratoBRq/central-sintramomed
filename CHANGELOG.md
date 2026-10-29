@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.56 — 29/10/2026
+- Programação de pagamento: opção "Preencher o VALOR com a produção da quinzena". O valor é o Total do extrato de produção (bruto, sem descontos). Quem produziu em mais de uma empresa fica só na empresa onde teve mais diárias (empate: maior valor), com a soma de todas e, logo abaixo, a linha "* Rubrica: soma da produção" com a parte e as diárias de cada empresa. A folha calcula subtotal e total. Precisa clicar em Buscar de novo para trazer os valores.
+
 ## 0.1.55 — 29/10/2026
 - Nova tela **NR-01 · Portal DOM** (menu Gestão): gera `dom-nr01-ativos.csv` em Downloads no modelo de importação do Portal Psicossocial da DOM Assessoria (nome, CPF, nascimento, cargo Movimentador de Mercadorias, data de início, e-mail e WhatsApp). Lista à parte quem não pode entrar por falta de CPF válido, WhatsApp (celular com DDD) ou data de início. A importação é feita no portal em Trabalhadores › Importar planilha.
 
