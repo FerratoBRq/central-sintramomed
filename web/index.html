@@ -120,11 +120,13 @@ main{min-width:0;padding-block:36px 0;padding-left:max(16px,env(safe-area-inset-
 .btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
 .field{display:flex;flex-direction:column;gap:6px;min-width:0}
 [hidden]{display:none!important}
-.cal-wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px}.cal-h{font-weight:600;margin-bottom:6px}
+.cal-wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+.cal{background:var(--surface-2);border:1px solid var(--line);border-radius:16px;overflow:hidden;padding:0 10px 10px}
+.cal-h{font-family:var(--f-display);font-weight:700;font-size:17px;margin:0 -10px 8px;padding:10px 14px;background:color-mix(in srgb,var(--accent) 14%,var(--surface));color:var(--accent);border-bottom:1px solid var(--line)}.cal-h span{font-weight:500;color:var(--muted)}
 .cal-g{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}.cal-w{font-size:11px;color:var(--muted);text-align:center}
-.cal-d{all:unset;box-sizing:border-box;min-height:40px;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:12px;color:var(--muted)}
-.cal-d.qqs{background:var(--surface-2);color:var(--ink)}.cal-d.tem{background:var(--accent-soft);cursor:pointer}.cal-d.tem span{font-size:11px;font-weight:700;color:var(--accent)}
-.cal-d.marc{background:var(--accent);color:#fff}.cal-d.marc span{color:#fff}.cal-d.sel{outline:2px solid var(--ink)}.cal-d.hoje b{text-decoration:underline}.cal-d:focus-visible{outline:2px solid var(--accent)}
+.cal-d{all:unset;box-sizing:border-box;min-height:52px;border-radius:10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:12px;color:var(--muted)}
+.cal-d.qqs{background:var(--surface);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}.cal-d[disabled]{opacity:.35;cursor:default}.cal-d b{font-size:14px}.cal-d span{font-size:10px!important;line-height:1.1;text-align:center}.cal-d.tem{background:var(--accent-soft);cursor:pointer}.cal-d.tem span{font-size:11px;font-weight:700;color:var(--accent)}
+.cal-d.marc{background:var(--accent);color:#fff}.cal-d.marc span{color:#fff}.cal-d.sel{outline:2px solid var(--ink)}.cal-d.hoje{box-shadow:inset 0 0 0 2px var(--accent)}.cal-d:focus-visible{outline:2px solid var(--accent)}
 .field label{font-size:12.5px;font-weight:500;color:var(--muted)}
 .field input,.field select,.field textarea,.inp{border:1px solid var(--line-2);background:var(--surface);border-radius:var(--r-sm);padding:9px 12px;width:100%;min-width:0;transition:border-color .15s,box-shadow .15s}
 .field input:focus,.field select:focus,.field textarea:focus,.inp:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 22%,transparent)}
@@ -387,7 +389,7 @@ td .btn{white-space:nowrap}.busca-r .search,.modal .search{flex:none}.busca-r .s
     </nav>
     <button class="tema-b" id="btnTema" type="button"></button>
     <div class="side-foot">
-      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.64</b></span><span id="runtime">Modo navegador</span></div>
+      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.65</b></span><span id="runtime">Modo navegador</span></div>
       <span id="syncInfo"></span>
       <button class="link" id="btnSync" type="button" hidden>Sincronizar tudo agora</button>
       <span id="updInfo">Verificando atualizações…</span>
@@ -405,7 +407,7 @@ td .btn{white-space:nowrap}.busca-r .search,.modal .search{flex:none}.busca-r .s
 /* Tema: claro, escuro ou automático (segue o Windows). O botão de lua/sol fixa o modo neste computador. */
 const temaEscuro=()=>{const t=document.documentElement.dataset.theme;return t?t==="dark":matchMedia("(prefers-color-scheme: dark)").matches};
 try{const t=localStorage.getItem("cs_tema");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}
-const APP_VERSION="0.1.64";
+const APP_VERSION="0.1.65";
 /* ---------- utilidades ---------- */
 const $=(s,r=document)=>r.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -533,9 +535,9 @@ function abasBind(redesenhar){document.querySelectorAll("[data-aba]").forEach(b=
    Um tópico por tela/função, em passos curtos. Ao lançar função nova, atualize o tópico (regra no CLAUDE.md). */
 const MANUAL=[
  {t:"Primeiros passos",p:["Abra a engrenagem (no alto do menu) e entre com o login e a senha do Sistema eSocial (Guia Campo Grande). A senha fica guardada no Windows.","O Central importa e atualiza os trabalhadores sozinho a cada 5 minutos. Para atualizar na hora, clique nas setas ao lado da engrenagem.","Use o botão Lançar (azul, no alto do menu) para lançar ASO, NR-33/NR-35 ou uma entrega do estoque.","Use Buscar ou Ctrl+K para achar um trabalhador pelo nome ou CPF, uma tela ou uma ação."]},
- {t:"Painel",p:["Mostra trabalhadores ativos, pendências críticas, vencimentos dos próximos 30 dias e quem está sem produção há mais de 3 meses. Clique num número para abrir a lista.","Previsão de vencimentos: ASO, NR-35 e NR-33 que vencem até o dia 15 do mês depois do próximo.","Atalhos abrem os sistemas das tomadoras em nova aba."]},
+ {t:"Painel",p:["Mostra trabalhadores ativos, pendências críticas, vencimentos dos próximos 30 dias e quem está sem produção há mais de 3 meses. Clique num número para abrir a lista.","Vencimento das NRs: NR-35 e NR-33 que vencem até o dia 15 do mês depois do próximo.","Atalhos abrem os sistemas das tomadoras em nova aba."]},
  {t:"Trabalhadores e ficha",p:["Busque por nome, CPF ou matrícula e filtre por Ativos, Pendência crítica, Sem produção, A desligar, Inativos e Desligados.","Clique no trabalhador para abrir a ficha: dados, documentos, ASO, NRs, uniformes e anexos.","Emitir ficha: escolha a Ficha do Trabalhador ou o Termo de EPI do próprio Sistema eSocial (Guia), ou a ficha do Central, e clique em Imprimir.","Editar endereço no Sistema eSocial cria um pedido na Aprovação; nada é gravado no Guia sem aprovar.","Atualizar esta ficha do Sistema eSocial busca os dados mais novos daquele trabalhador."]},
- {t:"Pendências e vencimentos",p:["Pendências mostra o que falta em cada trabalhador (início, ASO, NR-35, NR-33, produção, término). Clique num item para filtrar; Críticas e Atenção separam a gravidade.","Vencimentos: escolha ASO, NR-35 ou NR-33, marque no calendário as datas das turmas (de preferência quarta, quinta ou sexta) e o Central distribui as pessoas. Imprima a lista para marcar.","Lista para emissão de certificados: gera o Word no modelo da DOM, com 13 nomes por folha, separado por NR-33 e NR-35."]},
+ {t:"Pendências e vencimentos",p:["Pendências mostra o que falta em cada trabalhador (início, ASO, NR-35, NR-33, produção, término). Clique num item para filtrar; Críticas e Atenção separam a gravidade.","Vencimento das NRs: escolha NR-35 ou NR-33, clique num dia livre do calendário para marcar a turma (de preferência quarta, quinta ou sexta) e o Central distribui as pessoas. Clique num dia marcado para ver a turma, mover alguém para outra data, vincular um trabalhador ou desmarcar a data.","Lista para emissão de certificados: gera o Word no modelo da DOM, com 13 nomes por folha, separado por NR-33 e NR-35."]},
  {t:"ASOs e NRs recebidos",p:["Salve os PDFs que chegam pelo WhatsApp na pasta ASOs para lançar ou NRs para lançar (Documentos > Central Sintramomed). O Central lê a cada minuto. Se o arquivo for para a pasta errada, ele muda sozinho.","Também dá para usar Anexar ou arrastar os PDFs para a tela.","Na aba Para conferir: Conferir e lançar abre o documento lido para conferir. Enviar prontos para aprovação manda de uma vez os que estão completos.","Depois de lançado, o arquivo vai para ASOs lançados ou NRs lançadas e fica anexado na ficha."]},
  {t:"Aprovação",p:["Tudo o que o Central vai gravar no Sistema eSocial (ASO, NR, endereço, desconto autorizado, EPI) aparece aqui com o que muda: como está no sistema e como vai ficar.","Aprovar e enviar pede uma segunda confirmação, grava no Guia e confere relendo a página. Recusar descarta o pedido.","A aba Histórico guarda o que foi enviado, recusado ou deu erro."]},
  {t:"Relatório mensal e sem produção",p:["Relatório mensal: escolha o mês e clique em Buscar no Sistema eSocial. Vêm admissões, periódicos (com a empresa da produção) e afastados/desligados (pelo mês do lançamento).","Marque classificação do ASO, envio à DOM e antecedentes; inclua pessoas à mão se precisar; clique em Gerar Excel.","Aba Sem produção há +3 meses: marque quem deve ser desligado. Marcar não envia nada ao sistema."]},
@@ -619,6 +621,7 @@ const ATALHOS=[
 /* Novidades curtas por versão (aparecem na engrenagem, no aviso de atualização e em Feedback). Uma linha por versão;
    o detalhe fica no CHANGELOG.md. Ao lançar versão, acrescente a linha nova no topo. */
 const VERSOES=[
+ ["0.1.65","Calendário das NRs com turmas e vínculo de trabalhadores"],
  ["0.1.64","Manual do usuário, limpar histórico do estoque e sem clique duplicado"],
  ["0.1.63","Contagem do estoque e avisos nos grupos do menu"],
  ["0.1.62","E-mail correto nas fichas do Guia"],
@@ -1724,18 +1727,18 @@ function abrirNR(w0,aoTerminar,arquivoInicial){let w=w0,arquivo=null;
    Turmas sugeridas só em quarta, quinta ou sexta: cada pessoa vai para a última turma antes do vencimento
    (o mais perto possível, sem deixar vencer), juntando o máximo de gente por data, até o limite por turma.
    Quem já venceu vai para a primeira data possível. Marcações ficam em lists (id "prev-agenda"), compartilhadas. */
-const PREV_ITENS=[{k:"ASO",nome:"ASO",d:w=>w.asoValidade,usa:()=>true},
-  {k:"NR-35",nome:"NR-35 (altura)",d:w=>w.nr35Validade||(w.nr35Data?addYears(w.nr35Data,2):""),usa:w=>w.exige35&&w.asoAltura!==false},
+const PREV_ITENS=[{k:"NR-35",nome:"NR-35 (altura)",d:w=>w.nr35Validade||(w.nr35Data?addYears(w.nr35Data,2):""),usa:w=>w.exige35&&w.asoAltura!==false},
   {k:"NR-33",nome:"NR-33 (confinado)",d:w=>w.nr33Validade||(w.nr33Data?addYears(w.nr33Data,1):""),usa:w=>w.exige33&&w.asoConfinado!==false}];
 const prevAte=()=>iso(new Date(TODAY.getFullYear(),TODAY.getMonth()+2,15));
 const prevCap=()=>Math.max(1,parseInt(LS.get("cs_prev_cap")||"15",10)||15);
 const ehQQS=d=>[3,4,5].includes(d.getDay());// quarta, quinta, sexta
-function prevAgenda(){let a=S.lists.find(l=>l.id==="prev-agenda");if(!a){a={id:"prev-agenda",tipo:"agenda",marcados:{}};S.lists.push(a)}a.marcados=a.marcados||{};a.datas=a.datas||{};return a}
+function prevAgenda(){let a=S.lists.find(l=>l.id==="prev-agenda");if(!a){a={id:"prev-agenda",tipo:"agenda",marcados:{}};S.lists.push(a)}a.marcados=a.marcados||{};a.datas=a.datas||{};a.fixos=a.fixos||{};return a}
 // Datas de turma escolhidas no calendário (por item), só as de hoje em diante.
 const prevEscolhidas=it=>(prevAgenda().datas[it]||[]).filter(d=>d>=iso(TODAY)).sort();
 function prevLinhas(){const ate=prevAte(),hoje=iso(TODAY),out=[];
   for(const w of S.workers.filter(w=>ATIVOS(w)&&!w.exemplo))for(const it of PREV_ITENS){if(!it.usa(w))continue;const v=it.d(w);
-    if(!v&&it.k!=="ASO")continue;if(v&&v>ate)continue;out.push({w,item:it.k,nome:it.nome,venc:v||"",chave:it.k+"|"+w.cpf,vencido:!v||v<hoje})}
+    const chave=it.k+"|"+w.cpf,fixo=prevAgenda().fixos[chave];
+    if(!fixo&&(!v||v>ate))continue;out.push({w,item:it.k,nome:it.nome,venc:v||"",chave,vencido:!!v&&v<hoje})}
   return out.sort((a,b)=>(a.venc||"").localeCompare(b.venc||""))}
 // Datas quarta/quinta/sexta de amanhã até a janela.
 function prevDatas(){const d=new Date(TODAY);d.setDate(d.getDate()+1);const fim=prevAte(),out=[];while(iso(d)<=fim){if(ehQQS(d))out.push(iso(d));d.setDate(d.getDate()+1)}return out}
@@ -1743,10 +1746,13 @@ function prevTurmas(linhas){const datas=prevDatas(),cap=prevCap(),turmas={};
   for(const it of PREV_ITENS.map(i=>i.k)){const ls=linhas.filter(l=>l.item===it).sort((a,b)=>(a.venc||"").localeCompare(b.venc||""));
     // Datas marcadas pelo usuário: cada um vai para a última data marcada antes de vencer (quem vence depois da
     // 2ª data vai para a 2ª, e assim por diante); vencidos e quem vence antes da 1ª data vão para a 1ª.
-    const marc=prevEscolhidas(it);
-    if(marc.length){for(const l of ls){const antes=marc.filter(d=>!l.vencido&&d<l.venc);l.turma=antes.length?antes[antes.length-1]:marc[0];l.manual=true;
+    const marc=prevEscolhidas(it),fixos=prevAgenda().fixos;
+    // Vinculados à mão a uma data: ficam nela (enquanto a data for de hoje em diante).
+    for(const l of ls.filter(l=>fixos[l.chave]>=iso(TODAY))){l.turma=fixos[l.chave];l.manual=true;l.fixo=true;(turmas[it+"|"+l.turma]=turmas[it+"|"+l.turma]||[]).push(l)}
+    const soltos=ls.filter(l=>!l.fixo);
+    if(marc.length){for(const l of soltos){const antes=marc.filter(d=>!l.vencido&&d<l.venc);l.turma=antes.length?antes[antes.length-1]:marc[0];l.manual=true;
         (turmas[it+"|"+l.turma]=turmas[it+"|"+l.turma]||[]).push(l)}continue}
-    for(const l of ls){
+    for(const l of soltos){
       // última data de qua/qui/sex antes do vencimento que ainda tenha vaga (para vencidos: a primeira data)
       const lim=l.vencido?"":(()=>{const x=parse(l.venc);x.setDate(x.getDate()-3);return iso(x)})();
       const ok=datas.filter(d=>(l.vencido||d<=lim)&&((turmas[it+"|"+d]||[]).length<cap));
@@ -1759,7 +1765,7 @@ function prevTurmas(linhas){const datas=prevDatas(),cap=prevCap(),turmas={};
       l.turma=esc||"";if(esc)(turmas[it+"|"+esc]=turmas[it+"|"+esc]||[]).push(l)}}
   return turmas}
 function prevResumoHTML(){const ls=prevLinhas();const cont=k=>ls.filter(l=>l.item===k).length;
-  return `<section class="panel click" id="prevCard" style="cursor:pointer" tabindex="0" role="button" aria-label="Abrir a previsão de vencimentos"><div class="panel-h"><h2>Previsão de vencimentos até ${br(prevAte())}</h2><span class="small muted">Clique para ver a lista e as datas</span></div>
+  return `<section class="panel click" id="prevCard" style="cursor:pointer" tabindex="0" role="button" aria-label="Abrir a previsão de vencimentos"><div class="panel-h"><h2>Vencimento das NRs até ${br(prevAte())}</h2><span class="small muted">Clique para ver a lista e as turmas</span></div>
     <div class="chips">${PREV_ITENS.map(i=>`<span class="pill ${cont(i.k)?"warn":"ok"}">${esc(i.nome)}: ${cont(i.k)}</span>`).join("")}<span class="pill ${ls.some(l=>l.vencido)?"crit":"ok"}">Já vencidos: ${ls.filter(l=>l.vencido).length}</span></div></section>`}
 /* Lista para emissão de certificados (modelo Word do sindicato: web/modelos/lista-certificados.json, tirado do .docx).
    Uma lista por NR (33 e 35 separadas). Cada folha tem as 13 linhas do modelo; passou de 13, a folha é duplicada
@@ -1777,6 +1783,28 @@ async function prevListaCert(nr,linhas,quando){
   if(!ps.length){toast(`Nenhum trabalhador de ${nr} nesta lista`);return}
   await baixarArquivo(await listaCertDocx(ps,quando),`Lista emissao certificados ${nr} ${br(quando).replace(/\//g,"-")}.docx`);
   toast(`Lista de ${nr}: ${ps.length} nome${ps.length>1?"s":""} em ${Math.ceil(ps.length/13)} folha${ps.length>13?"s":""}`)}
+/* Turma de uma data: quem está nela (automático ou vinculado), mover para outra data, vincular outro trabalhador
+   (inclusive quem ainda não está vencendo) e desmarcar a data. Vínculos ficam em prev-agenda.fixos (compartilhado). */
+function prevTurmaModal(s,itens,ls,turmas){const a=prevAgenda(),m=document.createElement("div");m.className="modal";
+  const salvar=async()=>{await Store.put("lists",a);m.remove();vPrev()};
+  const sec=k=>{const gente=turmas[k+"|"+s]||[],datas=prevEscolhidas(k);
+    return `<fieldset><legend>${esc(PREV_ITENS.find(i=>i.k===k).nome)} · ${gente.length} pessoa${gente.length===1?"":"s"}</legend>${gente.length?`<div class="list">${gente.map(l=>`<div class="row"><span><b>${esc(l.w.nome)}</b> <span class="small muted">${l.venc?(l.vencido?"Vencida em ":"Vence em ")+br(l.venc):"Sem registro"}${l.fixo?" · vinculado":""}</span></span>
+      <select class="inp" data-mover="${esc(l.chave)}" style="width:auto;padding:4px 8px" aria-label="Data da turma de ${esc(l.w.nome)}"><option value="">Automático</option>${datas.map(d=>`<option value="${d}" ${l.fixo&&d===l.turma?"selected":""}>${br(d)}</option>`).join("")}<option value="-">Tirar desta turma</option></select></div>`).join("")}</div>`:`<div class="small muted">Ninguém nesta turma.</div>`}</fieldset>`};
+  m.innerHTML=`<div class="scrim"></div><div class="modal-c" role="dialog" aria-modal="true" aria-labelledby="ptH" style="max-width:760px"><div class="drawer-h"><div><div class="eyebrow">Turma</div><h2 id="ptH" style="font-size:20px">${new Date(s+"T12:00").toLocaleDateString("pt-BR",{weekday:"long"}).replace(/^./,c=>c.toUpperCase())}, ${br(s)}</h2></div><div class="toolbar"><button class="btn danger" id="ptDesm">Desmarcar data</button><button class="btn" id="ptClose">Fechar</button></div></div>
+   <div class="drawer-b" style="align-items:stretch">${itens.map(sec).join("")}
+    <fieldset><legend>Vincular trabalhador a esta data</legend><div class="form-grid"><div class="field span2"><label for="ptBusca">Trabalhador</label><input id="ptBusca" class="inp" placeholder="Nome ou CPF" autocomplete="off"><div id="ptSug" class="list"></div></div>
+     <div class="field"><label for="ptItem">NR</label><select id="ptItem">${itens.map(k=>`<option>${k}</option>`).join("")}</select></div></div></fieldset></div></div>`;
+  document.body.appendChild(m);m.querySelector(".scrim").onclick=()=>m.remove();$("#ptClose").onclick=()=>m.remove();
+  m.querySelectorAll("[data-mover]").forEach(x=>x.onchange=async()=>{const k=x.dataset.mover;if(x.value==="-"||x.value==="")delete a.fixos[k];else a.fixos[k]=x.value;
+    if(x.value==="-"){const d=prevEscolhidas(k.split("|")[0]).find(v=>v!==s);if(d)a.fixos[k]=d}await salvar()});
+  $("#ptBusca").oninput=()=>{const q=$("#ptBusca").value.toLowerCase().trim(),qd=q.replace(/\D/g,"");if(q.length<2){$("#ptSug").innerHTML="";return}
+    const r=S.workers.filter(w=>ATIVOS(w)&&!w.exemplo&&(w.nome.toLowerCase().includes(q)||(qd.length>=3&&w.cpf.includes(qd)))).slice(0,6);
+    $("#ptSug").innerHTML=r.map(w=>`<div class="row"><span><b>${esc(w.nome)}</b> <span class="small muted mono">${esc(fmtCPF(w.cpf))}</span></span><button class="btn sm primary" data-vinc="${w.cpf}">Vincular</button></div>`).join("")||`<div class="small muted">Ninguém encontrado.</div>`;
+    m.querySelectorAll("[data-vinc]").forEach(b=>b.onclick=async()=>{const k=$("#ptItem").value;a.fixos[k+"|"+b.dataset.vinc]=s;
+      if(!(a.datas[k]||[]).includes(s))a.datas[k]=[...(a.datas[k]||[]),s].sort();await salvar();toast("Trabalhador vinculado à turma")})};
+  $("#ptDesm").onclick=async()=>{const b=$("#ptDesm");if(!b.dataset.armed){b.dataset.armed="1";b.textContent="Confirmar: desmarcar";return}
+    for(const k of itens)a.datas[k]=(a.datas[k]||[]).filter(x=>x!==s);for(const[k,v]of Object.entries(a.fixos))if(v===s)delete a.fixos[k];if(ui.prevDia===s)ui.prevDia="";await salvar()};
+}
 function vPrev(){
   const ls=prevLinhas(),turmas=prevTurmas(ls),ag=prevAgenda(),filtro=ui.prevItem||"",dia=ui.prevDia||"";
   const itensVis=filtro?[filtro]:PREV_ITENS.map(i=>i.k),algumaMarcada=itensVis.some(k=>prevEscolhidas(k).length);
@@ -1787,12 +1815,12 @@ function vPrev(){
   const cal=m=>{const dias=new Date(m.getFullYear(),m.getMonth()+1,0).getDate(),ini=m.getDay(),cel=[];for(let i=0;i<ini;i++)cel.push(`<span></span>`);
     for(let d=1;d<=dias;d++){const dt=new Date(m.getFullYear(),m.getMonth(),d),s=iso(dt),gente=(porDia[s]||[]).filter(l=>!filtro||l.item===filtro),q=ehQQS(dt)&&s>iso(TODAY);
       const futuro=s>=iso(TODAY),marcada=itensVis.some(k=>prevEscolhidas(k).includes(s));
-      cel.push(`<button type="button" class="cal-d ${q?"qqs":""} ${gente.length?"tem":""} ${marcada?"marc":""} ${s===dia?"sel":""} ${s===iso(TODAY)?"hoje":""}" ${futuro?`data-marca="${s}"`:"disabled"} aria-pressed="${marcada}" title="${br(s)}${marcada?" · turma marcada (clique para desmarcar)":" · clique para marcar turma"}${gente.length?` · ${gente.length} pessoa${gente.length>1?"s":""}`:""}"><b>${d}</b>${gente.length?`<span>${gente.length}</span>`:""}</button>`)}
-    return `<div class="cal"><div class="cal-h">${MESES[m.getMonth()]} ${m.getFullYear()}</div><div class="cal-g">${["D","S","T","Q","Q","S","S"].map(x=>`<span class="cal-w">${x}</span>`).join("")}${cel.join("")}</div></div>`};
-  $("#view").innerHTML=`<div class="head"><div><h1>Previsão de vencimentos</h1><p>ASO, NR-35 e NR-33 que vencem até ${br(prevAte())}, com turmas sugeridas às quartas, quintas e sextas para juntar o máximo de trabalhadores antes de vencer.</p></div>
+      cel.push(`<button type="button" class="cal-d ${q?"qqs":""} ${gente.length?"tem":""} ${marcada?"marc":""} ${s===dia?"sel":""} ${s===iso(TODAY)?"hoje":""}" ${futuro?`data-marca="${s}"`:"disabled"} aria-pressed="${marcada}" title="${br(s)}${marcada?" · turma marcada (clique para desmarcar)":" · clique para marcar turma"}${gente.length?` · ${gente.length} pessoa${gente.length>1?"s":""}`:""}"><b>${d}</b>${gente.length?`<span>${gente.length} ${ico("users",11)}</span>`:""}</button>`)}
+    return `<div class="cal"><div class="cal-h">${MESES[m.getMonth()]} <span>${m.getFullYear()}</span></div><div class="cal-g">${["D","S","T","Q","Q","S","S"].map(x=>`<span class="cal-w">${x}</span>`).join("")}${cel.join("")}</div></div>`};
+  $("#view").innerHTML=`<div class="head"><div><h1>Vencimento das NRs</h1><p>NR-35 e NR-33 que vencem até ${br(prevAte())}. Marque as datas das turmas no calendário e vincule quem vai em cada uma.</p></div>
     <div class="toolbar"><label class="small muted" for="prevCap">Vagas por turma</label><input id="prevCap" class="inp" type="number" min="1" max="200" value="${prevCap()}" style="width:80px"><button class="btn" id="prevPrint">${ico("print",16)} Imprimir lista</button><button class="btn" id="prevCert35">Lista de certificados NR-35</button><button class="btn" id="prevCert33">Lista de certificados NR-33</button></div></div>
    <div class="chips">${[["","Todos"],...PREV_ITENS.map(i=>[i.k,i.nome])].map(([k,l])=>`<button class="chip" aria-pressed="${filtro===k}" data-pf="${k}">${esc(l)} (${ls.filter(x=>!k||x.item===k).length})</button>`).join("")}</div>
-   <section class="panel"><div class="panel-h"><h2>${algumaMarcada?"Turmas marcadas":"Melhores datas"}</h2><span class="small muted">Clique num dia para marcar ou desmarcar a turma${filtro?` de ${esc(PREV_ITENS.find(i=>i.k===filtro).nome)}`:" (ASO, NR-35 e NR-33; escolha um item acima para marcar só dele)"} · quarta, quinta e sexta em destaque · o número é a quantidade de pessoas</span></div>
+   <section class="panel"><div class="panel-h"><h2>${algumaMarcada?"Turmas marcadas":"Melhores datas"}</h2><span class="small muted">Clique num dia livre para marcar a turma${filtro?` de ${esc(PREV_ITENS.find(i=>i.k===filtro).nome)}`:" (NR-35 e NR-33)"}; clique num dia marcado para ver e vincular os trabalhadores</span></div>
     ${algumaMarcada?"":`<div class="note">Nenhuma turma marcada ainda: o calendário mostra uma sugestão automática. Ao marcar as datas, o Central distribui os trabalhadores nelas.</div>`}
     <div class="cal-wrap">${meses.map(cal).join("")}</div>
     <div class="chips" style="margin-top:12px">${[...new Set(Object.keys(turmas).filter(k=>!filtro||k.startsWith(filtro+"|")).map(k=>k.split("|")[1]))].sort().map(d=>{const n=Object.entries(turmas).filter(([k])=>k.endsWith("|"+d)&&(!filtro||k.startsWith(filtro+"|"))).reduce((s,[,v])=>s+v.length,0);
@@ -1807,6 +1835,7 @@ function vPrev(){
   document.querySelectorAll("[data-pf]").forEach(b=>b.onclick=()=>{ui.prevItem=b.dataset.pf;vPrev()});
   document.querySelectorAll("[data-dia]").forEach(b=>b.onclick=()=>{ui.prevDia=ui.prevDia===b.dataset.dia?"":b.dataset.dia;vPrev()});
   document.querySelectorAll("[data-marca]").forEach(b=>b.onclick=async()=>{const s=b.dataset.marca,a=prevAgenda(),tem=itensVis.some(k=>(a.datas[k]||[]).includes(s));
+    if(tem){prevTurmaModal(s,itensVis,ls,turmas);return}
     for(const k of itensVis){const l=(a.datas[k]||[]).filter(x=>x!==s&&x>=iso(TODAY));if(!tem)l.push(s);a.datas[k]=l.sort()}
     if(ui.prevDia===s&&tem)ui.prevDia="";await Store.put("lists",a);vPrev()});
   const lp=$("#prevLimpa");if(lp)lp.onclick=()=>{ui.prevDia="";vPrev()};

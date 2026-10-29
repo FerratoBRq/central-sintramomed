@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.65 — 29/10/2026
+- Vencimento das NRs (antes Previsão de vencimentos): só NR-35 e NR-33; o ASO saiu dessa tela (continua em Pendências).
+- Calendário com cada mês num cartão com fundo e cabeçalho colorido, dias maiores e o dia de hoje destacado.
+- Clique num dia livre marca a turma; num dia marcado abre a turma: quem está nela, mover para outra data, vincular qualquer trabalhador ativo (mesmo quem ainda não está vencendo) e desmarcar a data. Vínculos compartilhados entre os computadores.
+
 ## 0.1.64 — 29/10/2026
 - **Manual do usuário** na engrenagem (Ajuda), com busca; também pela busca rápida (Ctrl+K).
 - Estoque: **Limpar histórico** (aba Configurações) zera saldos e movimentos até agora em todos os computadores, sem apagar os arquivos (corte compartilhado na configuração do estoque).
