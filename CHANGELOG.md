@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.70 — 29/10/2026
+- Emitir ficha › **Ordem de Serviço**: sai idêntica ao modelo O.S._COAMO.docx atualizado (todo o texto igual), mudando só a data do dia (elaboração e assinaturas) e o nome do colaborador; a data da última revisão e o responsável ficam como no modelo. Não gera mais Word: ao clicar já abre a impressão (impressora ou Salvar como PDF).
+
 ## 0.1.69 — 29/10/2026
 - Programação de pagamento: a opção de valor agora puxa o **valor líquido** de cada trabalhador (o que cai na conta), lido dos holerites das folhas já processadas da quinzena no Sistema eSocial (`rel_folhaPagamento.php` + `holerite2020.php`, só leitura). Empresa sem folha processada fica com o valor em branco e com aviso. Quem trabalhou em mais de uma empresa continua na de mais diárias, com a soma dos líquidos e a rubrica.
 - Termo de EPI (Guia): kit padrão conferido com a página real do Guia.
