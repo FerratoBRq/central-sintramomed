@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.69 — 29/10/2026
+- Programação de pagamento: a opção de valor agora puxa o **valor líquido** de cada trabalhador (o que cai na conta), lido dos holerites das folhas já processadas da quinzena no Sistema eSocial (`rel_folhaPagamento.php` + `holerite2020.php`, só leitura). Empresa sem folha processada fica com o valor em branco e com aviso. Quem trabalhou em mais de uma empresa continua na de mais diárias, com a soma dos líquidos e a rubrica.
+- Termo de EPI (Guia): kit padrão conferido com a página real do Guia.
+
 ## 0.1.68 — 29/10/2026
 - Emitir ficha › **Ordem de Serviço**: gera em Word a O.S. por atividade (modelo Coamo do sindicato) com o nome do trabalhador e as datas de elaboração e de assinatura do dia; a data da última revisão (17/03/2026) e o responsável (Gabriel F. Cavalcante) ficam como no modelo.
 - Emitir ficha › **Termo de EPI (Guia)**: sai com o kit padrão (2 calças, 2 camisetas e 1 par de botina) na data do dia, sem as entregas anteriores.
