@@ -384,12 +384,13 @@ td .btn{white-space:nowrap}.busca-r .search,.modal .search{flex:none}.busca-r .s
         <button data-v="fatiador"><span data-ico="scissors"></span>Fatiador de PDF</button>
         <button data-v="entrevista"><span data-ico="chat"></span>Entrevista online</button>
         <button data-v="pagamentos"><span data-ico="list"></span>Programação de pagamento</button>
+        <button data-v="adiantamentos"><span data-ico="list"></span>Adiantamentos</button>
         <button data-v="modelos"><span data-ico="print"></span>Modelos para impressão</button>
         <button data-v="feedback"><span data-ico="idea"></span>Feedback e novidades</button></div></div>
     </nav>
     <button class="tema-b" id="btnTema" type="button"></button>
     <div class="side-foot">
-      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.77</b></span><span id="runtime">Modo navegador</span></div>
+      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.78</b></span><span id="runtime">Modo navegador</span></div>
       <span id="syncInfo"></span>
       <button class="link" id="btnSync" type="button" hidden>Sincronizar tudo agora</button>
       <span id="updInfo">Verificando atualizações…</span>
@@ -407,7 +408,7 @@ td .btn{white-space:nowrap}.busca-r .search,.modal .search{flex:none}.busca-r .s
 /* Tema: claro, escuro ou automático (segue o Windows). O botão de lua/sol fixa o modo neste computador. */
 const temaEscuro=()=>{const t=document.documentElement.dataset.theme;return t?t==="dark":matchMedia("(prefers-color-scheme: dark)").matches};
 try{const t=localStorage.getItem("cs_tema");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}
-const APP_VERSION="0.1.77";
+const APP_VERSION="0.1.78";
 /* ---------- utilidades ---------- */
 const $=(s,r=document)=>r.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -543,6 +544,7 @@ const MANUAL=[
  {t:"Relatório mensal e sem produção",p:["Relatório mensal: escolha o mês e clique em Buscar no Sistema eSocial. Vêm admissões, periódicos (com a empresa da produção) e afastados/desligados (pelo mês do lançamento).","Marque classificação do ASO, envio à DOM e antecedentes; inclua pessoas à mão se precisar; clique em Gerar Excel.","Aba Sem produção há +3 meses: marque quem deve ser desligado. Marcar não envia nada ao sistema."]},
  {t:"Estoque e EPIs",p:["Aba Saldo mostra uniformes por tamanho e EPIs. Contagem: digite o que há de fato e o Central lança só a diferença.","Entrada: compra ou devolução. Saída ou baixa: Primeiro uniforme (kit pronto e sem custo: 1 camiseta manga longa, 1 calça e 1 botina; só escolher os tamanhos, uma vez por trabalhador), Entrega de EPI (sem custo), Uniforme da safra (1 calça e 1 camisa por safra, sem custo), Fornecimento com desconto autorizado ou Baixa.","Desconto autorizado só vale para peça extra pedida pelo trabalhador ou reposição por perda/dano por culpa dele. Botina e EPIs nunca são cobrados. Imprima o Termo de autorização de desconto e colha a assinatura antes.","Ao entregar camiseta, calça ou botina, a opção Lançar também na aba EPI's do Sistema eSocial cria o pedido na Aprovação.","Estorno: o botão Estornar desfaz um movimento. Ele pede confirmação, e um clique duplo não lança duas vezes.","Limpar histórico do estoque (aba Configurações): zera saldos e movimentos até agora em todos os computadores; depois lance a Contagem."]},
  {t:"NR-01 · Portal DOM",p:["Conecte o Portal DOM uma vez na engrenagem (e-mail e senha do portal). O Central consulta o portal a cada 10 minutos.","Aba Situação: quem está fora do portal, convidado, em treinamento ou concluiu, com os itens feitos.","Aba Importar: salva a planilha dos que faltam e abre a tela de importação do portal; arraste o arquivo e confirme lá.","Aba Faltam dados: quem não entra na planilha por falta de CPF, WhatsApp (celular com DDD) ou data de início."]},
+ {t:"Adiantamentos",p:["Ferramentas › Adiantamentos: escolha o trabalhador pelo nome, o valor, a data e em quantas parcelas descontar (uma por quinzena). Registrar já abre o termo de adiantamento e autorização de desconto (2 vias) para imprimir e assinar.","Programação de adiantamentos: escolha o período e imprima a lista A4 no formato da programação de pagamento, com conta, poupança ou PIX.","Lançar desconto no Guia (clique duas vezes para confirmar) manda cada parcela para a Aprovação como Crédito/Desconto ADIANTAMENTO SALARIAL; depois de aprovado, sai no holerite.","Na Programação de pagamento, o líquido já vem descontado e o nome aparece com “− Adiantamento”. Parcela da quinzena ainda não lançada no Guia aparece num aviso.","Base legal: CLT art. 462 (desconto de adiantamento) e Constituição art. 7º, XXXIV (avulso). Sem juros, com termo assinado e sem passar de 70% do líquido da quinzena."]},
  {t:"Programação de pagamento",p:["Escolha o mês e a quinzena e clique em Buscar produção e contas. As empresas com produção vêm marcadas.","Puxar o valor líquido preenche o VALOR com o líquido do holerite, lido das folhas já processadas da quinzena; empresa sem folha processada fica em branco e aparece um aviso. Quem trabalhou em mais de uma empresa fica na de mais diárias, com a soma (*).","Vale-transporte: em Anexar planilhas (.xlsx), escolha a planilha de transporte da empresa (pode ser a do ano todo). O programa pega só o período da quinzena, liga à empresa pelo nome do título (ex.: TRANSPORTE COAMO DOURADOS) e soma o Valor a Receber no valor de cada trabalhador, que aparece com “+ Transporte” na frente do nome. Se ligar à empresa errada, troque na lista ao lado: fica lembrado. Quem está na planilha mas não teve produção aparece num aviso.","Usar PIX para quem não tem conta: usa a chave do Guia; sem ela, o celular ou e-mail do cadastro marcado (conferir).","Imprima uma folha por empresa, as empresas marcadas juntas ou a folha em branco."]},
  {t:"Ferramentas",p:["Fatiador de PDF: separa um PDF digitalizado em páginas e anexa cada uma na ficha certa.","Entrevista online: ficha de triagem do candidato; Converter em cadastro cria o trabalhador.","Modelos para impressão: fichas e documentos prontos para imprimir.","Feedback e novidades: registre sugestões ou problemas e veja o que mudou em cada versão."]},
  {t:"Engrenagem e dicas",p:["Na engrenagem: acesso ao Sistema eSocial, acesso ao Portal DOM, compartilhamento entre computadores (pasta ou GitHub privado), cofre de senhas, atualização automática e este manual.","Modo noturno: botão com a lua ou o sol no fim do menu.","Listas longas: escolha 15, 30, 45 ou 60 por tela e use os botões 1, 2, 3… embaixo.","Os grupos do menu recolhem clicando no nome; quando recolhidos, mostram a soma dos avisos.","O programa se atualiza sozinho. Para atualizar na hora: Verificar agora, no fim do menu."]}];
@@ -602,7 +604,7 @@ document.addEventListener("keydown",e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLower
 function render(){
   document.querySelectorAll("#nav button[data-v]").forEach(b=>b.setAttribute("aria-current",b.dataset.v===current?"page":"false"));navGrupos();
   const crit=S.workers.filter(w=>nivel(w)==="crit").length;const nc=$("#navCount");nc.hidden=!crit;nc.textContent=crit;
-  ({painel:vPainel,trabalhadores:vTrab,pendencias:vPend,fatiador:vFat,relatorios:vRel,entrevista:vEnt,modelos:vMod,feedback:vFeed,estoque:vEst,asos:vAsos,nrs:vNrs,aprovacao:vAprov,pagamentos:vPag,nr01:vNr01,previsao:vPrev})[current]();
+  ({painel:vPainel,trabalhadores:vTrab,pendencias:vPend,fatiador:vFat,relatorios:vRel,entrevista:vEnt,modelos:vMod,feedback:vFeed,estoque:vEst,asos:vAsos,nrs:vNrs,aprovacao:vAprov,pagamentos:vPag,adiantamentos:vAdt,nr01:vNr01,previsao:vPrev})[current]();
   asoBadge();aprovBadge();
 }
 const exBanner=()=>S.workers.some(w=>w.exemplo)?`<div class="banner"><span><b>Dados de exemplo.</b> Os trabalhadores marcados como exemplo servem só para testar as telas.</span><button class="btn sm" id="clrEx">Remover exemplos</button></div>`:"";
@@ -621,6 +623,7 @@ const ATALHOS=[
 /* Novidades curtas por versão (aparecem na engrenagem, no aviso de atualização e em Feedback). Uma linha por versão;
    o detalhe fica no CHANGELOG.md. Ao lançar versão, acrescente a linha nova no topo. */
 const VERSOES=[
+ ["0.1.78","Adiantamentos e sincronização sem fechar a tela"],
  ["0.1.77","Transporte marcado como “+ Transporte” no nome"],
  ["0.1.76","Vale-transporte somado na programação de pagamento"],
  ["0.1.75","Impressão automática só quando ligar o botão"],
@@ -975,7 +978,10 @@ function syncInfo(){const el=$("#syncInfo");if(!el)return;
   if(Sync.erro){el.innerHTML=`<span style="color:var(--crit)">${esc(Sync.erro)}</span>`;return}
   if(Sync.ultima){const d=new Date(Sync.ultima);el.textContent=`eSocial sincronizado às ${hhmm(d)}`}else el.textContent="Aguardando a primeira sincronização";
 }
-function rerenderSeguro(){if(!$("#layer").innerHTML&&!document.querySelector(".modal")&&!document.querySelector("main input:focus,main select:focus,main textarea:focus"))render();else{const crit=S.workers.filter(w=>nivel(w)==="crit").length;const nc=$("#navCount");nc.hidden=!crit;nc.textContent=crit}}
+// Atualização em segundo plano (sincronização, outro PC): redesenha sem perder o lugar — a rolagem volta para onde estava e
+// cada tela guarda em ui o que estava aberto (ex.: Ver folha da programação). Com janela aberta ou campo em uso, espera.
+function rerenderSeguro(){if(!$("#layer").innerHTML&&!document.querySelector(".modal")&&!document.querySelector("main input:focus,main select:focus,main textarea:focus")){
+    const sc=[document.scrollingElement,...document.querySelectorAll("main,#view")].filter(Boolean).map(el=>[el,el.scrollTop]);render();sc.forEach(([el,t])=>{el.scrollTop=t})}else{const crit=S.workers.filter(w=>nivel(w)==="crit").length;const nc=$("#navCount");nc.hidden=!crit;nc.textContent=crit}}
 async function syncCiclo(manual,tudo){
   if(!IS_TAURI)return;if(Sync.rodando){if(manual)toast("A sincronização já está em andamento");return}
   try{Sync.cfg=await tinvoke("cred_status")}catch(e){Sync.cfg={configurado:false}}
@@ -2488,14 +2494,14 @@ async function pagLiquidos(ini,fim,aoAndar){
   const folhas={};for(const d of docs){const trs=[...d.querySelectorAll("tr")];trs.forEach((tr,i)=>{const a=tr.querySelector('a[href*="holerite2020"]'),fp=a&&(a.getAttribute("href").match(/fpCodigo=(\d+)/)||[])[1];if(!fp)return;
     const per=tr.textContent.replace(/\s+/g," ").match(/(\d\d\/\d\d\/\d{4}) a (\d\d\/\d\d\/\d{4})/),emp=trs[i+1]?trs[i+1].textContent.replace(/\s+/g," ").trim():"";
     const isoBr=s=>s.split("/").reverse().join("-");if(per&&isoBr(per[1])>=ini&&isoBr(per[2])<=fim&&/^\d{2,5} - /.test(emp))folhas[fp]=normNome(emp.replace(/^\d{2,5} - /,""))})}
-  const out={},fila=Object.keys(folhas);let feitos=0;const total=fila.length;
+  const out={},adt=new Set(),fila=Object.keys(folhas);let feitos=0;const total=fila.length;
   const passo=async()=>{while(fila.length){const fp=fila.shift(),e=out[folhas[fp]]=out[folhas[fp]]||{};
     try{const d=dom(await sget(`/register/holerite2020.php?opcao1=6&fpCodigo=${fp}`)),ds=[d];for(const n of pgs(d).filter(n=>n>1))ds.push(dom(await sget(`/register/holerite2020.php?opcReferencia=&opcao1=6&pagina=${n}&acao=Visualizar&fp_refmes=&fp_refano=&fp_dtini=&fp_dtfim=&fpCodigo=${fp}&totalRegistro=`)));
       // A paginação do holerite começa em 1 (pagina=0 e pagina=1 repetem a primeira): cada CPF conta uma vez por folha.
-      const f={};for(const x of ds)for(const c of x.body.textContent.replace(/\s+/g," ").split(/Recibo de Pagamento/i).slice(1)){const cpf=dig((c.match(/CPF:\s*([\d.\-]+)/)||[])[1]),v=c.match(/Valor L[ií]quido:?\s*([\d.,]+)/i);if(cpf.length===11&&v)f[cpf]=num(v[1])}
+      const f={};for(const x of ds)for(const c of x.body.textContent.replace(/\s+/g," ").split(/Recibo de Pagamento/i).slice(1)){const cpf=dig((c.match(/CPF:\s*([\d.\-]+)/)||[])[1]),v=c.match(/Valor L[ií]quido:?\s*([\d.,]+)/i);if(cpf.length===11&&v){f[cpf]=num(v[1]);if(/ADIANTAMENTO/i.test(c))adt.add(cpf)}}
       for(const[cpf,v]of Object.entries(f))e[cpf]=Math.round(((e[cpf]||0)+v)*100)/100}catch(err){}
     feitos++;aoAndar&&aoAndar(`Valor líquido: ${feitos} de ${total} folhas`)}};
-  await Promise.all([passo(),passo(),passo()]);return out}
+  await Promise.all([passo(),passo(),passo()]);return {liq:out,adt}}
 async function pagBuscar(r,aoAndar){
   const[ini,fim]=pagPeriodo(r.mes,r.q);
   const emps=[...dom(await sget("/register/rel_folhaproducao.php")).querySelectorAll('select[name="cod_empresa"] option')].filter(o=>o.value).map(o=>({cod:o.value,nome:o.textContent.trim()}));
@@ -2515,10 +2521,10 @@ async function pagBuscar(r,aoAndar){
     feitos++;aoAndar&&aoAndar(`Produção: ${feitos} de ${emps.length} empresas`)}};
   await Promise.all([passo(),passo(),passo(),passo()]);
   // Valor líquido de cada um, da folha processada da empresa (null = folha ainda não processada).
-  const liq=await pagLiquidos(ini,fim,aoAndar);
+  const {liq,adt}=await pagLiquidos(ini,fim,aoAndar);
   // Nome da empresa na folha pode ter complemento (ex.: "CARGILL ... DOURADOS" × "CARGILL ... DOURADOSMOVIMENTACAO FARELO"): aceita prefixo único.
   const chv=s=>normNome(s).replace(/[^A-Z0-9]/g,""),acha=n=>{if(liq[normNome(n)])return liq[normNome(n)];const k=chv(n),c=Object.keys(liq).filter(x=>chv(x).startsWith(k)||k.startsWith(chv(x)));return c.length===1?liq[c[0]]:null};
-  for(const e of achadas){const l=acha(e.nome);e.liqOk=!!l;for(const p of e.pessoas){const c=(p.cpf||"").replace(/\D/g,"");p.liquido=l&&c&&l[c]!=null?l[c]:null}}
+  for(const e of achadas){const l=acha(e.nome);e.liqOk=!!l;for(const p of e.pessoas){const c=(p.cpf||"").replace(/\D/g,"");p.liquido=l&&c&&l[c]!=null?l[c]:null;p.adiant=adt.has(c)}}
   // Dados bancários de quem apareceu (relidos a cada busca).
   const cpfs=[...new Set(achadas.flatMap(e=>e.pessoas.map(p=>p.cpf)).filter(Boolean))],ws=cpfs.map(c=>S.workers.find(w=>w.cpf===c)).filter(w=>w&&w.origemId);let lidos=0;
   const passoB=async()=>{while(ws.length){const w=ws.shift();try{w.banco=await lerBanco(w.origemId);await Store.put("workers",w,true)}catch(err){}lidos++;aoAndar&&aoAndar(`Dados bancários: ${lidos} de ${cpfs.length}`)}};
@@ -2573,36 +2579,36 @@ function pagConsolidar(r){const por={},vts=vtPorPessoa(r).por;
     const lq=l.filter(x=>x.p.liquido!=null),vt=vts[k]||0;
     // Rubrica só para quem produziu em mais de uma empresa; o vale-transporte vai somado e marcado "+ Transporte" no nome.
     const partes=l.length>1?l.map(x=>({emp:abrevEmpresa(x.e.nome),valor:x.p.liquido,diarias:x.p.diarias||0})):null;
-    out[k]={cod:top.e.cod,valor:lq.length||vt?Math.round((lq.reduce((s,x)=>s+x.p.liquido,0)+vt)*100)/100:null,falta:lq.length<l.length,partes,vt}}
+    out[k]={cod:top.e.cod,valor:lq.length||vt?Math.round((lq.reduce((s,x)=>s+x.p.liquido,0)+vt)*100)/100:null,falta:lq.length<l.length,partes,vt,adt:l.some(x=>x.p.adiant)}}
   return out}
 // emps: [] = folha em branco (só o modelo); 1 empresa = folha dela; várias = todas na mesma folha, com o nome de cada empresa antes dos seus trabalhadores.
 function pagFolhas(r,emps,o){const[ini,fim]=r?pagPeriodo(r.mes,r.q):["",""];
   // Quase todos são Sicredi: o banco só aparece quando é outro; a operação, quando existe.
   const ag=b=>{const x=[b.banco&&!/SICREDI/i.test(b.banco)?b.banco.replace("CAIXA ECONOMICA FEDERAL","CEF").replace("BANCO DO BRASIL","BB"):"",b.operacao?"op. "+b.operacao:""].filter(Boolean).join(" · ");return x?` <small>${esc(x)}</small>`:""};
-  const cons=o.valores&&r?pagConsolidar(r):null,vTd=p=>`<td style="text-align:right">${p.valor!=null?reais(p.valor):""}</td>`;let soma=0;
+  const cons=o.cons||(o.valores&&r?pagConsolidar(r):null),vTd=p=>`<td style="text-align:right">${p.valor!=null?reais(p.valor):""}</td>`;let soma=0;
   // Rubrica: linha logo abaixo de quem produziu em mais de uma empresa, com a parte de cada uma.
   const rub=p=>p.partes?`<tr><td colspan="4" class="pg-rub">* ${esc(p.partes.map(x=>`${x.emp} ${x.valor!=null?reais(x.valor):"(folha não processada)"}`).join(" + "))}</td></tr>`:"";
-  const linha=p=>(p.t==="pix"?`<tr><td>${esc(p.nome)}${p.vt?" + Transporte":""}${p.partes?" *":""}</td><td colspan="2" class="pg-pix">PIX: ${esc(p.pix)}${p.conferir?" <small>(conferir)</small>":""}</td>${vTd(p)}</tr>`
-    :`<tr><td>${esc(p.nome)}${p.vt?" + Transporte":""}${p.partes?" *":""}</td><td>${p.t==="corrente"?esc(p.b.conta)+ag(p.b):""}</td><td>${p.t==="poupanca"?esc(p.b.conta)+ag(p.b):""}</td>${vTd(p)}</tr>`)+rub(p);
+  const linha=p=>(p.t==="pix"?`<tr><td>${esc(p.nome)}${p.vt?" + Transporte":""}${p.adt?" − Adiantamento":""}${p.partes?" *":""}</td><td colspan="2" class="pg-pix">PIX: ${esc(p.pix)}${p.conferir?" <small>(conferir)</small>":""}</td>${vTd(p)}</tr>`
+    :`<tr><td>${esc(p.nome)}${p.vt?" + Transporte":""}${p.adt?" − Adiantamento":""}${p.partes?" *":""}</td><td>${p.t==="corrente"?esc(p.b.conta)+ag(p.b):""}</td><td>${p.t==="poupanca"?esc(p.b.conta)+ag(p.b):""}</td>${vTd(p)}</tr>`)+rub(p);
   const vazia=`<tr><td></td><td></td><td></td><td></td></tr>`,blocos=[],varias=emps.length>1;
   for(const e of emps){
-    const ps=e.pessoas.filter(p=>!cons||cons[p.cpf||p.nome].cod===e.cod).map(p=>{const x=pagPessoa(p,o);if(cons){const c=cons[p.cpf||p.nome];x.valor=c.valor;x.partes=c.partes;x.vt=c.vt;soma+=c.valor||0}return x});
+    const ps=e.pessoas.filter(p=>!cons||cons[p.cpf||p.nome].cod===e.cod).map(p=>{const x=pagPessoa(p,o);if(cons){const c=cons[p.cpf||p.nome];x.valor=c.valor;x.partes=c.partes;x.vt=c.vt;x.adt=c.adt;soma+=c.valor||0}return x});
     const grupo=t=>ps.filter(p=>p.t===t).sort((a,b)=>a.nome.localeCompare(b.nome));
     if(varias){if(blocos.length)blocos.push(vazia);blocos.push(`<tr><th colspan="4" style="text-align:left">${esc(e.nome)}</th></tr>`)}
     let g0=true;for(const t of ["poupanca","corrente","pix","sem"]){const g=grupo(t);if(!g.length)continue;if(!g0)blocos.push(vazia);g0=false;for(const p of g){const h=linha(p);blocos.push(...h.split("</tr>").filter(Boolean).map(x=>x+"</tr>"))}}}
   const nPes=new Set(emps.flatMap(e=>e.pessoas.filter(p=>!cons||cons[p.cpf||p.nome].cod===e.cod).map(p=>p.cpf||p.nome))).size;
-  const empTxt=!emps.length?"":(emps.length===1?emps[0].nome:emps.map(e=>abrevEmpresa(e.nome)).join(" · "))+(ini?` · produção de ${br(ini)} a ${br(fim)}`:"");
+  const empTxt=o.empTxt!=null?o.empTxt:!emps.length?"":(emps.length===1?emps[0].nome:emps.map(e=>abrevEmpresa(e.nome)).join(" · "))+(ini?` · produção de ${br(ini)} a ${br(fim)}`:"");
   const pags=[];for(let i=0;i<Math.max(1,blocos.length);i+=PAG_LINHAS-1)pags.push(blocos.slice(i,i+PAG_LINHAS-1));
   const dt=o.data?parse(o.data):TODAY;
   const valDe=h=>{const m=h.match(/<td style="text-align:right">([\d.,]+)<\/td><\/tr>$/);return m?Number(m[1].replace(/\./g,"").replace(",",".")):0};let acum=0;
   return pags.map((b,i)=>{const fimF=i===pags.length-1;const corpo=[...b];const sub=b.reduce((s,h)=>s+valDe(h),0);acum+=sub;while(corpo.length<PAG_LINHAS-1)corpo.push(vazia);
-    return `<div class="pg-folha"><div class="pg-cab"><h1>PROGRAMAÇÃO DE PAGAMENTOS</h1><div>DOURADOS-MS., ${emps.length?`${pad(dt.getDate())}/${pad(dt.getMonth()+1)}/${dt.getFullYear()}`:"______/______/________"}.</div><div>RESPONSÁVEL: ${esc(o.resp||"")}</div></div>
+    return `<div class="pg-folha"><div class="pg-cab"><h1>${esc(o.titulo||"PROGRAMAÇÃO DE PAGAMENTOS")}</h1><div>DOURADOS-MS., ${emps.length?`${pad(dt.getDate())}/${pad(dt.getMonth()+1)}/${dt.getFullYear()}`:"______/______/________"}.</div><div>RESPONSÁVEL: ${esc(o.resp||"")}</div></div>
       <div class="pg-lin">EMPRESA:<u>${esc(empTxt)}</u></div>
       <div class="pg-lin">VALORES RECEBIDO:<u></u></div><div class="pg-lin"><u></u></div>
       <table class="pg-tab"><colgroup><col style="width:45%"><col style="width:17%"><col style="width:20%"><col style="width:18%"></colgroup>
       <thead><tr><th>DISCRIMINAÇÃO</th><th>C/CORRENTE</th><th>C/POUPANÇA</th><th>VALOR:</th></tr></thead><tbody>${corpo.join("")}
       <tr><th style="text-align:left">${fimF?"TOTAL:":"SUBTOTAL:"}</th><td></td><td></td><td style="text-align:right;font-weight:700">${cons?reais(fimF?acum:sub):""}</td></tr></tbody></table>
-      <div class="pg-rod"><span>${emps.length?`${nPes} trabalhador${nPes>1?"es":""} com produção · dados bancários do Sistema eSocial${cons?` · valor líquido da folha processada${r&&(r.vt||[]).length?" · + Transporte: vale-transporte somado":""} · * soma de mais de uma empresa`:""}`:""}</span><span>${pags.length>1?`Folha ${i+1} de ${pags.length}`:""}</span></div></div>`}).join("")}
+      <div class="pg-rod"><span>${o.rodape!=null?esc(o.rodape):emps.length?`${nPes} trabalhador${nPes>1?"es":""} com produção · dados bancários do Sistema eSocial${cons?` · valor líquido da folha processada${r&&(r.vt||[]).length?" · + Transporte: vale-transporte somado":""}${Object.values(cons).some(c=>c.adt)?" · − Adiantamento: já descontado no holerite":""} · * soma de mais de uma empresa`:""}`:""}</span><span>${pags.length>1?`Folha ${i+1} de ${pags.length}`:""}</span></div></div>`}).join("")}
 function vPag(){
   const mes=ui.pagMes||ym(TODAY),q=ui.pagQ||(TODAY.getDate()<=15?"1":"2"),r=pagDoc(mes,q),[ini,fim]=pagPeriodo(mes,q);
   const o={resp:LS.get("cs_pag_resp")||"MÁRIO CIRIDIÃO DOS SANTOS",data:ui.pagData||iso(TODAY)};
@@ -2624,6 +2630,10 @@ function vPag(){
    ${r.buscadoEm?`<section class="panel"><div class="panel-h"><h2>Empresas com produção na quinzena · ${r.empresas.length}</h2><span class="toolbar"><button class="btn sm" id="pgTodas">Marcar todas</button><button class="btn sm" id="pgNenhuma">Desmarcar todas</button></span></div>
      ${r.empresas.length?`<div class="list">${r.empresas.map(e=>`<div class="row"><label class="chk"><input type="checkbox" data-pge="${e.cod}" ${r.marcadas[e.cod]?"checked":""}> <b>${esc(e.nome)}</b></label><span class="toolbar"><span class="pill info">${e.pessoas.length} trabalhador${e.pessoas.length>1?"es":""}</span><button class="btn sm" data-pgv="${e.cod}">Ver folha</button></span></div>`).join("")}</div>`:`<div class="empty">Nenhuma empresa teve produção de ${br(ini)} a ${br(fim)}.</div>`}
      ${semBanco.length?`<div class="banner" style="border-left-color:var(--warn)"><span><b>${semBanco.length} sem conta nem PIX${pixAlt?" (nem celular ou e-mail)":""} no Sistema eSocial</b> (saem no fim da lista, com as colunas em branco): ${esc(semBanco.slice(0,12).join(", "))}${semBanco.length>12?"…":""}</span></div>`:""}</section>`:""}
+   ${r.buscadoEm?(()=>{const pes={};r.empresas.forEach(e=>e.pessoas.forEach(p=>{if(p.cpf)pes[p.cpf]=p}));const naoL=[],foraH=[];
+     for(const a of adtLista())for(const pc of adtParcelas(a))if(pc.data>=ini&&pc.data<=fim){const p=pes[a.cpf],t=`${normNome(a.nome)} (${brl(pc.valor)})`;
+       if(pc.status!=="enviado")naoL.push(t);else if(p&&p.liquido!=null&&!p.adiant)foraH.push(t)}
+     return naoL.length||foraH.length?`<section class="panel"><h2>Adiantamentos desta quinzena</h2>${naoL.length?`<div class="banner" style="border-left-color:var(--warn)"><span><b>Desconto ainda não lançado no Guia:</b> ${esc(naoL.join(", "))}. Lance em Ferramentas › Adiantamentos antes de processar a folha.</span></div>`:""}${foraH.length?`<div class="banner" style="border-left-color:var(--warn)"><span><b>Lançado, mas não apareceu no holerite</b> (a folha pode ter sido processada antes): ${esc(foraH.join(", "))}. Confira no Sistema eSocial.</span></div>`:""}</section>`:""})():""}
    ${r.buscadoEm?(()=>{const vt=r.vt||[],nao=vtPorPessoa(r).nao,tot=vt.reduce((s,v)=>s+v.linhas.reduce((a,l)=>a+l.valor,0),0);
      return `<section class="panel"><div class="panel-h"><h2>Vale-transporte da quinzena${vt.length?` · ${brl(tot)}`:""}</h2><span class="toolbar"><label class="btn sm primary" style="cursor:pointer">${ico("plus",14)} Anexar planilhas (.xlsx)<input type="file" id="pgVt" accept=".xlsx" multiple hidden></label></span></div>
      <div class="small muted" style="margin-bottom:8px">Anexe a planilha de transporte da empresa (pode ser a do ano todo): o programa pega só o período ${br(ini)} a ${br(fim)}, liga à empresa pelo nome do título e soma o "Valor a Receber" no valor de cada trabalhador${valores?"":" — marque Puxar o valor líquido para aparecer na folha"}.</div>
@@ -2632,7 +2642,7 @@ function vPag(){
      ${nao.length?`<div class="banner" style="border-left-color:var(--warn)"><span><b>${nao.length} da planilha sem produção na quinzena</b> (não entram na folha): ${esc(nao.slice(0,12).join(", "))}${nao.length>12?"…":""}</span></div>`:""}</section>`})():""}
    <div id="pgPrev"></div>`;
   const salvarUi=()=>{ui.pagMes=$("#pgMes").value||ym(TODAY);ui.pagQ=$("#pgQ").value;ui.pagData=$("#pgData").value;LS.set("cs_pag_resp",$("#pgResp").value.trim())};
-  $("#pgMes").onchange=()=>{salvarUi();vPag()};$("#pgQ").onchange=()=>{salvarUi();vPag()};$("#pgData").onchange=salvarUi;$("#pgResp").onchange=salvarUi;
+  $("#pgMes").onchange=()=>{salvarUi();ui.pagVer="";vPag()};$("#pgQ").onchange=()=>{salvarUi();ui.pagVer="";vPag()};$("#pgData").onchange=salvarUi;$("#pgResp").onchange=salvarUi;
   $("#pgBuscar").onclick=async()=>{if(!IS_TAURI){toast("A busca no Sistema eSocial funciona no programa instalado.");return}salvarUi();const b=$("#pgBuscar");b.disabled=true;
     try{await pagBuscar(r,t=>{const m=$("#pgMsg");if(m)m.textContent=t});toast("Produção e contas atualizadas")}catch(e){toast("Não foi possível buscar: "+(e.message||e))}vPag()};
   document.querySelectorAll("[data-pge]").forEach(c=>c.onchange=async()=>{r.marcadas[c.dataset.pge]=c.checked;await Store.put("lists",r);vPag()});
@@ -2648,10 +2658,93 @@ function vPag(){
   const opc=()=>({resp:$("#pgResp").value.trim(),data:$("#pgData").value,pixAlt:$("#pgPixAlt").checked,valores:$("#pgValores").checked&&temValor});
   $("#pgValores").onchange=e=>{LS.set("cs_pag_valores",e.target.checked?"1":"0");vPag()};
   $("#pgPixAlt").onchange=e=>{LS.set("cs_pag_pixalt",e.target.checked?"1":"0");vPag()};
-  document.querySelectorAll("[data-pgv]").forEach(b=>b.onclick=()=>{const e=r.empresas.find(x=>x.cod===b.dataset.pgv);$("#pgPrev").innerHTML=`<section class="panel"><h2>${esc(e.nome)}</h2><div style="background:var(--surface-2);padding:12px;border-radius:12px;overflow:auto">${pagFolhas(r,[e],opc())}</div></section>`;$("#pgPrev").scrollIntoView({behavior:"smooth"})});
+  // Ver folha fica guardado em ui.pagVer: se a tela for redesenhada (sincronização), a folha continua aberta.
+  const verFolha=(cod,rolar)=>{const e=r.empresas.find(x=>x.cod===cod);if(!e){ui.pagVer="";return}ui.pagVer=cod;
+    $("#pgPrev").innerHTML=`<section class="panel"><div class="panel-h"><h2>${esc(e.nome)}</h2><button class="btn sm" id="pgVerX">Fechar</button></div><div style="background:var(--surface-2);padding:12px;border-radius:12px;overflow:auto">${pagFolhas(r,[e],opc())}</div></section>`;
+    $("#pgVerX").onclick=()=>{ui.pagVer="";$("#pgPrev").innerHTML=""};if(rolar)$("#pgPrev").scrollIntoView({behavior:"smooth"})};
+  document.querySelectorAll("[data-pgv]").forEach(b=>b.onclick=()=>verFolha(b.dataset.pgv,true));if(ui.pagVer)verFolha(ui.pagVer,false);
   $("#pgModo").onchange=e=>{ui.pagModo=e.target.value;vPag()};
   $("#pgPrint").onclick=()=>{salvarUi();const ms=r.empresas.filter(e=>r.marcadas[e.cod]);
     $("#printArea").innerHTML=modo==="branco"?pagFolhas(null,[],opc()):modo==="juntas"?pagFolhas(r,ms,opc()):ms.map(e=>pagFolhas(r,[e],opc())).join("");if(IS_TAURI)window.print();else toast("A impressão funciona no programa instalado.")};
+}
+
+/* ---------- ADIANTAMENTO SALARIAL (Ferramentas) ----------
+   O escritório adianta parte da remuneração ao trabalhador e desconta depois na folha (CLT art. 462, caput: desconto de
+   adiantamento é permitido; vale para o avulso pelo art. 7º, XXXIV, da Constituição). Cada adiantamento (lists tipo
+   "adiantamento") tem termo assinado, programação A4 para pagar e parcelas de desconto lançadas no Guia como Crédito/Desconto
+   tipo 116 ADIANTAMENTO SALARIAL, pela Aprovação. Na Programação de pagamento o líquido já vem descontado do holerite e o nome
+   sai com "− Adiantamento"; parcela da quinzena ainda não lançada no Guia vira aviso. Sem juros nem encargos. */
+const ADT_TIPO=["116","ADIANTAMENTO SALARIAL"];
+const adtLista=()=>S.lists.filter(l=>l.tipo==="adiantamento").sort((a,b)=>b.data.localeCompare(a.data)||a.nome.localeCompare(b.nome));
+// Parcelas com a data de desconto (5º dia útil da quinzena seguinte, uma por quinzena) e a situação do pedido no Guia.
+function adtParcelas(a){const ps=parcelas(a.valor,a.n||1);return ps.map((v,i)=>{const data=a.datas&&a.datas[i]||dataDescontoQuinzena(a.data,i),
+  pd=S.lists.find(l=>l.tipo==="aprovacao"&&l.dados&&l.dados.adt===a.id&&l.dados.parcela===i+1);return {n:i+1,valor:v,data,pedido:pd,status:pd?pd.status:"nao"}})}
+const ADT_ST={nao:["Não lançado no Guia","warn"],pendente:["Na Aprovação","info"],enviado:["Lançado no Guia","ok"],erro:["Erro ao lançar","crit"],recusado:["Recusado","crit"]};
+async function adtPedirDesconto(a){const w=S.workers.find(x=>x.cpf===a.cpf);if(!w){toast("Trabalhador não encontrado");return}let n=0;
+  for(const pc of adtParcelas(a)){if(pc.pedido&&pc.status!=="recusado")continue;
+    const hist=semAcento(`ADIANTAMENTO SALARIAL DE ${br(a.data)}${a.n>1?` - PARCELA ${pc.n}/${a.n}`:""}`).slice(0,250);
+    await aprovCriar("desconto",w,{adt:a.id,parcela:pc.n,de:a.n,cod_tipo_desconto:ADT_TIPO[0],tipoNome:ADT_TIPO[1],data:pc.data,valor:pc.valor,historico:hist},
+      [["Aba do sistema","Lançamentos › Crédito/Desconto","Lançamentos › Crédito/Desconto"],["Operação","—","Inserir lançamento novo"],["Trabalhador","",normNome(w.nome)],["Tipo de desconto","",ADT_TIPO[1]],["Data","",br(pc.data)],["Valor","",brl(pc.valor)],["Histórico","",hist]]);n++}
+  toast(n?`${n} desconto${n>1?"s":""} enviado${n>1?"s":""} para a Aprovação`:"Os descontos já estão na Aprovação ou lançados")}
+// Termo: 1 folha A4 com 2 vias (sindicato e trabalhador), no mesmo leiaute do termo do uniforme.
+function adtTermoHTML(a){const ps=adtParcelas(a),dt=parse(a.data);
+  const via=q=>`<div class="vale-via">
+    <div class="vale-l1"><b class="vale-tit">TERMO DE ADIANTAMENTO SALARIAL E AUTORIZAÇÃO DE DESCONTO</b><span class="vale-campo"><b>VALOR:</b><u>${brl(a.valor)}</u></span></div>
+    <div class="vale-campo"><b>NOME:</b><u>${esc(normNome(a.nome))}${a.cpf?` · CPF ${esc(fmtCPF(a.cpf))}`:""}</u></div>
+    <div class="vale-campo"><b>DESCONTO:</b><u>${ps.map(p=>`${a.n>1?p.n+"ª ":""}${brl(p.valor)} na folha de ${br(p.data)}`).join(" · ")}</u></div>
+    <div class="vale-data"><b>DATA:</b><u>${pad(dt.getDate())}</u><b>DE</b><u>${MESES_EXT[dt.getMonth()].toUpperCase()}</u><b>DE</b><u>${dt.getFullYear()}</u></div>
+    <div class="vale-txt">Eu, trabalhador avulso em atividade de movimentação de mercadorias (Lei 12.023/2009), declaro que recebi do Sindicato dos Trabalhadores na Movimentação de Mercadorias em Geral de Dourados (SINTRAMOMED, CNPJ 03.682.762/0001-03) a quantia acima, a meu pedido, como ADIANTAMENTO SALARIAL por conta da remuneração dos meus próximos trabalhos${a.obs?` (${esc(a.obs)})`:""}. De forma livre e expressa, autorizo o desconto desse valor nas minhas remunerações, como indicado acima, com o lançamento no recibo de pagamento como "ADIANTAMENTO SALARIAL" (CLT, art. 462, caput, c/c art. 7º, XXXIV, da Constituição). O adiantamento não tem juros, multa ou qualquer encargo. Se a remuneração da quinzena não bastar, ou se eu não tiver produção nela, a parcela passa para a quinzena seguinte em que eu trabalhar, sem que o desconto passe de 70% do líquido da quinzena. Recebi uma via deste termo.</div>
+    <div class="vale-campo"><b>ASSINATURA:</b><u></u></div><div class="vale-q">${q}</div></div>`;
+  return `<div class="vale-folha">${via("1ª via · Sindicato")}<div class="vale-corte">✂ - - - - - - - - - - - - - - - - recorte aqui - - - - - - - - - - - - - - - -</div>${via("2ª via · Trabalhador")}</div>`}
+function adtTermo(a){const md=document.createElement("div");md.className="modal";
+  md.innerHTML=`<div class="scrim"></div><div class="modal-c" role="dialog" aria-modal="true" aria-label="Termo de adiantamento salarial"><div class="drawer-h"><div><div class="eyebrow">Termo de adiantamento e autorização de desconto · 1 folha A4, 2 vias</div><h2 style="font-size:19px">${esc(a.nome)}</h2></div><div class="toolbar"><button class="btn primary" id="aPrint">${ico("print",16)} Imprimir</button><button class="btn" id="aClose">Fechar</button></div></div>
+   <div class="drawer-b" style="background:var(--surface-2)">${adtTermoHTML(a)}</div></div>`;
+  document.body.appendChild(md);const close=()=>md.remove();md.querySelector(".scrim").onclick=close;$("#aClose").onclick=close;
+  $("#aPrint").onclick=()=>{$("#printArea").innerHTML=adtTermoHTML(a);if(IS_TAURI)window.print();else toast("A impressão funciona no programa instalado.")}}
+// Programação de adiantamentos: mesma folha A4 da programação de pagamento, com o valor adiantado e a conta/PIX de cada um.
+function adtFolha(lista,o){const cons={},pessoas=[];for(const a of lista){const k=a.cpf||normNome(a.nome);if(!cons[k]){cons[k]={cod:"adt",valor:0};pessoas.push({nome:normNome(a.nome),cpf:a.cpf})}cons[k].valor=Math.round((cons[k].valor+a.valor)*100)/100}
+  return pagFolhas(null,[{cod:"adt",nome:"ADIANTAMENTO SALARIAL",pessoas}],{...o,cons,titulo:"PROGRAMAÇÃO DE ADIANTAMENTOS",empTxt:`ADIANTAMENTO SALARIAL${o.de?` · ${o.de===o.ate?br(o.de):`${br(o.de)} a ${br(o.ate)}`}`:""}`,
+    rodape:`${lista.length} adiantamento${lista.length>1?"s":""} · dados bancários do Sistema eSocial · descontado depois na folha (ADIANTAMENTO SALARIAL), com termo assinado`})}
+function vAdt(){
+  const lista=adtLista(),aba=ui.adtAba||"abertos",de=ui.adtDe||iso(TODAY),ate=ui.adtAte||de,pixAlt=LS.get("cs_pag_pixalt")!=="0";
+  const aberto=a=>adtParcelas(a).some(p=>p.status!=="enviado"),mostra=lista.filter(a=>aba==="todos"||aberto(a)),prog=lista.filter(a=>a.data>=de&&a.data<=ate);
+  const pgA=paginar(mostra,"adtPg"),nomes=S.workers.filter(w=>w.status!=="desligado").map(w=>w.nome).sort((a,b)=>a.localeCompare(b));
+  $("#view").innerHTML=`<div class="head"><div><h1>Adiantamentos</h1><p>Adiantamento salarial: registre o valor, imprima o termo assinado, pague pela programação de adiantamentos e lance o desconto no Guia (Crédito/Desconto · ADIANTAMENTO SALARIAL), pela Aprovação. Na Programação de pagamento o líquido já vem descontado do holerite.</p></div></div>
+   <div class="banner"><span><b>Dentro da lei:</b> o desconto de adiantamento é permitido pelo art. 462 da CLT, que vale para o trabalhador avulso (art. 7º, XXXIV, da Constituição). Sem juros ou encargos, com termo assinado, o desconto aparecendo no holerite e sem tirar mais de 70% do líquido da quinzena (divida em parcelas se precisar).</span></div>
+   <section class="panel"><h2>Novo adiantamento</h2><div class="form-grid">
+     <div class="field span2"><label for="adW">Trabalhador</label><input id="adW" list="adWl" placeholder="Digite o nome" autocomplete="off"><datalist id="adWl">${nomes.map(n=>`<option value="${esc(n)}">`).join("")}</datalist></div>
+     <div class="field"><label for="adV">Valor (R$)</label><input id="adV" inputmode="decimal" placeholder="0,00"></div>
+     <div class="field"><label for="adD">Data do adiantamento</label><input id="adD" type="date" value="${iso(TODAY)}"></div>
+     <div class="field"><label for="adN">Descontar em</label><select id="adN">${[1,2,3,4].map(n=>`<option value="${n}">${n===1?"1 parcela (próxima quinzena)":n+" parcelas (uma por quinzena)"}</option>`).join("")}</select></div>
+     <div class="field span2"><label for="adO">Observação (opcional)</label><input id="adO" maxlength="120"></div></div>
+     <div class="small muted" id="adPrev" style="margin:6px 0"></div>
+     <div class="toolbar"><button class="btn primary" id="adSalvar">${ico("plus",16)} Registrar e imprimir o termo</button></div></section>
+   <section class="panel"><div class="panel-h"><h2>Adiantamentos</h2>${abasHTML("adtAba",[["abertos","Com desconto em aberto"],["todos","Todos"]],aba)}</div>
+     ${mostra.length?`<div class="list">${pgA.itens.map(a=>{const ps=adtParcelas(a);return `<div class="row"><span><b>${esc(a.nome)}</b> · ${brl(a.valor)} <span class="small muted">em ${br(a.data)}${a.obs?` · ${esc(a.obs)}`:""}</span>
+        <div class="small">${ps.map(p=>`<span class="pill ${ADT_ST[p.status][1]}">${a.n>1?p.n+"ª ":""}${brl(p.valor)} · ${br(p.data)} · ${ADT_ST[p.status][0]}</span>`).join(" ")}</div></span>
+        <span class="toolbar"><button class="btn sm" data-adtt="${a.id}">${ico("print",14)} Termo</button>${ps.some(p=>p.status==="nao"||p.status==="recusado")?`<button class="btn sm primary" data-adtl="${a.id}">Lançar desconto no Guia</button>`:""}${ps.every(p=>p.status==="nao"||p.status==="recusado")?`<button class="btn sm" data-adtx="${a.id}">Excluir</button>`:""}</span></div>`}).join("")}</div>${pgA.html}`:`<div class="empty">${aba==="todos"?"Nenhum adiantamento registrado.":"Nenhum desconto em aberto."}</div>`}</section>
+   <section class="panel"><div class="panel-h"><h2>Programação de adiantamentos</h2><span class="toolbar"><button class="btn primary" id="adProg" ${prog.length?"":"disabled"}>${ico("print",16)} Imprimir ${prog.length||""}</button></span></div>
+     <div class="form-grid"><div class="field"><label for="adDe">De</label><input id="adDe" type="date" value="${de}"></div><div class="field"><label for="adAte">Até</label><input id="adAte" type="date" value="${ate}"></div>
+     <div class="field span2"><label for="adResp">Responsável</label><input id="adResp" value="${esc(LS.get("cs_pag_resp")||"MÁRIO CIRIDIÃO DOS SANTOS")}"></div></div>
+     <div class="small muted" style="margin-top:6px">${prog.length?`${prog.length} adiantamento${prog.length>1?"s":""} · ${brl(prog.reduce((s,a)=>s+a.valor,0))}. Mesma folha da programação de pagamento, com conta, poupança ou PIX do Sistema eSocial.`:"Nenhum adiantamento nesse período."}</div>
+     ${prog.length?`<div style="background:var(--surface-2);padding:12px;border-radius:12px;overflow:auto;margin-top:10px">${adtFolha(prog,{resp:$("#adResp")?$("#adResp").value:LS.get("cs_pag_resp")||"MÁRIO CIRIDIÃO DOS SANTOS",data:ate,de,ate,pixAlt})}</div>`:""}</section>`;
+  abasBind(vAdt);paginarBind(vAdt);
+  const valor=()=>Math.round((Number(String($("#adV").value).replace(/\./g,"").replace(",","."))||0)*100)/100;
+  const prev=()=>{const v=valor(),n=+$("#adN").value,d=$("#adD").value;$("#adPrev").textContent=v>0&&d?"Desconto: "+parcelas(v,n).map((x,i)=>`${n>1?i+1+"ª ":""}${brl(x)} em ${br(dataDescontoQuinzena(d,i))}`).join(" · "):""};
+  ["adV","adN","adD"].forEach(id=>$("#"+id).oninput=prev);$("#adN").onchange=prev;
+  $("#adSalvar").onclick=async e=>{if(e.currentTarget.disabled)return;const nome=$("#adW").value.trim(),w=S.workers.find(x=>normNome(x.nome)===normNome(nome)),v=valor(),d=$("#adD").value,n=+$("#adN").value;
+    if(!w){toast("Escolha o trabalhador pela lista de nomes");$("#adW").focus();return}if(!(v>0)){toast("Informe o valor do adiantamento");$("#adV").focus();return}if(!d){toast("Informe a data");return}
+    const a={id:"adt-"+uid(),tipo:"adiantamento",cpf:w.cpf,nome:w.nome,valor:v,data:d,n,datas:parcelas(v,n).map((_,i)=>dataDescontoQuinzena(d,i)),obs:$("#adO").value.trim(),criadoEm:new Date().toISOString(),criadoPor:nomeUsuario()||""};
+    e.currentTarget.disabled=true;S.lists.push(a);await Store.put("lists",a);toast("Adiantamento registrado");vAdt();adtTermo(a)};
+  document.querySelectorAll("[data-adtt]").forEach(b=>b.onclick=()=>adtTermo(S.lists.find(l=>l.id===b.dataset.adtt)));
+  // Dois cliques (como no estorno): o 1º arma o botão, o 2º confirma; desligado durante o envio para não duplicar.
+  const armar=b=>{if(b.dataset.armed)return false;b.dataset.armed="1";b.textContent=b.dataset.adtl?"Confirmar: enviar à Aprovação":"Confirmar exclusão";return true};
+  document.querySelectorAll("[data-adtl]").forEach(b=>b.onclick=async()=>{if(armar(b)||b.disabled)return;b.disabled=true;await adtPedirDesconto(S.lists.find(l=>l.id===b.dataset.adtl));vAdt()});
+  document.querySelectorAll("[data-adtx]").forEach(b=>b.onclick=async()=>{if(armar(b)||b.disabled)return;b.disabled=true;const a=S.lists.find(l=>l.id===b.dataset.adtx);
+    S.lists=S.lists.filter(l=>l!==a);await Store.del("lists",a.id);toast("Adiantamento excluído");vAdt()});
+  const per=()=>{ui.adtDe=$("#adDe").value||iso(TODAY);ui.adtAte=$("#adAte").value||ui.adtDe;if(ui.adtAte<ui.adtDe)ui.adtAte=ui.adtDe;vAdt()};$("#adDe").onchange=per;$("#adAte").onchange=per;
+  $("#adResp").onchange=()=>{LS.set("cs_pag_resp",$("#adResp").value.trim());vAdt()};
+  $("#adProg").onclick=()=>{$("#printArea").innerHTML=adtFolha(prog,{resp:$("#adResp").value.trim(),data:ate,de,ate,pixAlt});if(IS_TAURI)window.print();else toast("A impressão funciona no programa instalado.")};
 }
 
 /* ---------- NR-01 · PORTAL PSICOSSOCIAL DA DOM ASSESSORIA ----------
@@ -2778,7 +2871,7 @@ async function aprovEnviar(p){
   p.status="enviado";p.enviadoEm=new Date().toISOString();p.enviadoPor=nomeUsuario()||"";delete p.erro;await Store.put("lists",p)}
 function vAprov(){
   const ps=aprovPedidos().sort((a,b)=>b.criadoEm.localeCompare(a.criadoEm)),pend=ps.filter(p=>p.status==="pendente"),hist=ps.filter(p=>p.status!=="pendente"),aba=ui.aprAba||"pendentes",pgA=paginar(aba==="pendentes"?pend:hist,"aprPg"+aba);
-  const titulo=p=>p.acao==="epi"?`EPI/uniforme · ${p.dados.equip}`:p.acao==="endereco"?"Endereço":p.acao==="aso"?"ASO":p.acao==="desconto"?`Desconto autorizado de uniforme${p.dados.de>1?` (parcela ${p.dados.parcela}/${p.dados.de})`:""}`:"Curso "+(p.dados&&p.dados.nr||"");
+  const titulo=p=>p.acao==="epi"?`EPI/uniforme · ${p.dados.equip}`:p.acao==="endereco"?"Endereço":p.acao==="aso"?"ASO":p.acao==="desconto"?`${p.dados.adt?"Adiantamento salarial":"Desconto autorizado de uniforme"}${p.dados.de>1?` (parcela ${p.dados.parcela}/${p.dados.de})`:""}`:"Curso "+(p.dados&&p.dados.nr||"");
   const cartao=p=>`<section class="panel" data-pid="${p.id}"><div class="panel-h"><div><h2>${esc(titulo(p))} · ${esc(p.wnome)}</h2><span class="small muted">CPF ${esc(fmtCPF(p.wcpf))} · pedido ${p.criadoPor?"por "+esc(p.criadoPor)+" ":""}em ${br(p.criadoEm.slice(0,10))} ${hhmm(new Date(p.criadoEm))}</span></div>
      ${p.status==="pendente"?`<div class="toolbar"><button class="btn" data-recusa="${p.id}">Recusar</button><button class="btn primary" data-aprova="${p.id}">Aprovar e enviar</button></div>`:`<span class="pill ${p.status==="enviado"?"ok":p.status==="erro"?"crit":"warn"}">${p.status==="enviado"?"enviado":p.status==="erro"?"erro":"recusado"}</span>`}</div>
     <div class="tbl-wrap" style="box-shadow:none"><table><thead><tr><th>Campo</th><th>No sistema hoje</th><th>Vai ficar</th></tr></thead><tbody>
@@ -2901,6 +2994,6 @@ function emitirFicha(w){
   render();syncInfo();
   if(IS_TAURI){setTimeout(()=>syncCiclo(false),2500);setInterval(()=>syncCiclo(false),SYNC_MS)}
   // Estoque e pasta compartilhada: lê o que os outros computadores gravaram a cada minuto.
-  const comp=async()=>{await asoVerificarPasta(false);await puxarCompartilhado();await docsSincronizar();await estCarregar();if(current==="estoque"&&!document.querySelector(".modal")&&!document.querySelector("main input:focus"))vEst()};
+  const comp=async()=>{await asoVerificarPasta(false);await puxarCompartilhado();await docsSincronizar();await estCarregar();if(current==="estoque")rerenderSeguro()};
   if(IS_TAURI){try{GH.cfg=await tinvoke("gh_cred_status")}catch(e){}}await centralPasta();await estCarregar();if(["estoque","asos","nrs"].includes(current))render();if(IS_TAURI){setTimeout(comp,4000);setInterval(comp,60000)}})();
 </script>
