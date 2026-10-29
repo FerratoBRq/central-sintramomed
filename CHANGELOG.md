@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.55 — 29/10/2026
+- Nova tela **NR-01 · Portal DOM** (menu Gestão): gera `dom-nr01-ativos.csv` em Downloads no modelo de importação do Portal Psicossocial da DOM Assessoria (nome, CPF, nascimento, cargo Movimentador de Mercadorias, data de início, e-mail e WhatsApp). Lista à parte quem não pode entrar por falta de CPF válido, WhatsApp (celular com DDD) ou data de início. A importação é feita no portal em Trabalhadores › Importar planilha.
+
 ## 0.1.54 — 28/10/2026
 - Modo noturno: botão com lua (ir para o escuro) ou sol (voltar ao claro) no fim do menu lateral. A escolha fica guardada neste computador; sem escolha, segue o Windows.
 - Programação de pagamento: opção "Sem conta corrente ou poupança: puxar a chave PIX" (ligada por padrão). Usa a chave cadastrada nos dados bancários do Sistema eSocial (inclusive quando o tipo de conta é Chave Pix e a chave está no campo da conta); se não houver, o celular ou o e-mail do cadastro, marcado "(conferir)" na folha.
