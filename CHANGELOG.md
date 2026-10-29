@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.71 — 29/10/2026
+- Programação de pagamento: a opção passa a se chamar só "Puxar o valor líquido".
+
 ## 0.1.70 — 29/10/2026
 - Emitir ficha › **Ordem de Serviço**: sai idêntica ao modelo O.S._COAMO.docx atualizado (todo o texto igual), mudando só a data do dia (elaboração e assinaturas) e o nome do colaborador; a data da última revisão e o responsável ficam como no modelo. Não gera mais Word: ao clicar já abre a impressão (impressora ou Salvar como PDF).
 

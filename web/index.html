@@ -389,7 +389,7 @@ td .btn{white-space:nowrap}.busca-r .search,.modal .search{flex:none}.busca-r .s
     </nav>
     <button class="tema-b" id="btnTema" type="button"></button>
     <div class="side-foot">
-      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.70</b></span><span id="runtime">Modo navegador</span></div>
+      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.71</b></span><span id="runtime">Modo navegador</span></div>
       <span id="syncInfo"></span>
       <button class="link" id="btnSync" type="button" hidden>Sincronizar tudo agora</button>
       <span id="updInfo">Verificando atualizações…</span>
@@ -407,7 +407,7 @@ td .btn{white-space:nowrap}.busca-r .search,.modal .search{flex:none}.busca-r .s
 /* Tema: claro, escuro ou automático (segue o Windows). O botão de lua/sol fixa o modo neste computador. */
 const temaEscuro=()=>{const t=document.documentElement.dataset.theme;return t?t==="dark":matchMedia("(prefers-color-scheme: dark)").matches};
 try{const t=localStorage.getItem("cs_tema");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}
-const APP_VERSION="0.1.70";
+const APP_VERSION="0.1.71";
 /* ---------- utilidades ---------- */
 const $=(s,r=document)=>r.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -543,7 +543,7 @@ const MANUAL=[
  {t:"Relatório mensal e sem produção",p:["Relatório mensal: escolha o mês e clique em Buscar no Sistema eSocial. Vêm admissões, periódicos (com a empresa da produção) e afastados/desligados (pelo mês do lançamento).","Marque classificação do ASO, envio à DOM e antecedentes; inclua pessoas à mão se precisar; clique em Gerar Excel.","Aba Sem produção há +3 meses: marque quem deve ser desligado. Marcar não envia nada ao sistema."]},
  {t:"Estoque e EPIs",p:["Aba Saldo mostra uniformes por tamanho e EPIs. Contagem: digite o que há de fato e o Central lança só a diferença.","Entrada: compra ou devolução. Saída ou baixa: Primeiro uniforme (kit pronto e sem custo: 1 camiseta manga longa, 1 calça e 1 botina; só escolher os tamanhos, uma vez por trabalhador), Entrega de EPI (sem custo), Uniforme da safra (1 calça e 1 camisa por safra, sem custo), Fornecimento com desconto autorizado ou Baixa.","Desconto autorizado só vale para peça extra pedida pelo trabalhador ou reposição por perda/dano por culpa dele. Botina e EPIs nunca são cobrados. Imprima o Termo de autorização de desconto e colha a assinatura antes.","Ao entregar camiseta, calça ou botina, a opção Lançar também na aba EPI's do Sistema eSocial cria o pedido na Aprovação.","Estorno: o botão Estornar desfaz um movimento. Ele pede confirmação, e um clique duplo não lança duas vezes.","Limpar histórico do estoque (aba Configurações): zera saldos e movimentos até agora em todos os computadores; depois lance a Contagem."]},
  {t:"NR-01 · Portal DOM",p:["Conecte o Portal DOM uma vez na engrenagem (e-mail e senha do portal). O Central consulta o portal a cada 10 minutos.","Aba Situação: quem está fora do portal, convidado, em treinamento ou concluiu, com os itens feitos.","Aba Importar: salva a planilha dos que faltam e abre a tela de importação do portal; arraste o arquivo e confirme lá.","Aba Faltam dados: quem não entra na planilha por falta de CPF, WhatsApp (celular com DDD) ou data de início."]},
- {t:"Programação de pagamento",p:["Escolha o mês e a quinzena e clique em Buscar produção e contas. As empresas com produção vêm marcadas.","Puxar o valor líquido preenche o VALOR com o líquido do holerite (o que cai na conta), lido das folhas já processadas da quinzena; empresa sem folha processada fica em branco e aparece um aviso. Quem trabalhou em mais de uma empresa fica na de mais diárias, com a soma (*).","Usar PIX para quem não tem conta: usa a chave do Guia; sem ela, o celular ou e-mail do cadastro marcado (conferir).","Imprima uma folha por empresa, as empresas marcadas juntas ou a folha em branco."]},
+ {t:"Programação de pagamento",p:["Escolha o mês e a quinzena e clique em Buscar produção e contas. As empresas com produção vêm marcadas.","Puxar o valor líquido preenche o VALOR com o líquido do holerite, lido das folhas já processadas da quinzena; empresa sem folha processada fica em branco e aparece um aviso. Quem trabalhou em mais de uma empresa fica na de mais diárias, com a soma (*).","Usar PIX para quem não tem conta: usa a chave do Guia; sem ela, o celular ou e-mail do cadastro marcado (conferir).","Imprima uma folha por empresa, as empresas marcadas juntas ou a folha em branco."]},
  {t:"Ferramentas",p:["Fatiador de PDF: separa um PDF digitalizado em páginas e anexa cada uma na ficha certa.","Entrevista online: ficha de triagem do candidato; Converter em cadastro cria o trabalhador.","Modelos para impressão: fichas e documentos prontos para imprimir.","Feedback e novidades: registre sugestões ou problemas e veja o que mudou em cada versão."]},
  {t:"Engrenagem e dicas",p:["Na engrenagem: acesso ao Sistema eSocial, acesso ao Portal DOM, compartilhamento entre computadores (pasta ou GitHub privado), cofre de senhas, atualização automática e este manual.","Modo noturno: botão com a lua ou o sol no fim do menu.","Listas longas: escolha 15, 30, 45 ou 60 por tela e use os botões 1, 2, 3… embaixo.","Os grupos do menu recolhem clicando no nome; quando recolhidos, mostram a soma dos avisos.","O programa se atualiza sozinho. Para atualizar na hora: Verificar agora, no fim do menu."]}];
 function abrirManual(){const m=document.createElement("div");m.className="modal";
@@ -621,6 +621,7 @@ const ATALHOS=[
 /* Novidades curtas por versão (aparecem na engrenagem, no aviso de atualização e em Feedback). Uma linha por versão;
    o detalhe fica no CHANGELOG.md. Ao lançar versão, acrescente a linha nova no topo. */
 const VERSOES=[
+ ["0.1.71","Texto mais curto na programação de pagamento"],
  ["0.1.70","Ordem de Serviço igual ao modelo, direto na impressão"],
  ["0.1.69","Programação de pagamento com o valor líquido"],
  ["0.1.68","Ordem de Serviço e Termo de EPI com o kit do dia"],
@@ -2471,7 +2472,7 @@ function pagPessoa(p,o){const w=p.cpf&&S.workers.find(x=>x.cpf===p.cpf),b=w&&w.b
   if(t==="pix"&&!pix)t="sem";
   if(t==="sem"&&o.pixAlt&&w){const cel=String(w.telefone||"").replace(/\D/g,"");const k=cel.length>=10?cel:(w.email||"");if(k){t="pix";pix=k;conferir=true}}
   return {nome:w?normNome(w.nome):p.nome,b,t,pix,conferir}}
-// Valor líquido (o que cai na conta) das folhas processadas da quinzena: rel_folhaPagamento (POST de relatório) lista as folhas
+// Valor líquido das folhas processadas da quinzena: rel_folhaPagamento (POST de relatório) lista as folhas
 // por empresa; holerite2020 (GET) traz um recibo por trabalhador com CPF e "Valor Liquido". Só leitura. Devolve {empresa: {cpf: valor}}.
 async function pagLiquidos(ini,fim,aoAndar){
   const num=s=>Number(s.replace(/\./g,"").replace(",","."))||0,dig=s=>(s||"").replace(/\D/g,""),pgs=d=>[...new Set([...d.querySelectorAll("a")].map(a=>(a.getAttribute("href")||"").match(/pagina=(\d+)/)).filter(Boolean).map(m=>+m[1]))].filter(n=>n>0);
@@ -2515,7 +2516,7 @@ async function pagBuscar(r,aoAndar){
   const passoB=async()=>{while(ws.length){const w=ws.shift();try{w.banco=await lerBanco(w.origemId);await Store.put("workers",w,true)}catch(err){}lidos++;aoAndar&&aoAndar(`Dados bancários: ${lidos} de ${cpfs.length}`)}};
   await Promise.all([passoB(),passoB(),passoB(),passoB()]);
   r.empresas=achadas.sort((a,b)=>a.nome.localeCompare(b.nome));r.marcadas={};achadas.forEach(e=>r.marcadas[e.cod]=true);r.buscadoEm=new Date().toISOString();await Store.put("lists",r)}
-// Com valores: cada trabalhador fica só na empresa onde teve mais diárias (empate: maior produção); o valor é a soma dos líquidos (o que cai na conta).
+// Com valores: cada trabalhador fica só na empresa onde teve mais diárias (empate: maior produção); o valor é a soma dos líquidos.
 function pagConsolidar(r){const por={};
   for(const e of r.empresas)for(const p of e.pessoas){const k=p.cpf||p.nome;(por[k]=por[k]||[]).push({e,p})}
   const out={};for(const[k,l]of Object.entries(por)){const top=l.slice().sort((a,b)=>(b.p.diarias||0)-(a.p.diarias||0)||(b.p.valor||0)-(a.p.valor||0))[0];
@@ -2565,7 +2566,7 @@ function vPag(){
      <div class="field"><label for="pgQ">Quinzena</label><select id="pgQ"><option value="1" ${q==="1"?"selected":""}>1ª quinzena (1 a 15)</option><option value="2" ${q==="2"?"selected":""}>2ª quinzena (16 ao fim)</option></select></div>
      <div class="field"><label for="pgData">Data da folha</label><input id="pgData" type="date" value="${o.data}"></div>
      <div class="field"><label for="pgResp">Responsável</label><input id="pgResp" value="${esc(o.resp)}"></div>
-     <div class="span2"><label class="chk" title="Quem trabalhou em mais de uma empresa fica na de mais diárias, com a soma"><input type="checkbox" id="pgValores" ${valores?"checked":""}> Puxar o valor líquido (o que cai na conta)</label>${valores&&r.buscadoEm&&!temValor?`<div class="small" style="color:var(--warn);margin-top:4px">Clique em Buscar de novo para trazer o valor líquido das folhas.</div>`:""}${valores&&semFolha.length?`<div class="small" style="color:var(--warn);margin-top:4px">Folha da quinzena ainda não processada no Sistema eSocial (valor em branco): ${esc(semFolha.map(e=>abrevEmpresa(e.nome)).join(", "))}.</div>`:""}${valores&&multi?`<div class="small muted" style="margin-top:4px">${multi} em mais de uma empresa: o valor é somado e fica na empresa com mais diárias.</div>`:""}</div>
+     <div class="span2"><label class="chk" title="Quem trabalhou em mais de uma empresa fica na de mais diárias, com a soma"><input type="checkbox" id="pgValores" ${valores?"checked":""}> Puxar o valor líquido</label>${valores&&r.buscadoEm&&!temValor?`<div class="small" style="color:var(--warn);margin-top:4px">Clique em Buscar de novo para trazer o valor líquido das folhas.</div>`:""}${valores&&semFolha.length?`<div class="small" style="color:var(--warn);margin-top:4px">Folha da quinzena ainda não processada no Sistema eSocial (valor em branco): ${esc(semFolha.map(e=>abrevEmpresa(e.nome)).join(", "))}.</div>`:""}${valores&&multi?`<div class="small muted" style="margin-top:4px">${multi} em mais de uma empresa: o valor é somado e fica na empresa com mais diárias.</div>`:""}</div>
      <div class="span2"><label class="chk" title="Chave do Sistema eSocial; sem ela, celular ou e-mail marcado (conferir)"><input type="checkbox" id="pgPixAlt" ${pixAlt?"checked":""}> Usar PIX para quem não tem conta</label></div></div>
     <div class="toolbar"><button class="btn primary" id="pgBuscar">${ico("sync",16)} ${r.buscadoEm?"Buscar de novo":"Buscar produção e contas"}</button><span class="small muted" id="pgMsg">${r.buscadoEm?`Período ${br(ini)} a ${br(fim)} · buscado em ${br(r.buscadoEm.slice(0,10))} às ${hhmm(new Date(r.buscadoEm))}`:`Período ${br(ini)} a ${br(fim)}`}</span></div></section>
    ${r.buscadoEm?`<section class="panel"><div class="panel-h"><h2>Empresas com produção na quinzena · ${r.empresas.length}</h2><span class="toolbar"><button class="btn sm" id="pgTodas">Marcar todas</button><button class="btn sm" id="pgNenhuma">Desmarcar todas</button></span></div>
