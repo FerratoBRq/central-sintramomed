@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.54 — 28/10/2026
+- Modo noturno: botão com lua (ir para o escuro) ou sol (voltar ao claro) no fim do menu lateral. A escolha fica guardada neste computador; sem escolha, segue o Windows.
+- Programação de pagamento: opção "Sem conta corrente ou poupança: puxar a chave PIX" (ligada por padrão). Usa a chave cadastrada nos dados bancários do Sistema eSocial (inclusive quando o tipo de conta é Chave Pix e a chave está no campo da conta); se não houver, o celular ou o e-mail do cadastro, marcado "(conferir)" na folha.
+
 ## 0.1.53 — 28/10/2026
 - Programação de pagamento: opção de impressão "Uma folha por empresa", "Empresas marcadas na mesma folha" (o nome de cada empresa vem antes dos seus trabalhadores e a linha EMPRESA lista todas) ou "Folha em branco" (só o modelo, com a data para preencher).
 
