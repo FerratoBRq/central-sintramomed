@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.67 — 29/10/2026
+- Estoque, Saída ou baixa: ao trocar o motivo, os itens são refeitos. Primeiro uniforme: camiseta manga longa, calça e botina. Uniforme da safra: 1 calça e 1 camiseta manga longa. Demais motivos: 1 camiseta manga longa (a botina do primeiro uniforme não fica mais nas outras opções).
+
 ## 0.1.66 — 29/10/2026
 - Estoque: novo motivo de saída **Primeiro uniforme (sem custo)**, já com 1 camiseta manga longa, 1 calça e 1 par de botina; só escolher o colaborador e os tamanhos. Uma vez por trabalhador (avisa se já recebeu). Imprime o Termo de entrega do primeiro uniforme e pode lançar na aba EPI's do Sistema eSocial pela Aprovação.
 

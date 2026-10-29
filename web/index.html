@@ -389,7 +389,7 @@ td .btn{white-space:nowrap}.busca-r .search,.modal .search{flex:none}.busca-r .s
     </nav>
     <button class="tema-b" id="btnTema" type="button"></button>
     <div class="side-foot">
-      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.66</b></span><span id="runtime">Modo navegador</span></div>
+      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.67</b></span><span id="runtime">Modo navegador</span></div>
       <span id="syncInfo"></span>
       <button class="link" id="btnSync" type="button" hidden>Sincronizar tudo agora</button>
       <span id="updInfo">Verificando atualizações…</span>
@@ -407,7 +407,7 @@ td .btn{white-space:nowrap}.busca-r .search,.modal .search{flex:none}.busca-r .s
 /* Tema: claro, escuro ou automático (segue o Windows). O botão de lua/sol fixa o modo neste computador. */
 const temaEscuro=()=>{const t=document.documentElement.dataset.theme;return t?t==="dark":matchMedia("(prefers-color-scheme: dark)").matches};
 try{const t=localStorage.getItem("cs_tema");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}
-const APP_VERSION="0.1.66";
+const APP_VERSION="0.1.67";
 /* ---------- utilidades ---------- */
 const $=(s,r=document)=>r.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -621,6 +621,7 @@ const ATALHOS=[
 /* Novidades curtas por versão (aparecem na engrenagem, no aviso de atualização e em Feedback). Uma linha por versão;
    o detalhe fica no CHANGELOG.md. Ao lançar versão, acrescente a linha nova no topo. */
 const VERSOES=[
+ ["0.1.67","Itens certos ao trocar o motivo da saída"],
  ["0.1.66","Primeiro uniforme pronto e sem custo no estoque"],
  ["0.1.65","Calendário das NRs com turmas e vínculo de trabalhadores"],
  ["0.1.64","Manual do usuário, limpar histórico do estoque e sem clique duplicado"],
@@ -2153,7 +2154,8 @@ function abrirInventario(){const m=document.createElement("div");m.className="mo
 function abrirMov(tipo){
   const entrada=tipo==="entrada";const cfg=estCfg();let quem=null;
   // Primeiro uniforme: kit pronto, sem custo (1 camiseta manga longa, 1 calça e 1 par de botina); só os tamanhos são escolhidos.
-  const KIT_PRIMEIRO=["camisa-ml","calca","botina"];
+  // Itens que já vêm na tela ao escolher o motivo (só os tamanhos são escolhidos); os demais motivos começam com 1 camiseta manga longa.
+  const KIT_PRIMEIRO=["camisa-ml","calca","botina"],KIT_MOTIVO={primeiro:KIT_PRIMEIRO,safra:["calca","camisa-ml"]};
   const linha=(pid)=>`<div class="mov-linha form-grid" style="grid-template-columns:2fr 1fr 1fr auto;align-items:end">
      <div class="field"><label>Item</label><select class="inp" data-it="prod"><optgroup label="Uniformes">${PRODUTOS.filter(p=>p.grupo!=="epi").map(p=>`<option value="${p.id}" ${p.id===pid?"selected":""}>${esc(p.nome)}</option>`).join("")}</optgroup><optgroup label="EPIs">${PRODUTOS.filter(p=>p.grupo==="epi").map(p=>`<option value="${p.id}">${esc(p.nome)}</option>`).join("")}</optgroup></select></div>
      <div class="field"><label>Tamanho</label><select class="inp" data-it="tam"></select></div>
@@ -2204,7 +2206,7 @@ function abrirMov(tipo){
     const r=S.workers.filter(w=>w.status!=="desligado"&&(w.nome.toLowerCase().includes(q)||(qd.length>=3&&w.cpf.includes(qd)))).slice(0,6);
     $("#mvSug").innerHTML=r.map(w=>`<div class="row"><span><b>${esc(w.nome)}</b> <span class="small muted mono">${esc(fmtCPF(w.cpf))}</span></span><button class="btn sm" data-pick="${w.id}">Escolher</button></div>`).join("")||`<div class="small muted">Ninguém encontrado.</div>`;
     m.querySelectorAll("[data-pick]").forEach(b=>b.onclick=()=>{quem=S.workers.find(w=>w.id===b.dataset.pick);$("#mvBusca").value=quem.nome;$("#mvSug").innerHTML="";aviso()})};
-  $("#mvBusca").oninput=()=>{quem=null;sug();aviso()};$("#mvMot").onchange=()=>{if($("#mvMot").value==="primeiro"){$("#mvItens").innerHTML=KIT_PRIMEIRO.map(linha).join("");ligar()}aviso()};$("#mvParc").onchange=aviso;$("#mvVm").onchange=aviso;$("#mvObs").oninput=aviso;
+  $("#mvBusca").oninput=()=>{quem=null;sug();aviso()};$("#mvMot").onchange=()=>{const v=$("#mvMot").value;$("#mvItens").innerHTML=(KIT_MOTIVO[v]||["camisa-ml"]).map(linha).join("");ligar();aviso()};$("#mvParc").onchange=aviso;$("#mvVm").onchange=aviso;$("#mvObs").oninput=aviso;
   $("#mvMais").onclick=()=>{$("#mvItens").insertAdjacentHTML("beforeend",linha());ligar()};
   ligar();aviso();
   // Um clique só: o botão trava enquanto grava (clique duplo não lança duas vezes).
