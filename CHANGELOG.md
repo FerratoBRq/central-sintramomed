@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.80 — 29/10/2026
+- Programação de pagamento: o "− Adiantamento" é conferido só nas linhas de vencimentos e descontos do holerite (Cod. · Descrição · Referência · Valor), não no campo Mensagem. Conferido no Guia: o tipo 116 ADIANTAMENTO SALARIAL existe em Crédito/Desconto.
+
 ## 0.1.79 — 29/10/2026
 - Adiantamentos: "Registrar adiantamento" só grava; o termo sai pelo botão "Imprimir termo" de cada adiantamento da lista, a qualquer momento.
 
