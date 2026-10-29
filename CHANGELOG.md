@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.76 — 29/10/2026
+- Programação de pagamento: **Vale-transporte da quinzena**. Anexe as planilhas .xlsx de transporte das empresas (modelo "TRANSPORTE COAMO DOURADOS - PERIODO 01 A 15/10/2026"); o programa lê sem bibliotecas, pega só os blocos da quinzena, liga cada um à empresa pelo nome do título (troca manual fica lembrada) e soma o "Valor a Receber" no valor de cada trabalhador, com rubrica. Quem está na planilha sem produção na quinzena aparece em aviso.
+
 ## 0.1.75 — 29/10/2026
 - Emitir ficha: ao abrir, só mostra a prévia. A janela de impressão abre sozinha apenas com o botão **Impressão automática** ligado (vem desligado e fica lembrado).
 

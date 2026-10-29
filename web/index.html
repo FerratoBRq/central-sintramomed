@@ -389,7 +389,7 @@ td .btn{white-space:nowrap}.busca-r .search,.modal .search{flex:none}.busca-r .s
     </nav>
     <button class="tema-b" id="btnTema" type="button"></button>
     <div class="side-foot">
-      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.75</b></span><span id="runtime">Modo navegador</span></div>
+      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.76</b></span><span id="runtime">Modo navegador</span></div>
       <span id="syncInfo"></span>
       <button class="link" id="btnSync" type="button" hidden>Sincronizar tudo agora</button>
       <span id="updInfo">Verificando atualizações…</span>
@@ -407,7 +407,7 @@ td .btn{white-space:nowrap}.busca-r .search,.modal .search{flex:none}.busca-r .s
 /* Tema: claro, escuro ou automático (segue o Windows). O botão de lua/sol fixa o modo neste computador. */
 const temaEscuro=()=>{const t=document.documentElement.dataset.theme;return t?t==="dark":matchMedia("(prefers-color-scheme: dark)").matches};
 try{const t=localStorage.getItem("cs_tema");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}
-const APP_VERSION="0.1.75";
+const APP_VERSION="0.1.76";
 /* ---------- utilidades ---------- */
 const $=(s,r=document)=>r.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -543,7 +543,7 @@ const MANUAL=[
  {t:"Relatório mensal e sem produção",p:["Relatório mensal: escolha o mês e clique em Buscar no Sistema eSocial. Vêm admissões, periódicos (com a empresa da produção) e afastados/desligados (pelo mês do lançamento).","Marque classificação do ASO, envio à DOM e antecedentes; inclua pessoas à mão se precisar; clique em Gerar Excel.","Aba Sem produção há +3 meses: marque quem deve ser desligado. Marcar não envia nada ao sistema."]},
  {t:"Estoque e EPIs",p:["Aba Saldo mostra uniformes por tamanho e EPIs. Contagem: digite o que há de fato e o Central lança só a diferença.","Entrada: compra ou devolução. Saída ou baixa: Primeiro uniforme (kit pronto e sem custo: 1 camiseta manga longa, 1 calça e 1 botina; só escolher os tamanhos, uma vez por trabalhador), Entrega de EPI (sem custo), Uniforme da safra (1 calça e 1 camisa por safra, sem custo), Fornecimento com desconto autorizado ou Baixa.","Desconto autorizado só vale para peça extra pedida pelo trabalhador ou reposição por perda/dano por culpa dele. Botina e EPIs nunca são cobrados. Imprima o Termo de autorização de desconto e colha a assinatura antes.","Ao entregar camiseta, calça ou botina, a opção Lançar também na aba EPI's do Sistema eSocial cria o pedido na Aprovação.","Estorno: o botão Estornar desfaz um movimento. Ele pede confirmação, e um clique duplo não lança duas vezes.","Limpar histórico do estoque (aba Configurações): zera saldos e movimentos até agora em todos os computadores; depois lance a Contagem."]},
  {t:"NR-01 · Portal DOM",p:["Conecte o Portal DOM uma vez na engrenagem (e-mail e senha do portal). O Central consulta o portal a cada 10 minutos.","Aba Situação: quem está fora do portal, convidado, em treinamento ou concluiu, com os itens feitos.","Aba Importar: salva a planilha dos que faltam e abre a tela de importação do portal; arraste o arquivo e confirme lá.","Aba Faltam dados: quem não entra na planilha por falta de CPF, WhatsApp (celular com DDD) ou data de início."]},
- {t:"Programação de pagamento",p:["Escolha o mês e a quinzena e clique em Buscar produção e contas. As empresas com produção vêm marcadas.","Puxar o valor líquido preenche o VALOR com o líquido do holerite, lido das folhas já processadas da quinzena; empresa sem folha processada fica em branco e aparece um aviso. Quem trabalhou em mais de uma empresa fica na de mais diárias, com a soma (*).","Usar PIX para quem não tem conta: usa a chave do Guia; sem ela, o celular ou e-mail do cadastro marcado (conferir).","Imprima uma folha por empresa, as empresas marcadas juntas ou a folha em branco."]},
+ {t:"Programação de pagamento",p:["Escolha o mês e a quinzena e clique em Buscar produção e contas. As empresas com produção vêm marcadas.","Puxar o valor líquido preenche o VALOR com o líquido do holerite, lido das folhas já processadas da quinzena; empresa sem folha processada fica em branco e aparece um aviso. Quem trabalhou em mais de uma empresa fica na de mais diárias, com a soma (*).","Vale-transporte: em Anexar planilhas (.xlsx), escolha a planilha de transporte da empresa (pode ser a do ano todo). O programa pega só o período da quinzena, liga à empresa pelo nome do título (ex.: TRANSPORTE COAMO DOURADOS) e soma o Valor a Receber no valor de cada trabalhador, com a rubrica abaixo do nome. Se ligar à empresa errada, troque na lista ao lado: fica lembrado. Quem está na planilha mas não teve produção aparece num aviso.","Usar PIX para quem não tem conta: usa a chave do Guia; sem ela, o celular ou e-mail do cadastro marcado (conferir).","Imprima uma folha por empresa, as empresas marcadas juntas ou a folha em branco."]},
  {t:"Ferramentas",p:["Fatiador de PDF: separa um PDF digitalizado em páginas e anexa cada uma na ficha certa.","Entrevista online: ficha de triagem do candidato; Converter em cadastro cria o trabalhador.","Modelos para impressão: fichas e documentos prontos para imprimir.","Feedback e novidades: registre sugestões ou problemas e veja o que mudou em cada versão."]},
  {t:"Engrenagem e dicas",p:["Na engrenagem: acesso ao Sistema eSocial, acesso ao Portal DOM, compartilhamento entre computadores (pasta ou GitHub privado), cofre de senhas, atualização automática e este manual.","Modo noturno: botão com a lua ou o sol no fim do menu.","Listas longas: escolha 15, 30, 45 ou 60 por tela e use os botões 1, 2, 3… embaixo.","Os grupos do menu recolhem clicando no nome; quando recolhidos, mostram a soma dos avisos.","O programa se atualiza sozinho. Para atualizar na hora: Verificar agora, no fim do menu."]}];
 function abrirManual(){const m=document.createElement("div");m.className="modal";
@@ -621,6 +621,7 @@ const ATALHOS=[
 /* Novidades curtas por versão (aparecem na engrenagem, no aviso de atualização e em Feedback). Uma linha por versão;
    o detalhe fica no CHANGELOG.md. Ao lançar versão, acrescente a linha nova no topo. */
 const VERSOES=[
+ ["0.1.76","Vale-transporte somado na programação de pagamento"],
  ["0.1.75","Impressão automática só quando ligar o botão"],
  ["0.1.74","Logo da O.S. na proporção certa"],
  ["0.1.73","Ficha, Termo de EPI e O.S. com as mesmas opções"],
@@ -2522,12 +2523,55 @@ async function pagBuscar(r,aoAndar){
   const passoB=async()=>{while(ws.length){const w=ws.shift();try{w.banco=await lerBanco(w.origemId);await Store.put("workers",w,true)}catch(err){}lidos++;aoAndar&&aoAndar(`Dados bancários: ${lidos} de ${cpfs.length}`)}};
   await Promise.all([passoB(),passoB(),passoB(),passoB()]);
   r.empresas=achadas.sort((a,b)=>a.nome.localeCompare(b.nome));r.marcadas={};achadas.forEach(e=>r.marcadas[e.cod]=true);r.buscadoEm=new Date().toISOString();await Store.put("lists",r)}
+/* Vale-transporte na programação: planilhas .xlsx das empresas ("TRANSPORTE COAMO DOURADOS - PERIODO 01 A 15/10/2026",
+   NOME · Total dias · Valor Transporte · Valor a Receber · ... · TOTAL DE TRANSPORTES). Lê sem bibliotecas (zip + inflate
+   nativo do navegador), pega só os blocos da quinzena escolhida e soma o "Valor a Receber" no valor de cada trabalhador. */
+async function xlsxLer(buf){
+  const u=new Uint8Array(buf),dv=new DataView(buf),dec=new TextDecoder();let e=u.length-22;while(e>=0&&dv.getUint32(e,true)!==0x06054b50)e--;
+  if(e<0)throw new Error("O arquivo não é uma planilha .xlsx.");
+  const arq={};let c=dv.getUint32(e+16,true);for(let i=dv.getUint16(e+10,true);i>0;i--){
+    const met=dv.getUint16(c+10,true),tam=dv.getUint32(c+20,true),nl=dv.getUint16(c+28,true),el=dv.getUint16(c+30,true),cl=dv.getUint16(c+32,true),off=dv.getUint32(c+42,true);
+    const nome=dec.decode(u.subarray(c+46,c+46+nl));c+=46+nl+el+cl;if(!/\.xml(\.rels)?$|\.rels$/.test(nome))continue;
+    const ini=off+30+dv.getUint16(off+26,true)+dv.getUint16(off+28,true),dados=u.subarray(ini,ini+tam);
+    arq[nome]=met===0?dec.decode(dados):await new Response(new Blob([dados]).stream().pipeThrough(new DecompressionStream("deflate-raw"))).text()}
+  const x=s=>new DOMParser().parseFromString(s||"<a/>","application/xml"),txt=n=>[...n.getElementsByTagName("t")].map(t=>t.textContent).join("");
+  const ss=[...x(arq["xl/sharedStrings.xml"]).getElementsByTagName("si")].map(txt);
+  const rels={};[...x(arq["xl/_rels/workbook.xml.rels"]).getElementsByTagName("Relationship")].forEach(r=>rels[r.getAttribute("Id")]="xl/"+r.getAttribute("Target").replace(/^\/?xl\//,""));
+  const col=ref=>[...ref.replace(/\d/g,"")].reduce((n,ch)=>n*26+ch.charCodeAt(0)-64,0)-1;
+  return [...x(arq["xl/workbook.xml"]).getElementsByTagName("sheet")].map(s=>{const d=x(arq[rels[s.getAttribute("r:id")]]);
+    return {nome:s.getAttribute("name"),linhas:[...d.getElementsByTagName("row")].map(r=>{const l=[];for(const k of r.getElementsByTagName("c")){const t=k.getAttribute("t"),v=k.getElementsByTagName("v")[0];
+      l[col(k.getAttribute("r"))]=t==="s"?ss[+(v&&v.textContent)]:t==="inlineStr"?txt(k):t==="str"||t==="b"?(v?v.textContent:""):v?Number(v.textContent):null}return l})}})}
+// Blocos "TRANSPORTE <EMPRESA> - PERIODO <d1> A <d2>/<mm>/<aaaa>" (ou um dia só, "15-01-2026") da quinzena r.mes/r.q.
+function vtBlocos(planilhas,mes,q){const out=[];
+  for(const pl of planilhas){let b=null;for(const l of pl.linhas){const a=String(l[0]??"").replace(/\s+/g," ").trim();
+    const t=a.match(/^TRANSPORTES?\s+(.+?)\s*-\s*PER[IÍ]ODO\s*(?:DE\s*)?(.+)$/i);
+    if(t){b=null;const p=t[2].match(/(\d{1,2})(?:\s*A\s*(\d{1,2}))?[\/\-.](\d{1,2})[\/\-.](\d{4})/i);if(!p)continue;
+      const d1=+p[1],d2=+(p[2]||p[1]),m=`${p[4]}-${pad(+p[3])}`;if(m!==mes||(d1<=15?"1":"2")!==q)continue;
+      b={titulo:a,empresa:normNome(t[1]),periodo:`${pad(d1)} a ${pad(d2)}/${pad(+p[3])}/${p[4]}`,linhas:[]};out.push(b);continue}
+    if(!b)continue;if(/^TOTAL/i.test(a)){b=null;continue}if(!a||/^NOME$/i.test(a))continue;
+    const dias=Number(l[1])||0,v=Number(l[3])||Math.round(dias*(Number(l[2])||0)*100)/100;if(v>0)b.linhas.push({nome:normNome(a),dias,valor:Math.round(v*100)/100})}}
+  return out.filter(b=>b.linhas.length)}
+// Empresa do título ("COAMO DOURADOS", "PRIMATO") → empresa com produção que tem todas as palavras (DOURADOS = DDOS) e menos sobras.
+function vtEmpresa(nome,emps){const fora=new Set(["DE","DO","DA","DOS","DAS","E"]),pal=s=>normNome(s).replace(/[^A-Z0-9 ]/g," ").split(" ").filter(w=>w&&!fora.has(w)).map(w=>w==="DDOS"?"DOURADOS":w);
+  const t=pal(nome);let melhor=null,sobra=1e9;for(const e of emps){const n=pal(e.nome);if(!t.every(w=>n.includes(w)))continue;const s=n.length-t.length;if(s<sobra){sobra=s;melhor=e}}return melhor}
+// Nome da planilha → trabalhador da lista: igual, ou mesmo primeiro e último nome com as abreviações batendo ("GABRIEL F. DE OLIVEIRA").
+function vtAchar(nome,pessoas){const ex=pessoas.filter(p=>normNome(p.nome)===nome);if(ex.length===1)return ex[0];
+  const fora=new Set(["DE","DO","DA","DOS","DAS","E"]),tk=s=>normNome(s).replace(/\./g,". ").split(" ").filter(w=>w&&!fora.has(w)),a=tk(nome);
+  const ok=pessoas.filter(p=>{const b=tk(p.nome);if(a[0]!==b[0]||a[a.length-1]!==b[b.length-1])return false;let j=1;
+    for(const w of a.slice(1,-1)){const ini=w.endsWith(".")?w[0]:null;while(j<b.length-1&&!(ini?b[j][0]===ini:b[j]===w))j++;if(j>=b.length-1)return false;j++}return true});
+  return ok.length===1?ok[0]:null}
+// Vale-transporte por trabalhador (chave cpf||nome) e quem não foi achado.
+function vtPorPessoa(r){const por={},nao=[];const todas=r.empresas.flatMap(e=>e.pessoas);
+  for(const v of r.vt||[]){const e=r.empresas.find(x=>x.cod===v.cod);for(const l of v.linhas){const p=(e&&vtAchar(l.nome,e.pessoas))||vtAchar(l.nome,todas);
+    if(p){const k=p.cpf||p.nome;por[k]=Math.round(((por[k]||0)+l.valor)*100)/100}else nao.push(l.nome)}}
+  return {por,nao}}
 // Com valores: cada trabalhador fica só na empresa onde teve mais diárias (empate: maior produção); o valor é a soma dos líquidos.
-function pagConsolidar(r){const por={};
+function pagConsolidar(r){const por={},vts=vtPorPessoa(r).por;
   for(const e of r.empresas)for(const p of e.pessoas){const k=p.cpf||p.nome;(por[k]=por[k]||[]).push({e,p})}
   const out={};for(const[k,l]of Object.entries(por)){const top=l.slice().sort((a,b)=>(b.p.diarias||0)-(a.p.diarias||0)||(b.p.valor||0)-(a.p.valor||0))[0];
-    const lq=l.filter(x=>x.p.liquido!=null);
-    out[k]={cod:top.e.cod,valor:lq.length?Math.round(lq.reduce((s,x)=>s+x.p.liquido,0)*100)/100:null,falta:lq.length<l.length,partes:l.length>1?l.map(x=>({emp:abrevEmpresa(x.e.nome),valor:x.p.liquido,diarias:x.p.diarias||0})):null}}
+    const lq=l.filter(x=>x.p.liquido!=null),vt=vts[k]||0;
+    const partes=l.length>1||vt?[...l.map(x=>({emp:abrevEmpresa(x.e.nome),valor:x.p.liquido,diarias:x.p.diarias||0})),...(vt?[{emp:"Vale-transporte",valor:vt}]:[])]:null;
+    out[k]={cod:top.e.cod,valor:lq.length||vt?Math.round((lq.reduce((s,x)=>s+x.p.liquido,0)+vt)*100)/100:null,falta:lq.length<l.length,partes}}
   return out}
 // emps: [] = folha em branco (só o modelo); 1 empresa = folha dela; várias = todas na mesma folha, com o nome de cada empresa antes dos seus trabalhadores.
 function pagFolhas(r,emps,o){const[ini,fim]=r?pagPeriodo(r.mes,r.q):["",""];
@@ -2556,7 +2600,7 @@ function pagFolhas(r,emps,o){const[ini,fim]=r?pagPeriodo(r.mes,r.q):["",""];
       <table class="pg-tab"><colgroup><col style="width:45%"><col style="width:17%"><col style="width:20%"><col style="width:18%"></colgroup>
       <thead><tr><th>DISCRIMINAÇÃO</th><th>C/CORRENTE</th><th>C/POUPANÇA</th><th>VALOR:</th></tr></thead><tbody>${corpo.join("")}
       <tr><th style="text-align:left">${fimF?"TOTAL:":"SUBTOTAL:"}</th><td></td><td></td><td style="text-align:right;font-weight:700">${cons?reais(fimF?acum:sub):""}</td></tr></tbody></table>
-      <div class="pg-rod"><span>${emps.length?`${nPes} trabalhador${nPes>1?"es":""} com produção · dados bancários do Sistema eSocial${cons?" · valor líquido da folha processada · * soma de mais de uma empresa":""}`:""}</span><span>${pags.length>1?`Folha ${i+1} de ${pags.length}`:""}</span></div></div>`}).join("")}
+      <div class="pg-rod"><span>${emps.length?`${nPes} trabalhador${nPes>1?"es":""} com produção · dados bancários do Sistema eSocial${cons?` · valor líquido da folha processada${r&&(r.vt||[]).length?" + vale-transporte":""} · * soma (rubrica abaixo do nome)`:""}`:""}</span><span>${pags.length>1?`Folha ${i+1} de ${pags.length}`:""}</span></div></div>`}).join("")}
 function vPag(){
   const mes=ui.pagMes||ym(TODAY),q=ui.pagQ||(TODAY.getDate()<=15?"1":"2"),r=pagDoc(mes,q),[ini,fim]=pagPeriodo(mes,q);
   const o={resp:LS.get("cs_pag_resp")||"MÁRIO CIRIDIÃO DOS SANTOS",data:ui.pagData||iso(TODAY)};
@@ -2578,6 +2622,12 @@ function vPag(){
    ${r.buscadoEm?`<section class="panel"><div class="panel-h"><h2>Empresas com produção na quinzena · ${r.empresas.length}</h2><span class="toolbar"><button class="btn sm" id="pgTodas">Marcar todas</button><button class="btn sm" id="pgNenhuma">Desmarcar todas</button></span></div>
      ${r.empresas.length?`<div class="list">${r.empresas.map(e=>`<div class="row"><label class="chk"><input type="checkbox" data-pge="${e.cod}" ${r.marcadas[e.cod]?"checked":""}> <b>${esc(e.nome)}</b></label><span class="toolbar"><span class="pill info">${e.pessoas.length} trabalhador${e.pessoas.length>1?"es":""}</span><button class="btn sm" data-pgv="${e.cod}">Ver folha</button></span></div>`).join("")}</div>`:`<div class="empty">Nenhuma empresa teve produção de ${br(ini)} a ${br(fim)}.</div>`}
      ${semBanco.length?`<div class="banner" style="border-left-color:var(--warn)"><span><b>${semBanco.length} sem conta nem PIX${pixAlt?" (nem celular ou e-mail)":""} no Sistema eSocial</b> (saem no fim da lista, com as colunas em branco): ${esc(semBanco.slice(0,12).join(", "))}${semBanco.length>12?"…":""}</span></div>`:""}</section>`:""}
+   ${r.buscadoEm?(()=>{const vt=r.vt||[],nao=vtPorPessoa(r).nao,tot=vt.reduce((s,v)=>s+v.linhas.reduce((a,l)=>a+l.valor,0),0);
+     return `<section class="panel"><div class="panel-h"><h2>Vale-transporte da quinzena${vt.length?` · ${brl(tot)}`:""}</h2><span class="toolbar"><label class="btn sm primary" style="cursor:pointer">${ico("plus",14)} Anexar planilhas (.xlsx)<input type="file" id="pgVt" accept=".xlsx" multiple hidden></label></span></div>
+     <div class="small muted" style="margin-bottom:8px">Anexe a planilha de transporte da empresa (pode ser a do ano todo): o programa pega só o período ${br(ini)} a ${br(fim)}, liga à empresa pelo nome do título e soma o "Valor a Receber" no valor de cada trabalhador${valores?"":" — marque Puxar o valor líquido para aparecer na folha"}.</div>
+     ${vt.length?`<div class="list">${vt.map((v,i)=>`<div class="row"><span><b>${esc(v.titulo)}</b><div class="small muted">${esc(v.arquivo)} · ${v.linhas.length} trabalhador${v.linhas.length>1?"es":""} · ${brl(v.linhas.reduce((a,l)=>a+l.valor,0))}</div></span>
+       <span class="toolbar"><select class="inp" data-vtemp="${i}" aria-label="Empresa do vale-transporte" style="width:auto;max-width:280px"><option value="">Escolha a empresa…</option>${r.empresas.map(e=>`<option value="${e.cod}" ${e.cod===v.cod?"selected":""}>${esc(e.nome)}</option>`).join("")}</select><button class="btn sm" data-vttira="${i}">Tirar</button></span></div>`).join("")}</div>`:""}
+     ${nao.length?`<div class="banner" style="border-left-color:var(--warn)"><span><b>${nao.length} da planilha sem produção na quinzena</b> (não entram na folha): ${esc(nao.slice(0,12).join(", "))}${nao.length>12?"…":""}</span></div>`:""}</section>`})():""}
    <div id="pgPrev"></div>`;
   const salvarUi=()=>{ui.pagMes=$("#pgMes").value||ym(TODAY);ui.pagQ=$("#pgQ").value;ui.pagData=$("#pgData").value;LS.set("cs_pag_resp",$("#pgResp").value.trim())};
   $("#pgMes").onchange=()=>{salvarUi();vPag()};$("#pgQ").onchange=()=>{salvarUi();vPag()};$("#pgData").onchange=salvarUi;$("#pgResp").onchange=salvarUi;
@@ -2585,6 +2635,13 @@ function vPag(){
     try{await pagBuscar(r,t=>{const m=$("#pgMsg");if(m)m.textContent=t});toast("Produção e contas atualizadas")}catch(e){toast("Não foi possível buscar: "+(e.message||e))}vPag()};
   document.querySelectorAll("[data-pge]").forEach(c=>c.onchange=async()=>{r.marcadas[c.dataset.pge]=c.checked;await Store.put("lists",r);vPag()});
   const todas=v=>async()=>{r.empresas.forEach(e=>r.marcadas[e.cod]=v);await Store.put("lists",r);vPag()};
+  const vtIn=$("#pgVt");if(vtIn)vtIn.onchange=async()=>{const vinc=JSON.parse(LS.get("cs_vt_vinc")||"{}");let n=0;const sem=[];r.vt=r.vt||[];
+    for(const f of vtIn.files){try{const bs=vtBlocos(await xlsxLer(await f.arrayBuffer()),r.mes,r.q);if(!bs.length){sem.push(f.name);continue}
+      for(const b of bs){const e=r.empresas.find(x=>x.cod===vinc[b.empresa])||vtEmpresa(b.empresa,r.empresas);r.vt=r.vt.filter(v=>v.titulo!==b.titulo);r.vt.push({...b,arquivo:f.name,cod:e?e.cod:""});n++}}
+      catch(e){toast(`${f.name}: ${e.message||e}`)}}
+    await Store.put("lists",r);if(n)toast(`${n} planilha${n>1?"s":""} de vale-transporte anexada${n>1?"s":""}`);if(sem.length)toast(`Sem o período ${br(ini)} a ${br(fim)}: ${sem.join(", ")}`);vPag()};
+  document.querySelectorAll("[data-vtemp]").forEach(s=>s.onchange=async()=>{const v=r.vt[+s.dataset.vtemp];v.cod=s.value;const vinc=JSON.parse(LS.get("cs_vt_vinc")||"{}");vinc[v.empresa]=s.value;LS.set("cs_vt_vinc",JSON.stringify(vinc));await Store.put("lists",r);vPag()});
+  document.querySelectorAll("[data-vttira]").forEach(b=>b.onclick=async()=>{r.vt.splice(+b.dataset.vttira,1);await Store.put("lists",r);vPag()});
   const t=$("#pgTodas");if(t)t.onclick=todas(true);const n=$("#pgNenhuma");if(n)n.onclick=todas(false);
   const opc=()=>({resp:$("#pgResp").value.trim(),data:$("#pgData").value,pixAlt:$("#pgPixAlt").checked,valores:$("#pgValores").checked&&temValor});
   $("#pgValores").onchange=e=>{LS.set("cs_pag_valores",e.target.checked?"1":"0");vPag()};
