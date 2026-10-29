@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.64 — 29/10/2026
+- **Manual do usuário** na engrenagem (Ajuda), com busca; também pela busca rápida (Ctrl+K).
+- Estoque: **Limpar histórico** (aba Configurações) zera saldos e movimentos até agora em todos os computadores, sem apagar os arquivos (corte compartilhado na configuração do estoque).
+- Clique duplo não lança, estorna ou marca desconto duas vezes; botões travam enquanto gravam.
+- Maiúsculas: mês da Programação de pagamento ("Outubro de 2026"), dias da semana e rótulos como Exemplo, Cadastrado, Sem registro, Estornado, Altura, Confinado, Formação, Reciclagem, Lido em, Até.
+
 ## 0.1.63 — 29/10/2026
 - Estoque: botão **Contagem** para lançar o inventário. Digita o que há em cada tamanho e o Central lança só a diferença como "Ajuste de inventário".
 - Menu: grupo recolhido mostra a soma dos avisos de dentro (ex.: ASOs e NRs esperando em Documentos e eSocial).

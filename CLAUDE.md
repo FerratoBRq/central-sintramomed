@@ -13,7 +13,7 @@
 - Senhas ficam no Gerenciador de Credenciais do Windows (`keyring`). Nunca em arquivo, log ou repositório.
 - Textos da interface em português do Brasil, datas dd/mm/aaaa, valores em R$.
 - A interface é um HTML único (`web/index.html`) que roda no navegador e dentro do .exe. Use `IS_TAURI` para o que só existe no programa instalado.
-- Para lançar versão: subir a versão em `package.json`, `src-tauri/tauri.conf.json`, `src-tauri/Cargo.toml`, `APP_VERSION` em `web/index.html` e `web/version.json`; registrar no `CHANGELOG.md` e uma linha curta no topo de `VERSOES` (web/index.html: é o que aparece na engrenagem, no aviso e em Feedback); `git push` na `main`. O GitHub gera o instalador e os PCs se atualizam sozinhos em até 5 min.
+- Para lançar versão: subir a versão em `package.json`, `src-tauri/tauri.conf.json`, `src-tauri/Cargo.toml`, `APP_VERSION` em `web/index.html` e `web/version.json`; registrar no `CHANGELOG.md` e uma linha curta no topo de `VERSOES` (web/index.html: é o que aparece na engrenagem, no aviso e em Feedback); atualizar o `MANUAL` (engrenagem › Ajuda) quando a função for nova ou mudar o uso; `git push` na `main`. O GitHub gera o instalador e os PCs se atualizam sozinhos em até 5 min.
 - Depois de editar `web/index.html`, conferir a sintaxe do script: `node -e 'const h=require("fs").readFileSync("web/index.html","utf8");new Function(h.split("<script>")[1].split("</script>")[0])'`.
 
 ## Código mínimo (adaptado do ponytail, MIT — github.com/DietrichGebert/ponytail)
