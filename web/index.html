@@ -389,7 +389,7 @@ td .btn{white-space:nowrap}.busca-r .search,.modal .search{flex:none}.busca-r .s
     </nav>
     <button class="tema-b" id="btnTema" type="button"></button>
     <div class="side-foot">
-      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.67</b></span><span id="runtime">Modo navegador</span></div>
+      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.68</b></span><span id="runtime">Modo navegador</span></div>
       <span id="syncInfo"></span>
       <button class="link" id="btnSync" type="button" hidden>Sincronizar tudo agora</button>
       <span id="updInfo">Verificando atualizações…</span>
@@ -407,7 +407,7 @@ td .btn{white-space:nowrap}.busca-r .search,.modal .search{flex:none}.busca-r .s
 /* Tema: claro, escuro ou automático (segue o Windows). O botão de lua/sol fixa o modo neste computador. */
 const temaEscuro=()=>{const t=document.documentElement.dataset.theme;return t?t==="dark":matchMedia("(prefers-color-scheme: dark)").matches};
 try{const t=localStorage.getItem("cs_tema");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}
-const APP_VERSION="0.1.67";
+const APP_VERSION="0.1.68";
 /* ---------- utilidades ---------- */
 const $=(s,r=document)=>r.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -536,7 +536,7 @@ function abasBind(redesenhar){document.querySelectorAll("[data-aba]").forEach(b=
 const MANUAL=[
  {t:"Primeiros passos",p:["Abra a engrenagem (no alto do menu) e entre com o login e a senha do Sistema eSocial (Guia Campo Grande). A senha fica guardada no Windows.","O Central importa e atualiza os trabalhadores sozinho a cada 5 minutos. Para atualizar na hora, clique nas setas ao lado da engrenagem.","Use o botão Lançar (azul, no alto do menu) para lançar ASO, NR-33/NR-35 ou uma entrega do estoque.","Use Buscar ou Ctrl+K para achar um trabalhador pelo nome ou CPF, uma tela ou uma ação."]},
  {t:"Painel",p:["Mostra trabalhadores ativos, pendências críticas, vencimentos dos próximos 30 dias e quem está sem produção há mais de 3 meses. Clique num número para abrir a lista.","Vencimento das NRs: NR-35 e NR-33 que vencem até o dia 15 do mês depois do próximo.","Atalhos abrem os sistemas das tomadoras em nova aba."]},
- {t:"Trabalhadores e ficha",p:["Busque por nome, CPF ou matrícula e filtre por Ativos, Pendência crítica, Sem produção, A desligar, Inativos e Desligados.","Clique no trabalhador para abrir a ficha: dados, documentos, ASO, NRs, uniformes e anexos.","Emitir ficha: escolha a Ficha do Trabalhador ou o Termo de EPI do próprio Sistema eSocial (Guia), ou a ficha do Central, e clique em Imprimir.","Editar endereço no Sistema eSocial cria um pedido na Aprovação; nada é gravado no Guia sem aprovar.","Atualizar esta ficha do Sistema eSocial busca os dados mais novos daquele trabalhador."]},
+ {t:"Trabalhadores e ficha",p:["Busque por nome, CPF ou matrícula e filtre por Ativos, Pendência crítica, Sem produção, A desligar, Inativos e Desligados.","Clique no trabalhador para abrir a ficha: dados, documentos, ASO, NRs, uniformes e anexos.","Emitir ficha: escolha a Ficha do Trabalhador ou o Termo de EPI do próprio Sistema eSocial (Guia), a Ordem de Serviço ou a ficha do Central. O Termo de EPI sai com 2 calças, 2 camisetas e 1 par de botina na data do dia. A Ordem de Serviço sai em Word com o nome do trabalhador e a data do dia.","Editar endereço no Sistema eSocial cria um pedido na Aprovação; nada é gravado no Guia sem aprovar.","Atualizar esta ficha do Sistema eSocial busca os dados mais novos daquele trabalhador."]},
  {t:"Pendências e vencimentos",p:["Pendências mostra o que falta em cada trabalhador (início, ASO, NR-35, NR-33, produção, término). Clique num item para filtrar; Críticas e Atenção separam a gravidade.","Vencimento das NRs: escolha NR-35 ou NR-33, clique num dia livre do calendário para marcar a turma (de preferência quarta, quinta ou sexta) e o Central distribui as pessoas. Clique num dia marcado para ver a turma, mover alguém para outra data, vincular um trabalhador ou desmarcar a data.","Lista para emissão de certificados: gera o Word no modelo da DOM, com 13 nomes por folha, separado por NR-33 e NR-35."]},
  {t:"ASOs e NRs recebidos",p:["Salve os PDFs que chegam pelo WhatsApp na pasta ASOs para lançar ou NRs para lançar (Documentos > Central Sintramomed). O Central lê a cada minuto. Se o arquivo for para a pasta errada, ele muda sozinho.","Também dá para usar Anexar ou arrastar os PDFs para a tela.","Na aba Para conferir: Conferir e lançar abre o documento lido para conferir. Enviar prontos para aprovação manda de uma vez os que estão completos.","Depois de lançado, o arquivo vai para ASOs lançados ou NRs lançadas e fica anexado na ficha."]},
  {t:"Aprovação",p:["Tudo o que o Central vai gravar no Sistema eSocial (ASO, NR, endereço, desconto autorizado, EPI) aparece aqui com o que muda: como está no sistema e como vai ficar.","Aprovar e enviar pede uma segunda confirmação, grava no Guia e confere relendo a página. Recusar descarta o pedido.","A aba Histórico guarda o que foi enviado, recusado ou deu erro."]},
@@ -621,6 +621,7 @@ const ATALHOS=[
 /* Novidades curtas por versão (aparecem na engrenagem, no aviso de atualização e em Feedback). Uma linha por versão;
    o detalhe fica no CHANGELOG.md. Ao lançar versão, acrescente a linha nova no topo. */
 const VERSOES=[
+ ["0.1.68","Ordem de Serviço e Termo de EPI com o kit do dia"],
  ["0.1.67","Itens certos ao trocar o motivo da saída"],
  ["0.1.66","Primeiro uniforme pronto e sem custo no estoque"],
  ["0.1.65","Calendário das NRs com turmas e vínculo de trabalhadores"],
@@ -1204,7 +1205,7 @@ async function relBuscar(r,aoAndar){
 const CRC_T=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
 const crc32=b=>{let c=0xFFFFFFFF;for(const x of b)c=CRC_T[(c^x)&0xFF]^(c>>>8);return(c^0xFFFFFFFF)>>>0};
 function zipStore(files){const enc=new TextEncoder(),parts=[],cen=[];let off=0;
-  for(const[nome,txt]of files){const d=enc.encode(txt),n=enc.encode(nome),c=crc32(d);
+  for(const[nome,txt]of files){const d=txt instanceof Uint8Array?txt:enc.encode(txt),n=enc.encode(nome),c=crc32(d);
     const h=new DataView(new ArrayBuffer(30));h.setUint32(0,0x04034b50,true);h.setUint16(4,20,true);h.setUint16(6,0x0800,true);h.setUint32(14,c,true);h.setUint32(18,d.length,true);h.setUint32(22,d.length,true);h.setUint16(26,n.length,true);
     const e=new DataView(new ArrayBuffer(46));e.setUint32(0,0x02014b50,true);e.setUint16(4,20,true);e.setUint16(6,20,true);e.setUint16(8,0x0800,true);e.setUint32(16,c,true);e.setUint32(20,d.length,true);e.setUint32(24,d.length,true);e.setUint16(28,n.length,true);e.setUint32(42,off,true);
     parts.push(h.buffer,n,d);cen.push(e.buffer,n);off+=30+n.length+d.length}
@@ -2736,10 +2737,27 @@ function fichaHTML(w){
    sem os scripts e o formulário de busca, e impressa daqui. A ficha do Central continua como opção. */
 // E-mail protegido pelo Cloudflare: hex em que o 1º byte é a chave (XOR) dos demais.
 const cfEmail=h=>{const k=parseInt(String(h).slice(0,2),16);let o="";for(let i=2;i+1<String(h).length;i+=2)o+=String.fromCharCode(parseInt(h.slice(i,i+2),16)^k);return o};
+/* Ordem de Serviço (O.S.) por atividade · modelo Word do sindicato (web/modelos/ordem-servico.json, tirado do .docx da Coamo).
+   Muda só o nome do colaborador e as datas de elaboração e de assinatura (dia da emissão); a data da última revisão e o
+   responsável (GABRIEL F. CAVALCANTE) ficam como no modelo. */
+async function ordemServicoDocx(w,dataIso){
+  const m=await (await fetch("modelos/ordem-servico.json")).json(),d=br(dataIso||iso(TODAY));
+  const arq={...m.arquivos};arq["word/document.xml"]=arq["word/document.xml"].split("{{DATA}}").join(xe(d)).split("{{NOME}}").join(xe(normNome(w.nome)));
+  const bins=Object.entries(m.binarios||{}).map(([k,b])=>[k,Uint8Array.from(atob(b),c=>c.charCodeAt(0))]);
+  return zipStore([...Object.entries(arq),...bins])}
+// Termo de EPI: em vez do histórico, sai o kit padrão (2 calças, 2 camisetas, 1 par de botina) com a data de hoje.
+// O certificado (CA) de cada item vem das entregas que já estavam no termo; sem ele, fica em branco.
+function epiPadrao(d){const tr=[...d.querySelectorAll("tr")],cab=tr.find(x=>/Equipamentos/i.test(x.textContent)&&/Quantidade/i.test(x.textContent));if(!cab)return;
+  const linhas=[];let n=cab.nextElementSibling;while(n&&n.tagName==="TR"&&n.children.length>=4&&!/_{5,}|DOURADOS\s*\//.test(n.textContent)){linhas.push(n);n=n.nextElementSibling}
+  const ca={};linhas.forEach(x=>{const c=[...x.children].map(y=>y.textContent.trim());if(c[0]&&!ca[c[0]])ca[c[0]]=c[1]});
+  const modelo=linhas[0]||cab,hoje=br(iso(TODAY));
+  const nova=([eq,q])=>{const r=modelo.cloneNode(true),c=[...r.children];c.forEach(x=>x.textContent="");c[0].textContent=eq;if(c[1])c[1].textContent=ca[eq]||"";if(c[2])c[2].textContent=String(q);if(c[3])c[3].textContent=hoje;return r};
+  linhas.forEach(x=>x.remove());let ref=cab;for(const it of [["CALCA",2],["CAMISETA",2],["BOTINA",1]]){const r=nova(it);ref.after(r);ref=r}}
 async function fichaGuiaHTML(tipo,w){
   const hoje=br(iso(TODAY)),cam=tipo==="epi"?`/register/imp_epi.php?cod_colaborador=${w.origemId}&dt1=01/01/2000&dt2=${hoje}`:`/register/imp_colaborador.php?acao=Visualizar&cod_colaborador=${w.origemId}`;
   const d=dom(await sget(cam));d.querySelectorAll("script,form").forEach(x=>x.remove());
   // O Guia passa por Cloudflare, que troca e-mails por "[email protected]" e só os mostra com um script: decodifica aqui.
+  if(tipo==="epi")epiPadrao(d);
   d.querySelectorAll("[data-cfemail]").forEach(el=>{const t=d.createTextNode(cfEmail(el.getAttribute("data-cfemail")));(el.closest('a[href*="email-protection"]')||el).replaceWith(t)});
   const base=d.createElement("base");base.href="https://sistemaesocial.guiacampogrande.com/register/";d.head.prepend(base);
   return "<!doctype html>"+d.documentElement.outerHTML}
@@ -2747,19 +2765,22 @@ function emitirFicha(w){
   const guia=IS_TAURI&&!!w.origemId,m=document.createElement("div");m.className="modal";let tipo=guia?"ficha":"central";
   m.innerHTML=`<div class="scrim"></div><div class="modal-c" role="dialog" aria-modal="true" aria-label="Emitir ficha" style="max-width:900px"><div class="drawer-h"><div><div class="eyebrow">Emitir ficha · A4</div><h2 style="font-size:20px">${esc(w.nome)}</h2></div><div class="toolbar"><button class="btn primary" id="fPrint">${ico("print",16)} Imprimir</button><button class="btn" id="fClose">Fechar</button></div></div>
    <div class="drawer-b" style="background:var(--surface-2);align-items:stretch">
-    ${abasHTML("fichaTipo",[...(guia?[["ficha","Ficha do Trabalhador (Guia)"],["epi","Termo de EPI (Guia)"]]:[]),["central","Ficha do Central"]],tipo)}
+    ${abasHTML("fichaTipo",[...(guia?[["ficha","Ficha do Trabalhador (Guia)"],["epi","Termo de EPI (Guia)"]]:[]),["os","Ordem de Serviço"],["central","Ficha do Central"]],tipo)}
     ${guia?"":`<div class="small muted">As fichas do Sistema eSocial aparecem no programa instalado, para trabalhadores já sincronizados.</div>`}
     <div id="fPrev"></div></div></div>`;
   document.body.appendChild(m);const close=()=>m.remove();m.querySelector(".scrim").onclick=close;$("#fClose").onclick=close;
   let html="";
   const mostrar=async()=>{m.querySelectorAll("[data-aba]").forEach(b=>{const on=b.dataset.aba==="fichaTipo:"+tipo;b.setAttribute("aria-pressed",on);b.setAttribute("aria-selected",on)});
     const pv=$("#fPrev");if(tipo==="central"){html="";pv.innerHTML=fichaHTML(w);return}
+    if(tipo==="os"){html="";pv.innerHTML=`<section class="panel"><h2>Ordem de Serviço (O.S.) por atividade</h2><div class="note">Modelo do sindicato (Movimentador de Mercadorias · Operacional). Sai em Word com o nome <b>${esc(normNome(w.nome))}</b> e as datas de elaboração e de assinatura em <b>${br(iso(TODAY))}</b>. A data da última revisão (17/03/2026) e o responsável (Gabriel F. Cavalcante) ficam como no modelo.</div><div class="toolbar"><button class="btn primary" id="fOS">${ico("print",16)} Gerar a O.S. (Word)</button></div></section>`;
+      $("#fOS").onclick=async()=>{try{await baixarArquivo(await ordemServicoDocx(w),`Ordem de Servico ${normNome(w.nome)} ${br(iso(TODAY)).replace(/\//g,"-")}.docx`)}catch(e){toast("Não foi possível gerar a O.S.: "+(e.message||e))}};return}
     pv.innerHTML=`<div class="empty">Buscando no Sistema eSocial…</div>`;
     try{html=await fichaGuiaHTML(tipo,w);pv.innerHTML=`<iframe id="fIframe" title="Ficha do Sistema eSocial" style="width:100%;height:68vh;border:0;border-radius:8px;background:#fff"></iframe>`;$("#fIframe").srcdoc=html}
     catch(e){html="";pv.innerHTML=`<div class="banner" style="border-left-color:var(--crit)"><span>Não foi possível buscar no Sistema eSocial: ${esc(String(e.message||e))}</span></div>`}};
   m.querySelectorAll("[data-aba]").forEach(b=>b.onclick=()=>{tipo=b.dataset.aba.split(":")[1];mostrar()});
   $("#fPrint").onclick=()=>{if(!IS_TAURI){toast("A impressão funciona no programa instalado. No navegador, use a ficha na tela.");return}
     if(tipo==="central"){$("#printArea").innerHTML=fichaHTML(w);window.print();return}
+    if(tipo==="os"){$("#fOS").click();return}
     const f=$("#fIframe");if(!f||!html){toast("Aguarde a ficha carregar");return}f.contentWindow.focus();f.contentWindow.print()};
   mostrar();
 }
