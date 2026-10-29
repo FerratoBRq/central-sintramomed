@@ -389,7 +389,7 @@ td .btn{white-space:nowrap}.busca-r .search,.modal .search{flex:none}.busca-r .s
     </nav>
     <button class="tema-b" id="btnTema" type="button"></button>
     <div class="side-foot">
-      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.74</b></span><span id="runtime">Modo navegador</span></div>
+      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.75</b></span><span id="runtime">Modo navegador</span></div>
       <span id="syncInfo"></span>
       <button class="link" id="btnSync" type="button" hidden>Sincronizar tudo agora</button>
       <span id="updInfo">Verificando atualizações…</span>
@@ -407,7 +407,7 @@ td .btn{white-space:nowrap}.busca-r .search,.modal .search{flex:none}.busca-r .s
 /* Tema: claro, escuro ou automático (segue o Windows). O botão de lua/sol fixa o modo neste computador. */
 const temaEscuro=()=>{const t=document.documentElement.dataset.theme;return t?t==="dark":matchMedia("(prefers-color-scheme: dark)").matches};
 try{const t=localStorage.getItem("cs_tema");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}
-const APP_VERSION="0.1.74";
+const APP_VERSION="0.1.75";
 /* ---------- utilidades ---------- */
 const $=(s,r=document)=>r.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -536,7 +536,7 @@ function abasBind(redesenhar){document.querySelectorAll("[data-aba]").forEach(b=
 const MANUAL=[
  {t:"Primeiros passos",p:["Abra a engrenagem (no alto do menu) e entre com o login e a senha do Sistema eSocial (Guia Campo Grande). A senha fica guardada no Windows.","O Central importa e atualiza os trabalhadores sozinho a cada 5 minutos. Para atualizar na hora, clique nas setas ao lado da engrenagem.","Use o botão Lançar (azul, no alto do menu) para lançar ASO, NR-33/NR-35 ou uma entrega do estoque.","Use Buscar ou Ctrl+K para achar um trabalhador pelo nome ou CPF, uma tela ou uma ação."]},
  {t:"Painel",p:["Mostra trabalhadores ativos, pendências críticas, vencimentos dos próximos 30 dias e quem está sem produção há mais de 3 meses. Clique num número para abrir a lista.","Vencimento das NRs: NR-35 e NR-33 que vencem até o dia 15 do mês depois do próximo.","Atalhos abrem os sistemas das tomadoras em nova aba."]},
- {t:"Trabalhadores e ficha",p:["Busque por nome, CPF ou matrícula e filtre por Ativos, Pendência crítica, Sem produção, A desligar, Inativos e Desligados.","Clique no trabalhador para abrir a ficha: dados, documentos, ASO, NRs, uniformes e anexos.","Emitir ficha: escolha a Ficha do Trabalhador ou o Termo de EPI do próprio Sistema eSocial (Guia), a Ordem de Serviço ou a ficha do Central. O Termo de EPI sai com 2 calças, 2 camisetas e 1 par de botina na data do dia. Ficha do Trabalhador, Termo de EPI e Ordem de Serviço têm as mesmas opções: Data do documento (o termo usa na entrega do kit e no local e data; a O.S. na elaboração e nas assinaturas; a ficha do cadastro sai como está no Guia, sem data), Abrir a impressão ao escolher (fica lembrado) e Imprimir, onde você escolhe a impressora ou Salvar como PDF. A Ordem de Serviço sai igual ao modelo do sindicato, só com o nome e a data.","Editar endereço no Sistema eSocial cria um pedido na Aprovação; nada é gravado no Guia sem aprovar.","Atualizar esta ficha do Sistema eSocial busca os dados mais novos daquele trabalhador."]},
+ {t:"Trabalhadores e ficha",p:["Busque por nome, CPF ou matrícula e filtre por Ativos, Pendência crítica, Sem produção, A desligar, Inativos e Desligados.","Clique no trabalhador para abrir a ficha: dados, documentos, ASO, NRs, uniformes e anexos.","Emitir ficha: escolha a Ficha do Trabalhador ou o Termo de EPI do próprio Sistema eSocial (Guia), a Ordem de Serviço ou a ficha do Central. O Termo de EPI sai com 2 calças, 2 camisetas e 1 par de botina na data do dia. Ficha do Trabalhador, Termo de EPI e Ordem de Serviço têm as mesmas opções: Data do documento (o termo usa na entrega do kit e no local e data; a O.S. na elaboração e nas assinaturas; a ficha do cadastro sai como está no Guia, sem data), o botão Impressão automática (desligado: só mostra a prévia; ligado: já abre a janela de impressão ao escolher; fica lembrado) e Imprimir, onde você escolhe a impressora ou Salvar como PDF. A Ordem de Serviço sai igual ao modelo do sindicato, só com o nome e a data.","Editar endereço no Sistema eSocial cria um pedido na Aprovação; nada é gravado no Guia sem aprovar.","Atualizar esta ficha do Sistema eSocial busca os dados mais novos daquele trabalhador."]},
  {t:"Pendências e vencimentos",p:["Pendências mostra o que falta em cada trabalhador (início, ASO, NR-35, NR-33, produção, término). Clique num item para filtrar; Críticas e Atenção separam a gravidade.","Vencimento das NRs: escolha NR-35 ou NR-33, clique num dia livre do calendário para marcar a turma (de preferência quarta, quinta ou sexta) e o Central distribui as pessoas. Clique num dia marcado para ver a turma, mover alguém para outra data, vincular um trabalhador ou desmarcar a data.","Lista para emissão de certificados: gera o Word no modelo da DOM, com 13 nomes por folha, separado por NR-33 e NR-35."]},
  {t:"ASOs e NRs recebidos",p:["Salve os PDFs que chegam pelo WhatsApp na pasta ASOs para lançar ou NRs para lançar (Documentos > Central Sintramomed). O Central lê a cada minuto. Se o arquivo for para a pasta errada, ele muda sozinho.","Também dá para usar Anexar ou arrastar os PDFs para a tela.","Na aba Para conferir: Conferir e lançar abre o documento lido para conferir. Enviar prontos para aprovação manda de uma vez os que estão completos.","Depois de lançado, o arquivo vai para ASOs lançados ou NRs lançadas e fica anexado na ficha."]},
  {t:"Aprovação",p:["Tudo o que o Central vai gravar no Sistema eSocial (ASO, NR, endereço, desconto autorizado, EPI) aparece aqui com o que muda: como está no sistema e como vai ficar.","Aprovar e enviar pede uma segunda confirmação, grava no Guia e confere relendo a página. Recusar descarta o pedido.","A aba Histórico guarda o que foi enviado, recusado ou deu erro."]},
@@ -621,6 +621,7 @@ const ATALHOS=[
 /* Novidades curtas por versão (aparecem na engrenagem, no aviso de atualização e em Feedback). Uma linha por versão;
    o detalhe fica no CHANGELOG.md. Ao lançar versão, acrescente a linha nova no topo. */
 const VERSOES=[
+ ["0.1.75","Impressão automática só quando ligar o botão"],
  ["0.1.74","Logo da O.S. na proporção certa"],
  ["0.1.73","Ficha, Termo de EPI e O.S. com as mesmas opções"],
  ["0.1.72","Valor líquido sem duplicar na programação"],
@@ -2803,13 +2804,13 @@ async function fichaGuiaHTML(tipo,w,dataIso){
    de elaboração e assinaturas (a data da revisão não muda). Ficha e termo dependem do Guia; a O.S. não. */
 const FICHA_INFO={ficha:"Como está no Sistema eSocial (Guia). Não tem data para escolher.",epi:"Kit padrão: 2 calças, 2 camisetas e 1 par de botina, com a data de entrega escolhida.",os:"Modelo do sindicato. Mudam só a data (elaboração e assinaturas) e o nome do colaborador."};
 function emitirFicha(w){
-  const guia=IS_TAURI&&!!w.origemId,m=document.createElement("div");m.className="modal";let tipo=guia?"ficha":"os",dataDoc=iso(TODAY),auto=LS.get("cs_ficha_auto")!=="0",imprimirAoCarregar=auto;
+  const guia=IS_TAURI&&!!w.origemId,m=document.createElement("div");m.className="modal";let tipo=guia?"ficha":"os",dataDoc=iso(TODAY),auto=LS.get("cs_ficha_auto")==="1",imprimirAoCarregar=auto;
   m.innerHTML=`<div class="scrim"></div><div class="modal-c" role="dialog" aria-modal="true" aria-label="Emitir ficha" style="max-width:900px"><div class="drawer-h"><div><div class="eyebrow">Emitir ficha · A4</div><h2 style="font-size:20px">${esc(w.nome)}</h2></div><div class="toolbar"><button class="btn primary" id="fPrint">${ico("print",16)} Imprimir</button><button class="btn" id="fClose">Fechar</button></div></div>
    <div class="drawer-b" style="background:var(--surface-2);align-items:stretch">
     ${abasHTML("fichaTipo",[...(guia?[["ficha","Ficha do Trabalhador (Guia)"],["epi","Termo de EPI (Guia)"]]:[]),["os","Ordem de Serviço"],["central","Ficha do Central"]],tipo)}
     ${guia?"":`<div class="small muted">A Ficha do Trabalhador e o Termo de EPI do Sistema eSocial aparecem no programa instalado, para trabalhadores já sincronizados.</div>`}
     <div class="toolbar" id="fOpc" style="flex-wrap:wrap;gap:12px;align-items:center"><label class="small" for="fData">Data do documento</label><input type="date" id="fData" class="inp" style="width:auto" value="${dataDoc}">
-     <label class="chk small" title="Ao escolher a ficha, já abre a janela de impressão (impressora ou Salvar como PDF)"><input type="checkbox" id="fAuto" ${auto?"checked":""}> Abrir a impressão ao escolher</label><span class="small muted" id="fInfo"></span></div>
+     <button type="button" class="btn sm${auto?" primary":""}" id="fAuto" aria-pressed="${auto}" title="Ligada: ao escolher a ficha, já abre a janela de impressão (impressora ou Salvar como PDF). Desligada: só mostra a prévia.">${ico("print",14)} Impressão automática: ${auto?"ligada":"desligada"}</button><span class="small muted" id="fInfo"></span></div>
     <div id="fPrev"></div></div></div>`;
   document.body.appendChild(m);const close=()=>m.remove();m.querySelector(".scrim").onclick=close;$("#fClose").onclick=close;
   let html="";
@@ -2824,7 +2825,7 @@ function emitirFicha(w){
     catch(e){html="";pv.innerHTML=`<div class="banner" style="border-left-color:var(--crit)"><span>Não foi possível montar: ${esc(String(e.message||e))}</span></div>`}};
   m.querySelectorAll("[data-aba]").forEach(b=>b.onclick=()=>{tipo=b.dataset.aba.split(":")[1];imprimirAoCarregar=auto;mostrar()});
   $("#fData").onchange=e=>{if(!e.target.value)return;dataDoc=e.target.value;mostrar()};
-  $("#fAuto").onchange=e=>{auto=e.target.checked;LS.set("cs_ficha_auto",auto?"1":"0")};
+  $("#fAuto").onclick=e=>{auto=!auto;LS.set("cs_ficha_auto",auto?"1":"0");const b=e.currentTarget;b.setAttribute("aria-pressed",auto);b.classList.toggle("primary",auto);b.innerHTML=`${ico("print",14)} Impressão automática: ${auto?"ligada":"desligada"}`};
   $("#fPrint").onclick=()=>{if(!IS_TAURI){toast("A impressão funciona no programa instalado. No navegador, use a ficha na tela.");return}
     if(tipo==="central"){$("#printArea").innerHTML=fichaHTML(w);window.print();return}
     imprimir()};

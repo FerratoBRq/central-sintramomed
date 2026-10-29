@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.75 — 29/10/2026
+- Emitir ficha: ao abrir, só mostra a prévia. A janela de impressão abre sozinha apenas com o botão **Impressão automática** ligado (vem desligado e fica lembrado).
+
 ## 0.1.74 — 29/10/2026
 - Ordem de Serviço: o logo do sindicato sai inteiro e na proporção certa (no modelo ele estava esticado e cortado em cima).
 
