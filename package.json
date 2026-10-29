@@ -1,6 +1,6 @@
 {
   "name": "central-sintramomed",
-  "version": "0.1.71",
+  "version": "0.1.72",
   "private": true,
   "scripts": {
     "web": "npx --yes serve web -l 5173",

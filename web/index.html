@@ -389,7 +389,7 @@ td .btn{white-space:nowrap}.busca-r .search,.modal .search{flex:none}.busca-r .s
     </nav>
     <button class="tema-b" id="btnTema" type="button"></button>
     <div class="side-foot">
-      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.71</b></span><span id="runtime">Modo navegador</span></div>
+      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.72</b></span><span id="runtime">Modo navegador</span></div>
       <span id="syncInfo"></span>
       <button class="link" id="btnSync" type="button" hidden>Sincronizar tudo agora</button>
       <span id="updInfo">Verificando atualizações…</span>
@@ -407,7 +407,7 @@ td .btn{white-space:nowrap}.busca-r .search,.modal .search{flex:none}.busca-r .s
 /* Tema: claro, escuro ou automático (segue o Windows). O botão de lua/sol fixa o modo neste computador. */
 const temaEscuro=()=>{const t=document.documentElement.dataset.theme;return t?t==="dark":matchMedia("(prefers-color-scheme: dark)").matches};
 try{const t=localStorage.getItem("cs_tema");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}
-const APP_VERSION="0.1.71";
+const APP_VERSION="0.1.72";
 /* ---------- utilidades ---------- */
 const $=(s,r=document)=>r.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -621,6 +621,7 @@ const ATALHOS=[
 /* Novidades curtas por versão (aparecem na engrenagem, no aviso de atualização e em Feedback). Uma linha por versão;
    o detalhe fica no CHANGELOG.md. Ao lançar versão, acrescente a linha nova no topo. */
 const VERSOES=[
+ ["0.1.72","Valor líquido sem duplicar na programação"],
  ["0.1.71","Texto mais curto na programação de pagamento"],
  ["0.1.70","Ordem de Serviço igual ao modelo, direto na impressão"],
  ["0.1.69","Programação de pagamento com o valor líquido"],
@@ -2484,8 +2485,10 @@ async function pagLiquidos(ini,fim,aoAndar){
     const isoBr=s=>s.split("/").reverse().join("-");if(per&&isoBr(per[1])>=ini&&isoBr(per[2])<=fim&&/^\d{2,5} - /.test(emp))folhas[fp]=normNome(emp.replace(/^\d{2,5} - /,""))})}
   const out={},fila=Object.keys(folhas);let feitos=0;const total=fila.length;
   const passo=async()=>{while(fila.length){const fp=fila.shift(),e=out[folhas[fp]]=out[folhas[fp]]||{};
-    try{const d=dom(await sget(`/register/holerite2020.php?opcao1=6&fpCodigo=${fp}`)),ds=[d];for(const n of pgs(d))ds.push(dom(await sget(`/register/holerite2020.php?opcReferencia=&opcao1=6&pagina=${n}&acao=Visualizar&fp_refmes=&fp_refano=&fp_dtini=&fp_dtfim=&fpCodigo=${fp}&totalRegistro=`)));
-      for(const x of ds)for(const c of x.body.textContent.replace(/\s+/g," ").split(/Recibo de Pagamento/i).slice(1)){const cpf=dig((c.match(/CPF:\s*([\d.\-]+)/)||[])[1]),v=c.match(/Valor L[ií]quido:?\s*([\d.,]+)/i);if(cpf.length===11&&v)e[cpf]=Math.round(((e[cpf]||0)+num(v[1]))*100)/100}}catch(err){}
+    try{const d=dom(await sget(`/register/holerite2020.php?opcao1=6&fpCodigo=${fp}`)),ds=[d];for(const n of pgs(d).filter(n=>n>1))ds.push(dom(await sget(`/register/holerite2020.php?opcReferencia=&opcao1=6&pagina=${n}&acao=Visualizar&fp_refmes=&fp_refano=&fp_dtini=&fp_dtfim=&fpCodigo=${fp}&totalRegistro=`)));
+      // A paginação do holerite começa em 1 (pagina=0 e pagina=1 repetem a primeira): cada CPF conta uma vez por folha.
+      const f={};for(const x of ds)for(const c of x.body.textContent.replace(/\s+/g," ").split(/Recibo de Pagamento/i).slice(1)){const cpf=dig((c.match(/CPF:\s*([\d.\-]+)/)||[])[1]),v=c.match(/Valor L[ií]quido:?\s*([\d.,]+)/i);if(cpf.length===11&&v)f[cpf]=num(v[1])}
+      for(const[cpf,v]of Object.entries(f))e[cpf]=Math.round(((e[cpf]||0)+v)*100)/100}catch(err){}
     feitos++;aoAndar&&aoAndar(`Valor líquido: ${feitos} de ${total} folhas`)}};
   await Promise.all([passo(),passo(),passo()]);return out}
 async function pagBuscar(r,aoAndar){

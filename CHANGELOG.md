@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.72 — 29/10/2026
+- Programação de pagamento: o valor líquido vinha em dobro para quem estava na primeira página de holerites (a página 0 e a 1 do Guia são a mesma). Agora cada CPF conta uma vez por folha.
+
 ## 0.1.71 — 29/10/2026
 - Programação de pagamento: a opção passa a se chamar só "Puxar o valor líquido".
 
