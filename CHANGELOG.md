@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.73 — 29/10/2026
+- Emitir ficha: Ficha do Trabalhador, Termo de EPI e Ordem de Serviço com as mesmas opções — prévia A4, **Data do documento**, **Abrir a impressão ao escolher** (lembrado) e **Imprimir** (impressora ou Salvar como PDF). A ficha do cadastro sai como no Guia, sem data; o Termo de EPI usa a data na entrega do kit e no local e data; a O.S. na elaboração e nas assinaturas.
+
 ## 0.1.72 — 29/10/2026
 - Programação de pagamento: o valor líquido vinha em dobro para quem estava na primeira página de holerites (a página 0 e a 1 do Guia são a mesma). Agora cada CPF conta uma vez por folha.
 
