@@ -390,7 +390,7 @@ td .btn{white-space:nowrap}.busca-r .search,.modal .search{flex:none}.busca-r .s
     </nav>
     <button class="tema-b" id="btnTema" type="button"></button>
     <div class="side-foot">
-      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.82</b></span><span id="runtime">Modo navegador</span></div>
+      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.83</b></span><span id="runtime">Modo navegador</span></div>
       <span id="syncInfo"></span>
       <button class="link" id="btnSync" type="button" hidden>Sincronizar tudo agora</button>
       <span id="updInfo">Verificando atualizações…</span>
@@ -408,7 +408,7 @@ td .btn{white-space:nowrap}.busca-r .search,.modal .search{flex:none}.busca-r .s
 /* Tema: claro, escuro ou automático (segue o Windows). O botão de lua/sol fixa o modo neste computador. */
 const temaEscuro=()=>{const t=document.documentElement.dataset.theme;return t?t==="dark":matchMedia("(prefers-color-scheme: dark)").matches};
 try{const t=localStorage.getItem("cs_tema");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}
-const APP_VERSION="0.1.82";
+const APP_VERSION="0.1.83";
 /* ---------- utilidades ---------- */
 const $=(s,r=document)=>r.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -469,8 +469,8 @@ const S={workers:[],docs:[],lists:[],interviews:[]};
 async function loadAll(){for(const k of Object.keys(S))S[k]=await Store.all(k)}
 
 /* ---------- regras ---------- */
-const DOC_TIPOS=["RG","CPF","CNH","CTPS","Ficha de cadastro","Ficha de EPI","ASO","NR-33","NR-35","Ficha de entrevista","Comprovante de residência","Outro"];
-const DOC_OBRIG=["RG","CPF","Ficha de cadastro","Ficha de EPI","ASO"];
+const DOC_TIPOS=["RG","CPF","CNH","CTPS","Ficha de cadastro","Ficha de EPI","Ordem de Serviço","ASO","NR-33","NR-35","Ficha de entrevista","Comprovante de residência","Outro"];
+const DOC_OBRIG=["RG","CPF","Ficha de cadastro","Ficha de EPI","Ordem de Serviço","ASO"];
 const CATEGORIAS={"202":"202 · Avulso não portuário","201":"201 · Avulso portuário","701":"701 · Contribuinte individual","901":"901 · Estagiário"};
 const STATUS={ativo:"Ativo",a_desligar:"A desligar",afastado:"Afastado",inativo:"Inativo no sistema",desligado:"Desligado"};
 const ATIVOS=w=>w.status==="ativo"||w.status==="a_desligar";
@@ -623,6 +623,7 @@ const ATALHOS=[
 /* Novidades curtas por versão (aparecem na engrenagem, no aviso de atualização e em Feedback). Uma linha por versão;
    o detalhe fica no CHANGELOG.md. Ao lançar versão, acrescente a linha nova no topo. */
 const VERSOES=[
+ ["0.1.83","Ordem de Serviço no Fatiador e nos anexos"],
  ["0.1.82","CPF numa linha só na lista"],
  ["0.1.81","Código interno na lista de trabalhadores"],
  ["0.1.80","Adiantamento conferido só nas linhas do holerite"],

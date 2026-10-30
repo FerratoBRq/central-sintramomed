@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.83 — 30/10/2026
+- Fatiador de PDF e anexos da ficha: novo tipo de documento **Ordem de Serviço** (logo depois de Ficha de EPI).
+
 ## 0.1.82 — 30/10/2026
 - Trabalhadores: o CPF não quebra mais em duas linhas.
 
