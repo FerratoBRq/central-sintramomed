@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.84 — 30/10/2026
+- A Ordem de Serviço não entra nos documentos obrigatórios (não gera pendência).
+
 ## 0.1.83 — 30/10/2026
 - Fatiador de PDF e anexos da ficha: novo tipo de documento **Ordem de Serviço** (logo depois de Ficha de EPI).
 
