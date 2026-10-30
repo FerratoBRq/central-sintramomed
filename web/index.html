@@ -390,7 +390,7 @@ td .btn{white-space:nowrap}.busca-r .search,.modal .search{flex:none}.busca-r .s
     </nav>
     <button class="tema-b" id="btnTema" type="button"></button>
     <div class="side-foot">
-      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.80</b></span><span id="runtime">Modo navegador</span></div>
+      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.81</b></span><span id="runtime">Modo navegador</span></div>
       <span id="syncInfo"></span>
       <button class="link" id="btnSync" type="button" hidden>Sincronizar tudo agora</button>
       <span id="updInfo">Verificando atualizações…</span>
@@ -408,7 +408,7 @@ td .btn{white-space:nowrap}.busca-r .search,.modal .search{flex:none}.busca-r .s
 /* Tema: claro, escuro ou automático (segue o Windows). O botão de lua/sol fixa o modo neste computador. */
 const temaEscuro=()=>{const t=document.documentElement.dataset.theme;return t?t==="dark":matchMedia("(prefers-color-scheme: dark)").matches};
 try{const t=localStorage.getItem("cs_tema");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}
-const APP_VERSION="0.1.80";
+const APP_VERSION="0.1.81";
 /* ---------- utilidades ---------- */
 const $=(s,r=document)=>r.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -537,7 +537,7 @@ function abasBind(redesenhar){document.querySelectorAll("[data-aba]").forEach(b=
 const MANUAL=[
  {t:"Primeiros passos",p:["Abra a engrenagem (no alto do menu) e entre com o login e a senha do Sistema eSocial (Guia Campo Grande). A senha fica guardada no Windows.","O Central importa e atualiza os trabalhadores sozinho a cada 5 minutos. Para atualizar na hora, clique nas setas ao lado da engrenagem.","Use o botão Lançar (azul, no alto do menu) para lançar ASO, NR-33/NR-35 ou uma entrega do estoque.","Use Buscar ou Ctrl+K para achar um trabalhador pelo nome ou CPF, uma tela ou uma ação."]},
  {t:"Painel",p:["Mostra trabalhadores ativos, pendências críticas, vencimentos dos próximos 30 dias e quem está sem produção há mais de 3 meses. Clique num número para abrir a lista.","Vencimento das NRs: NR-35 e NR-33 que vencem até o dia 15 do mês depois do próximo.","Atalhos abrem os sistemas das tomadoras em nova aba."]},
- {t:"Trabalhadores e ficha",p:["Busque por nome, CPF ou matrícula e filtre por Ativos, Pendência crítica, Sem produção, A desligar, Inativos e Desligados.","Clique no trabalhador para abrir a ficha: dados, documentos, ASO, NRs, uniformes e anexos.","Emitir ficha: escolha a Ficha do Trabalhador ou o Termo de EPI do próprio Sistema eSocial (Guia), a Ordem de Serviço ou a ficha do Central. O Termo de EPI sai com 2 calças, 2 camisetas e 1 par de botina na data do dia. Ficha do Trabalhador, Termo de EPI e Ordem de Serviço têm as mesmas opções: Data do documento (o termo usa na entrega do kit e no local e data; a O.S. na elaboração e nas assinaturas; a ficha do cadastro sai como está no Guia, sem data), o botão Impressão automática (desligado: só mostra a prévia; ligado: já abre a janela de impressão ao escolher; fica lembrado) e Imprimir, onde você escolhe a impressora ou Salvar como PDF. A Ordem de Serviço sai igual ao modelo do sindicato, só com o nome e a data.","Editar endereço no Sistema eSocial cria um pedido na Aprovação; nada é gravado no Guia sem aprovar.","Atualizar esta ficha do Sistema eSocial busca os dados mais novos daquele trabalhador."]},
+ {t:"Trabalhadores e ficha",p:["A lista vem em ordem alfabética; em Ordem, escolha Por código interno para ver pelo código do Sistema eSocial (a primeira coluna). Busque por nome, CPF, matrícula ou código interno e filtre por Ativos, Pendência crítica, Sem produção, A desligar, Inativos e Desligados.","Clique no trabalhador para abrir a ficha: dados, documentos, ASO, NRs, uniformes e anexos.","Emitir ficha: escolha a Ficha do Trabalhador ou o Termo de EPI do próprio Sistema eSocial (Guia), a Ordem de Serviço ou a ficha do Central. O Termo de EPI sai com 2 calças, 2 camisetas e 1 par de botina na data do dia. Ficha do Trabalhador, Termo de EPI e Ordem de Serviço têm as mesmas opções: Data do documento (o termo usa na entrega do kit e no local e data; a O.S. na elaboração e nas assinaturas; a ficha do cadastro sai como está no Guia, sem data), o botão Impressão automática (desligado: só mostra a prévia; ligado: já abre a janela de impressão ao escolher; fica lembrado) e Imprimir, onde você escolhe a impressora ou Salvar como PDF. A Ordem de Serviço sai igual ao modelo do sindicato, só com o nome e a data.","Editar endereço no Sistema eSocial cria um pedido na Aprovação; nada é gravado no Guia sem aprovar.","Atualizar esta ficha do Sistema eSocial busca os dados mais novos daquele trabalhador."]},
  {t:"Pendências e vencimentos",p:["Pendências mostra o que falta em cada trabalhador (início, ASO, NR-35, NR-33, produção, término). Clique num item para filtrar; Críticas e Atenção separam a gravidade.","Vencimento das NRs: escolha NR-35 ou NR-33, clique num dia livre do calendário para marcar a turma (de preferência quarta, quinta ou sexta) e o Central distribui as pessoas. Clique num dia marcado para ver a turma, mover alguém para outra data, vincular um trabalhador ou desmarcar a data.","Lista para emissão de certificados: gera o Word no modelo da DOM, com 13 nomes por folha, separado por NR-33 e NR-35."]},
  {t:"ASOs e NRs recebidos",p:["Salve os PDFs que chegam pelo WhatsApp na pasta ASOs para lançar ou NRs para lançar (Documentos > Central Sintramomed). O Central lê a cada minuto. Se o arquivo for para a pasta errada, ele muda sozinho.","Também dá para usar Anexar ou arrastar os PDFs para a tela.","Na aba Para conferir: Conferir e lançar abre o documento lido para conferir. Enviar prontos para aprovação manda de uma vez os que estão completos.","Depois de lançado, o arquivo vai para ASOs lançados ou NRs lançadas e fica anexado na ficha."]},
  {t:"Aprovação",p:["Tudo o que o Central vai gravar no Sistema eSocial (ASO, NR, endereço, desconto autorizado, EPI) aparece aqui com o que muda: como está no sistema e como vai ficar.","Aprovar e enviar pede uma segunda confirmação, grava no Guia e confere relendo a página. Recusar descarta o pedido.","A aba Histórico guarda o que foi enviado, recusado ou deu erro."]},
@@ -623,6 +623,7 @@ const ATALHOS=[
 /* Novidades curtas por versão (aparecem na engrenagem, no aviso de atualização e em Feedback). Uma linha por versão;
    o detalhe fica no CHANGELOG.md. Ao lançar versão, acrescente a linha nova no topo. */
 const VERSOES=[
+ ["0.1.81","Código interno na lista de trabalhadores"],
  ["0.1.80","Adiantamento conferido só nas linhas do holerite"],
  ["0.1.79","Registrar e imprimir termo separados nos adiantamentos"],
  ["0.1.78","Adiantamentos e sincronização sem fechar a tela"],
@@ -763,25 +764,29 @@ function vPainel(){
 /* ---------- TRABALHADORES ---------- */
 function vTrab(){
   const f=ui.filtro,q=ui.busca.toLowerCase().trim(),qd=q.replace(/\D/g,"");
-  let ws=S.workers.slice().sort((a,b)=>a.nome.localeCompare(b.nome));
+  // Ordem alfabética por padrão; opção pelo código interno do Sistema eSocial (cod_colaborador = origemId). Sem código vai para o fim.
+  const porCod=ui.trabOrdem==="cod",cod=w=>Number(w.origemId)||Infinity;
+  let ws=S.workers.slice().sort((a,b)=>porCod?cod(a)-cod(b)||a.nome.localeCompare(b.nome):a.nome.localeCompare(b.nome));
   if(f==="crit")ws=ws.filter(w=>nivel(w)==="crit");
   if(f==="inativos")ws=ws.filter(w=>w.status==="ativo"&&diasSemProducao(w)>INATIVO_DIAS);
   if(f==="a_desligar")ws=ws.filter(w=>w.status==="a_desligar");
   if(f==="desligados")ws=ws.filter(w=>w.status==="desligado");
   if(f==="todos")ws=ws.filter(ATIVOS);if(f==="outros")ws=ws.filter(w=>w.status==="inativo"||w.status==="afastado");
-  if(q)ws=ws.filter(w=>w.nome.toLowerCase().includes(q)||(qd&&w.cpf.includes(qd))||(w.matricula||"").includes(q));
+  if(q)ws=ws.filter(w=>w.nome.toLowerCase().includes(q)||(qd&&w.cpf.includes(qd))||(w.matricula||"").includes(q)||(qd&&qd===q&&String(w.origemId||"")===qd));
   const pgT=paginar(ws,"trabPg");
   const chips=[["todos","Ativos"],["crit","Pendência crítica"],["inativos","Sem produção +3 meses"],["a_desligar","A desligar"],["outros","Inativos e afastados"],["desligados","Desligados"]];
   $("#view").innerHTML=`
   <div class="head"><div><h1>Trabalhadores</h1><p>Ficha completa com documentos, carteira, SST e situação dos eventos eSocial.</p></div><div class="toolbar"><button class="btn" id="lancBtn">${ico("upload",16)} Lançar ASO</button><button class="btn" id="nrBtn">${ico("upload",16)} Lançar NR-33 / NR-35</button><button class="btn" id="impBtn">${ico("upload",16)} Importar do Sistema eSocial</button><button class="btn primary" id="novoTrab">${ico("plus",16)} Novo trabalhador</button></div></div>
   ${exBanner()}
-  <div class="toolbar"><div class="search">${ico("search",16)}<input class="inp" id="busca" placeholder="Buscar por nome, CPF ou matrícula" value="${esc(ui.busca)}" aria-label="Buscar trabalhador"></div>
+  <div class="toolbar"><div class="search">${ico("search",16)}<input class="inp" id="busca" placeholder="Buscar por nome, CPF, matrícula ou código" value="${esc(ui.busca)}" aria-label="Buscar trabalhador"></div>
+   <select class="inp" id="trabOrdem" style="width:auto" aria-label="Ordenar a lista"><option value="nome" ${porCod?"":"selected"}>Ordem alfabética</option><option value="cod" ${porCod?"selected":""}>Por código interno</option></select>
    <div class="chips">${chips.map(([k,l])=>`<button class="chip" aria-pressed="${f===k}" data-f="${k}">${l}</button>`).join("")}</div></div>
-  ${ws.length?`<div class="tbl-wrap"><table><thead><tr><th>Nome</th><th>CPF</th><th>Cadastro</th><th>Última produção</th><th>Anexos</th><th>Situação</th></tr></thead><tbody>
-  ${pgT.itens.map(w=>{const p=pendencias(w);const nd=docsDe(w.id).length;return `<tr class="click" data-w="${w.id}"><td><div class="who"><span class="av">${esc(iniciais(w.nome))}</span><div style="min-width:0"><b>${esc(w.nome)}</b>${w.exemplo?` <span class="pill info">Exemplo</span>`:""}<div class="small muted">Mat. ${esc(w.matricula||"—")} · ${esc(STATUS[w.status])}</div></div></div></td>
+  ${ws.length?`<div class="tbl-wrap"><table><thead><tr><th aria-sort="${porCod?"ascending":"none"}">Cód. interno</th><th aria-sort="${porCod?"none":"ascending"}">Nome</th><th>CPF</th><th>Cadastro</th><th>Última produção</th><th>Anexos</th><th>Situação</th></tr></thead><tbody>
+  ${pgT.itens.map(w=>{const p=pendencias(w);const nd=docsDe(w.id).length;return `<tr class="click" data-w="${w.id}"><td class="mono">${esc(w.origemId||"—")}</td><td><div class="who"><span class="av">${esc(iniciais(w.nome))}</span><div style="min-width:0"><b>${esc(w.nome)}</b>${w.exemplo?` <span class="pill info">Exemplo</span>`:""}<div class="small muted">Mat. ${esc(w.matricula||"—")} · ${esc(STATUS[w.status])}</div></div></div></td>
    <td class="mono">${esc(fmtCPF(w.cpf))}</td><td class="mono">${br(w.dtCadastro)}</td><td class="mono">${br(w.ultimaProducao)}${w.status!=="desligado"?`<div class="small muted">${diasSemProducao(w)} dias</div>`:""}</td><td class="num mono">${nd}</td><td>${pillsHTML(p,2)}</td></tr>`}).join("")}
   </tbody></table></div>${pgT.html}`:`<div class="empty">Nenhum trabalhador neste filtro.</div>`}`;
   bindBanner();paginarBind(vTrab);
+  $("#trabOrdem").onchange=e=>{ui.trabOrdem=e.target.value;ui.trabPg=1;vTrab()};
   $("#novoTrab").onclick=()=>openWorker(null);
   $("#impBtn").onclick=openImport;$("#lancBtn").onclick=()=>abrirLancamento(null,()=>render());$("#nrBtn").onclick=()=>abrirNR(null,()=>render());
   const b=$("#busca");b.oninput=()=>{ui.busca=b.value;ui.trabPg=1;const pos=b.selectionStart;vTrab();const nb=$("#busca");nb.focus();nb.setSelectionRange(pos,pos)};
