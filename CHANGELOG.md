@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.86 — 30/10/2026
+- Fatiador de PDF: lê cada página (OCR no programa instalado), marca **ASO** e **certificado de NR-33/NR-35** com o trabalhador achado pelo CPF e junta o verso do certificado de NR (2 páginas) num só arquivo ("Junto com a página anterior", ajustável). Ao salvar, os completos são anexados, atualizados na ficha e enviados para a Aprovação (lançar no Sistema eSocial); os incompletos ficam em ASOs/NRs recebidos para conferir. Miniaturas não são refeitas a cada atualização.
+
 ## 0.1.85 — 30/10/2026
 - Fatiador de PDF: **Arquivos já separados de um colaborador**: escolhe o colaborador, anexa vários PDFs ou fotos de uma vez (tipo de documento pelo nome do arquivo, ajustável) e salva tudo na ficha dele (anexos e pasta Documentos/NOME - CPF).
 

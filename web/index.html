@@ -390,7 +390,7 @@ td .btn{white-space:nowrap}.busca-r .search,.modal .search{flex:none}.busca-r .s
     </nav>
     <button class="tema-b" id="btnTema" type="button"></button>
     <div class="side-foot">
-      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.85</b></span><span id="runtime">Modo navegador</span></div>
+      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.86</b></span><span id="runtime">Modo navegador</span></div>
       <span id="syncInfo"></span>
       <button class="link" id="btnSync" type="button" hidden>Sincronizar tudo agora</button>
       <span id="updInfo">Verificando atualizações…</span>
@@ -408,7 +408,7 @@ td .btn{white-space:nowrap}.busca-r .search,.modal .search{flex:none}.busca-r .s
 /* Tema: claro, escuro ou automático (segue o Windows). O botão de lua/sol fixa o modo neste computador. */
 const temaEscuro=()=>{const t=document.documentElement.dataset.theme;return t?t==="dark":matchMedia("(prefers-color-scheme: dark)").matches};
 try{const t=localStorage.getItem("cs_tema");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}
-const APP_VERSION="0.1.85";
+const APP_VERSION="0.1.86";
 /* ---------- utilidades ---------- */
 const $=(s,r=document)=>r.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -546,7 +546,7 @@ const MANUAL=[
  {t:"NR-01 · Portal DOM",p:["Conecte o Portal DOM uma vez na engrenagem (e-mail e senha do portal). O Central consulta o portal a cada 10 minutos.","Aba Situação: quem está fora do portal, convidado, em treinamento ou concluiu, com os itens feitos.","Aba Importar: salva a planilha dos que faltam e abre a tela de importação do portal; arraste o arquivo e confirme lá.","Aba Faltam dados: quem não entra na planilha por falta de CPF, WhatsApp (celular com DDD) ou data de início."]},
  {t:"Adiantamentos",p:["Ferramentas › Adiantamentos: escolha o trabalhador pelo nome, o valor, a data e em quantas parcelas descontar (uma por quinzena). Registrar adiantamento só grava; o termo de adiantamento e autorização de desconto (2 vias) fica no botão Imprimir termo de cada adiantamento da lista e pode ser emitido a qualquer momento.","Programação de adiantamentos: escolha o período e imprima a lista A4 no formato da programação de pagamento, com conta, poupança ou PIX.","Lançar desconto no Guia (clique duas vezes para confirmar) manda cada parcela para a Aprovação como Crédito/Desconto ADIANTAMENTO SALARIAL; depois de aprovado, sai no holerite.","Na Programação de pagamento, o líquido já vem descontado e o nome aparece com “− Adiantamento”. Parcela da quinzena ainda não lançada no Guia aparece num aviso.","Base legal: CLT art. 462 (desconto de adiantamento) e Constituição art. 7º, XXXIV (avulso). Sem juros, com termo assinado e sem passar de 70% do líquido da quinzena."]},
  {t:"Programação de pagamento",p:["Escolha o mês e a quinzena e clique em Buscar produção e contas. As empresas com produção vêm marcadas.","Puxar o valor líquido preenche o VALOR com o líquido do holerite, lido das folhas já processadas da quinzena; empresa sem folha processada fica em branco e aparece um aviso. Quem trabalhou em mais de uma empresa fica na de mais diárias, com a soma (*).","Vale-transporte: em Anexar planilhas (.xlsx), escolha a planilha de transporte da empresa (pode ser a do ano todo). O programa pega só o período da quinzena, liga à empresa pelo nome do título (ex.: TRANSPORTE COAMO DOURADOS) e soma o Valor a Receber no valor de cada trabalhador, que aparece com “+ Transporte” na frente do nome. Se ligar à empresa errada, troque na lista ao lado: fica lembrado. Quem está na planilha mas não teve produção aparece num aviso.","Usar PIX para quem não tem conta: usa a chave do Guia; sem ela, o celular ou e-mail do cadastro marcado (conferir).","Imprima uma folha por empresa, as empresas marcadas juntas ou a folha em branco."]},
- {t:"Ferramentas",p:["Fatiador de PDF: separa um PDF digitalizado em páginas e anexa cada uma na ficha certa. Se os documentos de um colaborador já estão em arquivos separados (PDF ou foto), use Arquivos já separados de um colaborador: escolha o colaborador, os arquivos (o tipo vem do nome do arquivo e pode ser trocado) e Salvar na ficha.","Entrevista online: ficha de triagem do candidato; Converter em cadastro cria o trabalhador.","Modelos para impressão: fichas e documentos prontos para imprimir.","Feedback e novidades: registre sugestões ou problemas e veja o que mudou em cada versão."]},
+ {t:"Ferramentas",p:["Fatiador de PDF: separa um PDF digitalizado em páginas e anexa cada uma na ficha certa. O Central lê as páginas: ASO e certificado de NR-33/NR-35 já vêm marcados com o trabalhador achado pelo CPF, e o verso do certificado de NR (2ª página) vai junto com a frente (Junto com a página anterior). Ao salvar, os ASOs e NRs completos são anexados, atualizados na ficha e enviados para a Aprovação para lançar no Sistema eSocial; os que faltar dado ficam em ASOs/NRs recebidos para conferir. Se os documentos de um colaborador já estão em arquivos separados (PDF ou foto), use Arquivos já separados de um colaborador: escolha o colaborador, os arquivos (o tipo vem do nome do arquivo e pode ser trocado) e Salvar na ficha.","Entrevista online: ficha de triagem do candidato; Converter em cadastro cria o trabalhador.","Modelos para impressão: fichas e documentos prontos para imprimir.","Feedback e novidades: registre sugestões ou problemas e veja o que mudou em cada versão."]},
  {t:"Engrenagem e dicas",p:["Na engrenagem: acesso ao Sistema eSocial, acesso ao Portal DOM, compartilhamento entre computadores (pasta ou GitHub privado), cofre de senhas, atualização automática e este manual.","Modo noturno: botão com a lua ou o sol no fim do menu.","Listas longas: escolha 15, 30, 45 ou 60 por tela e use os botões 1, 2, 3… embaixo.","Os grupos do menu recolhem clicando no nome; quando recolhidos, mostram a soma dos avisos.","O programa se atualiza sozinho. Para atualizar na hora: Verificar agora, no fim do menu."]}];
 function abrirManual(){const m=document.createElement("div");m.className="modal";
   m.innerHTML=`<div class="scrim"></div><div class="modal-c" role="dialog" aria-modal="true" aria-labelledby="manH" style="max-width:820px"><div class="drawer-h"><div><div class="eyebrow">Ajuda · versão ${APP_VERSION}</div><h2 id="manH" style="font-size:20px">Manual do usuário</h2></div><button class="btn" id="manClose">Fechar</button></div>
@@ -623,6 +623,7 @@ const ATALHOS=[
 /* Novidades curtas por versão (aparecem na engrenagem, no aviso de atualização e em Feedback). Uma linha por versão;
    o detalhe fica no CHANGELOG.md. Ao lançar versão, acrescente a linha nova no topo. */
 const VERSOES=[
+ ["0.1.86","Fatiador lê ASO e NR e já manda para a Aprovação"],
  ["0.1.85","Fatiador: arquivos já separados de um colaborador"],
  ["0.1.84","Ordem de Serviço no Fatiador e nos anexos"],
  ["0.1.82","CPF numa linha só na lista"],
@@ -1125,9 +1126,10 @@ function vFat(){
   ${fat?`<section class="panel"><div class="panel-h"><div><div class="eyebrow">Arquivo carregado</div><h2>${esc(fat.nome)} · <span class="mono">${fat.n}</span> página${fat.n>1?"s":""}</h2></div>
      <div class="toolbar"><button class="btn" id="fatNovo">Trocar arquivo</button><button class="btn primary" id="fatSalvar">Salvar páginas nas fichas</button></div></div>
      <div class="toolbar"><span class="small muted">Aplicar a todas:</span><select class="inp" id="allW" style="max-width:260px">${opts}</select><select class="inp" id="allT" style="max-width:200px"><option value="">— tipo —</option>${tipos}</select><button class="btn sm" id="applyAll">Aplicar</button></div>
-     <div class="pages" id="pages">${fat.pages.map((p,i)=>`<div class="page"><div class="ph" id="ph${i}">${i+1}</div><span class="pn">Página ${i+1} de ${fat.n}</span>
+     <div class="pages" id="pages">${fat.pages.map((p,i)=>`<div class="page"><div class="ph" id="ph${i}">${i+1}</div><span class="pn">Página ${i+1} de ${fat.n}${p.lido?` · <span class="small" style="color:var(--accent)">${esc(p.lido)}</span>`:""}</span>
+       ${i?`<label class="chk small"><input type="checkbox" data-pj="${i}" ${p.junto?"checked":""}> Junto com a página ${i}</label>`:""}
        <select class="inp" data-pw="${i}">${opts}</select><select class="inp" data-pt="${i}">${tipos}</select></div>`).join("")}</div>
-     <div class="note">Páginas sem trabalhador escolhido não são salvas. Cada página salva vira um PDF próprio de 1 página, no tamanho original (A4).</div>
+     <div class="note">${fat.lendo?`<b>${esc(fat.lendo)}</b> · `:""}O Central lê cada página: ASO e certificado de NR-33/NR-35 vêm marcados com o trabalhador achado pelo CPF, e o verso do certificado de NR (2ª página) vai junto com a frente. Ao salvar, ASOs e NRs completos já são anexados, atualizados na ficha e enviados para a Aprovação (lançar no Sistema eSocial); os que faltar dado ficam em ASOs/NRs recebidos para conferir. Os demais documentos vão para a ficha. Páginas sem trabalhador (que não sejam ASO ou NR) não são salvas.</div>
    </section>`
   :`<label class="drop" id="drop" for="fatFile"><span class="ic">${ico("upload",28)}</span><b>Arraste o PDF aqui</b><span class="muted">ou clique para escolher · ex.: um PDF de 5 páginas vira 5 arquivos</span></label><input type="file" id="fatFile" accept="application/pdf" hidden>
    <section class="panel"><div class="panel-h"><div><h2>Arquivos já separados de um colaborador</h2><span class="small muted">Documentos já digitalizados um por arquivo (PDF ou foto): escolha o colaborador, anexe todos de uma vez e salve na ficha dele.</span></div></div>
@@ -1146,8 +1148,9 @@ function vFat(){
       const w=S.workers.find(y=>y.id===fatSep.w);toast(`${n} arquivo${n>1?"s":""} salvo${n>1?"s":""} na ficha de ${w?w.nome:"colaborador"}`);fatSep=null;vFat()};
     return}
   fat.pages.forEach((p,i)=>{$(`[data-pw="${i}"]`).value=p.w;$(`[data-pt="${i}"]`).value=p.tipo});
-  document.querySelectorAll("[data-pw]").forEach(s=>s.onchange=()=>fat.pages[s.dataset.pw].w=s.value);
-  document.querySelectorAll("[data-pt]").forEach(s=>s.onchange=()=>fat.pages[s.dataset.pt].tipo=s.value);
+  document.querySelectorAll("[data-pw]").forEach(s=>s.onchange=()=>{const p=fat.pages[s.dataset.pw];p.w=s.value;p.manual=true});
+  document.querySelectorAll("[data-pt]").forEach(s=>s.onchange=()=>{const p=fat.pages[s.dataset.pt];p.tipo=s.value;p.manual=true});
+  document.querySelectorAll("[data-pj]").forEach(c=>c.onchange=()=>{const p=fat.pages[c.dataset.pj];p.junto=c.checked;p.manual=true});
   $("#applyAll").onclick=()=>{const w=$("#allW").value,t=$("#allT").value;fat.pages.forEach(p=>{if(w)p.w=w;if(t)p.tipo=t});vFat()};
   $("#fatNovo").onclick=()=>{fat=null;vFat()};
   $("#fatSalvar").onclick=saveFat;
@@ -1156,14 +1159,42 @@ function vFat(){
 async function loadFat(file){
   if(file.type!=="application/pdf"&&!/\.pdf$/i.test(file.name)){toast("Escolha um arquivo PDF");return}
   try{const bytes=new Uint8Array(await file.arrayBuffer());const doc=await PDFLib.PDFDocument.load(bytes,{ignoreEncryption:true});const n=doc.getPageCount();
-    fat={nome:file.name,bytes,n,pages:Array.from({length:n},()=>({w:"",tipo:"Outro"}))};vFat()}catch(e){toast("Não consegui ler este PDF. Ele pode estar protegido ou corrompido.")}}
-async function drawThumbs(){if(!fat||!window.pdfjsLib)return;try{const pdf=await pdfjsLib.getDocument({data:fat.bytes.slice()}).promise;for(let i=0;i<fat.n;i++){const ph=$("#ph"+i);if(!ph)return;const c=await renderPage(pdf,i+1,220);ph.replaceWith(c)}}catch(e){}}
+    fat={nome:file.name,bytes,n,pages:Array.from({length:n},()=>({w:"",tipo:"Outro"}))};vFat();fatLer(fat)}catch(e){toast("Não consegui ler este PDF. Ele pode estar protegido ou corrompido.")}}
+// Lê o texto de cada página (OCR no programa instalado quando é imagem) e marca ASO, NR-33/NR-35 e o trabalhador pelo CPF.
+// Certificado de NR tem 2 páginas: a página seguinte à frente, se não for outro documento, vai junto (verso/conteúdo).
+async function fatLer(f){try{const pdf=await pdfjsLib.getDocument({data:f.bytes.slice()}).promise;
+  for(let i=0;i<f.n;i++){if(fat!==f)return;f.lendo=`Lendo página ${i+1} de ${f.n}…`;fatAtualizar();
+    let txt=(await (await pdf.getPage(i+1)).getTextContent()).items.map(t=>t.str).join(" ");
+    if(txt.replace(/\s/g,"").length<40&&IS_TAURI){try{txt=await ocrGirando(await renderPage(pdf,i+1,1600))}catch(e){}}
+    const x=lerDocumentoTexto(txt),p=f.pages[i],ant=f.pages[i-1];if(p.manual)continue;
+    const w=x.cpf?S.workers.find(z=>z.cpf===x.cpf):x.nome?S.workers.find(z=>normNome(z.nome)===normNome(x.nome)):null;
+    if(x.tipo==="aso"||x.tipo==="curso"){p.tipo=x.tipo==="aso"?"ASO":(x.nr||"NR 35").replace(" ","-");if(!DOC_TIPOS.includes(p.tipo))p.tipo="Outro";p.lido=`${p.tipo} lido${w?" · "+normNome(w.nome):x.cpf?" · CPF "+fmtCPF(x.cpf)+" não cadastrado":""}`;if(w)p.w=w.id}
+    else if(ant&&/^NR-/.test(ant.tipo)&&!ant.junto){p.junto=true;p.tipo=ant.tipo;p.w=ant.w;p.lido="Verso do certificado"}
+    else if(w&&!p.w){p.w=w.id;p.lido="Trabalhador achado pelo CPF"}}
+  f.lendo="";fatAtualizar()}catch(e){f.lendo="";fatAtualizar()}}
+const fatAtualizar=()=>{if(current==="fatiador"&&fat&&!document.querySelector(".modal")){const y=window.scrollY;vFat();window.scrollTo(0,y)}};
+// Miniaturas guardadas em fat.thumbs: redesenhar a tela (leitura das páginas) não refaz as imagens.
+async function drawThumbs(){if(!fat||!window.pdfjsLib)return;const f=fat;f.thumbs=f.thumbs||[];let pdf=null;
+  try{for(let i=0;i<f.n;i++){const ph=$("#ph"+i);if(!ph||fat!==f)return;if(!f.thumbs[i]){pdf=pdf||await pdfjsLib.getDocument({data:f.bytes.slice()}).promise;f.thumbs[i]=await renderPage(pdf,i+1,220)}
+    const ph2=$("#ph"+i);if(ph2)ph2.replaceWith(f.thumbs[i])}}catch(e){}}
 async function saveFat(){
-  const todo=fat.pages.map((p,i)=>({...p,i})).filter(p=>p.w);if(!todo.length){toast("Escolha o trabalhador de pelo menos uma página");return}
-  const src=await PDFLib.PDFDocument.load(fat.bytes,{ignoreEncryption:true});const base=fat.nome.replace(/\.pdf$/i,"");
-  for(const p of todo){const out=await PDFLib.PDFDocument.create();const[pg]=await out.copyPages(src,[p.i]);out.addPage(pg);const bytes=await out.save();
-    await saveDoc(p.w,p.tipo,`${base}_pag${p.i+1}.pdf`,new Blob([bytes],{type:"application/pdf"}),"application/pdf")}
-  toast(`${todo.length} página${todo.length>1?"s":""} salva${todo.length>1?"s":""} nas fichas`);fat=null;vFat()}
+  // Grupos: página marcada "junto com a anterior" entra no mesmo PDF (certificado de NR = frente + verso).
+  const grupos=[];fat.pages.forEach((p,i)=>{if(p.junto&&grupos.length)grupos[grupos.length-1].pgs.push(i);else grupos.push({pgs:[i],w:p.w,tipo:p.tipo})});
+  const filaK=t=>t==="ASO"?"aso":/^NR-3[35]$/.test(t)?"nr":"";
+  const todo=grupos.filter(g=>g.w||filaK(g.tipo));if(!todo.length){toast("Escolha o trabalhador de pelo menos uma página");return}
+  const btn=$("#fatSalvar");if(btn){if(btn.disabled)return;btn.disabled=true;btn.textContent="Salvando…"}
+  const src=await PDFLib.PDFDocument.load(fat.bytes,{ignoreEncryption:true});const base=fat.nome.replace(/\.pdf$/i,"");let docs=0,aprov=0,conferir=0;
+  for(const g of todo){const out=await PDFLib.PDFDocument.create();for(const pg of await out.copyPages(src,g.pgs))out.addPage(pg);
+    const nome=`${base}_pag${g.pgs.map(i=>i+1).join("-")}.pdf`,blob=new Blob([await out.save()],{type:"application/pdf"}),k=filaK(g.tipo);
+    if(!k){await saveDoc(g.w,g.tipo,nome,blob,"application/pdf");docs++;continue}
+    // ASO / NR: mesma fila de ASOs e NRs recebidos; completo vai direto para a Aprovação (como "Enviar prontos").
+    const w=S.workers.find(z=>z.id===g.w),file=new File([blob],nome,{type:"application/pdf"}),chave=`fat|${nome}|${Date.now()}|${g.pgs[0]}`;
+    await qAnalisar(k,file,chave,w?{wid:w.id,wcpf:w.cpf}:{});
+    const l=qFila(k),it=l.find(y=>y.chave===chave);if(k==="nr"&&it.x&&!it.x.nr)it.x.nr=g.tipo.replace("-"," ");
+    const d=await saveDoc("__recebido",g.tipo,nome,blob,"application/pdf");it.docId=d.id;qFilaSalvar(k,l);
+    if(qPronto(k,it)&&await qEnviarAprov(k,it))aprov++;else conferir++}
+  if(Pasta.base)await docsSincronizar();asoBadge();
+  toast([docs?`${docs} documento${docs>1?"s":""} na ficha`:"",aprov?`${aprov} ASO/NR anexado${aprov>1?"s":""} e enviado${aprov>1?"s":""} para a Aprovação`:"",conferir?`${conferir} para conferir em ASOs/NRs recebidos`:""].filter(Boolean).join(" · "));fat=null;vFat()}
 
 /* ---------- LISTAS E INATIVOS ---------- */
 function vRel(){
@@ -2408,6 +2439,9 @@ async function qConcluir(k,chave,status){
 const qPronto=(k,it)=>{const w=asoTrab(it),x=it.x||{};if(!(w&&w.origemId&&x.data&&x.validade>x.data))return false;
   if(k==="aso")return !!((x.clinica||x.crm)&&x.resultado!=="INAPTO");
   const min=(NR_CARGA[x.nr]||{})[x.modalidade];return !!(min&&x.empresa&&Number(x.cargaHoraria)>=min)};
+// ASO/NR pronto: atualiza a ficha, anexa o documento e cria o pedido na Aprovação (lançamento no Sistema eSocial).
+async function qEnviarAprov(k,it){const w=asoTrab(it),y=k==="aso"?asoDados(it.x):nrDados(it.x);
+  try{const f=await asoArquivo(it),diff=aprovDiffDoc(w,y);await registrarNoCentral(w,y,f);await aprovCriar(k==="aso"?"aso":"curso",w,y,diff);await qConcluir(k,it.chave,"aprovacao");return true}catch(e){return false}}
 const asoDados=x=>({classe:x.altura||x.confinado?"COMPLETO":"SIMPLES",tipo:"aso",exameCod:x.exame==="ADMISSIONAL"?"1":"2",empresa:x.clinica||x.crm||"",data:x.data,validade:x.validade,inativarAnterior:true,altura:!!x.altura,confinado:!!x.confinado});
 const nrDados=x=>({tipo:"curso",nr:x.nr,modalidade:x.modalidade,cargaHoraria:x.cargaHoraria,empresa:x.empresa,data:x.data,validade:x.validade,inativarAnterior:true});
 /* Documentos: anexo do programa vira arquivo na pasta do trabalhador; arquivo posto lá vira anexo. */
@@ -2475,7 +2509,7 @@ function vFila(k){const F=FILAS[k],ehAso=k==="aso",reab=()=>vFila(k);
     try{f=await asoArquivo(it)}catch(e){toast("Não encontrei o arquivo: "+(e.message||e));return}if(!f){toast("Arquivo não encontrado");return}
     (ehAso?abrirLancamento:abrirNR)(asoTrab(it),async r=>{await qConcluir(k,it.chave,r==="local"?"registrado":r==="aprovacao"?"aprovacao":"lancado");await docsSincronizar();reab()},f)});
   const lo=$("#aLote");if(lo)lo.onclick=async()=>{lo.disabled=true;let ok=0;
-    for(const it of prontos){const w=asoTrab(it),y=ehAso?asoDados(it.x):nrDados(it.x);try{const f=await asoArquivo(it),diff=aprovDiffDoc(w,y);await registrarNoCentral(w,y,f);await aprovCriar(ehAso?"aso":"curso",w,y,diff);await qConcluir(k,it.chave,"aprovacao");ok++}catch(e){}}
+    for(const it of prontos)if(await qEnviarAprov(k,it))ok++;
     await docsSincronizar();reab();toast(`${ok} ${ok===1?F.nome:F.plural} registrado${ok===1?"":"s"} e enviado${ok===1?"":"s"} para Aprovação`)};
   const ab=$("#aAbrir");if(ab)ab.onclick=()=>abrirNaPasta(F.entrada);
   const ad=$("#aDocs");if(ad)ad.onclick=()=>abrirNaPasta(DOCS);
