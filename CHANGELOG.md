@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.85 — 30/10/2026
+- Fatiador de PDF: **Arquivos já separados de um colaborador**: escolhe o colaborador, anexa vários PDFs ou fotos de uma vez (tipo de documento pelo nome do arquivo, ajustável) e salva tudo na ficha dele (anexos e pasta Documentos/NOME - CPF).
+
 ## 0.1.84 — 30/10/2026
 - A Ordem de Serviço não entra nos documentos obrigatórios (não gera pendência).
 
