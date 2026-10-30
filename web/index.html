@@ -390,7 +390,7 @@ td .btn{white-space:nowrap}.busca-r .search,.modal .search{flex:none}.busca-r .s
     </nav>
     <button class="tema-b" id="btnTema" type="button"></button>
     <div class="side-foot">
-      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.81</b></span><span id="runtime">Modo navegador</span></div>
+      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.82</b></span><span id="runtime">Modo navegador</span></div>
       <span id="syncInfo"></span>
       <button class="link" id="btnSync" type="button" hidden>Sincronizar tudo agora</button>
       <span id="updInfo">Verificando atualizações…</span>
@@ -408,7 +408,7 @@ td .btn{white-space:nowrap}.busca-r .search,.modal .search{flex:none}.busca-r .s
 /* Tema: claro, escuro ou automático (segue o Windows). O botão de lua/sol fixa o modo neste computador. */
 const temaEscuro=()=>{const t=document.documentElement.dataset.theme;return t?t==="dark":matchMedia("(prefers-color-scheme: dark)").matches};
 try{const t=localStorage.getItem("cs_tema");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}
-const APP_VERSION="0.1.81";
+const APP_VERSION="0.1.82";
 /* ---------- utilidades ---------- */
 const $=(s,r=document)=>r.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -623,6 +623,7 @@ const ATALHOS=[
 /* Novidades curtas por versão (aparecem na engrenagem, no aviso de atualização e em Feedback). Uma linha por versão;
    o detalhe fica no CHANGELOG.md. Ao lançar versão, acrescente a linha nova no topo. */
 const VERSOES=[
+ ["0.1.82","CPF numa linha só na lista"],
  ["0.1.81","Código interno na lista de trabalhadores"],
  ["0.1.80","Adiantamento conferido só nas linhas do holerite"],
  ["0.1.79","Registrar e imprimir termo separados nos adiantamentos"],
@@ -783,7 +784,7 @@ function vTrab(){
    <div class="chips">${chips.map(([k,l])=>`<button class="chip" aria-pressed="${f===k}" data-f="${k}">${l}</button>`).join("")}</div></div>
   ${ws.length?`<div class="tbl-wrap"><table><thead><tr><th aria-sort="${porCod?"ascending":"none"}">Cód. interno</th><th aria-sort="${porCod?"none":"ascending"}">Nome</th><th>CPF</th><th>Cadastro</th><th>Última produção</th><th>Anexos</th><th>Situação</th></tr></thead><tbody>
   ${pgT.itens.map(w=>{const p=pendencias(w);const nd=docsDe(w.id).length;return `<tr class="click" data-w="${w.id}"><td class="mono">${esc(w.origemId||"—")}</td><td><div class="who"><span class="av">${esc(iniciais(w.nome))}</span><div style="min-width:0"><b>${esc(w.nome)}</b>${w.exemplo?` <span class="pill info">Exemplo</span>`:""}<div class="small muted">Mat. ${esc(w.matricula||"—")} · ${esc(STATUS[w.status])}</div></div></div></td>
-   <td class="mono">${esc(fmtCPF(w.cpf))}</td><td class="mono">${br(w.dtCadastro)}</td><td class="mono">${br(w.ultimaProducao)}${w.status!=="desligado"?`<div class="small muted">${diasSemProducao(w)} dias</div>`:""}</td><td class="num mono">${nd}</td><td>${pillsHTML(p,2)}</td></tr>`}).join("")}
+   <td class="mono" style="white-space:nowrap">${esc(fmtCPF(w.cpf))}</td><td class="mono">${br(w.dtCadastro)}</td><td class="mono">${br(w.ultimaProducao)}${w.status!=="desligado"?`<div class="small muted">${diasSemProducao(w)} dias</div>`:""}</td><td class="num mono">${nd}</td><td>${pillsHTML(p,2)}</td></tr>`}).join("")}
   </tbody></table></div>${pgT.html}`:`<div class="empty">Nenhum trabalhador neste filtro.</div>`}`;
   bindBanner();paginarBind(vTrab);
   $("#trabOrdem").onchange=e=>{ui.trabOrdem=e.target.value;ui.trabPg=1;vTrab()};
@@ -1158,7 +1159,7 @@ function vRel(){
   ${aba==="inativos"?`<section class="panel"><div class="panel-h"><div><h2>Sem produção há mais de 3 meses</h2><span class="small muted">Base: última produção (ou data de cadastro, se nunca produziu) há mais de ${INATIVO_DIAS} dias</span></div>
    <button class="btn primary" id="markDes" ${inat.length?"":"disabled"}>Marcar selecionados para desligar</button></div>
    ${inat.length?`<div class="tbl-wrap"><table><thead><tr><th style="width:36px"><input type="checkbox" id="selAll" aria-label="Selecionar todos"></th><th>Nome</th><th>CPF</th><th>Última produção</th><th class="num">Dias parado</th></tr></thead><tbody>
-   ${pgI.itens.map(w=>`<tr><td><input type="checkbox" class="selI" value="${w.id}" aria-label="Selecionar ${esc(w.nome)}"></td><td><a href="#" data-w="${w.id}" style="color:inherit"><b>${esc(w.nome)}</b></a></td><td class="mono">${esc(fmtCPF(w.cpf))}</td><td class="mono">${w.ultimaProducao?br(w.ultimaProducao):"nunca"}</td><td class="num mono"><span class="pill warn">${diasSemProducao(w)}</span></td></tr>`).join("")}
+   ${pgI.itens.map(w=>`<tr><td><input type="checkbox" class="selI" value="${w.id}" aria-label="Selecionar ${esc(w.nome)}"></td><td><a href="#" data-w="${w.id}" style="color:inherit"><b>${esc(w.nome)}</b></a></td><td class="mono" style="white-space:nowrap">${esc(fmtCPF(w.cpf))}</td><td class="mono">${w.ultimaProducao?br(w.ultimaProducao):"nunca"}</td><td class="num mono"><span class="pill warn">${diasSemProducao(w)}</span></td></tr>`).join("")}
    </tbody></table></div>${pgI.html}<div class="note">Marcar para desligar não envia nada. O trabalhador passa a aparecer em Pendências até você enviar o <span class="evt">S-2399</span> no sistema eSocial e marcar na ficha.</div>`:`<div class="empty">Nenhum trabalhador ativo sem produção há mais de 3 meses.</div>`}
   </section>`:relHTML()}`;
   abasBind(vRel);paginarBind(vRel);

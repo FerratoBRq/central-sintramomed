@@ -1,7 +1,10 @@
 # Changelog
 
+## 0.1.82 — 30/10/2026
+- Trabalhadores: o CPF não quebra mais em duas linhas.
+
 ## 0.1.81 — 30/10/2026
-- Trabalhadores: nova coluna **Cód. interno** (código do Sistema eSocial) antes do nome; a lista continua em ordem alfabética, com a opção **Por código interno**; a busca também acha pelo código. CPF não quebra mais em duas linhas.
+- Trabalhadores: nova coluna **Cód. interno** (código do Sistema eSocial) antes do nome; a lista continua em ordem alfabética, com a opção **Por código interno**; a busca também acha pelo código.
 
 ## 0.1.80 — 29/10/2026
 - Programação de pagamento: o "− Adiantamento" é conferido só nas linhas de vencimentos e descontos do holerite (Cod. · Descrição · Referência · Valor), não no campo Mensagem. Conferido no Guia: o tipo 116 ADIANTAMENTO SALARIAL existe em Crédito/Desconto.
