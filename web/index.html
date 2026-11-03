@@ -391,7 +391,7 @@ td .btn{white-space:nowrap}.busca-r .search,.modal .search{flex:none}.busca-r .s
     </nav>
     <button class="tema-b" id="btnTema" type="button"></button>
     <div class="side-foot">
-      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.88</b></span><span id="runtime">Modo navegador</span></div>
+      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.89</b></span><span id="runtime">Modo navegador</span></div>
       <span id="syncInfo"></span>
       <button class="link" id="btnSync" type="button" hidden>Sincronizar tudo agora</button>
       <span id="updInfo">Verificando atualizações…</span>
@@ -409,7 +409,7 @@ td .btn{white-space:nowrap}.busca-r .search,.modal .search{flex:none}.busca-r .s
 /* Tema: claro, escuro ou automático (segue o Windows). O botão de lua/sol fixa o modo neste computador. */
 const temaEscuro=()=>{const t=document.documentElement.dataset.theme;return t?t==="dark":matchMedia("(prefers-color-scheme: dark)").matches};
 try{const t=localStorage.getItem("cs_tema");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}
-const APP_VERSION="0.1.88";
+const APP_VERSION="0.1.89";
 /* ---------- utilidades ---------- */
 const $=(s,r=document)=>r.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -538,8 +538,8 @@ function abasBind(redesenhar){document.querySelectorAll("[data-aba]").forEach(b=
 const MANUAL=[
  {t:"Primeiros passos",p:["Abra a engrenagem (no alto do menu) e entre com o login e a senha do Sistema eSocial (Guia Campo Grande). A senha fica guardada no Windows.","O Central importa e atualiza os trabalhadores sozinho a cada 5 minutos. Para atualizar na hora, clique nas setas ao lado da engrenagem.","Use o botão Lançar (azul, no alto do menu) para lançar ASO, NR-33/NR-35 ou uma entrega do estoque.","Use Buscar ou Ctrl+K para achar um trabalhador pelo nome ou CPF, uma tela ou uma ação."]},
  {t:"Painel",p:["Mostra trabalhadores ativos, pendências críticas, vencimentos dos próximos 30 dias e quem está sem produção há mais de 3 meses. Clique num número para abrir a lista.","Vencimento das NRs: NR-35 e NR-33 que vencem até o dia 15 do mês depois do próximo.","Atalhos abrem os sistemas das tomadoras em nova aba."]},
- {t:"Trabalhadores e ficha",p:["A lista vem em ordem alfabética; em Ordem, escolha Por código interno para ver pelo código do Sistema eSocial (a primeira coluna). Busque por nome, CPF, matrícula ou código interno e filtre por Ativos, Pendência crítica, Sem produção, A desligar, Inativos e Desligados.","Clique no trabalhador para abrir a ficha: dados, documentos, ASO, NRs, uniformes e anexos.","Emitir ficha: escolha a Ficha do Trabalhador ou o Termo de EPI do próprio Sistema eSocial (Guia), a Ordem de Serviço ou a ficha do Central. O Termo de EPI sai com 2 calças, 2 camisetas e 1 par de botina na data do dia. Ficha do Trabalhador, Termo de EPI e Ordem de Serviço têm as mesmas opções: Data do documento (o termo usa na entrega do kit e no local e data; a O.S. na elaboração e nas assinaturas; a ficha do cadastro sai como está no Guia, sem data), o botão Impressão automática (desligado: só mostra a prévia; ligado: já abre a janela de impressão ao escolher; fica lembrado) e Imprimir, onde você escolhe a impressora ou Salvar como PDF. A Ordem de Serviço sai igual ao modelo do sindicato, só com o nome e a data.","Editar endereço no Sistema eSocial cria um pedido na Aprovação; nada é gravado no Guia sem aprovar.","Atualizar esta ficha do Sistema eSocial busca os dados mais novos daquele trabalhador."]},
- {t:"Pendências e vencimentos",p:["Vencimentos tem duas abas, NRs e ASOs, com calendário de 3 meses: o dia exato em que vence o curso ou o ASO de cada trabalhador fica marcado em vermelho (passe o mouse para ver os nomes). Na aba ASOs, clique no dia para ver quem vence e anote a data do exame marcado; na aba NRs, clique num dia para marcar a turma.","Pendências mostra o que falta em cada trabalhador (início, ASO, NR-35, NR-33, produção, término). Clique num item para filtrar; Críticas e Atenção separam a gravidade.","Vencimento das NRs: escolha NR-35 ou NR-33, clique num dia livre do calendário para marcar a turma (de preferência quarta, quinta ou sexta) e o Central distribui as pessoas. Clique num dia marcado para ver a turma, mover alguém para outra data, vincular um trabalhador ou desmarcar a data.","Lista para emissão de certificados: gera o Word no modelo da DOM, com 13 nomes por folha, separado por NR-33 e NR-35."]},
+ {t:"Trabalhadores e ficha",p:["A lista vem em ordem alfabética; em Ordem, escolha Por código interno para ver pelo código do Sistema eSocial (a primeira coluna). Busque por nome, CPF, matrícula ou código interno e filtre por Ativos, Pendência crítica, Sem produção, A desligar, Inativos e Desligados.","Clique no trabalhador para abrir a ficha: dados, documentos, ASO, NRs, uniformes e anexos. Emitir ficha › Ficha do Trabalhador sai sempre numa única folha A4, já na escala certa (sem ajustar na impressão).","Emitir ficha: escolha a Ficha do Trabalhador ou o Termo de EPI do próprio Sistema eSocial (Guia), a Ordem de Serviço ou a ficha do Central. O Termo de EPI sai com 2 calças, 2 camisetas e 1 par de botina na data do dia. Ficha do Trabalhador, Termo de EPI e Ordem de Serviço têm as mesmas opções: Data do documento (o termo usa na entrega do kit e no local e data; a O.S. na elaboração e nas assinaturas; a ficha do cadastro sai como está no Guia, sem data), o botão Impressão automática (desligado: só mostra a prévia; ligado: já abre a janela de impressão ao escolher; fica lembrado) e Imprimir, onde você escolhe a impressora ou Salvar como PDF. A Ordem de Serviço sai igual ao modelo do sindicato, só com o nome e a data.","Editar endereço no Sistema eSocial cria um pedido na Aprovação; nada é gravado no Guia sem aprovar.","Atualizar esta ficha do Sistema eSocial busca os dados mais novos daquele trabalhador."]},
+ {t:"Pendências e vencimentos",p:["Vencimentos tem duas abas, NRs e ASOs, com calendário de 3 meses: o dia exato em que vence o curso ou o ASO de cada trabalhador fica marcado em vermelho (passe o mouse para ver os nomes). Na aba ASOs, clique no dia para ver quem vence e anote a data do exame marcado; na aba NRs, clique num dia para marcar a turma. A NR-33 pode ter mais de um dia: abra a outra data marcada e vincule o mesmo trabalhador (ele fica nas duas turmas); na lista, a NR-33 tem campo para o 2º dia marcado.","Pendências mostra o que falta em cada trabalhador (início, ASO, NR-35, NR-33, produção, término). Clique num item para filtrar; Críticas e Atenção separam a gravidade.","Vencimento das NRs: escolha NR-35 ou NR-33, clique num dia livre do calendário para marcar a turma (de preferência quarta, quinta ou sexta) e o Central distribui as pessoas. Clique num dia marcado para ver a turma, mover alguém para outra data, vincular um trabalhador ou desmarcar a data.","Lista para emissão de certificados: gera o Word no modelo da DOM, com 13 nomes por folha, separado por NR-33 e NR-35."]},
  {t:"ASOs e NRs recebidos",p:["Salve os PDFs que chegam pelo WhatsApp na pasta ASOs para lançar ou NRs para lançar (Documentos > Central Sintramomed). O Central lê a cada minuto. Se o arquivo for para a pasta errada, ele muda sozinho.","Também dá para usar Anexar ou arrastar os PDFs para a tela.","Na aba Para conferir: Conferir e lançar abre o documento lido para conferir. Enviar prontos para aprovação manda de uma vez os que estão completos.","Depois de lançado, o arquivo vai para ASOs lançados ou NRs lançadas e fica anexado na ficha."]},
  {t:"Aprovação",p:["Tudo o que o Central vai gravar no Sistema eSocial (ASO, NR, endereço, desconto autorizado, EPI) aparece aqui com o que muda: como está no sistema e como vai ficar.","Aprovar e enviar pede uma segunda confirmação, grava no Guia e confere relendo a página. Recusar descarta o pedido.","A aba Histórico guarda o que foi enviado, recusado ou deu erro."]},
  {t:"Relatório mensal e sem produção",p:["Relatório mensal: escolha o mês e clique em Buscar no Sistema eSocial. Vêm admissões, periódicos (com a empresa da produção) e afastados/desligados (pelo mês do lançamento).","Marque classificação do ASO, envio à DOM e antecedentes; inclua pessoas à mão se precisar; clique em Gerar Excel.","Aba Sem produção há +3 meses: marque quem deve ser desligado. Marcar não envia nada ao sistema."]},
@@ -624,6 +624,7 @@ const ATALHOS=[
 /* Novidades curtas por versão (aparecem na engrenagem, no aviso de atualização e em Feedback). Uma linha por versão;
    o detalhe fica no CHANGELOG.md. Ao lançar versão, acrescente a linha nova no topo. */
 const VERSOES=[
+ ["0.1.89","Ficha em uma folha A4 e NR-33 em mais de um dia"],
  ["0.1.88","Calendário de vencimento dos ASOs e dia exato das NRs"],
  ["0.1.87","Termo de EPI com as letras do Guia e feedback enviado sozinho"],
  ["0.1.86","Fatiador lê ASO e NR e já manda para a Aprovação"],
@@ -1815,7 +1816,7 @@ const PREV_ITENS=[{k:"NR-35",nome:"NR-35 (altura)",d:w=>w.nr35Validade||(w.nr35D
 const prevAte=()=>iso(new Date(TODAY.getFullYear(),TODAY.getMonth()+2,15));
 const prevCap=()=>Math.max(1,parseInt(LS.get("cs_prev_cap")||"15",10)||15);
 const ehQQS=d=>[3,4,5].includes(d.getDay());// quarta, quinta, sexta
-function prevAgenda(){let a=S.lists.find(l=>l.id==="prev-agenda");if(!a){a={id:"prev-agenda",tipo:"agenda",marcados:{}};S.lists.push(a)}a.marcados=a.marcados||{};a.datas=a.datas||{};a.fixos=a.fixos||{};return a}
+function prevAgenda(){let a=S.lists.find(l=>l.id==="prev-agenda");if(!a){a={id:"prev-agenda",tipo:"agenda",marcados:{}};S.lists.push(a)}a.marcados=a.marcados||{};a.datas=a.datas||{};a.fixos=a.fixos||{};a.extras=a.extras||{};return a}
 // Datas de turma escolhidas no calendário (por item), só as de hoje em diante.
 const prevEscolhidas=it=>(prevAgenda().datas[it]||[]).filter(d=>d>=iso(TODAY)).sort();
 function prevLinhas(){const ate=prevAte(),hoje=iso(TODAY),out=[];
@@ -1825,7 +1826,11 @@ function prevLinhas(){const ate=prevAte(),hoje=iso(TODAY),out=[];
   return out.sort((a,b)=>(a.venc||"").localeCompare(b.venc||""))}
 // Datas quarta/quinta/sexta de amanhã até a janela.
 function prevDatas(){const d=new Date(TODAY);d.setDate(d.getDate()+1);const fim=prevAte(),out=[];while(iso(d)<=fim){if(ehQQS(d))out.push(iso(d));d.setDate(d.getDate()+1)}return out}
-function prevTurmas(linhas){const datas=prevDatas(),cap=prevCap(),turmas={};
+// NR-33 pode ter mais de um dia (formação de 16 h): dias a mais ficam em prevAgenda().extras[chave] e a pessoa entra também nessas turmas.
+function prevTurmas(linhas){const t=prevTurmas0(linhas),ex=prevAgenda().extras,hoje=iso(TODAY);
+  for(const l of linhas.filter(l=>l.item==="NR-33")){l.extras=(ex[l.chave]||[]).filter(d=>d>=hoje&&d!==l.turma).sort();for(const d of l.extras)(t["NR-33|"+d]=t["NR-33|"+d]||[]).push(l)}
+  return t}
+function prevTurmas0(linhas){const datas=prevDatas(),cap=prevCap(),turmas={};
   for(const it of PREV_ITENS.map(i=>i.k)){const ls=linhas.filter(l=>l.item===it).sort((a,b)=>(a.venc||"").localeCompare(b.venc||""));
     // Datas marcadas pelo usuário: cada um vai para a última data marcada antes de vencer (quem vence depois da
     // 2ª data vai para a 2ª, e assim por diante); vencidos e quem vence antes da 1ª data vão para a 1ª.
@@ -1871,22 +1876,26 @@ async function prevListaCert(nr,linhas,quando){
 function prevTurmaModal(s,itens,ls,turmas){const a=prevAgenda(),m=document.createElement("div");m.className="modal";
   const salvar=async()=>{await Store.put("lists",a);m.remove();vPrev()};
   const sec=k=>{const gente=turmas[k+"|"+s]||[],datas=prevEscolhidas(k);
-    return `<fieldset><legend>${esc(PREV_ITENS.find(i=>i.k===k).nome)} · ${gente.length} pessoa${gente.length===1?"":"s"}</legend>${gente.length?`<div class="list">${gente.map(l=>`<div class="row"><span><b>${esc(l.w.nome)}</b> <span class="small muted">${l.venc?(l.vencido?"Vencida em ":"Vence em ")+br(l.venc):"Sem registro"}${l.fixo?" · vinculado":""}</span></span>
+    return `<fieldset><legend>${esc(PREV_ITENS.find(i=>i.k===k).nome)} · ${gente.length} pessoa${gente.length===1?"":"s"}</legend>${gente.length?`<div class="list">${gente.map(l=>(l.extras||[]).includes(s)?`<div class="row"><span><b>${esc(l.w.nome)}</b> <span class="small muted">NR-33 em mais de um dia · também em ${br(l.turma)}</span></span><button class="btn sm" data-tiraext="${esc(l.chave)}">Tirar este dia</button></div>`:`<div class="row"><span><b>${esc(l.w.nome)}</b> <span class="small muted">${l.venc?(l.vencido?"Vencida em ":"Vence em ")+br(l.venc):"Sem registro"}${l.fixo?" · vinculado":""}${(l.extras||[]).length?" · também em "+l.extras.map(br).join(", "):""}</span></span>
       <select class="inp" data-mover="${esc(l.chave)}" style="width:auto;padding:4px 8px" aria-label="Data da turma de ${esc(l.w.nome)}"><option value="">Automático</option>${datas.map(d=>`<option value="${d}" ${l.fixo&&d===l.turma?"selected":""}>${br(d)}</option>`).join("")}<option value="-">Tirar desta turma</option></select></div>`).join("")}</div>`:`<div class="small muted">Ninguém nesta turma.</div>`}</fieldset>`};
   m.innerHTML=`<div class="scrim"></div><div class="modal-c" role="dialog" aria-modal="true" aria-labelledby="ptH" style="max-width:760px"><div class="drawer-h"><div><div class="eyebrow">Turma</div><h2 id="ptH" style="font-size:20px">${new Date(s+"T12:00").toLocaleDateString("pt-BR",{weekday:"long"}).replace(/^./,c=>c.toUpperCase())}, ${br(s)}</h2></div><div class="toolbar"><button class="btn danger" id="ptDesm">Desmarcar data</button><button class="btn" id="ptClose">Fechar</button></div></div>
    <div class="drawer-b" style="align-items:stretch">${itens.map(sec).join("")}
     <fieldset><legend>Vincular trabalhador a esta data</legend><div class="form-grid"><div class="field span2"><label for="ptBusca">Trabalhador</label><input id="ptBusca" class="inp" placeholder="Nome ou CPF" autocomplete="off"><div id="ptSug" class="list"></div></div>
-     <div class="field"><label for="ptItem">NR</label><select id="ptItem">${itens.map(k=>`<option>${k}</option>`).join("")}</select></div></div></fieldset></div></div>`;
+     <div class="field"><label for="ptItem">NR</label><select id="ptItem">${itens.map(k=>`<option>${k}</option>`).join("")}</select></div></div>
+     ${itens.includes("NR-33")?`<div class="small muted">NR-33: se o trabalhador já está em outra turma, ele fica nas duas (curso em mais de um dia).</div>`:""}</fieldset></div></div>`;
   document.body.appendChild(m);m.querySelector(".scrim").onclick=()=>m.remove();$("#ptClose").onclick=()=>m.remove();
   m.querySelectorAll("[data-mover]").forEach(x=>x.onchange=async()=>{const k=x.dataset.mover;if(x.value==="-"||x.value==="")delete a.fixos[k];else a.fixos[k]=x.value;
     if(x.value==="-"){const d=prevEscolhidas(k.split("|")[0]).find(v=>v!==s);if(d)a.fixos[k]=d}await salvar()});
   $("#ptBusca").oninput=()=>{const q=$("#ptBusca").value.toLowerCase().trim(),qd=q.replace(/\D/g,"");if(q.length<2){$("#ptSug").innerHTML="";return}
     const r=S.workers.filter(w=>ATIVOS(w)&&!w.exemplo&&(w.nome.toLowerCase().includes(q)||(qd.length>=3&&w.cpf.includes(qd)))).slice(0,6);
     $("#ptSug").innerHTML=r.map(w=>`<div class="row"><span><b>${esc(w.nome)}</b> <span class="small muted mono">${esc(fmtCPF(w.cpf))}</span></span><button class="btn sm primary" data-vinc="${w.cpf}">Vincular</button></div>`).join("")||`<div class="small muted">Ninguém encontrado.</div>`;
-    m.querySelectorAll("[data-vinc]").forEach(b=>b.onclick=async()=>{const k=$("#ptItem").value;a.fixos[k+"|"+b.dataset.vinc]=s;
+    m.querySelectorAll("[data-vinc]").forEach(b=>b.onclick=async()=>{const k=$("#ptItem").value,ch=k+"|"+b.dataset.vinc,l=ls.find(x=>x.chave===ch);
+      // NR-33 já com turma em outro dia: este dia entra como dia a mais (não troca o 1º).
+      if(k==="NR-33"&&l&&l.turma&&l.turma!==s){a.extras[ch]=[...new Set([...(a.extras[ch]||[]),s])].sort();if(!a.fixos[ch])a.fixos[ch]=l.turma}else a.fixos[ch]=s;
       if(!(a.datas[k]||[]).includes(s))a.datas[k]=[...(a.datas[k]||[]),s].sort();await salvar();toast("Trabalhador vinculado à turma")})};
+  m.querySelectorAll("[data-tiraext]").forEach(b=>b.onclick=async()=>{const k=b.dataset.tiraext;a.extras[k]=(a.extras[k]||[]).filter(d=>d!==s);if(!a.extras[k].length)delete a.extras[k];await salvar()});
   $("#ptDesm").onclick=async()=>{const b=$("#ptDesm");if(!b.dataset.armed){b.dataset.armed="1";b.textContent="Confirmar: desmarcar";return}
-    for(const k of itens)a.datas[k]=(a.datas[k]||[]).filter(x=>x!==s);for(const[k,v]of Object.entries(a.fixos))if(v===s)delete a.fixos[k];if(ui.prevDia===s)ui.prevDia="";await salvar()};
+    for(const k of itens)a.datas[k]=(a.datas[k]||[]).filter(x=>x!==s);for(const[k,v]of Object.entries(a.fixos))if(v===s)delete a.fixos[k];for(const k of Object.keys(a.extras)){a.extras[k]=a.extras[k].filter(d=>d!==s);if(!a.extras[k].length)delete a.extras[k]}if(ui.prevDia===s)ui.prevDia="";await salvar()};
 }
 function vPrev(){
   if((ui.prevAba||"nr")==="aso")return vPrevAso();
@@ -1914,8 +1923,8 @@ function vPrev(){
    <section class="panel"><div class="panel-h"><h2>Lista para marcar · ${vis.length}</h2></div>
     ${vis.length?`<div class="tbl-wrap" style="box-shadow:none"><table><thead><tr><th>Trabalhador</th><th>Item</th><th>Vence em</th><th>Turma sugerida</th><th>Marcado</th></tr></thead><tbody>
      ${pgV.itens.map(l=>{const mk=ag.marcados[l.chave];return `<tr><td><a href="#" data-w="${l.w.id}" style="color:inherit;text-decoration:none"><b>${esc(l.w.nome)}</b></a><div class="small muted mono">${esc(fmtCPF(l.w.cpf))}${l.w.telefone?" · "+esc(l.w.telefone):""}</div></td><td>${esc(l.nome)}</td>
-      <td>${l.venc?`<span class="pill ${l.vencido?"crit":"warn"}">${br(l.venc)}</span>`:`<span class="pill crit">Sem registro</span>`}</td><td class="mono">${l.turma?`${br(l.turma)} <span class="small muted">${new Date(l.turma+"T12:00").toLocaleDateString("pt-BR",{weekday:"short"}).replace(/^./,c=>c.toUpperCase())}</span>`:"—"}</td>
-      <td><input type="date" class="inp" data-mk="${esc(l.chave)}" value="${esc(mk||"")}" style="padding:4px 6px" aria-label="Data marcada"></td></tr>`}).join("")}</tbody></table></div>${pgV.html}`:`<div class="empty">Nada vencendo até ${br(prevAte())}.</div>`}
+      <td>${l.venc?`<span class="pill ${l.vencido?"crit":"warn"}">${br(l.venc)}</span>`:`<span class="pill crit">Sem registro</span>`}</td><td class="mono">${l.turma?`${br(l.turma)} <span class="small muted">${new Date(l.turma+"T12:00").toLocaleDateString("pt-BR",{weekday:"short"}).replace(/^./,c=>c.toUpperCase())}</span>${(l.extras||[]).length?`<div class="small">+ ${l.extras.map(br).join(", ")}</div>`:""}`:"—"}</td>
+      <td><input type="date" class="inp" data-mk="${esc(l.chave)}" value="${esc(mk||"")}" style="padding:4px 6px" aria-label="Data marcada">${l.item==="NR-33"?`<input type="date" class="inp" data-mk="${esc(l.chave)}|2" value="${esc(ag.marcados[l.chave+"|2"]||"")}" style="padding:4px 6px;margin-top:4px" aria-label="2º dia marcado" title="2º dia (NR-33)">`:""}</td></tr>`}).join("")}</tbody></table></div>${pgV.html}`:`<div class="empty">Nada vencendo até ${br(prevAte())}.</div>`}
     <div class="note">Marcado: a data em que o curso ou exame foi agendado. Fica guardado e compartilhado entre os computadores.</div></section>`;
   paginarBind(vPrev);abasBind(vPrev);
   document.querySelectorAll("[data-pf]").forEach(b=>b.onclick=()=>{ui.prevItem=b.dataset.pf;vPrev()});
@@ -1930,7 +1939,7 @@ function vPrev(){
   document.querySelectorAll("[data-mk]").forEach(i=>i.onchange=async()=>{const a=prevAgenda();if(i.value)a.marcados[i.dataset.mk]=i.value;else delete a.marcados[i.dataset.mk];await Store.put("lists",a)});
   // Lista de certificados: da turma escolhida (botão da data) ou de todos os listados; data = a da turma ou hoje.
   $("#prevCert35").onclick=()=>prevListaCert("NR-35",vis,dia||iso(TODAY));$("#prevCert33").onclick=()=>prevListaCert("NR-33",vis,dia||iso(TODAY));
-  $("#prevPrint").onclick=()=>{const grupos={};vis.forEach(l=>{const k=(l.turma||"sem data")+"|"+l.item;(grupos[k]=grupos[k]||[]).push(l)});
+  $("#prevPrint").onclick=()=>{const grupos={};vis.forEach(l=>{for(const d of [l.turma||"sem data",...(l.extras||[])]){const k=d+"|"+l.item;(grupos[k]=grupos[k]||[]).push(l)}});
     const html=`<div class="ficha"><header><div style="flex-direction:row;align-items:center;gap:0"><img class="logo-f" src="logo.png" alt=""><div style="display:flex;flex-direction:column;gap:2px"><b>SINTRAMOMED</b><span>Previsão de vencimentos até ${br(prevAte())}</span></div></div><div class="fr">Lista para marcar<br><small>${br(iso(new Date()))} ${hhmm(new Date())}</small></div></header>
       ${Object.keys(grupos).sort().map(k=>{const[d,it]=k.split("|");return `<section><h2>${esc(it)} · ${d==="sem data"?"sem data sugerida":`turma de ${br(d)} (${new Date(d+"T12:00").toLocaleDateString("pt-BR",{weekday:"long"}).replace(/^./,c=>c.toUpperCase())})`} · ${grupos[k].length}</h2><table>${grupos[k].map(l=>`<tr><th>${esc(l.w.nome)}</th><td>CPF ${esc(fmtCPF(l.w.cpf))}${l.w.telefone?" · "+esc(l.w.telefone):""} · vence ${l.venc?br(l.venc):"sem registro"}</td></tr>`).join("")}</table></section>`}).join("")}</div>`;
     $("#printArea").innerHTML=html;if(IS_TAURI)window.print();else toast("A impressão funciona no programa instalado.")};
@@ -3061,6 +3070,17 @@ async function fichaGuiaHTML(tipo,w,dataIso){
    cadastro não tem data (sai como no Guia); o Termo de EPI usa a data na entrega do kit e no local/data; a O.S. nas datas
    de elaboração e assinaturas (a data da revisão não muda). Ficha e termo dependem do Guia; a O.S. não. */
 const FICHA_INFO={ficha:"Como está no Sistema eSocial (Guia). Não tem data para escolher.",epi:"Kit padrão: 2 calças, 2 camisetas e 1 par de botina, com a data de entrega escolhida.",os:"Modelo do sindicato. Mudam só a data (elaboração e assinaturas) e o nome do colaborador."};
+/* Ficha do Trabalhador do Guia sempre numa folha A4, sem ajustar escala na impressão: a página é medida na largura útil
+   do A4 (210 mm − 2×8 mm ≈ 733 px) e, se passar da altura útil (297 mm − 2×8 mm ≈ 1062 px, com folga de 5%), recebe zoom para caber.
+   A prévia mostra igual ao papel. ponytail: se a ficha do Guia crescer muito, o zoom deixa a letra menor (aviso no rodapé da prévia). */
+function fichaA4(d){if(!d||!d.body)return;const W=733,H=1010,st=d.createElement("style");
+  st.textContent=`@page{size:A4 portrait;margin:8mm}html,body{margin:0!important;padding:0!important}body{width:${W}px!important;box-sizing:border-box}table{max-width:100%}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}`;
+  d.head.appendChild(st);
+  // Tamanho do conteúdo pelos próprios elementos (a página do Guia é sem doctype: no modo antigo o scroll do body é a janela toda).
+  let wid=0,hei=0;for(const el of d.body.querySelectorAll("*")){const r=el.getBoundingClientRect();if(r.width&&r.height){wid=Math.max(wid,r.right);hei=Math.max(hei,r.bottom)}}
+  const z=Math.min(1,W/Math.max(W,wid),H/Math.max(1,hei));
+  const s2=d.createElement("style");s2.textContent=`html{zoom:${z.toFixed(3)}}@media print{html,body{height:auto!important;overflow:hidden!important}body{break-inside:avoid}}`;d.head.appendChild(s2);
+  d.documentElement.setAttribute("data-zoom",z.toFixed(2))}
 function emitirFicha(w){
   const guia=IS_TAURI&&!!w.origemId,m=document.createElement("div");m.className="modal";let tipo=guia?"ficha":"os",dataDoc=iso(TODAY),auto=LS.get("cs_ficha_auto")==="1",imprimirAoCarregar=auto;
   m.innerHTML=`<div class="scrim"></div><div class="modal-c" role="dialog" aria-modal="true" aria-label="Emitir ficha" style="max-width:900px"><div class="drawer-h"><div><div class="eyebrow">Emitir ficha · A4</div><h2 style="font-size:20px">${esc(w.nome)}</h2></div><div class="toolbar"><button class="btn primary" id="fPrint">${ico("print",16)} Imprimir</button><button class="btn" id="fClose">Fechar</button></div></div>
@@ -3079,7 +3099,7 @@ function emitirFicha(w){
     const ir=imprimirAoCarregar&&IS_TAURI;imprimirAoCarregar=false;
     pv.innerHTML=`<div class="empty">${tipo==="os"?"Montando a Ordem de Serviço…":"Buscando no Sistema eSocial…"}</div>`;
     try{html=tipo==="os"?await ordemServicoHTML(w,dataDoc):await fichaGuiaHTML(tipo,w,dataDoc);pv.innerHTML=`<iframe id="fIframe" title="Prévia para impressão" style="width:100%;height:64vh;border:0;border-radius:8px;background:#fff"></iframe>`;
-      const f=$("#fIframe");f.onload=()=>{if(!ir)return;const imgs=[...f.contentDocument.images].filter(i=>!i.complete);Promise.all(imgs.map(i=>new Promise(r=>{i.onload=i.onerror=r}))).then(imprimir)};f.srcdoc=html}
+      const f=$("#fIframe");f.onload=()=>{const imgs=[...f.contentDocument.images].filter(i=>!i.complete);Promise.all(imgs.map(i=>new Promise(r=>{i.onload=i.onerror=r}))).then(()=>{if(tipo==="ficha")fichaA4(f.contentDocument);if(ir)imprimir()})};f.srcdoc=html}
     catch(e){html="";pv.innerHTML=`<div class="banner" style="border-left-color:var(--crit)"><span>Não foi possível montar: ${esc(String(e.message||e))}</span></div>`}};
   m.querySelectorAll("[data-aba]").forEach(b=>b.onclick=()=>{tipo=b.dataset.aba.split(":")[1];imprimirAoCarregar=auto;mostrar()});
   $("#fData").onchange=e=>{if(!e.target.value)return;dataDoc=e.target.value;mostrar()};

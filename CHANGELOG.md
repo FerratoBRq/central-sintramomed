@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.89 — 03/11/2026
+- Emitir ficha › Ficha do Trabalhador: sai sempre numa única folha A4 (retrato, margem de 8 mm), na largura da folha e com a escala ajustada sozinha quando a ficha é comprida; a prévia mostra igual ao papel.
+- Vencimentos: a NR-33 pode ser marcada em mais de um dia para o mesmo trabalhador (vincular de novo em outra data marcada o deixa nas duas turmas; "Tirar este dia" desfaz). Na lista, campo para o 2º dia marcado e a turma mostra os dias a mais; a impressão sai em cada data.
+
 ## 0.1.88 — 03/11/2026
 - Vencimentos: abas **NRs** e **ASOs**. O calendário das NRs passa a marcar em vermelho o dia exato em que vence o curso de cada trabalhador (nomes ao passar o mouse), além das turmas. Nova aba ASOs com o mesmo calendário: cada dia mostra quantos ASOs vencem; clicar no dia lista quem é, com campo para a data do exame marcado e impressão da lista.
 
