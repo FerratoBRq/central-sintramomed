@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.88 — 03/11/2026
+- Vencimentos: abas **NRs** e **ASOs**. O calendário das NRs passa a marcar em vermelho o dia exato em que vence o curso de cada trabalhador (nomes ao passar o mouse), além das turmas. Nova aba ASOs com o mesmo calendário: cada dia mostra quantos ASOs vencem; clicar no dia lista quem é, com campo para a data do exame marcado e impressão da lista.
+
 ## 0.1.87 — 03/11/2026
 - Emitir ficha: a Ficha do Trabalhador e o Termo de EPI do Guia mantêm o modo de exibição da página original (o programa forçava um "doctype" que deixava as letras das tabelas menores que no Guia).
 - Feedback: com o GitHub de dados configurado, **Salvar** já envia o pedido sozinho (repositório privado); a resposta e o "Implementado" aparecem no próprio pedido.

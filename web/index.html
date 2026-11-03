@@ -127,6 +127,7 @@ main{min-width:0;padding-block:36px 0;padding-left:max(16px,env(safe-area-inset-
 .cal-d{all:unset;box-sizing:border-box;min-height:52px;border-radius:10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:12px;color:var(--muted)}
 .cal-d.qqs{background:var(--surface);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}.cal-d[disabled]{opacity:.35;cursor:default}.cal-d b{font-size:14px}.cal-d span{font-size:10px!important;line-height:1.1;text-align:center}.cal-d.tem{background:var(--accent-soft);cursor:pointer}.cal-d.tem span{font-size:11px;font-weight:700;color:var(--accent)}
 .cal-d.marc{background:var(--accent);color:#fff}.cal-d.marc span{color:#fff}.cal-d.sel{outline:2px solid var(--ink)}.cal-d.hoje{box-shadow:inset 0 0 0 2px var(--accent)}.cal-d:focus-visible{outline:2px solid var(--accent)}
+.cal-d .cal-v{color:var(--crit)!important;font-weight:700;white-space:nowrap;font-size:9.5px!important}.cal-d.marc .cal-v{color:#fff!important}.cal-d.venc{box-shadow:inset 0 -3px 0 var(--crit)}
 .field label{font-size:12.5px;font-weight:500;color:var(--muted)}
 .field input,.field select,.field textarea,.inp{border:1px solid var(--line-2);background:var(--surface);border-radius:var(--r-sm);padding:9px 12px;width:100%;min-width:0;transition:border-color .15s,box-shadow .15s}
 .field input:focus,.field select:focus,.field textarea:focus,.inp:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 22%,transparent)}
@@ -390,7 +391,7 @@ td .btn{white-space:nowrap}.busca-r .search,.modal .search{flex:none}.busca-r .s
     </nav>
     <button class="tema-b" id="btnTema" type="button"></button>
     <div class="side-foot">
-      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.87</b></span><span id="runtime">Modo navegador</span></div>
+      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.88</b></span><span id="runtime">Modo navegador</span></div>
       <span id="syncInfo"></span>
       <button class="link" id="btnSync" type="button" hidden>Sincronizar tudo agora</button>
       <span id="updInfo">Verificando atualizações…</span>
@@ -408,7 +409,7 @@ td .btn{white-space:nowrap}.busca-r .search,.modal .search{flex:none}.busca-r .s
 /* Tema: claro, escuro ou automático (segue o Windows). O botão de lua/sol fixa o modo neste computador. */
 const temaEscuro=()=>{const t=document.documentElement.dataset.theme;return t?t==="dark":matchMedia("(prefers-color-scheme: dark)").matches};
 try{const t=localStorage.getItem("cs_tema");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}
-const APP_VERSION="0.1.87";
+const APP_VERSION="0.1.88";
 /* ---------- utilidades ---------- */
 const $=(s,r=document)=>r.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -538,7 +539,7 @@ const MANUAL=[
  {t:"Primeiros passos",p:["Abra a engrenagem (no alto do menu) e entre com o login e a senha do Sistema eSocial (Guia Campo Grande). A senha fica guardada no Windows.","O Central importa e atualiza os trabalhadores sozinho a cada 5 minutos. Para atualizar na hora, clique nas setas ao lado da engrenagem.","Use o botão Lançar (azul, no alto do menu) para lançar ASO, NR-33/NR-35 ou uma entrega do estoque.","Use Buscar ou Ctrl+K para achar um trabalhador pelo nome ou CPF, uma tela ou uma ação."]},
  {t:"Painel",p:["Mostra trabalhadores ativos, pendências críticas, vencimentos dos próximos 30 dias e quem está sem produção há mais de 3 meses. Clique num número para abrir a lista.","Vencimento das NRs: NR-35 e NR-33 que vencem até o dia 15 do mês depois do próximo.","Atalhos abrem os sistemas das tomadoras em nova aba."]},
  {t:"Trabalhadores e ficha",p:["A lista vem em ordem alfabética; em Ordem, escolha Por código interno para ver pelo código do Sistema eSocial (a primeira coluna). Busque por nome, CPF, matrícula ou código interno e filtre por Ativos, Pendência crítica, Sem produção, A desligar, Inativos e Desligados.","Clique no trabalhador para abrir a ficha: dados, documentos, ASO, NRs, uniformes e anexos.","Emitir ficha: escolha a Ficha do Trabalhador ou o Termo de EPI do próprio Sistema eSocial (Guia), a Ordem de Serviço ou a ficha do Central. O Termo de EPI sai com 2 calças, 2 camisetas e 1 par de botina na data do dia. Ficha do Trabalhador, Termo de EPI e Ordem de Serviço têm as mesmas opções: Data do documento (o termo usa na entrega do kit e no local e data; a O.S. na elaboração e nas assinaturas; a ficha do cadastro sai como está no Guia, sem data), o botão Impressão automática (desligado: só mostra a prévia; ligado: já abre a janela de impressão ao escolher; fica lembrado) e Imprimir, onde você escolhe a impressora ou Salvar como PDF. A Ordem de Serviço sai igual ao modelo do sindicato, só com o nome e a data.","Editar endereço no Sistema eSocial cria um pedido na Aprovação; nada é gravado no Guia sem aprovar.","Atualizar esta ficha do Sistema eSocial busca os dados mais novos daquele trabalhador."]},
- {t:"Pendências e vencimentos",p:["Pendências mostra o que falta em cada trabalhador (início, ASO, NR-35, NR-33, produção, término). Clique num item para filtrar; Críticas e Atenção separam a gravidade.","Vencimento das NRs: escolha NR-35 ou NR-33, clique num dia livre do calendário para marcar a turma (de preferência quarta, quinta ou sexta) e o Central distribui as pessoas. Clique num dia marcado para ver a turma, mover alguém para outra data, vincular um trabalhador ou desmarcar a data.","Lista para emissão de certificados: gera o Word no modelo da DOM, com 13 nomes por folha, separado por NR-33 e NR-35."]},
+ {t:"Pendências e vencimentos",p:["Vencimentos tem duas abas, NRs e ASOs, com calendário de 3 meses: o dia exato em que vence o curso ou o ASO de cada trabalhador fica marcado em vermelho (passe o mouse para ver os nomes). Na aba ASOs, clique no dia para ver quem vence e anote a data do exame marcado; na aba NRs, clique num dia para marcar a turma.","Pendências mostra o que falta em cada trabalhador (início, ASO, NR-35, NR-33, produção, término). Clique num item para filtrar; Críticas e Atenção separam a gravidade.","Vencimento das NRs: escolha NR-35 ou NR-33, clique num dia livre do calendário para marcar a turma (de preferência quarta, quinta ou sexta) e o Central distribui as pessoas. Clique num dia marcado para ver a turma, mover alguém para outra data, vincular um trabalhador ou desmarcar a data.","Lista para emissão de certificados: gera o Word no modelo da DOM, com 13 nomes por folha, separado por NR-33 e NR-35."]},
  {t:"ASOs e NRs recebidos",p:["Salve os PDFs que chegam pelo WhatsApp na pasta ASOs para lançar ou NRs para lançar (Documentos > Central Sintramomed). O Central lê a cada minuto. Se o arquivo for para a pasta errada, ele muda sozinho.","Também dá para usar Anexar ou arrastar os PDFs para a tela.","Na aba Para conferir: Conferir e lançar abre o documento lido para conferir. Enviar prontos para aprovação manda de uma vez os que estão completos.","Depois de lançado, o arquivo vai para ASOs lançados ou NRs lançadas e fica anexado na ficha."]},
  {t:"Aprovação",p:["Tudo o que o Central vai gravar no Sistema eSocial (ASO, NR, endereço, desconto autorizado, EPI) aparece aqui com o que muda: como está no sistema e como vai ficar.","Aprovar e enviar pede uma segunda confirmação, grava no Guia e confere relendo a página. Recusar descarta o pedido.","A aba Histórico guarda o que foi enviado, recusado ou deu erro."]},
  {t:"Relatório mensal e sem produção",p:["Relatório mensal: escolha o mês e clique em Buscar no Sistema eSocial. Vêm admissões, periódicos (com a empresa da produção) e afastados/desligados (pelo mês do lançamento).","Marque classificação do ASO, envio à DOM e antecedentes; inclua pessoas à mão se precisar; clique em Gerar Excel.","Aba Sem produção há +3 meses: marque quem deve ser desligado. Marcar não envia nada ao sistema."]},
@@ -623,6 +624,7 @@ const ATALHOS=[
 /* Novidades curtas por versão (aparecem na engrenagem, no aviso de atualização e em Feedback). Uma linha por versão;
    o detalhe fica no CHANGELOG.md. Ao lançar versão, acrescente a linha nova no topo. */
 const VERSOES=[
+ ["0.1.88","Calendário de vencimento dos ASOs e dia exato das NRs"],
  ["0.1.87","Termo de EPI com as letras do Guia e feedback enviado sozinho"],
  ["0.1.86","Fatiador lê ASO e NR e já manda para a Aprovação"],
  ["0.1.85","Fatiador: arquivos já separados de um colaborador"],
@@ -1887,6 +1889,7 @@ function prevTurmaModal(s,itens,ls,turmas){const a=prevAgenda(),m=document.creat
     for(const k of itens)a.datas[k]=(a.datas[k]||[]).filter(x=>x!==s);for(const[k,v]of Object.entries(a.fixos))if(v===s)delete a.fixos[k];if(ui.prevDia===s)ui.prevDia="";await salvar()};
 }
 function vPrev(){
+  if((ui.prevAba||"nr")==="aso")return vPrevAso();
   const ls=prevLinhas(),turmas=prevTurmas(ls),ag=prevAgenda(),filtro=ui.prevItem||"",dia=ui.prevDia||"";
   const itensVis=filtro?[filtro]:PREV_ITENS.map(i=>i.k),algumaMarcada=itensVis.some(k=>prevEscolhidas(k).length);
   const vis=ls.filter(l=>(!filtro||l.item===filtro)&&(!dia||l.turma===dia)),pgV=paginar(vis,"prevPg");
@@ -1895,11 +1898,13 @@ function vPrev(){
   const meses=[];for(let k=0;k<3;k++)meses.push(new Date(TODAY.getFullYear(),TODAY.getMonth()+k,1));
   const cal=m=>{const dias=new Date(m.getFullYear(),m.getMonth()+1,0).getDate(),ini=m.getDay(),cel=[];for(let i=0;i<ini;i++)cel.push(`<span></span>`);
     for(let d=1;d<=dias;d++){const dt=new Date(m.getFullYear(),m.getMonth(),d),s=iso(dt),gente=(porDia[s]||[]).filter(l=>!filtro||l.item===filtro),q=ehQQS(dt)&&s>iso(TODAY);
-      const futuro=s>=iso(TODAY),marcada=itensVis.some(k=>prevEscolhidas(k).includes(s));
-      cel.push(`<button type="button" class="cal-d ${q?"qqs":""} ${gente.length?"tem":""} ${marcada?"marc":""} ${s===dia?"sel":""} ${s===iso(TODAY)?"hoje":""}" ${futuro?`data-marca="${s}"`:"disabled"} aria-pressed="${marcada}" title="${br(s)}${marcada?" · turma marcada (clique para desmarcar)":" · clique para marcar turma"}${gente.length?` · ${gente.length} pessoa${gente.length>1?"s":""}`:""}"><b>${d}</b>${gente.length?`<span>${gente.length} ${ico("users",11)}</span>`:""}</button>`)}
+      const futuro=s>=iso(TODAY),marcada=itensVis.some(k=>prevEscolhidas(k).includes(s)),vence=ls.filter(l=>l.venc===s&&(!filtro||l.item===filtro));
+      // Dia exato em que vence o curso de cada trabalhador (faixa vermelha embaixo e "N vence"); nomes no título.
+      cel.push(`<button type="button" class="cal-d ${q?"qqs":""} ${gente.length?"tem":""} ${marcada?"marc":""} ${vence.length?"venc":""} ${s===dia?"sel":""} ${s===iso(TODAY)?"hoje":""}" ${futuro?`data-marca="${s}"`:"disabled"} aria-pressed="${marcada}" title="${br(s)}${vence.length?` · VENCE: ${vence.map(l=>`${l.w.nome} (${l.item})`).join(", ")}`:""}${marcada?" · turma marcada (clique para ver ou desmarcar)":" · clique para marcar turma"}${gente.length?` · ${gente.length} na turma`:""}"><b>${d}</b>${gente.length?`<span>${gente.length} ${ico("users",11)}</span>`:""}${vence.length?`<span class="cal-v">${vence.length} vence${vence.length>1?"m":""}</span>`:""}</button>`)}
     return `<div class="cal"><div class="cal-h">${MESES[m.getMonth()]} <span>${m.getFullYear()}</span></div><div class="cal-g">${["D","S","T","Q","Q","S","S"].map(x=>`<span class="cal-w">${x}</span>`).join("")}${cel.join("")}</div></div>`};
-  $("#view").innerHTML=`<div class="head"><div><h1>Vencimento das NRs</h1><p>NR-35 e NR-33 que vencem até ${br(prevAte())}. Marque as datas das turmas no calendário e vincule quem vai em cada uma.</p></div>
+  $("#view").innerHTML=`<div class="head"><div><h1>Vencimentos</h1><p>NR-35 e NR-33 que vencem até ${br(prevAte())}: o dia exato do vencimento aparece em vermelho no calendário. Marque as datas das turmas e vincule quem vai em cada uma.</p></div>
     <div class="toolbar"><label class="small muted" for="prevCap">Vagas por turma</label><input id="prevCap" class="inp" type="number" min="1" max="200" value="${prevCap()}" style="width:80px"><button class="btn" id="prevPrint">${ico("print",16)} Imprimir lista</button><button class="btn" id="prevCert35">Lista de certificados NR-35</button><button class="btn" id="prevCert33">Lista de certificados NR-33</button></div></div>
+   ${abasHTML("prevAba",[["nr","NRs"],["aso","ASOs"]],"nr")}
    <div class="chips">${[["","Todos"],...PREV_ITENS.map(i=>[i.k,i.nome])].map(([k,l])=>`<button class="chip" aria-pressed="${filtro===k}" data-pf="${k}">${esc(l)} (${ls.filter(x=>!k||x.item===k).length})</button>`).join("")}</div>
    <section class="panel"><div class="panel-h"><h2>${algumaMarcada?"Turmas marcadas":"Melhores datas"}</h2><span class="small muted">Clique num dia livre para marcar a turma${filtro?` de ${esc(PREV_ITENS.find(i=>i.k===filtro).nome)}`:" (NR-35 e NR-33)"}; clique num dia marcado para ver e vincular os trabalhadores</span></div>
     ${algumaMarcada?"":`<div class="note">Nenhuma turma marcada ainda: o calendário mostra uma sugestão automática. Ao marcar as datas, o Central distribui os trabalhadores nelas.</div>`}
@@ -1912,7 +1917,7 @@ function vPrev(){
       <td>${l.venc?`<span class="pill ${l.vencido?"crit":"warn"}">${br(l.venc)}</span>`:`<span class="pill crit">Sem registro</span>`}</td><td class="mono">${l.turma?`${br(l.turma)} <span class="small muted">${new Date(l.turma+"T12:00").toLocaleDateString("pt-BR",{weekday:"short"}).replace(/^./,c=>c.toUpperCase())}</span>`:"—"}</td>
       <td><input type="date" class="inp" data-mk="${esc(l.chave)}" value="${esc(mk||"")}" style="padding:4px 6px" aria-label="Data marcada"></td></tr>`}).join("")}</tbody></table></div>${pgV.html}`:`<div class="empty">Nada vencendo até ${br(prevAte())}.</div>`}
     <div class="note">Marcado: a data em que o curso ou exame foi agendado. Fica guardado e compartilhado entre os computadores.</div></section>`;
-  paginarBind(vPrev);
+  paginarBind(vPrev);abasBind(vPrev);
   document.querySelectorAll("[data-pf]").forEach(b=>b.onclick=()=>{ui.prevItem=b.dataset.pf;vPrev()});
   document.querySelectorAll("[data-dia]").forEach(b=>b.onclick=()=>{ui.prevDia=ui.prevDia===b.dataset.dia?"":b.dataset.dia;vPrev()});
   document.querySelectorAll("[data-marca]").forEach(b=>b.onclick=async()=>{const s=b.dataset.marca,a=prevAgenda(),tem=itensVis.some(k=>(a.datas[k]||[]).includes(s));
@@ -1928,6 +1933,38 @@ function vPrev(){
   $("#prevPrint").onclick=()=>{const grupos={};vis.forEach(l=>{const k=(l.turma||"sem data")+"|"+l.item;(grupos[k]=grupos[k]||[]).push(l)});
     const html=`<div class="ficha"><header><div style="flex-direction:row;align-items:center;gap:0"><img class="logo-f" src="logo.png" alt=""><div style="display:flex;flex-direction:column;gap:2px"><b>SINTRAMOMED</b><span>Previsão de vencimentos até ${br(prevAte())}</span></div></div><div class="fr">Lista para marcar<br><small>${br(iso(new Date()))} ${hhmm(new Date())}</small></div></header>
       ${Object.keys(grupos).sort().map(k=>{const[d,it]=k.split("|");return `<section><h2>${esc(it)} · ${d==="sem data"?"sem data sugerida":`turma de ${br(d)} (${new Date(d+"T12:00").toLocaleDateString("pt-BR",{weekday:"long"}).replace(/^./,c=>c.toUpperCase())})`} · ${grupos[k].length}</h2><table>${grupos[k].map(l=>`<tr><th>${esc(l.w.nome)}</th><td>CPF ${esc(fmtCPF(l.w.cpf))}${l.w.telefone?" · "+esc(l.w.telefone):""} · vence ${l.venc?br(l.venc):"sem registro"}</td></tr>`).join("")}</table></section>`}).join("")}</div>`;
+    $("#printArea").innerHTML=html;if(IS_TAURI)window.print();else toast("A impressão funciona no programa instalado.")};
+}
+
+// ASOs: o mesmo calendário, com o dia exato em que vence o ASO de cada trabalhador ativo (validade lida ou 1 ano do exame).
+function vPrevAso(){
+  const ate=prevAte(),hoje=iso(TODAY),ag=prevAgenda(),dia=ui.asoDia||"";
+  const ls=S.workers.filter(w=>ATIVOS(w)&&!w.exemplo).map(w=>({w,venc:w.asoValidade||(w.asoData?addYears(w.asoData,1):""),chave:"ASO|"+w.cpf})).filter(l=>!l.venc||l.venc<=ate)
+    .map(l=>({...l,vencido:!!l.venc&&l.venc<hoje})).sort((a,b)=>(a.venc||"").localeCompare(b.venc||"")||a.w.nome.localeCompare(b.w.nome));
+  const vis=ls.filter(l=>!dia||l.venc===dia),pgV=paginar(vis,"asoPg"),vencidos=ls.filter(l=>l.vencido).length,sem=ls.filter(l=>!l.venc).length;
+  const meses=[];for(let k=0;k<3;k++)meses.push(new Date(TODAY.getFullYear(),TODAY.getMonth()+k,1));
+  const cal=m=>{const dias=new Date(m.getFullYear(),m.getMonth()+1,0).getDate(),cel=[];for(let i=0;i<m.getDay();i++)cel.push(`<span></span>`);
+    for(let d=1;d<=dias;d++){const s=iso(new Date(m.getFullYear(),m.getMonth(),d)),vence=ls.filter(l=>l.venc===s);
+      cel.push(`<button type="button" class="cal-d ${vence.length?"venc tem":""} ${s===dia?"sel":""} ${s===hoje?"hoje":""}" ${vence.length?`data-adia="${s}"`:"disabled"} aria-pressed="${s===dia}" title="${br(s)}${vence.length?` · VENCE: ${vence.map(l=>l.w.nome).join(", ")}`:""}"><b>${d}</b>${vence.length?`<span class="cal-v">${vence.length} vence${vence.length>1?"m":""}</span>`:""}</button>`)}
+    return `<div class="cal"><div class="cal-h">${MESES[m.getMonth()]} <span>${m.getFullYear()}</span></div><div class="cal-g">${["D","S","T","Q","Q","S","S"].map(x=>`<span class="cal-w">${x}</span>`).join("")}${cel.join("")}</div></div>`};
+  $("#view").innerHTML=`<div class="head"><div><h1>Vencimentos</h1><p>ASOs que vencem até ${br(ate)}: cada dia do calendário mostra quantos vencem nele. Clique no dia para ver quem é.</p></div>
+    <div class="toolbar"><button class="btn" id="asoPrint">${ico("print",16)} Imprimir lista</button></div></div>
+   ${abasHTML("prevAba",[["nr","NRs"],["aso","ASOs"]],"aso")}
+   <div class="chips"><span class="pill warn">Vencem até ${br(ate)}: ${ls.length-vencidos-sem}</span><span class="pill ${vencidos?"crit":"ok"}">Já vencidos: ${vencidos}</span>${sem?`<span class="pill crit">Sem ASO: ${sem}</span>`:""}</div>
+   <section class="panel"><div class="panel-h"><h2>Calendário de vencimento dos ASOs</h2>${dia?`<button class="btn sm" id="asoLimpa">Ver todos</button>`:""}</div><div class="cal-wrap">${meses.map(cal).join("")}</div></section>
+   <section class="panel"><div class="panel-h"><h2>${dia?`Vencem em ${br(dia)}`:"Lista"} · ${vis.length}</h2></div>
+    ${vis.length?`<div class="tbl-wrap" style="box-shadow:none"><table><thead><tr><th>Trabalhador</th><th>Último ASO</th><th>Vence em</th><th>Exame marcado</th></tr></thead><tbody>
+     ${pgV.itens.map(l=>`<tr><td><a href="#" data-w="${l.w.id}" style="color:inherit;text-decoration:none"><b>${esc(l.w.nome)}</b></a><div class="small muted mono">${esc(fmtCPF(l.w.cpf))}${l.w.telefone?" · "+esc(l.w.telefone):""}</div></td>
+      <td class="mono">${l.w.asoData?br(l.w.asoData):"—"}</td><td>${l.venc?`<span class="pill ${l.vencido?"crit":"warn"}">${br(l.venc)}</span>`:`<span class="pill crit">Sem registro</span>`}</td>
+      <td><input type="date" class="inp" data-mk="${esc(l.chave)}" value="${esc(ag.marcados[l.chave]||"")}" style="padding:4px 6px" aria-label="Data do exame marcado"></td></tr>`).join("")}</tbody></table></div>${pgV.html}`:`<div class="empty">Nenhum ASO vencendo até ${br(ate)}.</div>`}
+    <div class="note">Exame marcado: a data agendada na clínica. Fica guardada e compartilhada entre os computadores.</div></section>`;
+  abasBind(vPrev);paginarBind(vPrev);
+  document.querySelectorAll("[data-adia]").forEach(b=>b.onclick=()=>{ui.asoDia=ui.asoDia===b.dataset.adia?"":b.dataset.adia;ui.asoPg=1;vPrev()});
+  const lp=$("#asoLimpa");if(lp)lp.onclick=()=>{ui.asoDia="";vPrev()};
+  document.querySelectorAll("[data-w]").forEach(a=>a.onclick=e=>{e.preventDefault();openWorker(a.dataset.w)});
+  document.querySelectorAll("[data-mk]").forEach(i=>i.onchange=async()=>{const a=prevAgenda();if(i.value)a.marcados[i.dataset.mk]=i.value;else delete a.marcados[i.dataset.mk];await Store.put("lists",a)});
+  $("#asoPrint").onclick=()=>{const html=`<div class="ficha"><header><div style="flex-direction:row;align-items:center;gap:0"><img class="logo-f" src="logo.png" alt=""><div style="display:flex;flex-direction:column;gap:2px"><b>SINTRAMOMED</b><span>Vencimento de ASOs até ${br(ate)}</span></div></div><div class="fr">${dia?`Vencem em ${br(dia)}`:"Lista"}<br><small>${br(iso(new Date()))} ${hhmm(new Date())}</small></div></header>
+      <section><table>${vis.map(l=>`<tr><th>${esc(l.w.nome)}</th><td>CPF ${esc(fmtCPF(l.w.cpf))}${l.w.telefone?" · "+esc(l.w.telefone):""} · vence ${l.venc?br(l.venc):"sem registro"}${ag.marcados[l.chave]?" · exame marcado "+br(ag.marcados[l.chave]):""}</td></tr>`).join("")}</table></section></div>`;
     $("#printArea").innerHTML=html;if(IS_TAURI)window.print();else toast("A impressão funciona no programa instalado.")};
 }
 
