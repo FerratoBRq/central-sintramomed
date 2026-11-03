@@ -390,7 +390,7 @@ td .btn{white-space:nowrap}.busca-r .search,.modal .search{flex:none}.busca-r .s
     </nav>
     <button class="tema-b" id="btnTema" type="button"></button>
     <div class="side-foot">
-      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.86</b></span><span id="runtime">Modo navegador</span></div>
+      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.87</b></span><span id="runtime">Modo navegador</span></div>
       <span id="syncInfo"></span>
       <button class="link" id="btnSync" type="button" hidden>Sincronizar tudo agora</button>
       <span id="updInfo">Verificando atualizações…</span>
@@ -408,7 +408,7 @@ td .btn{white-space:nowrap}.busca-r .search,.modal .search{flex:none}.busca-r .s
 /* Tema: claro, escuro ou automático (segue o Windows). O botão de lua/sol fixa o modo neste computador. */
 const temaEscuro=()=>{const t=document.documentElement.dataset.theme;return t?t==="dark":matchMedia("(prefers-color-scheme: dark)").matches};
 try{const t=localStorage.getItem("cs_tema");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}
-const APP_VERSION="0.1.86";
+const APP_VERSION="0.1.87";
 /* ---------- utilidades ---------- */
 const $=(s,r=document)=>r.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -623,6 +623,7 @@ const ATALHOS=[
 /* Novidades curtas por versão (aparecem na engrenagem, no aviso de atualização e em Feedback). Uma linha por versão;
    o detalhe fica no CHANGELOG.md. Ao lançar versão, acrescente a linha nova no topo. */
 const VERSOES=[
+ ["0.1.87","Termo de EPI com as letras do Guia e feedback enviado sozinho"],
  ["0.1.86","Fatiador lê ASO e NR e já manda para a Aprovação"],
  ["0.1.85","Fatiador: arquivos já separados de um colaborador"],
  ["0.1.84","Ordem de Serviço no Fatiador e nos anexos"],
@@ -1465,10 +1466,11 @@ const TELAS={painel:"Painel",trabalhadores:"Trabalhadores",pendencias:"Pendênci
 const fbLista=()=>{try{return JSON.parse(LS.get("cs_feedback")||"[]")}catch(e){return[]}};
 const fbSalvar=l=>{LS.set("cs_feedback",JSON.stringify(l));registrarValor("feedback","lista",l)};
 const fbIssueURL=f=>`https://github.com/${GH_REPO}/issues/new?`+new URLSearchParams({title:`[${f.tipo}] ${f.texto.split(/\n/)[0].slice(0,70)}`,body:`**Tipo:** ${f.tipo}\n**Tela:** ${TELAS[f.tela]||f.tela}\n**Versão:** ${f.versao}\n**Data:** ${f.quando}\n\n${f.texto}`,labels:"feedback"}).toString();
-let ghIssues=null,ghReleases=null;
+let ghIssues=null,ghReleases=null,fbRespostas=null;
 async function vFeed(){
   const l=fbLista().sort((a,b)=>b.criado.localeCompare(a.criado));
-  const estado=f=>{const i=(ghIssues||[]).find(x=>x.title.includes(f.texto.split(/\n/)[0].slice(0,40)));return i?(i.state==="closed"?`<span class="pill ok">Implementado</span>`:`<span class="pill info">Em análise</span>`):f.enviado?`<span class="pill info">Enviado</span>`:`<span class="pill warn">Não enviado</span>`};
+  const estado=f=>{const rsp=(fbRespostas||{})[f.id];if(rsp)return rsp.status==="implementado"?`<span class="pill ok" title="${esc(rsp.nota||"")}">Implementado${rsp.versao?" na "+esc(rsp.versao):""}</span>`:`<span class="pill info" title="${esc(rsp.nota||"")}">Em análise</span>`;
+    const i=(ghIssues||[]).find(x=>x.title.includes(f.texto.split(/\n/)[0].slice(0,40)));return i?(i.state==="closed"?`<span class="pill ok">Implementado</span>`:`<span class="pill info">Em análise</span>`):f.enviado?`<span class="pill info">Enviado</span>`:`<span class="pill warn">Não enviado</span>`};
   $("#view").innerHTML=`<div class="head"><div><h1>Feedback</h1><p>Conte o que melhorar ou o que deu errado. Cada pedido vai para o GitHub do programa, e as correções chegam sozinhas na próxima versão.</p></div></div>
   <div class="grid2">
    <section class="panel"><h2>Novo feedback</h2>
@@ -1486,15 +1488,20 @@ async function vFeed(){
   </div>
   <section class="panel"><div class="panel-h"><h2>Seus pedidos</h2><span class="small muted">${l.length} registrado${l.length===1?"":"s"}</span></div>
    ${l.length?l.map(f=>`<div class="fb-item"><div class="fb-top"><span><b>${esc(f.tipo)}</b> <span class="small muted">· ${esc(TELAS[f.tela]||f.tela)} · ${esc(f.quando)}</span></span>${estado(f)}</div><div>${esc(f.texto)}</div>
-     <div class="toolbar"><a class="btn sm ${f.enviado?"":"primary"}" href="${esc(fbIssueURL(f))}" target="_blank" rel="noopener" data-fbenv="${f.id}">${f.enviado?"Abrir de novo no GitHub":"Enviar ao GitHub"}</a><button class="btn sm danger" data-fbdel="${f.id}">Apagar</button></div></div>`).join("")
+     ${(fbRespostas||{})[f.id]&&fbRespostas[f.id].nota?`<div class="small muted">Resposta: ${esc(fbRespostas[f.id].nota)}</div>`:""}
+     <div class="toolbar">${f.auto?"":`<a class="btn sm ${f.enviado?"":"primary"}" href="${esc(fbIssueURL(f))}" target="_blank" rel="noopener" data-fbenv="${f.id}">${f.enviado?"Abrir de novo no GitHub":"Enviar ao GitHub"}</a>`}<button class="btn sm danger" data-fbdel="${f.id}">Apagar</button></div></div>`).join("")
    :`<div class="empty">Nenhum feedback ainda. Escreva acima o que gostaria de mudar.</div>`}
-   <div class="note">Enviar ao GitHub abre a página do pedido já preenchida; confira e clique em <b>Create</b> (Criar). Quando o pedido for implementado, ele aparece aqui como Implementado.</div>
+   <div class="note">${ghOn()?"Com o GitHub de dados configurado na engrenagem, Salvar já envia o pedido (fica no repositório privado, junto com os dados).":"Enviar ao GitHub abre a página do pedido já preenchida; confira e clique em <b>Create</b> (Criar). Para enviar sozinho ao salvar, configure o GitHub de dados na engrenagem."} Quando o pedido for implementado, ele aparece aqui como Implementado.</div>
   </section>`;
-  $("#fbSalvar").onclick=()=>{const texto=$("#fbTexto").value.trim();if(texto.length<5){toast("Descreva o feedback");$("#fbTexto").focus();return}
+  $("#fbSalvar").onclick=async()=>{const texto=$("#fbTexto").value.trim();if(texto.length<5){toast("Descreva o feedback");$("#fbTexto").focus();return}
     const n=new Date();const f={id:uid(),tipo:$("#fbTipo").value,tela:$("#fbTela").value,texto,versao:APP_VERSION,criado:n.toISOString(),quando:`${br(iso(n))} ${hhmm(n)}`,enviado:false};
-    fbSalvar([f,...fbLista()]);toast("Feedback salvo. Agora clique em Enviar ao GitHub.");vFeed()};
+    fbSalvar([f,...fbLista()]);
+    // Com o GitHub de dados configurado, o pedido vai sozinho (repositório PRIVADO, pasta feedback/): sem passo a passo.
+    if(ghOn()){try{await ghPut(`feedback/${f.id}.json`,b64utf8(JSON.stringify(f,null,1)),`feedback · ${f.tipo}`);const l2=fbLista(),x=l2.find(y=>y.id===f.id);x.enviado=true;x.auto=true;fbSalvar(l2);toast("Feedback salvo e enviado")}
+      catch(e){toast("Feedback salvo. Não consegui enviar agora: use Enviar ao GitHub")}}else toast("Feedback salvo. Agora clique em Enviar ao GitHub.");vFeed()};
   document.querySelectorAll("[data-fbenv]").forEach(a=>a.addEventListener("click",()=>{const l2=fbLista();const f=l2.find(x=>x.id===a.dataset.fbenv);if(f){f.enviado=true;fbSalvar(l2)}setTimeout(vFeed,300)}));
   document.querySelectorAll("[data-fbdel]").forEach(b=>b.onclick=()=>{if(!b.dataset.armed){b.dataset.armed="1";b.textContent="Confirmar";return}fbSalvar(fbLista().filter(x=>x.id!==b.dataset.fbdel));vFeed()});
+  if(ghOn()&&fbRespostas===null){fbRespostas={};try{fbRespostas=JSON.parse(await ghGet("feedback/respostas.json",true)||"{}");if(current==="feedback")vFeed()}catch(e){}}
   if(IS_TAURI&&ghIssues===null){ghIssues=[];try{const [i,r]=await Promise.all([fetch(`https://api.github.com/repos/${GH_REPO}/issues?state=all&per_page=100`).then(r=>r.ok?r.json():[]),fetch(`https://api.github.com/repos/${GH_REPO}/releases?per_page=10`).then(r=>r.ok?r.json():null)]);ghIssues=Array.isArray(i)?i:[];ghReleases=Array.isArray(r)?r:null;if(current==="feedback")vFeed()}catch(e){}}
 }
 
@@ -3003,12 +3010,15 @@ function epiPadrao(d,dataBr){const tr=[...d.querySelectorAll("tr")],cab=tr.find(
   for(let t;(t=tw.nextNode());)if(/\d{1,2} de [a-zç]+ de \d{4}/i.test(t.nodeValue)&&/DOURADOS/i.test(t.parentNode.textContent))t.nodeValue=t.nodeValue.replace(/\d{1,2} de [a-zç]+ de \d{4}/i,ext)}
 async function fichaGuiaHTML(tipo,w,dataIso){
   const hoje=br(iso(TODAY)),cam=tipo==="epi"?`/register/imp_epi.php?cod_colaborador=${w.origemId}&dt1=01/01/2000&dt2=${hoje}`:`/register/imp_colaborador.php?acao=Visualizar&cod_colaborador=${w.origemId}`;
-  const d=dom(await sget(cam));d.querySelectorAll("script,form").forEach(x=>x.remove());
+  const raw=await sget(cam),d=dom(raw);d.querySelectorAll("script,form").forEach(x=>x.remove());
   if(tipo==="epi")epiPadrao(d,br(dataIso||iso(TODAY)));
   // O Guia passa por Cloudflare, que troca e-mails por "[email protected]" e só os mostra com um script: decodifica aqui.
   d.querySelectorAll("[data-cfemail]").forEach(el=>{const t=d.createTextNode(cfEmail(el.getAttribute("data-cfemail")));(el.closest('a[href*="email-protection"]')||el).replaceWith(t)});
   const base=d.createElement("base");base.href="https://sistemaesocial.guiacampogrande.com/register/";d.head.prepend(base);
-  return "<!doctype html>"+d.documentElement.outerHTML}
+  // Mantém o modo de exibição da página original: sem doctype o navegador usa o modo antigo (quirks), em que a tabela
+  // não herda a fonte pequena do corpo. Com "<!doctype html>" forçado, as letras do termo ficavam menores que no Guia.
+  const dt=(raw.match(/^\s*(<!doctype[^>]*>)/i)||[])[1]||"";
+  return dt+d.documentElement.outerHTML}
 /* Emitir ficha: Ficha do Trabalhador, Termo de EPI e Ordem de Serviço têm as mesmas opções — prévia A4, data do documento,
    "Abrir a impressão" ao escolher (lembrado) e Imprimir (impressora ou Salvar como PDF). Limites de cada uma: a ficha do
    cadastro não tem data (sai como no Guia); o Termo de EPI usa a data na entrega do kit e no local/data; a O.S. nas datas

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.87 — 03/11/2026
+- Emitir ficha: a Ficha do Trabalhador e o Termo de EPI do Guia mantêm o modo de exibição da página original (o programa forçava um "doctype" que deixava as letras das tabelas menores que no Guia).
+- Feedback: com o GitHub de dados configurado, **Salvar** já envia o pedido sozinho (repositório privado); a resposta e o "Implementado" aparecem no próprio pedido.
+
 ## 0.1.86 — 30/10/2026
 - Fatiador de PDF: lê cada página (OCR no programa instalado), marca **ASO** e **certificado de NR-33/NR-35** com o trabalhador achado pelo CPF e junta o verso do certificado de NR (2 páginas) num só arquivo ("Junto com a página anterior", ajustável). Ao salvar, os completos são anexados, atualizados na ficha e enviados para a Aprovação (lançar no Sistema eSocial); os incompletos ficam em ASOs/NRs recebidos para conferir. Miniaturas não são refeitas a cada atualização.
 
