@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.91 — 03/11/2026
+- Emitir ficha: o estilo do Guia (docs.css) fixava o corpo da página em 210 mm × 297 mm, mais largo que a área útil da impressão, o que deslocava e encolhia o Termo de EPI. Agora o corpo segue a folha: conferido no Guia, o Termo de EPI ocupa a largura e a altura da folha A4, centralizado, com a letra de 11 pt do Guia (escala 0,94).
+
 ## 0.1.90 — 03/11/2026
 - Emitir ficha: Termo de EPI e Ficha do Trabalhador numa folha A4 **centralizados e no maior tamanho que couber** (até 1,6×), aproveitando o espaço em branco; ficha comprida continua reduzida para caber numa folha. Funciona com leiaute de largura fixa ou fluida.
 

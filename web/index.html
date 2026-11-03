@@ -391,7 +391,7 @@ td .btn{white-space:nowrap}.busca-r .search,.modal .search{flex:none}.busca-r .s
     </nav>
     <button class="tema-b" id="btnTema" type="button"></button>
     <div class="side-foot">
-      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.90</b></span><span id="runtime">Modo navegador</span></div>
+      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.91</b></span><span id="runtime">Modo navegador</span></div>
       <span id="syncInfo"></span>
       <button class="link" id="btnSync" type="button" hidden>Sincronizar tudo agora</button>
       <span id="updInfo">Verificando atualizações…</span>
@@ -409,7 +409,7 @@ td .btn{white-space:nowrap}.busca-r .search,.modal .search{flex:none}.busca-r .s
 /* Tema: claro, escuro ou automático (segue o Windows). O botão de lua/sol fixa o modo neste computador. */
 const temaEscuro=()=>{const t=document.documentElement.dataset.theme;return t?t==="dark":matchMedia("(prefers-color-scheme: dark)").matches};
 try{const t=localStorage.getItem("cs_tema");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}
-const APP_VERSION="0.1.90";
+const APP_VERSION="0.1.91";
 /* ---------- utilidades ---------- */
 const $=(s,r=document)=>r.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -624,6 +624,7 @@ const ATALHOS=[
 /* Novidades curtas por versão (aparecem na engrenagem, no aviso de atualização e em Feedback). Uma linha por versão;
    o detalhe fica no CHANGELOG.md. Ao lançar versão, acrescente a linha nova no topo. */
 const VERSOES=[
+ ["0.1.91","Termo de EPI ocupando a folha toda, centralizado"],
  ["0.1.90","Termo de EPI centralizado e com letra maior"],
  ["0.1.89","Ficha em uma folha A4 e NR-33 em mais de um dia"],
  ["0.1.88","Calendário de vencimento dos ASOs e dia exato das NRs"],
@@ -3077,7 +3078,7 @@ const FICHA_INFO={ficha:"Como está no Sistema eSocial (Guia). Não tem data par
    Guia pode ser fluido (100% de largura), a caixa é estreitada para W/zoom e medida de novo, até estabilizar.
    A prévia mostra igual ao papel. ponytail: ficha muito comprida fica com letra menor para caber em uma folha. */
 function folhaA4(d){if(!d||!d.body)return;const W=733,H=1010,MAX=1.6;
-  const st=d.createElement("style");st.textContent=`@page{size:A4 portrait;margin:8mm}html,body{margin:0!important;padding:0!important;background:#fff}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}#fa4{margin:0 auto;box-sizing:border-box}@media print{html,body{height:auto!important;overflow:hidden!important}#fa4{break-inside:avoid}}`;d.head.appendChild(st);
+  const st=d.createElement("style");st.textContent=`@page{size:A4 portrait;margin:8mm}html,body{margin:0!important;padding:0!important;background:#fff;width:auto!important;height:auto!important;min-height:0!important}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}#fa4{margin:0 auto;box-sizing:border-box}@media print{html,body{height:auto!important;overflow:hidden!important}#fa4{break-inside:avoid}}`;d.head.appendChild(st);
   const cx=d.createElement("div");cx.id="fa4";while(d.body.firstChild)cx.appendChild(d.body.firstChild);d.body.appendChild(cx);
   // Mede pelos próprios elementos (a página do Guia é sem doctype: no modo antigo o scroll do body é a janela toda).
   const medir=()=>{const b=cx.getBoundingClientRect();let wid=0,hei=0;for(const el of cx.querySelectorAll("*")){const r=el.getBoundingClientRect();if(r.width&&r.height){wid=Math.max(wid,r.right-b.left);hei=Math.max(hei,r.bottom-b.top)}}return [Math.max(1,wid),Math.max(1,hei)]};
