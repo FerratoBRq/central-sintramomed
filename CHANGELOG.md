@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.90 — 03/11/2026
+- Emitir ficha: Termo de EPI e Ficha do Trabalhador numa folha A4 **centralizados e no maior tamanho que couber** (até 1,6×), aproveitando o espaço em branco; ficha comprida continua reduzida para caber numa folha. Funciona com leiaute de largura fixa ou fluida.
+
 ## 0.1.89 — 03/11/2026
 - Emitir ficha › Ficha do Trabalhador: sai sempre numa única folha A4 (retrato, margem de 8 mm), na largura da folha e com a escala ajustada sozinha quando a ficha é comprida; a prévia mostra igual ao papel.
 - Vencimentos: a NR-33 pode ser marcada em mais de um dia para o mesmo trabalhador (vincular de novo em outra data marcada o deixa nas duas turmas; "Tirar este dia" desfaz). Na lista, campo para o 2º dia marcado e a turma mostra os dias a mais; a impressão sai em cada data.
