@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.92 — 05/11/2026
+- Emitir ficha: a Ficha do Trabalhador volta a sair exatamente como no Guia (mesma fonte, tamanho de letra e espaçamento do site), sem ajuste de folha. O Termo de EPI continua numa folha A4, centralizado.
+
 ## 0.1.91 — 03/11/2026
 - Emitir ficha: o estilo do Guia (docs.css) fixava o corpo da página em 210 mm × 297 mm, mais largo que a área útil da impressão, o que deslocava e encolhia o Termo de EPI. Agora o corpo segue a folha: conferido no Guia, o Termo de EPI ocupa a largura e a altura da folha A4, centralizado, com a letra de 11 pt do Guia (escala 0,94).
 
