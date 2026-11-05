@@ -176,8 +176,21 @@ pub async fn esocial_testar(st: State<'_, Esocial>) -> Result<(), String> {
     fazer_login(&st).await
 }
 
+/// GET só para consulta: páginas PHP antigas às vezes executam ações por GET (ex.: ?acao=Excluir).
+/// Se o endereço tiver "acao=", ela precisa ser de leitura (Procurar, Procura ou Visualizar).
+fn get_permitido(caminho: &str) -> bool {
+    let q = caminho.split_once('?').map(|x| x.1).unwrap_or("").to_ascii_lowercase();
+    q.split('&').all(|par| match par.split_once('=') {
+        Some(("acao", v)) => matches!(v, "" | "procurar" | "procura" | "visualizar"),
+        _ => true,
+    })
+}
+
 #[tauri::command]
 pub async fn esocial_get(st: State<'_, Esocial>, caminho: String) -> Result<String, String> {
+    if !get_permitido(&caminho) {
+        return Err("Consulta não permitida: o Central só lê o Sistema eSocial por GET.".into());
+    }
     let u = url(&caminho)?;
     pedir(&st, || st.client.get(&u)).await
 }
@@ -219,6 +232,15 @@ pub async fn esocial_gravar(st: State<'_, Esocial>, caminho: String, campos: Vec
 
 #[cfg(test)]
 mod testes {
+    #[test]
+    fn get_so_leitura() {
+        assert!(super::get_permitido("/register/cad_colaborador.php?acao=Procurar&cod_colaborador=1"));
+        assert!(super::get_permitido("/register/holerite2020.php?opcao1=6&fpCodigo=1401"));
+        assert!(super::get_permitido("/register/rel_folhaPagamento.php?pagina=2&acao=Visualizar"));
+        assert!(!super::get_permitido("/register/cad_colaborador.php?acao=Excluir&cod_colaborador=1"));
+        assert!(!super::get_permitido("/register/cad_coleq.php?ACAO=Remover&id=3"));
+    }
+
     #[test]
     fn cidade_sem_uf() {
         for e in ["Dourados MS", "Dourados/MS", "Dourados - MS", "Dourados", " Dourados ms "] { assert_eq!(super::so_cidade(e), "Dourados"); }

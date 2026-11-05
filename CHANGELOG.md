@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.94 — 05/11/2026
+- Segurança: a leitura do Sistema eSocial por GET recusa qualquer endereço com ação que não seja de consulta (só Procurar/Procura/Visualizar), para nenhuma página antiga do Guia executar exclusão por link (`get_permitido` em esocial.rs, com teste). As fichas do Guia abertas no Central ficam num quadro sem scripts (sandbox) e sem atributos on* nem links javascript:.
+- Acessibilidade: textos secundários (rótulos do menu, cabeçalhos de tabela) com mais contraste no modo claro (de 3,6:1 para mais de 4,5:1); nomes nas dicas do calendário escapados.
+- Notebook 1366×768: barra lateral mais compacta para os grupos caberem, com indicação de rolagem.
+
 ## 0.1.93 — 05/11/2026
 - Relatório mensal, afastados e desligados: entram no mês pela **data de envio** do evento ao eSocial (S-2399/S-2230) e a tela mostra a **data da última produção** de cada um (com a data do envio embaixo). A última produção vem do relatório de produção do Guia por data (tipo 3, agrupado por data, 18 meses antes da saída), lido ao Buscar. Conferido com o modelo de setembro: o término de quem saiu por 90 dias sem produção é a própria data da última produção.
 
