@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.93 — 05/11/2026
+- Relatório mensal, afastados e desligados: entram no mês pela **data de envio** do evento ao eSocial (S-2399/S-2230) e a tela mostra a **data da última produção** de cada um (com a data do envio embaixo). A última produção vem do relatório de produção do Guia por data (tipo 3, agrupado por data, 18 meses antes da saída), lido ao Buscar. Conferido com o modelo de setembro: o término de quem saiu por 90 dias sem produção é a própria data da última produção.
+
 ## 0.1.92 — 05/11/2026
 - Emitir ficha: a Ficha do Trabalhador volta a sair exatamente como no Guia (mesma fonte, tamanho de letra e espaçamento do site), sem ajuste de folha. O Termo de EPI continua numa folha A4, centralizado.
 

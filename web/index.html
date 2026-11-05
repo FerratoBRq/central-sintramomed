@@ -391,7 +391,7 @@ td .btn{white-space:nowrap}.busca-r .search,.modal .search{flex:none}.busca-r .s
     </nav>
     <button class="tema-b" id="btnTema" type="button"></button>
     <div class="side-foot">
-      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.92</b></span><span id="runtime">Modo navegador</span></div>
+      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.93</b></span><span id="runtime">Modo navegador</span></div>
       <span id="syncInfo"></span>
       <button class="link" id="btnSync" type="button" hidden>Sincronizar tudo agora</button>
       <span id="updInfo">Verificando atualizações…</span>
@@ -409,7 +409,7 @@ td .btn{white-space:nowrap}.busca-r .search,.modal .search{flex:none}.busca-r .s
 /* Tema: claro, escuro ou automático (segue o Windows). O botão de lua/sol fixa o modo neste computador. */
 const temaEscuro=()=>{const t=document.documentElement.dataset.theme;return t?t==="dark":matchMedia("(prefers-color-scheme: dark)").matches};
 try{const t=localStorage.getItem("cs_tema");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}
-const APP_VERSION="0.1.92";
+const APP_VERSION="0.1.93";
 /* ---------- utilidades ---------- */
 const $=(s,r=document)=>r.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -542,7 +542,7 @@ const MANUAL=[
  {t:"Pendências e vencimentos",p:["Vencimentos tem duas abas, NRs e ASOs, com calendário de 3 meses: o dia exato em que vence o curso ou o ASO de cada trabalhador fica marcado em vermelho (passe o mouse para ver os nomes). Na aba ASOs, clique no dia para ver quem vence e anote a data do exame marcado; na aba NRs, clique num dia para marcar a turma. A NR-33 pode ter mais de um dia: abra a outra data marcada e vincule o mesmo trabalhador (ele fica nas duas turmas); na lista, a NR-33 tem campo para o 2º dia marcado.","Pendências mostra o que falta em cada trabalhador (início, ASO, NR-35, NR-33, produção, término). Clique num item para filtrar; Críticas e Atenção separam a gravidade.","Vencimento das NRs: escolha NR-35 ou NR-33, clique num dia livre do calendário para marcar a turma (de preferência quarta, quinta ou sexta) e o Central distribui as pessoas. Clique num dia marcado para ver a turma, mover alguém para outra data, vincular um trabalhador ou desmarcar a data.","Lista para emissão de certificados: gera o Word no modelo da DOM, com 13 nomes por folha, separado por NR-33 e NR-35."]},
  {t:"ASOs e NRs recebidos",p:["Salve os PDFs que chegam pelo WhatsApp na pasta ASOs para lançar ou NRs para lançar (Documentos > Central Sintramomed). O Central lê a cada minuto. Se o arquivo for para a pasta errada, ele muda sozinho.","Também dá para usar Anexar ou arrastar os PDFs para a tela.","Na aba Para conferir: Conferir e lançar abre o documento lido para conferir. Enviar prontos para aprovação manda de uma vez os que estão completos.","Depois de lançado, o arquivo vai para ASOs lançados ou NRs lançadas e fica anexado na ficha."]},
  {t:"Aprovação",p:["Tudo o que o Central vai gravar no Sistema eSocial (ASO, NR, endereço, desconto autorizado, EPI) aparece aqui com o que muda: como está no sistema e como vai ficar.","Aprovar e enviar pede uma segunda confirmação, grava no Guia e confere relendo a página. Recusar descarta o pedido.","A aba Histórico guarda o que foi enviado, recusado ou deu erro."]},
- {t:"Relatório mensal e sem produção",p:["Relatório mensal: escolha o mês e clique em Buscar no Sistema eSocial. Vêm admissões, periódicos (com a empresa da produção) e afastados/desligados (pelo mês do lançamento).","Marque classificação do ASO, envio à DOM e antecedentes; inclua pessoas à mão se precisar; clique em Gerar Excel.","Aba Sem produção há +3 meses: marque quem deve ser desligado. Marcar não envia nada ao sistema."]},
+ {t:"Relatório mensal e sem produção",p:["Afastados e desligados entram no mês pela data de envio do evento ao eSocial (S-2399 ou S-2230), não pela data do término, que é retroativa. Ex.: término em 18/06 enviado em 15/10 entra em outubro. Na tela aparece a data da última produção de cada um (lida do relatório de produção do Guia ao Buscar) e, embaixo, a data do envio.","Relatório mensal: escolha o mês e clique em Buscar no Sistema eSocial. Vêm admissões, periódicos (com a empresa da produção) e afastados/desligados (pelo mês do lançamento).","Marque classificação do ASO, envio à DOM e antecedentes; inclua pessoas à mão se precisar; clique em Gerar Excel.","Aba Sem produção há +3 meses: marque quem deve ser desligado. Marcar não envia nada ao sistema."]},
  {t:"Estoque e EPIs",p:["Aba Saldo mostra uniformes por tamanho e EPIs. Contagem: digite o que há de fato e o Central lança só a diferença.","Entrada: compra ou devolução. Saída ou baixa: Primeiro uniforme (kit pronto e sem custo: 1 camiseta manga longa, 1 calça e 1 botina; só escolher os tamanhos, uma vez por trabalhador), Entrega de EPI (sem custo), Uniforme da safra (1 calça e 1 camisa por safra, sem custo), Fornecimento com desconto autorizado ou Baixa.","Desconto autorizado só vale para peça extra pedida pelo trabalhador ou reposição por perda/dano por culpa dele. Botina e EPIs nunca são cobrados. Imprima o Termo de autorização de desconto e colha a assinatura antes.","Ao entregar camiseta, calça ou botina, a opção Lançar também na aba EPI's do Sistema eSocial cria o pedido na Aprovação.","Estorno: o botão Estornar desfaz um movimento. Ele pede confirmação, e um clique duplo não lança duas vezes.","Limpar histórico do estoque (aba Configurações): zera saldos e movimentos até agora em todos os computadores; depois lance a Contagem."]},
  {t:"NR-01 · Portal DOM",p:["Conecte o Portal DOM uma vez na engrenagem (e-mail e senha do portal). O Central consulta o portal a cada 10 minutos.","Aba Situação: quem está fora do portal, convidado, em treinamento ou concluiu, com os itens feitos.","Aba Importar: salva a planilha dos que faltam e abre a tela de importação do portal; arraste o arquivo e confirme lá.","Aba Faltam dados: quem não entra na planilha por falta de CPF, WhatsApp (celular com DDD) ou data de início."]},
  {t:"Adiantamentos",p:["Ferramentas › Adiantamentos: escolha o trabalhador pelo nome, o valor, a data e em quantas parcelas descontar (uma por quinzena). Registrar adiantamento só grava; o termo de adiantamento e autorização de desconto (2 vias) fica no botão Imprimir termo de cada adiantamento da lista e pode ser emitido a qualquer momento.","Programação de adiantamentos: escolha o período e imprima a lista A4 no formato da programação de pagamento, com conta, poupança ou PIX.","Lançar desconto no Guia (clique duas vezes para confirmar) manda cada parcela para a Aprovação como Crédito/Desconto ADIANTAMENTO SALARIAL; depois de aprovado, sai no holerite.","Na Programação de pagamento, o líquido já vem descontado e o nome aparece com “− Adiantamento”. Parcela da quinzena ainda não lançada no Guia aparece num aviso.","Base legal: CLT art. 462 (desconto de adiantamento) e Constituição art. 7º, XXXIV (avulso). Sem juros, com termo assinado e sem passar de 70% do líquido da quinzena."]},
@@ -624,6 +624,7 @@ const ATALHOS=[
 /* Novidades curtas por versão (aparecem na engrenagem, no aviso de atualização e em Feedback). Uma linha por versão;
    o detalhe fica no CHANGELOG.md. Ao lançar versão, acrescente a linha nova no topo. */
 const VERSOES=[
+ ["0.1.93","Desligados com a última produção no relatório mensal"],
  ["0.1.92","Ficha de cadastro igual à do Guia"],
  ["0.1.91","Termo de EPI ocupando a folha toda, centralizado"],
  ["0.1.90","Termo de EPI centralizado e com letra maior"],
@@ -1252,7 +1253,9 @@ function relLinhas(r){
   const linhaPer=(w,nome,d,k,manual)=>{const x=o[k]||{};return {k,w,manual,nome:w?nomeRel(w):nome,cad:w?w.dtCadastro:"",matr:w?w.matricula:"",d,dom:!!x.dom,classe:x.classe||(w&&w.asoClasse&&w.asoData===d?w.asoClasse:""),empresa:x.empresa??(w&&r.empresas[w.cpf]||"")}};
   const per=[...r.periodicos.filter(e=>e.d.startsWith(mes)).map(e=>{const w=nm[e.nome];return linhaPer(w,e.nome,e.d,"p:"+(w?w.cpf:e.nome)+":"+e.d,null)}),
     ...ex("p").map(({e,w})=>linhaPer(w,normNome(e.nome),e.d,"p:"+(e.cpf||e.id)+":"+e.d,e))].filter((x,i,a)=>!fora.has(x.k)&&a.findIndex(y=>y.k===x.k)===i).sort((a,b)=>a.d.localeCompare(b.d));
-  const linhaSai=(w,k,manual)=>{const x=o[k]||{};return {k,w,manual,nome:w?nomeRel(w):normNome(manual.nome),matr:w?w.matricula:"",d:w?(w.dtSaidaEnvio||w.dtSaida||w.dtTermino||""):(manual.d||""),motivo:x.motivo??(manual&&manual.motivo)??(w?motivoPadrao(w):"")}};
+  // Desligados/afastados entram no mês pela data de ENVIO do evento ao eSocial (S-2399/S-2230; o término é retroativo).
+  // Na tela aparece a data da última produção (no Guia, a data do término de quem saiu por 90 dias sem produção é ela).
+  const linhaSai=(w,k,manual)=>{const x=o[k]||{};return {k,w,manual,nome:w?nomeRel(w):normNome(manual.nome),matr:w?w.matricula:"",d:w?(w.dtSaidaEnvio||w.dtSaida||w.dtTermino||""):(manual.d||""),ult:w?(w.ultimaProducao||""):"",envio:w?(w.dtSaidaEnvio||""):"",motivo:x.motivo??(manual&&manual.motivo)??(w?motivoPadrao(w):"")}};
   const sai=[...S.workers.filter(w=>!w.exemplo&&(w.dtSaidaEnvio||w.dtSaida||w.dtTermino||"").startsWith(mes)).map(w=>linhaSai(w,"s:"+w.cpf,null)),
     ...ex("s").map(({e,w})=>linhaSai(w,"s:"+(e.cpf||e.id),e))].filter((x,i,a)=>!fora.has(x.k)&&a.findIndex(y=>y.k===x.k)===i);
   return {adm,per,sai}}
@@ -1277,6 +1280,14 @@ async function relBuscar(r,aoAndar){
     try{const s=await lerSaida(w.origemId,w.status);w.statusSaida=w.status;if(s.dtSaida){Object.assign(w,s);if(w.status==="desligado"&&!w.dtTermino)w.dtTermino=s.dtSaida}await Store.put("workers",w,true)}catch(e){}
     feitos++;if(aoAndar)aoAndar(feitos,feitos+fila.length)}};
   await Promise.all([passo(),passo(),passo(),passo()]);
+  // Última produção de quem saiu no mês: relatório de produção do trabalhador por data (tipo 3, agrupado por data),
+  // nos 18 meses antes da saída. Só leitura. Desligados não aparecem no relatório de inatividade (só traz ativos).
+  const saiu=relLinhas(r).sai.map(x=>x.w).filter(w=>w&&w.origemId);let f2=0;
+  for(const w of saiu){const ate=w.dtSaidaEnvio||w.dtSaida||iso(TODAY),de=iso(new Date(parse(ate).getFullYear(),parse(ate).getMonth()-18,1));
+    try{const d=dom(await spost("/register/rel_folhaproducao.php",[["acao","Visualizar"],["codempresa",""],["cod_empresa",""],["empset_codigo",""],["codcolaborador",w.origemId],["cod_colaborador",w.origemId],["dt_ini",br(de)],["dt_fim",br(ate)],["tipo","3"],["opcaoAgrup","1"],["via","trabalhador"],["opcaoFiscal","1"]]));
+      const ult=[...d.querySelectorAll("tr")].map(tr=>((tr.children[0]||{}).textContent||"").trim()).filter(t=>/^\d{2}\/\d{2}\/\d{4}$/.test(t)).map(XS.d2i).sort().pop();
+      if(ult&&ult!==w.ultimaProducao){w.ultimaProducao=ult;await Store.put("workers",w,true)}}catch(e){}
+    f2++;if(aoAndar)aoAndar(f2,saiu.length)}
   r.buscadoEm=new Date().toISOString();await relSalvar(r)}
 
 /* Excel (.xlsx) sem bibliotecas: zip sem compressão + SpreadsheetML com estilos do modelo. */
@@ -1373,8 +1384,8 @@ function relHTML(){
     ${per.map(x=>`<tr><td>${nomeCel(x)}</td><td class="mono">${x.cad?br(x.cad):"—"}</td><td>${matr(x.matr)}</td><td class="mono">${br(x.d)}</td><td>${ck(x,"dom")}</td><td>${cls(x)}</td><td>${txt(x,"empresa",140)}</td><td>${tirar(x)}</td></tr>`).join("")}</tbody></table></div>`:`<div class="empty">${IS_TAURI&&!r.buscadoEm?"Busque no Sistema eSocial para ver os periódicos do mês.":"Nenhum periódico registrado no mês."}</div>`}
    ${incluir("p","Incluir periódico","Data do periódico")}
    <h3 class="eyebrow" style="margin:4px 0 -4px">Afastados e desligados · ${sai.length}</h3>
-   ${sai.length?`<div class="tbl-wrap" style="box-shadow:none"><table><thead><tr><th>Trabalhador</th><th>Matrícula</th><th>Desligado em</th><th>Motivo</th><th></th></tr></thead><tbody>
-    ${sai.map(x=>`<tr><td>${nomeCel(x)}</td><td>${matr(x.matr)}</td><td class="mono">${x.d?br(x.d):"—"}</td><td style="width:50%">${txt(x,"motivo",300)}</td><td>${tirar(x)}</td></tr>`).join("")}</tbody></table></div>`:`<div class="empty">Ninguém afastado ou desligado em ${ymLabel(mes)}.</div>`}
+   ${sai.length?`<div class="tbl-wrap" style="box-shadow:none"><table><thead><tr><th>Trabalhador</th><th>Matrícula</th><th>Última produção</th><th>Motivo</th><th></th></tr></thead><tbody>
+    ${sai.map(x=>`<tr><td>${nomeCel(x)}</td><td>${matr(x.matr)}</td><td class="mono">${x.ult?br(x.ult):"—"}<div class="small muted">${x.envio?"Envio eSocial "+br(x.envio):x.d?"Saída "+br(x.d):""}</div></td><td style="width:50%">${txt(x,"motivo",300)}</td><td>${tirar(x)}</td></tr>`).join("")}</tbody></table></div>`:`<div class="empty">Ninguém afastado ou desligado em ${ymLabel(mes)}.</div>`}
    ${incluir("s","Incluir afastado ou desligado","Data")}
   </section>`}
 function bindRel(){if(!$("#relMes"))return;
