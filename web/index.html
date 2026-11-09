@@ -12,8 +12,8 @@
   --bg:#F5F5F7; --surface:#FFFFFF; --surface-2:#F5F5F7; --ink:#1D1D1F; --muted:#5E5E63; --faint:#6E6E73; --line:#E5E5EA; --line-2:#D2D2D7;
   --accent:#0071E3; --accent-ink:#FFFFFF; --accent-soft:#E8F1FD; --accent-2:#0077ED;
   --side:rgba(246,246,248,.82);
-  --crit:#D70015; --crit-soft:#FDEDEF; --warn:#B25000; --warn-soft:#FFF4E5; --ok:#248A3D; --ok-soft:#EAF7EE;
-  --blue:#0071E3; --blue-soft:#E8F1FD; --amber:#B25000; --amber-soft:#FFF4E5; --slate:#6E6E73; --slate-soft:#F2F2F7;
+  --crit:#D70015; --crit-soft:#FDEDEF; --warn:#B25000; --warn-soft:#FFF4E5; --ok:#1E7A34; --ok-soft:#EAF7EE;
+  --blue:#0062C4; --blue-soft:#E8F1FD; --amber:#B25000; --amber-soft:#FFF4E5; --slate:#6E6E73; --slate-soft:#F2F2F7;
   --shadow:0 1px 1px rgba(0,0,0,.03),0 4px 14px rgba(0,0,0,.05);
   --shadow-lg:0 20px 60px rgba(0,0,0,.18);
   --f-display:-apple-system,BlinkMacSystemFont,"SF Pro Display","Inter","Segoe UI Variable Display","Segoe UI",system-ui,sans-serif;
@@ -51,18 +51,18 @@ button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
 .mark{width:36px;height:36px;border-radius:9px;flex:none;background:linear-gradient(180deg,#2A8CFF,#0062CC);color:#fff;display:grid;place-items:center;font-family:var(--f-display);font-weight:700;font-size:18px;box-shadow:0 1px 2px rgba(0,0,0,.15),inset 0 1px 0 rgba(255,255,255,.25)}
 .brand-t{display:flex;flex-direction:column;min-width:0;line-height:1.2}
 .brand-t b{font-family:var(--f-display);font-size:15px;font-weight:600;letter-spacing:-.02em}
-.brand-t span{font-size:11.5px;color:var(--muted)}
+.brand-t span{font-size:12px;color:var(--muted)}
 .nav{display:flex;flex-direction:column;gap:1px}
-.nav-l{font-size:11px;font-weight:600;color:var(--faint);padding:14px 10px 5px;letter-spacing:.01em}
+.nav-l{font-size:12px;font-weight:600;color:var(--faint);padding:14px 10px 5px;letter-spacing:.01em}
 .nav button{all:unset;cursor:pointer;display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:8px;color:var(--ink);font-weight:500;font-size:13.5px}
 .nav button .ico{color:var(--accent)}
 .nav button:hover{background:color-mix(in srgb,var(--ink) 6%,transparent)}
 .nav button[aria-current="page"]{background:var(--accent);color:#fff}
 .nav button[aria-current="page"] .ico{color:#fff}
 .nav button:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 45%,transparent)}
-.nav .count{margin-left:auto;font-size:11px;background:var(--crit);color:#fff;border-radius:20px;padding:0 7px;font-weight:600;line-height:18px}
+.nav .count{margin-left:auto;font-size:11.5px;background:var(--crit);color:#fff;border-radius:20px;padding:0 7px;font-weight:600;line-height:18px}
 .nav button[aria-current="page"] .count{background:#fff;color:var(--accent)}
-.side-foot{margin-top:auto;padding:12px 10px;font-size:11.5px;color:var(--muted);display:flex;flex-direction:column;gap:6px;border-top:1px solid var(--line)}
+.side-foot{margin-top:auto;padding:12px 10px;font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:6px;border-top:1px solid var(--line)}
 .side-foot .row2{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .side-foot button.link{all:unset;cursor:pointer;color:var(--accent);font-weight:500}
 .gear{all:unset;cursor:pointer;width:30px;height:30px;display:grid;place-items:center;border-radius:8px;color:var(--muted)}
@@ -100,12 +100,12 @@ main{min-width:0;padding-block:36px 0;padding-left:max(16px,env(safe-area-inset-
 .sc:hover{background:color-mix(in srgb,var(--accent) 7%,var(--surface-2))}
 .sc a{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;text-decoration:none;color:inherit}
 .sc .badge{width:40px;height:40px;border-radius:10px;display:grid;place-items:center;font-weight:600;font-size:14px;color:#fff}
-.sc .t-sindicato{background:linear-gradient(180deg,#2A8CFF,#0062CC)} .sc .t-tomadora{background:linear-gradient(180deg,#FFB340,#FF9500)}
-.sc .t-pesquisa{background:linear-gradient(180deg,#9F7AFF,#7D4CDB)} .sc .t-governo{background:linear-gradient(180deg,#A1A1A6,#7C7C80)}
+.sc .t-sindicato{background:linear-gradient(180deg,#0A6FDB,#0055B0)} .sc .t-tomadora{background:linear-gradient(180deg,#C25E00,#9E4C00)}
+.sc .t-pesquisa{background:#0A5F67} .sc .t-governo{background:linear-gradient(180deg,#6E6E73,#525257)}
 .sc .txt{display:flex;flex-direction:column;min-width:0;line-height:1.3}
 .sc b{font-weight:600;font-size:14.5px}
 .sc span{font-size:12.5px;color:var(--muted)}
-.sc em{font-style:normal;font-size:11px;color:var(--faint);font-weight:600;text-transform:capitalize}
+.sc em{font-style:normal;font-size:12px;color:var(--faint);font-weight:600;text-transform:capitalize}
 .sc .go{color:var(--faint)} .sc:hover .go{color:var(--accent)}
 .sc-act{display:flex;flex-wrap:wrap;gap:6px;padding-top:10px;border-top:1px solid var(--line)}
 
@@ -122,12 +122,12 @@ main{min-width:0;padding-block:36px 0;padding-left:max(16px,env(safe-area-inset-
 [hidden]{display:none!important}
 .cal-wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
 .cal{background:var(--surface-2);border:1px solid var(--line);border-radius:16px;overflow:hidden;padding:0 10px 10px}
-.cal-h{font-family:var(--f-display);font-weight:700;font-size:17px;margin:0 -10px 8px;padding:10px 14px;background:color-mix(in srgb,var(--accent) 14%,var(--surface));color:var(--accent);border-bottom:1px solid var(--line)}.cal-h span{font-weight:500;color:var(--muted)}
-.cal-g{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}.cal-w{font-size:11px;color:var(--muted);text-align:center}
+.cal-h{font-family:var(--f-display);font-weight:700;font-size:17px;margin:0 -10px 8px;padding:10px 14px;background:color-mix(in srgb,var(--accent) 14%,var(--surface));color:var(--blue);border-bottom:1px solid var(--line)}.cal-h span{font-weight:500;color:var(--muted)}
+.cal-g{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}.cal-w{font-size:12px;color:var(--muted);text-align:center}
 .cal-d{all:unset;box-sizing:border-box;min-height:52px;border-radius:10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:12px;color:var(--muted)}
-.cal-d.qqs{background:var(--surface);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}.cal-d[disabled]{opacity:.35;cursor:default}.cal-d b{font-size:14px}.cal-d span{font-size:10px!important;line-height:1.1;text-align:center}.cal-d.tem{background:var(--accent-soft);cursor:pointer}.cal-d.tem span{font-size:11px;font-weight:700;color:var(--accent)}
+.cal-d.qqs{background:var(--surface);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}.cal-d[disabled]{opacity:.35;cursor:default}.cal-d b{font-size:14px}.cal-d span{font-size:11px!important;line-height:1.1;text-align:center}.cal-d.tem{background:var(--accent-soft);cursor:pointer}.cal-d.tem span{font-size:11.5px;font-weight:700;color:var(--accent)}
 .cal-d.marc{background:var(--accent);color:#fff}.cal-d.marc span{color:#fff}.cal-d.sel{outline:2px solid var(--ink)}.cal-d.hoje{box-shadow:inset 0 0 0 2px var(--accent)}.cal-d:focus-visible{outline:2px solid var(--accent)}
-.cal-d .cal-v{color:var(--crit)!important;font-weight:700;white-space:nowrap;font-size:9.5px!important}.cal-d.marc .cal-v{color:#fff!important}.cal-d.venc{box-shadow:inset 0 -3px 0 var(--crit)}
+.cal-d .cal-v{color:var(--crit)!important;font-weight:700;white-space:nowrap;font-size:11px!important;letter-spacing:-.01em}.cal-d.marc .cal-v{color:#fff!important}.cal-d.venc{box-shadow:inset 0 -3px 0 var(--crit)}
 .field label{font-size:12.5px;font-weight:500;color:var(--muted)}
 .field input,.field select,.field textarea,.inp{border:1px solid var(--line-2);background:var(--surface);border-radius:var(--r-sm);padding:9px 12px;width:100%;min-width:0;transition:border-color .15s,box-shadow .15s}
 .field input:focus,.field select:focus,.field textarea:focus,.inp:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 22%,transparent)}
@@ -158,10 +158,10 @@ tbody tr:last-child td{border-bottom:0}
 tbody tr.click{cursor:pointer;transition:background .12s} tbody tr.click:hover{background:color-mix(in srgb,var(--accent) 5%,transparent)}
 td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
 .who{display:flex;align-items:center;gap:12px;min-width:0}
-.av{width:34px;height:34px;border-radius:50%;flex:none;display:grid;place-items:center;font-weight:600;font-size:12.5px;background:linear-gradient(180deg,#B9BBC3,#8E9099);color:#fff}
+.av{width:34px;height:34px;border-radius:50%;flex:none;display:grid;place-items:center;font-weight:600;font-size:12.5px;background:linear-gradient(180deg,#7A7C85,#5D5F68);color:#fff}
 .pill{display:inline-flex;align-items:center;gap:5px;font-size:12px;border-radius:980px;padding:2px 9px;font-weight:500;white-space:nowrap}
 .pill.crit{background:var(--crit-soft);color:var(--crit)} .pill.warn{background:var(--warn-soft);color:var(--warn)} .pill.ok{background:var(--ok-soft);color:var(--ok)} .pill.info{background:var(--blue-soft);color:var(--blue)}
-.evt{font-family:var(--f-mono);font-size:10.5px;border-radius:5px;padding:1px 5px;background:color-mix(in srgb,var(--ink) 6%,transparent);color:var(--muted)}
+.evt{font-family:var(--f-mono);font-size:11.5px;border-radius:5px;padding:1px 5px;background:color-mix(in srgb,var(--ink) 6%,transparent);color:var(--muted)}
 .list{display:flex;flex-direction:column}
 .list .row{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line)}
 .list .row:last-child{border-bottom:0}
@@ -242,7 +242,7 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
 .ficha h1{font-size:22px;margin:16px 0 6px;letter-spacing:-.02em}.ficha h2{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:#6e6e73;margin:16px 0 6px}
 .ficha table{width:100%;min-width:0;border-collapse:collapse}.ficha th,.ficha td{border-bottom:1px solid #e5e5ea;padding:6px 4px;text-align:left;font-size:12.5px;background:#fff;color:#1d1d1f;text-transform:none;letter-spacing:0;font-weight:400}.ficha th{width:32%;color:#6e6e73}
 .ficha footer{display:flex;justify-content:space-between;gap:20px;margin-top:56px;text-align:center;font-size:12px;color:#1d1d1f}
-.tams{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}.tam{display:flex;flex-direction:column;align-items:center;min-width:46px;padding:6px 8px;border-radius:10px;background:var(--surface-2);font-variant-numeric:tabular-nums;font-size:15px}.tam b{font-size:11px;color:var(--muted);font-weight:600}.tam.baixo{background:var(--warn-soft);color:var(--warn)}.tam.zero{background:var(--crit-soft);color:var(--crit)}
+.tams{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}.tam{display:flex;flex-direction:column;align-items:center;min-width:46px;padding:6px 8px;border-radius:10px;background:var(--surface-2);font-variant-numeric:tabular-nums;font-size:15px}.tam b{font-size:12px;color:var(--muted);font-weight:600}.tam.baixo{background:var(--warn-soft);color:var(--warn)}.tam.zero{background:var(--crit-soft);color:var(--crit)}
 .vale-folha{background:#fff;color:#1d1d1f;width:100%;max-width:794px;margin:0 auto;font:12px/1.4 Arial,sans-serif;padding:16px}
 .vale-via{border:1.5px solid #222;padding:14px 22px 8px;height:112mm;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between;font-family:Arial,sans-serif}
 .vale-l1{display:flex;align-items:flex-end;gap:20px}.vale-tit{font-size:15px;flex:1}
@@ -302,24 +302,24 @@ body{background:var(--mesh),var(--bg);background-attachment:fixed}
 .brand{padding:2px 6px 14px}
 .side-acoes{display:flex;flex-direction:column;gap:8px;padding:0 4px 8px}
 .lancar-w{position:relative}
-.btn.lancar{width:100%;justify-content:center;padding:10px 16px;font-weight:600;font-size:14.5px;background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 88%,#fff),var(--accent));box-shadow:0 1px 0 rgba(255,255,255,.35) inset,0 6px 18px color-mix(in srgb,var(--accent) 35%,transparent)}
+.btn.lancar{width:100%;justify-content:center;padding:10px 16px;font-weight:600;font-size:14.5px;background:linear-gradient(180deg,var(--accent),color-mix(in srgb,var(--accent) 82%,#000));box-shadow:0 1px 0 rgba(255,255,255,.35) inset,0 6px 18px color-mix(in srgb,var(--accent) 35%,transparent)}
 .menu-g{position:absolute;left:0;right:0;top:calc(100% + 6px);z-index:30;border-radius:18px;padding:6px;display:flex;flex-direction:column;gap:2px;background:var(--surface);border:1px solid var(--line-2);box-shadow:var(--shadow-lg);animation:pop .18s cubic-bezier(.2,.8,.2,1)}
 .menu-g button{all:unset;cursor:pointer;display:flex;gap:10px;align-items:center;padding:9px 10px;border-radius:12px}
-.menu-g button .ico{color:var(--accent)}.menu-g button span{display:flex;flex-direction:column;line-height:1.25}.menu-g small{font-size:11.5px;color:var(--muted)}
+.menu-g button .ico{color:var(--accent)}.menu-g button span{display:flex;flex-direction:column;line-height:1.25}.menu-g small{font-size:12px;color:var(--muted)}
 .menu-g button:hover,.menu-g button:focus-visible{background:color-mix(in srgb,var(--accent) 12%,transparent);outline:none}
 .busca-g{all:unset;cursor:pointer;display:flex;align-items:center;gap:8px;padding:7px 12px;border-radius:980px;background:color-mix(in srgb,var(--ink) 6%,transparent);color:var(--muted);font-size:13.5px}
 .busca-g:hover{background:color-mix(in srgb,var(--ink) 10%,transparent)}.busca-g kbd{margin-left:auto;font:11px var(--f-mono);border:1px solid var(--line-2);border-radius:6px;padding:1px 5px}
 .busca-g:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 45%,transparent)}
 .nav{overflow-y:auto;flex:1;gap:2px;padding:2px 2px 8px;scrollbar-width:thin}
 .nav-g{display:flex;flex-direction:column}
-.nav .nav-l{all:unset;cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-size:11.5px;font-weight:600;color:var(--faint);padding:12px 10px 4px;border-radius:6px}
+.nav .nav-l{all:unset;cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:600;color:var(--faint);padding:12px 10px 4px;border-radius:6px}
 .nav .nav-l::after{content:"";width:6px;height:6px;border-right:1.6px solid currentColor;border-bottom:1.6px solid currentColor;transform:rotate(45deg);transition:transform .2s;margin-right:4px}
 .nav-g.fechado .nav-l::after{transform:rotate(-45deg)}.nav-g.fechado .nav-i{display:none}
 .nav .nav-l:hover{color:var(--ink)}.nav .nav-l:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 45%,transparent)}
 .nav-i{display:flex;flex-direction:column;gap:2px}
 .nav button[data-v]{padding:8px 10px;border-radius:12px;min-height:22px}
-.nav button[aria-current="page"]{background:color-mix(in srgb,var(--accent) 15%,transparent);color:var(--accent);box-shadow:0 0 0 1px color-mix(in srgb,var(--accent) 22%,transparent) inset}
-.nav button[aria-current="page"] .ico{color:var(--accent)}
+.nav button[aria-current="page"]{background:color-mix(in srgb,var(--accent) 15%,transparent);color:var(--blue);box-shadow:0 0 0 1px color-mix(in srgb,var(--accent) 22%,transparent) inset}
+.nav button[aria-current="page"] .ico{color:var(--blue)}
 .nav button[aria-current="page"] .count{background:var(--crit);color:#fff}
 .side-foot{border-top:1px solid color-mix(in srgb,var(--ink) 8%,transparent);padding:10px 8px 2px}
 /* conteúdo: superfícies sólidas com borda fina */
@@ -354,6 +354,8 @@ td .btn{white-space:nowrap}.busca-r .search,.modal .search{flex:none}.busca-r .s
 /* Telas baixas (notebook 1366×768): barra lateral mais compacta para caber todos os grupos; o resto rola com indicação. */
 @media (min-width:900px) and (max-height:820px){.brand{padding-bottom:8px}.side-acoes{gap:6px;padding-bottom:4px}.nav .nav-l{padding:8px 10px 2px}.nav button[data-v]{padding:5px 10px;min-height:20px}.side-foot{gap:3px;padding-top:6px}}
 .nav{mask-image:linear-gradient(to bottom,#000 calc(100% - 18px),transparent);-webkit-mask-image:linear-gradient(to bottom,#000 calc(100% - 18px),transparent)}
+p,.head p,.note,.small{text-wrap:pretty}
+.side-foot .mono{font-size:1em}
 </style>
 
 <div class="app">
@@ -394,7 +396,7 @@ td .btn{white-space:nowrap}.busca-r .search,.modal .search{flex:none}.busca-r .s
     </nav>
     <button class="tema-b" id="btnTema" type="button"></button>
     <div class="side-foot">
-      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.94</b></span><span id="runtime">Modo navegador</span></div>
+      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.95</b></span><span id="runtime">Modo navegador</span></div>
       <span id="syncInfo"></span>
       <button class="link" id="btnSync" type="button" hidden>Sincronizar tudo agora</button>
       <span id="updInfo">Verificando atualizações…</span>
@@ -412,7 +414,7 @@ td .btn{white-space:nowrap}.busca-r .search,.modal .search{flex:none}.busca-r .s
 /* Tema: claro, escuro ou automático (segue o Windows). O botão de lua/sol fixa o modo neste computador. */
 const temaEscuro=()=>{const t=document.documentElement.dataset.theme;return t?t==="dark":matchMedia("(prefers-color-scheme: dark)").matches};
 try{const t=localStorage.getItem("cs_tema");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}
-const APP_VERSION="0.1.94";
+const APP_VERSION="0.1.95";
 /* ---------- utilidades ---------- */
 const $=(s,r=document)=>r.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -431,7 +433,23 @@ const ymLabel=s=>{const[a,b]=s.split("-").map(Number);return `${MESES[b-1]}/${a}
 const prevYm=s=>{const[a,b]=s.split("-").map(Number);const d=new Date(a,b-2,1);return ym(d)};
 const fmtCPF=v=>{const d=String(v||"").replace(/\D/g,"").slice(0,11);return d.replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d{1,2})$/,"$1-$2")};
 const cpfOk=v=>{const c=String(v||"").replace(/\D/g,"");if(c.length!==11||/^(\d)\1+$/.test(c))return false;let s=0;for(let i=0;i<9;i++)s+=+c[i]*(10-i);let r=(s*10)%11%10;if(r!==+c[9])return false;s=0;for(let i=0;i<10;i++)s+=+c[i]*(11-i);r=(s*10)%11%10;return r===+c[10]};
-function toast(msg){const t=document.createElement("div");t.className="toast";t.setAttribute("role","status");t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2800)}
+/* Registro interno (só para o Claude otimizar o programa; nada disso aparece na tela):
+   erros de script, promessas sem tratamento, comandos do programa que falharam e avisos de falha mostrados ao usuário,
+   mais métricas padrão por dia (telas abertas e tempo de desenho, tempo de abertura, sincronizações). Sem dados pessoais:
+   CPF e números longos são mascarados. Guardado no PC (até 300 erros e 30 dias) e enviado a cada minuto, se mudou, para
+   central-logs/<pc>.jsonl no repositório PRIVADO de dados (ou na pasta compartilhada). */
+const Diag={max:300,sujo:false,
+  get(){try{return JSON.parse(LS.get("cs_diag")||"{}")}catch(e){return{}}},
+  set(d){try{LS.set("cs_diag",JSON.stringify(d))}catch(e){}},
+  limpo:s=>String(s==null?"":s).replace(/\d{3}\.?\d{3}\.?\d{3}-?\d{2}/g,"[cpf]").replace(/\d{8,}/g,"[num]").slice(0,700),
+  erro(tipo,msg,onde){try{const d=this.get();d.erros=(d.erros||[]).concat({t:new Date().toISOString(),tipo,tela:typeof current!=="undefined"?current:"",versao:typeof APP_VERSION!=="undefined"?APP_VERSION:"",msg:this.limpo(msg),onde:this.limpo(onde)}).slice(-this.max);this.set(d);this.sujo=true}catch(e){}},
+  conta(grupo,chave,ms){try{const d=this.get(),dia=new Date().toISOString().slice(0,10);d.m=d.m||{};const g=((d.m[dia]=d.m[dia]||{})[grupo]=d.m[dia][grupo]||{}),x=g[chave]=g[chave]||{n:0,ms:0};x.n++;if(ms)x.ms+=Math.round(ms);
+    const dias=Object.keys(d.m).sort();while(dias.length>30)delete d.m[dias.shift()];this.set(d);this.sujo=true}catch(e){}},
+  async enviar(){if(!this.sujo||!IS_TAURI||!compAtivo())return;this.sujo=false;
+    try{await compGravar("central-logs",pcId()+".jsonl",JSON.stringify({pc:pcId(),versao:APP_VERSION,enviado:new Date().toISOString(),...this.get()}))}catch(e){this.sujo=true}}};
+window.addEventListener("error",e=>Diag.erro("script",e.message,`${String(e.filename||"").split("/").pop()}:${e.lineno}:${e.colno} ${e.error&&e.error.stack||""}`));
+window.addEventListener("unhandledrejection",e=>{const r=e.reason;Diag.erro("promessa",r&&(r.message||r),r&&r.stack)});
+function toast(msg){if(/não foi possível|não consegui|erro|falh/i.test(msg))Diag.erro("aviso",msg);const t=document.createElement("div");t.className="toast";t.setAttribute("role","status");t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2800)}
 const IS_TAURI=!!(window.__TAURI__||window.__TAURI_INTERNALS__);
 const ICONS={
   home:'<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M10 21v-6h4v6"/>',
@@ -608,8 +626,9 @@ document.addEventListener("keydown",e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLower
 function render(){
   document.querySelectorAll("#nav button[data-v]").forEach(b=>b.setAttribute("aria-current",b.dataset.v===current?"page":"false"));navGrupos();
   const crit=S.workers.filter(w=>nivel(w)==="crit").length;const nc=$("#navCount");nc.hidden=!crit;nc.textContent=crit;
+  const t0=performance.now();
   ({painel:vPainel,trabalhadores:vTrab,pendencias:vPend,fatiador:vFat,relatorios:vRel,entrevista:vEnt,modelos:vMod,feedback:vFeed,estoque:vEst,asos:vAsos,nrs:vNrs,aprovacao:vAprov,pagamentos:vPag,adiantamentos:vAdt,nr01:vNr01,previsao:vPrev})[current]();
-  asoBadge();aprovBadge();
+  asoBadge();aprovBadge();Diag.conta("tela",current,performance.now()-t0);
 }
 const exBanner=()=>S.workers.some(w=>w.exemplo)?`<div class="banner"><span><b>Dados de exemplo.</b> Os trabalhadores marcados como exemplo servem só para testar as telas.</span><button class="btn sm" id="clrEx">Remover exemplos</button></div>`:"";
 function bindBanner(){const b=$("#clrEx");if(b)b.onclick=limparExemplos}
@@ -627,6 +646,7 @@ const ATALHOS=[
 /* Novidades curtas por versão (aparecem na engrenagem, no aviso de atualização e em Feedback). Uma linha por versão;
    o detalhe fica no CHANGELOG.md. Ao lançar versão, acrescente a linha nova no topo. */
 const VERSOES=[
+ ["0.1.95","Letras maiores, mais contraste e registro interno de erros"],
  ["0.1.94","Revisão de segurança, contraste e menu em telas baixas"],
  ["0.1.93","Desligados com a última produção no relatório mensal"],
  ["0.1.92","Ficha de cadastro igual à do Guia"],
@@ -958,7 +978,7 @@ async function aplicarPlano(pl,marca){
    em lotes de até 50 trabalhadores, priorizando novos e quem mudou de situação. */
 const SYNC_MS=5*60*1000,LOTE=50;
 const Sync={rodando:false,cfg:null,erro:"",feitos:0,total:0,ultima:LS.get("cs_sync_ultima")||""};
-const tinvoke=(c,a)=>window.__TAURI__.core.invoke(c,a||{});
+const tinvoke=(c,a)=>window.__TAURI__.core.invoke(c,a||{}).catch(e=>{if(!["cred_status","gh_cred_status","dom_cred_status"].includes(c))Diag.erro("comando",`${c}: ${e&&e.message||e}`);throw e});
 const sget=c=>tinvoke("esocial_get",{caminho:c});
 const spost=(c,campos)=>tinvoke("esocial_post",{caminho:c,campos});
 const dom=t=>new DOMParser().parseFromString(t,"text/html");
@@ -1009,7 +1029,7 @@ async function syncCiclo(manual,tudo){
   if(!IS_TAURI)return;if(Sync.rodando){if(manual)toast("A sincronização já está em andamento");return}
   try{Sync.cfg=await tinvoke("cred_status")}catch(e){Sync.cfg={configurado:false}}
   if(!Sync.cfg.configurado){syncInfo();if(manual)openConfig();return}
-  Sync.rodando=true;Sync.erro="";Sync.feitos=0;Sync.total=0;syncInfo();
+  Sync.rodando=true;Sync.erro="";Sync.feitos=0;Sync.total=0;syncInfo();const tS=performance.now();
   try{
     const lista=async()=>[...(await sget("/funcoes/procuraSimples.php?key=%25&field2=nome&field1=cod_colaborador&label=C&table=colaborador&title=x")).matchAll(/name=id value=(\d+)/g)].map(m=>m[1]);
     let ids=await lista();if(!ids.length){await tinvoke("esocial_testar");ids=await lista()}
@@ -1050,7 +1070,7 @@ async function syncCiclo(manual,tudo){
     if(primeira||manual)toast(`Sincronização concluída: ${recs.length} fichas lidas, ${pl.novos.length} novas e ${pl.atualiza.length} atualizadas${falhas?` · ${falhas} com erro`:""}`);
     if(tudo)LS.set("cs_sync_tudo",agora);
   }catch(e){Sync.erro=String(e&&e.message||e).slice(0,140)}
-  finally{Sync.rodando=false;syncInfo();rerenderSeguro()}
+  finally{Sync.rodando=false;Diag.conta("sync",Sync.erro?"com erro":(tudo?"completa":"normal"),performance.now()-tS);if(Sync.erro)Diag.erro("sync",Sync.erro);syncInfo();rerenderSeguro()}
 }
 function conexaoHTML(){return conexaoESHTML()+domCfgHTML()}
 function conexaoESHTML(){
@@ -3146,6 +3166,7 @@ function emitirFicha(w){
   render();syncInfo();
   if(IS_TAURI){setTimeout(()=>syncCiclo(false),2500);setInterval(()=>syncCiclo(false),SYNC_MS)}
   // Estoque e pasta compartilhada: lê o que os outros computadores gravaram a cada minuto.
-  const comp=async()=>{await asoVerificarPasta(false);await puxarCompartilhado();await docsSincronizar();await estCarregar();if(current==="estoque")rerenderSeguro()};
+  Diag.conta("inicio","abrir",performance.now());
+  const comp=async()=>{Diag.enviar();await asoVerificarPasta(false);await puxarCompartilhado();await docsSincronizar();await estCarregar();if(current==="estoque")rerenderSeguro()};
   if(IS_TAURI){try{GH.cfg=await tinvoke("gh_cred_status")}catch(e){}}await centralPasta();await estCarregar();if(["estoque","asos","nrs"].includes(current))render();if(IS_TAURI){setTimeout(comp,4000);setInterval(comp,60000)}})();
 </script>

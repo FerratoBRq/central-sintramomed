@@ -5,7 +5,8 @@
 
 use std::path::PathBuf;
 
-const SUBPASTAS: [&str; 2] = ["central-estoque", "central-dados"];
+// central-logs: registro interno de erros e métricas de cada PC (não aparece no programa; lido pelo Claude).
+const SUBPASTAS: [&str; 3] = ["central-estoque", "central-dados", "central-logs"];
 
 fn nome_valido(nome: &str, ext: &str) -> bool {
     nome.len() <= 90

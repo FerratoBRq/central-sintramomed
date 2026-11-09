@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.95 — 09/11/2026
+- Design revisado com o detector do Impeccable (github.com/pbakaus/impeccable): de 84 achados para 1 (o fundo do calendário, mantido a pedido). Texto mínimo de 12 px (rótulos 11,5 px), azul e verde mais escuros sobre fundos claros, selos dos atalhos e botão Lançar com contraste 4,5:1, sem gradiente roxo, parágrafos sem palavra sozinha na última linha. Novos `DESIGN.md`, `PRODUCT.md` e `ferramentas/design-check.js`.
+- Registro interno de erros e métricas (não aparece na tela): erros de script, comandos que falharam, avisos de falha e sincronizações, mais telas abertas e tempos, por PC, em `central-logs/` no repositório privado de dados. CPF e números longos mascarados.
+
 ## 0.1.94 — 05/11/2026
 - Segurança: a leitura do Sistema eSocial por GET recusa qualquer endereço com ação que não seja de consulta (só Procurar/Procura/Visualizar), para nenhuma página antiga do Guia executar exclusão por link (`get_permitido` em esocial.rs, com teste). As fichas do Guia abertas no Central ficam num quadro sem scripts (sandbox) e sem atributos on* nem links javascript:.
 - Acessibilidade: textos secundários (rótulos do menu, cabeçalhos de tabela) com mais contraste no modo claro (de 3,6:1 para mais de 4,5:1); nomes nas dicas do calendário escapados.
