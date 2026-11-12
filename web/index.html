@@ -396,7 +396,7 @@ p,.head p,.note,.small{text-wrap:pretty}
     </nav>
     <button class="tema-b" id="btnTema" type="button"></button>
     <div class="side-foot">
-      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.95</b></span><span id="runtime">Modo navegador</span></div>
+      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.96</b></span><span id="runtime">Modo navegador</span></div>
       <span id="syncInfo"></span>
       <button class="link" id="btnSync" type="button" hidden>Sincronizar tudo agora</button>
       <span id="updInfo">Verificando atualizações…</span>
@@ -414,7 +414,7 @@ p,.head p,.note,.small{text-wrap:pretty}
 /* Tema: claro, escuro ou automático (segue o Windows). O botão de lua/sol fixa o modo neste computador. */
 const temaEscuro=()=>{const t=document.documentElement.dataset.theme;return t?t==="dark":matchMedia("(prefers-color-scheme: dark)").matches};
 try{const t=localStorage.getItem("cs_tema");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}
-const APP_VERSION="0.1.95";
+const APP_VERSION="0.1.96";
 /* ---------- utilidades ---------- */
 const $=(s,r=document)=>r.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -646,6 +646,7 @@ const ATALHOS=[
 /* Novidades curtas por versão (aparecem na engrenagem, no aviso de atualização e em Feedback). Uma linha por versão;
    o detalhe fica no CHANGELOG.md. Ao lançar versão, acrescente a linha nova no topo. */
 const VERSOES=[
+ ["0.1.96","Modelos para impressão saem impressos (não mais em branco), em tamanho real"],
  ["0.1.95","Letras maiores, mais contraste e registro interno de erros"],
  ["0.1.94","Revisão de segurança, contraste e menu em telas baixas"],
  ["0.1.93","Desligados com a última produção no relatório mensal"],
@@ -1582,14 +1583,37 @@ async function novoModelo(file){
     const d=await saveDoc(MOD_ID,"Modelo",nome,file,"application/pdf");d.descricao=$("#nmDesc").value.trim();d.paginas=paginas;await Store.put("docs",d);
     close();toast("Modelo adicionado");vMod()};
 }
+// Bytes do PDF do modelo: o anexo guardado neste computador; se faltar (veio de outro PC e o arquivo não chegou), busca de novo no compartilhamento.
+async function modeloBytes(md){
+  if(!md.doc)return (await fetch(md.f)).arrayBuffer();
+  const d=md.doc;if(d.blob&&d.blob.size)return d.blob.arrayBuffer();
+  const b=compAtivo()?await compArqLer(d.id+".b64").catch(()=>null):null;
+  if(!b)throw new Error("O arquivo deste modelo não está neste computador");
+  d.blob=b64Blob(b,d.mime||"application/pdf");await Store.put("docs",d,true);return d.blob.arrayBuffer()}
+// Imprime as páginas numa folha A4 em tamanho real (sem a margem das outras impressões) e só depois que as imagens carregaram:
+// chamar a impressão antes disso saía com as folhas em branco.
+async function imprimirPaginas(imgs,deitado){
+  document.querySelectorAll("iframe.print-paginas").forEach(f=>f.remove());
+  const [w,h]=deitado?["297mm","210mm"]:["210mm","297mm"],f=document.createElement("iframe");
+  f.className="print-paginas";f.title="Impressão do modelo";f.setAttribute("aria-hidden","true");f.tabIndex=-1;
+  f.style.cssText=`position:fixed;left:-10000px;top:0;width:${w};height:${h};border:0`;
+  const pronto=new Promise(r=>f.onload=r);
+  f.srcdoc=`<!doctype html><html><head><meta charset="utf-8"><title>Modelo</title><style>@page{size:A4 ${deitado?"landscape":"portrait"};margin:0}html,body{margin:0;padding:0;background:#fff}img{display:block;width:${w};height:${h};object-fit:contain;break-after:page;page-break-after:always}img:last-child{break-after:auto;page-break-after:auto}</style></head><body>${imgs.map(s=>`<img src="${s}" alt="">`).join("")}</body></html>`;
+  document.body.appendChild(f);await pronto;
+  await Promise.all([...f.contentDocument.images].map(i=>i.decode().catch(()=>new Promise(r=>{if(i.complete)r();else i.onload=i.onerror=r}))));
+  f.contentWindow.focus();f.contentWindow.print()}
 async function abrirModelo(md){
   const m=document.createElement("div");m.className="modal";
-  m.innerHTML=`<div class="scrim"></div><div class="modal-c" role="dialog" aria-modal="true" aria-label="${esc(md.n)}"><div class="drawer-h"><div><div class="eyebrow">A4 · ${md.p} páginas</div><h2 style="font-size:19px">${esc(md.n)}</h2></div><div class="toolbar"><button class="btn primary" id="mPrint" disabled>Imprimir</button><button class="btn" id="mClose">Fechar</button></div></div><div class="drawer-b" id="mBody"><div class="empty">Carregando…</div></div></div>`;
+  m.innerHTML=`<div class="scrim"></div><div class="modal-c" role="dialog" aria-modal="true" aria-label="${esc(md.n)}"><div class="drawer-h"><div><div class="eyebrow">A4 · ${md.p} página${md.p==1?"":"s"}</div><h2 style="font-size:19px">${esc(md.n)}</h2></div><div class="toolbar"><button class="btn primary" id="mPrint" disabled>Imprimir</button><button class="btn" id="mClose">Fechar</button></div></div><div class="drawer-b" id="mBody"><div class="empty">Carregando…</div></div></div>`;
   document.body.appendChild(m);const close=()=>m.remove();m.querySelector(".scrim").onclick=close;$("#mClose").onclick=close;
-  try{const bytes=md.doc?await md.doc.blob.arrayBuffer():await (await fetch(md.f)).arrayBuffer();const pdf=await pdfjsLib.getDocument({data:new Uint8Array(bytes)}).promise;const imgs=[];$("#mBody").innerHTML="";
-    for(let i=1;i<=pdf.numPages;i++){const c=await renderPage(pdf,i,1240);c.style.width="100%";$("#mBody").appendChild(c);imgs.push(c.toDataURL("image/png"))}
-    const b=$("#mPrint");b.disabled=false;b.onclick=()=>{$("#printArea").innerHTML=imgs.map(s=>`<img class="pagina" src="${s}" alt="">`).join("");if(IS_TAURI)window.print();else toast("A impressão funciona no programa instalado.")}}
-  catch(e){$("#mBody").innerHTML=`<div class="empty">Não foi possível abrir o modelo.</div>`}
+  try{const pdf=await pdfjsLib.getDocument({data:new Uint8Array(await modeloBytes(md))}).promise,imgs=[],cs=[];$("#mBody").innerHTML="";
+    // ~200 dpi na folha A4 para a impressão sair nítida
+    const larg=Math.max(1240,1654/(window.devicePixelRatio||1));
+    for(let i=1;i<=pdf.numPages;i++){const c=await renderPage(pdf,i,larg);c.style.width="100%";$("#mBody").appendChild(c);cs.push(c);imgs.push(c.toDataURL("image/png"))}
+    const deitado=cs.every(c=>c.width>c.height),b=$("#mPrint");b.disabled=false;
+    b.onclick=async()=>{if(!IS_TAURI){toast("A impressão funciona no programa instalado.");return}
+      b.disabled=true;b.textContent="Preparando…";try{await imprimirPaginas(imgs,deitado)}catch(e){Diag.erro("modelo",String(e&&e.message||e),"imprimir");toast("Não foi possível imprimir o modelo")}finally{b.disabled=false;b.textContent="Imprimir"}}}
+  catch(e){Diag.erro("modelo",String(e&&e.message||e),"abrir "+(md.doc?"anexo":md.f));$("#mBody").innerHTML=`<div class="empty">Não foi possível abrir o modelo. ${/não está neste computador/.test(String(e&&e.message))?"O arquivo dele ainda não chegou a este computador; confira a conexão ou adicione o PDF de novo.":"O PDF pode estar protegido ou corrompido."}</div>`}
 }
 
 /* ---------- atualização (só no .exe) ---------- */
@@ -2094,12 +2118,17 @@ async function compArqGravar(nome,base64){
   return ghPut(p,b64utf8(base64),"anexo")}
 const compArqLer=nome=>ghOn()?ghGet(`central-dados/arquivos/${nome}`,true):tinvoke("pasta_arquivo_ler",{pasta:pastaComp(),nome});
 let _pub=Promise.resolve();
+// Anexos que não subiram (sem internet) ficam em cs_blob_pend e vão no próximo envio; sem isso o anexo nunca chegava aos outros PCs.
+const blobPend=()=>{try{return JSON.parse(LS.get("cs_blob_pend")||"[]")}catch(e){return[]}};
+const blobPendSet=l=>LS.set("cs_blob_pend",JSON.stringify([...new Set(l)]));
 function publicar(blobs){
   if(!compAtivo())return;
+  const novos=new Map((blobs||[]).filter(d=>d&&d.blob).map(d=>[d.id,d]));blobPendSet([...blobPend(),...novos.keys()]);
   _pub=_pub.then(async()=>{try{
-    for(const d of blobs||[])if(d&&d.blob)await compArqGravar(d.id+".b64",await blobB64(d.blob));
-    await compGravar("central-dados",pcId()+".jsonl",diario().map(x=>JSON.stringify(x)).join("\n"));Comp.erro=""}
-   catch(e){Comp.erro=String(e)}});return _pub}
+    for(const id of blobPend()){const d=novos.get(id)||S.docs.find(x=>x.id===id);
+      if(d&&d.blob)await compArqGravar(d.id+".b64",await blobB64(d.blob));blobPendSet(blobPend().filter(x=>x!==id))}
+    await compGravar("central-dados",pcId()+".jsonl",diario().map(x=>JSON.stringify(x)).join("\n"));Comp.erro="";LS.del("cs_pub_falhou")}
+   catch(e){Comp.erro=String(e);LS.set("cs_pub_falhou","1")}});return _pub}
 function registrar(col,o,del){
   if(!IS_TAURI||!o||o.exemplo||o.workerId==="__recebido")return;
   let k=o.id,d={...o};
@@ -3167,6 +3196,6 @@ function emitirFicha(w){
   if(IS_TAURI){setTimeout(()=>syncCiclo(false),2500);setInterval(()=>syncCiclo(false),SYNC_MS)}
   // Estoque e pasta compartilhada: lê o que os outros computadores gravaram a cada minuto.
   Diag.conta("inicio","abrir",performance.now());
-  const comp=async()=>{Diag.enviar();await asoVerificarPasta(false);await puxarCompartilhado();await docsSincronizar();await estCarregar();if(current==="estoque")rerenderSeguro()};
+  const comp=async()=>{Diag.enviar();if(compAtivo()&&(LS.get("cs_pub_falhou")||blobPend().length)){publicar([]);await _pub}await asoVerificarPasta(false);await puxarCompartilhado();await docsSincronizar();await estCarregar();if(current==="estoque")rerenderSeguro()};
   if(IS_TAURI){try{GH.cfg=await tinvoke("gh_cred_status")}catch(e){}}await centralPasta();await estCarregar();if(["estoque","asos","nrs"].includes(current))render();if(IS_TAURI){setTimeout(comp,4000);setInterval(comp,60000)}})();
 </script>

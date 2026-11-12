@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.96 — 12/11/2026
+- Modelos para impressão: os PDFs adicionados (ex.: Advertência, Vale) saíam com as folhas em branco porque a impressão era chamada antes de as páginas carregarem. Agora a impressão espera as páginas e sai numa folha A4 em tamanho real, sem a margem extra das outras impressões (`imprimirPaginas`), com ~200 dpi.
+- Se o arquivo de um modelo vindo de outro computador ainda não chegou, o Central busca de novo no compartilhamento (`modeloBytes`) e, sem ele, avisa em vez de mostrar a tela vazia.
+- Anexos (e modelos) que não subiram por falta de internet ficam numa fila (`cs_blob_pend`) e são enviados na próxima tentativa, a cada minuto, junto com o diário que falhou (`cs_pub_falhou`). Antes o arquivo nunca chegava aos outros PCs.
+
 ## 0.1.95 — 09/11/2026
 - Design revisado com o detector do Impeccable (github.com/pbakaus/impeccable): de 84 achados para 1 (o fundo do calendário, mantido a pedido). Texto mínimo de 12 px (rótulos 11,5 px), azul e verde mais escuros sobre fundos claros, selos dos atalhos e botão Lançar com contraste 4,5:1, sem gradiente roxo, parágrafos sem palavra sozinha na última linha. Novos `DESIGN.md`, `PRODUCT.md` e `ferramentas/design-check.js`.
 - Registro interno de erros e métricas (não aparece na tela): erros de script, comandos que falharam, avisos de falha e sincronizações, mais telas abertas e tempos, por PC, em `central-logs/` no repositório privado de dados. CPF e números longos mascarados.
