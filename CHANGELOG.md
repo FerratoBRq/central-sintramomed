@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.1.97 — 13/11/2026
+- Estoque e uniformes: tamanho P nas camisetas de manga longa e manga curta e novo item Uniforme polo (P, M, G e GG), com preço de custo padrão de R$ 40,00 (ajustável em Configurações). O polo conta como camisa no limite da safra e vai à aba EPI's do Guia como CAMISETA.
+
 ## 0.1.96 — 12/11/2026
 - Modelos para impressão: os PDFs adicionados (ex.: Advertência, Vale) saíam com as folhas em branco porque a impressão era chamada antes de as páginas carregarem. Agora a impressão espera as páginas e sai numa folha A4 em tamanho real, sem a margem extra das outras impressões (`imprimirPaginas`), com ~200 dpi.
 - Se o arquivo de um modelo vindo de outro computador ainda não chegou, o Central busca de novo no compartilhamento (`modeloBytes`) e, sem ele, avisa em vez de mostrar a tela vazia.

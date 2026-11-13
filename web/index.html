@@ -396,7 +396,7 @@ p,.head p,.note,.small{text-wrap:pretty}
     </nav>
     <button class="tema-b" id="btnTema" type="button"></button>
     <div class="side-foot">
-      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.96</b></span><span id="runtime">Modo navegador</span></div>
+      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.97</b></span><span id="runtime">Modo navegador</span></div>
       <span id="syncInfo"></span>
       <button class="link" id="btnSync" type="button" hidden>Sincronizar tudo agora</button>
       <span id="updInfo">Verificando atualizações…</span>
@@ -414,7 +414,7 @@ p,.head p,.note,.small{text-wrap:pretty}
 /* Tema: claro, escuro ou automático (segue o Windows). O botão de lua/sol fixa o modo neste computador. */
 const temaEscuro=()=>{const t=document.documentElement.dataset.theme;return t?t==="dark":matchMedia("(prefers-color-scheme: dark)").matches};
 try{const t=localStorage.getItem("cs_tema");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}
-const APP_VERSION="0.1.96";
+const APP_VERSION="0.1.97";
 /* ---------- utilidades ---------- */
 const $=(s,r=document)=>r.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -646,6 +646,7 @@ const ATALHOS=[
 /* Novidades curtas por versão (aparecem na engrenagem, no aviso de atualização e em Feedback). Uma linha por versão;
    o detalhe fica no CHANGELOG.md. Ao lançar versão, acrescente a linha nova no topo. */
 const VERSOES=[
+ ["0.1.97","Estoque: camiseta P e uniforme polo (P a GG)"],
  ["0.1.96","Modelos para impressão saem impressos (não mais em branco), em tamanho real"],
  ["0.1.95","Letras maiores, mais contraste e registro interno de erros"],
  ["0.1.94","Revisão de segurança, contraste e menu em telas baixas"],
@@ -2220,8 +2221,10 @@ function bindComp(redraw){
 // Itens e tamanhos da planilha "Controle de uniforme no estoque" (sem as quantidades, que estavam desatualizadas).
 const U=["Único"];
 const PRODUTOS=[
-  {id:"camisa-ml",nome:"Camiseta manga longa",grupo:"camisa",tam:["M","G","GG","EG","E2G"]},
-  {id:"camisa-mc",nome:"Camiseta manga curta",grupo:"camisa",tam:["M","G","GG","EG","E2G"]},
+  {id:"camisa-ml",nome:"Camiseta manga longa",grupo:"camisa",tam:["P","M","G","GG","EG","E2G"]},
+  {id:"camisa-mc",nome:"Camiseta manga curta",grupo:"camisa",tam:["P","M","G","GG","EG","E2G"]},
+  // Polo conta como camisa: entra no limite de 1 camisa por safra e vai à aba EPI's do Guia como CAMISETA.
+  {id:"polo",nome:"Uniforme polo",grupo:"camisa",tam:["P","M","G","GG"]},
   {id:"calca",nome:"Calça",grupo:"calca",tam:["36","38","40","42","44","46","48","50"]},
   {id:"botina",nome:"Botina",grupo:"botina",tam:["36","37","38","39","40","41","42","43","44","45"]},
   {id:"luva-tatil",nome:"Luva tátil black · CA 30916",grupo:"epi",tam:U},
@@ -2245,7 +2248,7 @@ const PRODUTOS=[
   {id:"capa-chuva",nome:"Capa de chuva OVC Plus · CA 28450",grupo:"epi",tam:U},
   {id:"cinta",nome:"Cinta ergonômica com suspensório (preta)",grupo:"epi",tam:["G","XG"]}];
 const unDe=id=>(PRODUTOS.find(p=>p.id===id)||{}).un||"un";
-const PRECO_PADRAO={"camisa-ml":40,"camisa-mc":40,calca:60,botina:60};
+const PRECO_PADRAO={"camisa-ml":40,"camisa-mc":40,polo:40,calca:60,botina:60};
 const MOTIVOS={compra:"Entrada (compra ou recebimento)",primeiro:"Primeiro uniforme (sem custo)",epi:"Entrega de EPI (sem desconto)",devolucao:"Devolução do colaborador",vale:"Fornecimento com desconto autorizado",safra:"Uniforme da safra",baixa:"Baixa (perda, avaria, descarte)",ajuste:"Ajuste de inventário",estorno:"Estorno",descontado:"Desconto efetuado"};
 const LIMITE_SAFRA={camisa:1,calca:1}; // por colaborador, por safra
 const brl=v=>Number(v||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
@@ -2287,7 +2290,7 @@ function vEst(){
   const busca=(ui.estBusca||"").toLowerCase();
   const lista=Est.movs.filter(m=>m.motivo!=="descontado"&&(!busca||[m.wn,m.cpf,prod(m.prod).nome,m.tam,MOTIVOS[m.motivo]].join(" ").toLowerCase().includes(busca)));
   const aba=ui.estAba||"saldo",H=k=>aba===k?"":"hidden",pgM=paginar(lista,"estPg"),nDesc=Est.movs.filter(m=>m.motivo==="vale"&&!estornado(m.id)&&!descontado(m.id)).length;
-  $("#view").innerHTML=`<div class="head"><div><h1>Estoque de uniformes e EPIs</h1><p>Camisetas, calças, botinas e EPIs: entradas, entregas de EPI, vales, uniforme da safra e baixas. Cada saída fica ligada ao colaborador.</p></div>
+  $("#view").innerHTML=`<div class="head"><div><h1>Estoque de uniformes e EPIs</h1><p>Camisetas, polos, calças, botinas e EPIs: entradas, entregas de EPI, vales, uniforme da safra e baixas. Cada saída fica ligada ao colaborador.</p></div>
    <div class="toolbar"><button class="btn" id="estInv">${ico("list",16)} Contagem</button><button class="btn" id="estEnt">${ico("plus",16)} Entrada</button><button class="btn primary" id="estSai">Saída ou baixa</button></div></div>
   ${Est.erro?`<div class="banner" style="border-left-color:var(--crit)"><span>Pasta compartilhada indisponível: ${esc(Est.erro)}. Mostrando só os movimentos deste computador.</span></div>`:""}
   ${abasHTML("estAba",[["saldo","Saldo"],["movimentos",`Movimentos (${lista.length})`],["descontos",`Descontos${nDesc?" ("+nDesc+")":""}`],["config","Configurações"]],aba)}
@@ -3035,7 +3038,7 @@ async function aprovCriar(acao,w,dados,diff){
   S.lists.push(p);await Store.put("lists",p);aprovBadge();return p}
 /* Aba EPI's do trabalhador no Sistema eSocial (cad_coleq.php): Data, Quantidade e Equipamento (1 CAMISETA, 2 CALCA, 3 BOTINA).
    Só esses três existem lá; os outros EPIs ficam só no estoque do Central. Confere relendo a lista da aba. */
-const EPI_GUIA={"camisa-ml":["1","CAMISETA"],"camisa-mc":["1","CAMISETA"],calca:["2","CALCA"],botina:["3","BOTINA"]};
+const EPI_GUIA={"camisa-ml":["1","CAMISETA"],"camisa-mc":["1","CAMISETA"],polo:["1","CAMISETA"],calca:["2","CALCA"],botina:["3","BOTINA"]};
 async function enviarEpi(w,d){
   if(!w.origemId)throw new Error("Este trabalhador ainda não foi sincronizado com o Sistema eSocial.");
   const pg=`/register/cad_coleq.php?acao=Procurar&cod_colaborador=${w.origemId}`;
