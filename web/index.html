@@ -396,7 +396,7 @@ p,.head p,.note,.small{text-wrap:pretty}
     </nav>
     <button class="tema-b" id="btnTema" type="button"></button>
     <div class="side-foot">
-      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.97</b></span><span id="runtime">Modo navegador</span></div>
+      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.98</b></span><span id="runtime">Modo navegador</span></div>
       <span id="syncInfo"></span>
       <button class="link" id="btnSync" type="button" hidden>Sincronizar tudo agora</button>
       <span id="updInfo">Verificando atualizações…</span>
@@ -414,7 +414,7 @@ p,.head p,.note,.small{text-wrap:pretty}
 /* Tema: claro, escuro ou automático (segue o Windows). O botão de lua/sol fixa o modo neste computador. */
 const temaEscuro=()=>{const t=document.documentElement.dataset.theme;return t?t==="dark":matchMedia("(prefers-color-scheme: dark)").matches};
 try{const t=localStorage.getItem("cs_tema");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}
-const APP_VERSION="0.1.97";
+const APP_VERSION="0.1.98";
 /* ---------- utilidades ---------- */
 const $=(s,r=document)=>r.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -646,6 +646,7 @@ const ATALHOS=[
 /* Novidades curtas por versão (aparecem na engrenagem, no aviso de atualização e em Feedback). Uma linha por versão;
    o detalhe fica no CHANGELOG.md. Ao lançar versão, acrescente a linha nova no topo. */
 const VERSOES=[
+ ["0.1.98","Uniforme polo sem custo"],
  ["0.1.97","Estoque: camiseta P e uniforme polo (P a GG)"],
  ["0.1.96","Modelos para impressão saem impressos (não mais em branco), em tamanho real"],
  ["0.1.95","Letras maiores, mais contraste e registro interno de erros"],
@@ -2223,8 +2224,8 @@ const U=["Único"];
 const PRODUTOS=[
   {id:"camisa-ml",nome:"Camiseta manga longa",grupo:"camisa",tam:["P","M","G","GG","EG","E2G"]},
   {id:"camisa-mc",nome:"Camiseta manga curta",grupo:"camisa",tam:["P","M","G","GG","EG","E2G"]},
-  // Polo conta como camisa: entra no limite de 1 camisa por safra e vai à aba EPI's do Guia como CAMISETA.
-  {id:"polo",nome:"Uniforme polo",grupo:"camisa",tam:["P","M","G","GG"]},
+  // Polo: sem custo (pedido do Gabriel, 13/11/2026), não entra em vale com desconto; conta como camisa no limite da safra e vai à aba EPI's do Guia como CAMISETA.
+  {id:"polo",nome:"Uniforme polo",grupo:"camisa",tam:["P","M","G","GG"],semCusto:true},
   {id:"calca",nome:"Calça",grupo:"calca",tam:["36","38","40","42","44","46","48","50"]},
   {id:"botina",nome:"Botina",grupo:"botina",tam:["36","37","38","39","40","41","42","43","44","45"]},
   {id:"luva-tatil",nome:"Luva tátil black · CA 30916",grupo:"epi",tam:U},
@@ -2248,7 +2249,7 @@ const PRODUTOS=[
   {id:"capa-chuva",nome:"Capa de chuva OVC Plus · CA 28450",grupo:"epi",tam:U},
   {id:"cinta",nome:"Cinta ergonômica com suspensório (preta)",grupo:"epi",tam:["G","XG"]}];
 const unDe=id=>(PRODUTOS.find(p=>p.id===id)||{}).un||"un";
-const PRECO_PADRAO={"camisa-ml":40,"camisa-mc":40,polo:40,calca:60,botina:60};
+const PRECO_PADRAO={"camisa-ml":40,"camisa-mc":40,calca:60,botina:60};
 const MOTIVOS={compra:"Entrada (compra ou recebimento)",primeiro:"Primeiro uniforme (sem custo)",epi:"Entrega de EPI (sem desconto)",devolucao:"Devolução do colaborador",vale:"Fornecimento com desconto autorizado",safra:"Uniforme da safra",baixa:"Baixa (perda, avaria, descarte)",ajuste:"Ajuste de inventário",estorno:"Estorno",descontado:"Desconto efetuado"};
 const LIMITE_SAFRA={camisa:1,calca:1}; // por colaborador, por safra
 const brl=v=>Number(v||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
@@ -2297,7 +2298,7 @@ function vEst(){
   <div class="tiles" ${H("saldo")}>${tot.filter(({p})=>p.grupo!=="epi").map(({p,q})=>`<div class="tile" style="cursor:default"><span class="ic">${ico("box",22)}</span><span class="n">${q}</span><span class="l">${esc(p.nome)}</span></div>`).join("")}</div>
   <div class="grid2" ${aba==="saldo"?"":"hidden"}>
    <section class="panel"><div class="panel-h"><h2>Uniformes · saldo por tamanho</h2><span class="small muted">${zerados} ${zerados===1?"item zerado":"itens zerados"}</span></div>
-    ${PRODUTOS.filter(p=>p.grupo!=="epi").map(p=>`<div><div class="small" style="font-weight:600;margin-bottom:6px">${esc(p.nome)} <span class="muted">· ${p.grupo==="botina"?"EPI, sem custo":brl(cfg.precos[p.id])}</span></div><div class="tams">${p.tam.map(t=>{const s=saldo(p.id,t);return `<span class="tam ${s<=0?"zero":s<=2?"baixo":""}" title="${esc(p.nome)} ${t}: ${s}"><b>${t}</b>${s}</span>`}).join("")}</div></div>`).join("")}
+    ${PRODUTOS.filter(p=>p.grupo!=="epi").map(p=>`<div><div class="small" style="font-weight:600;margin-bottom:6px">${esc(p.nome)} <span class="muted">· ${p.grupo==="botina"?"EPI, sem custo":p.semCusto?"sem custo":brl(cfg.precos[p.id])}</span></div><div class="tams">${p.tam.map(t=>{const s=saldo(p.id,t);return `<span class="tam ${s<=0?"zero":s<=2?"baixo":""}" title="${esc(p.nome)} ${t}: ${s}"><b>${t}</b>${s}</span>`}).join("")}</div></div>`).join("")}
    </section>
    <section class="panel"><div class="panel-h"><h2>EPIs · saldo</h2></div>
     <div class="list">${PRODUTOS.filter(p=>p.grupo==="epi").flatMap(p=>p.tam.map(t=>{const s=saldo(p.id,t);return `<div class="row"><span class="small">${esc(p.nome)}${t==="Único"?"":` · ${esc(t)}`}</span><span class="pill ${s<=0?"crit":s<=2?"warn":"ok"}" style="white-space:nowrap">${s} ${unDe(p.id)}</span></div>`})).join("")}</div>
@@ -2318,7 +2319,7 @@ function vEst(){
   <section class="panel" ${H("config")}><h2>Configurações do estoque</h2>
    <div class="form-grid">
     <div class="field"><label for="cfSafra">Safra atual</label><input id="cfSafra" value="${esc(cfg.safra)}"></div>
-    ${PRODUTOS.filter(p=>!["epi","botina"].includes(p.grupo)).map(p=>`<div class="field"><label for="cfP_${p.id}">Preço de custo · ${esc(p.nome)}</label><input id="cfP_${p.id}" type="number" min="0" step="0.01" value="${cfg.precos[p.id]}"></div>`).join("")}
+    ${PRODUTOS.filter(p=>!["epi","botina"].includes(p.grupo)&&!p.semCusto).map(p=>`<div class="field"><label for="cfP_${p.id}">Preço de custo · ${esc(p.nome)}</label><input id="cfP_${p.id}" type="number" min="0" step="0.01" value="${cfg.precos[p.id]}"></div>`).join("")}
    </div>
    <div class="note">Uniforme da safra: cada colaborador recebe no máximo ${LIMITE_SAFRA.calca} calça e ${LIMITE_SAFRA.camisa} camisa por safra. Mudando o nome da safra, o limite recomeça.${IS_TAURI?(compAtivo()?" Estoque compartilhado pela pasta configurada na engrenagem.":" Para usar o mesmo estoque em todos os computadores, configure a pasta compartilhada na engrenagem."):" No navegador o estoque fica só neste navegador."}</div>
    <div class="toolbar" style="justify-content:space-between"><button class="btn danger" id="cfLimpar">Limpar histórico do estoque</button><button class="btn primary" id="cfSalvar">Salvar configurações</button></div>
@@ -2387,6 +2388,7 @@ function abrirMov(tipo){
     // botina de segurança é EPI. Uniforme exigido para o trabalho também é gratuito (CLT art. 458 § 2º I; PN 115 do TST);
     // só pode ser descontado como peça extra pedida pelo trabalhador ou reposição por dano/perda (CLT art. 462).
     if(mot==="vale"&&its.some(i=>["botina","epi"].includes(prod(i.prod).grupo)))p.push("Botina e EPIs não podem ser cobrados do trabalhador (CLT art. 166, NR-6 e Lei 12.023/2009 art. 9º). Use Entrega de EPI.");
+    if(mot==="vale"&&its.some(i=>prod(i.prod).semCusto))p.push("Uniforme polo é sem custo e não pode ser descontado do trabalhador. Use Primeiro uniforme, Uniforme da safra ou Entrega de EPI.");
     if(mot==="vale"&&quem&&$("#mvVm").value==="extra")for(const g of ["camisa","calca"])if(its.some(i=>prod(i.prod).grupo===g)&&safraUsada(quem,cfg.safra,g)<LIMITE_SAFRA[g])p.push(`${quem.nome.split(" ")[0]} ainda não recebeu ${g==="calca"?"a calça":"a camisa"} gratuita da ${cfg.safra}. Entregue primeiro como Uniforme da safra (sem custo); o desconto só vale para peça extra.`);
     if(mot==="vale"&&$("#mvVm").value==="dano"&&!$("#mvObs").value.trim())p.push("Descreva na observação o que aconteceu com a peça (perda ou dano). Desgaste natural de uso não pode ser descontado.");
     if(mot==="primeiro"&&quem){const ja=Est.movs.find(x=>doColab(x,quem)&&x.motivo==="primeiro"&&!estornado(x.id));if(ja)p.push(`${quem.nome.split(" ")[0]} já recebeu o primeiro uniforme em ${br(ja.q.slice(0,10))}. Use Uniforme da safra, Entrega de EPI ou Fornecimento com desconto autorizado.`)}
