@@ -251,6 +251,7 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
 .vale-l1 .vale-campo{flex:0 0 46%}.vale-data{padding-left:60px}.vale-data u{flex:0 0 22%;text-align:center}
 .vale-txt{font-size:11px;color:#222}.vale-q{font-size:9px;color:#666;text-align:right}
 .vale-corte{text-align:center;color:#666;font-size:11px;padding:3mm 0;letter-spacing:.05em}
+select.pend{border-color:var(--warn);background:var(--warn-soft)}
 @media print{#printArea .vale-folha{padding:0;max-width:none}#printArea .ficha+.ficha{break-before:page;page-break-before:always}}
 
 /* programação de pagamentos (folha A4 no modelo do sindicato) */
@@ -396,7 +397,7 @@ p,.head p,.note,.small{text-wrap:pretty}
     </nav>
     <button class="tema-b" id="btnTema" type="button"></button>
     <div class="side-foot">
-      <div class="row2"><span>Versão <b class="mono" id="ver">0.2.1</b></span><span id="runtime">Modo navegador</span></div>
+      <div class="row2"><span>Versão <b class="mono" id="ver">0.2.2</b></span><span id="runtime">Modo navegador</span></div>
       <span id="syncInfo"></span>
       <button class="link" id="btnSync" type="button" hidden>Sincronizar tudo agora</button>
       <span id="updInfo">Verificando atualizações…</span>
@@ -414,7 +415,7 @@ p,.head p,.note,.small{text-wrap:pretty}
 /* Tema: claro, escuro ou automático (segue o Windows). O botão de lua/sol fixa o modo neste computador. */
 const temaEscuro=()=>{const t=document.documentElement.dataset.theme;return t?t==="dark":matchMedia("(prefers-color-scheme: dark)").matches};
 try{const t=localStorage.getItem("cs_tema");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}
-const APP_VERSION="0.2.1";
+const APP_VERSION="0.2.2";
 /* ---------- utilidades ---------- */
 const $=(s,r=document)=>r.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -565,7 +566,7 @@ const MANUAL=[
  {t:"ASOs e NRs recebidos",p:["Salve os PDFs que chegam pelo WhatsApp na pasta ASOs para lançar ou NRs para lançar (Documentos > Central Sintramomed). O Central lê a cada minuto. Se o arquivo for para a pasta errada, ele muda sozinho.","Também dá para usar Anexar ou arrastar os PDFs para a tela.","Na aba Para conferir: Conferir e lançar abre o documento lido para conferir. Enviar prontos para aprovação manda de uma vez os que estão completos.","Depois de lançado, o arquivo vai para ASOs lançados ou NRs lançadas e fica anexado na ficha."]},
  {t:"Aprovação",p:["Tudo o que o Central vai gravar no Sistema eSocial (ASO, NR, endereço, desconto autorizado, EPI) aparece aqui com o que muda: como está no sistema e como vai ficar.","Aprovar e enviar pede uma segunda confirmação, grava no Guia e confere relendo a página. Recusar descarta o pedido.","A aba Histórico guarda o que foi enviado, recusado ou deu erro."]},
  {t:"Relatório mensal e sem produção",p:["Afastados e desligados entram no mês pela data de envio do evento ao eSocial (S-2399 ou S-2230), não pela data do término, que é retroativa. Ex.: término em 18/06 enviado em 15/10 entra em outubro. Na tela aparece a data da última produção de cada um (lida do relatório de produção do Guia ao Buscar) e, embaixo, a data do envio.","Relatório mensal: escolha o mês e clique em Buscar no Sistema eSocial. Vêm admissões, periódicos (com a empresa da produção) e afastados/desligados (pelo mês do lançamento).","Marque classificação do ASO, envio à DOM e antecedentes; inclua pessoas à mão se precisar; clique em Gerar Excel.","Aba Sem produção há +3 meses: marque quem deve ser desligado. Marcar não envia nada ao sistema."]},
- {t:"Estoque e EPIs",p:["Aba Saldo mostra uniformes por tamanho e EPIs. Contagem: digite o que há de fato e o Central lança só a diferença.","Entrada: compra ou devolução. Saída ou baixa: Primeiro uniforme (kit pronto e sem custo: 1 camiseta manga longa, 1 calça e 1 botina; só escolher os tamanhos, uma vez por trabalhador), Entrega de EPI (sem custo), Uniforme da safra (1 calça e 1 camisa por safra, sem custo), Fornecimento com desconto autorizado ou Baixa.","Empresa: na entrega, escolha a empresa para onde vai o uniforme (lista das empresas do Sistema eSocial, ou digite). O Central já sugere a do último relatório mensal. A empresa aparece nos Movimentos, na busca e no termo.","Entrega em lote: o mesmo kit para várias pessoas de uma vez. Escolha o motivo, a empresa e o kit, adicione as pessoas pelo nome ou CPF (ou cole uma lista, um por linha) e escolha o tamanho de cada uma (o Central sugere o da última entrega). Ao lançar, saem todos os termos, um por folha.","Entrega em lote pela planilha: Baixar planilha modelo gera um Excel com o kit escolhido (uma coluna de tamanho por peça, com a lista de tamanhos em cada célula), a empresa, o motivo e as pessoas que já estão na lista. Preencha um trabalhador por linha (nome ou CPF) e use Importar planilha preenchida: a lista é substituída pela da planilha e o Central avisa quem não achou e tamanho que não existe.","Desconto autorizado só vale para peça extra pedida pelo trabalhador ou reposição por perda/dano por culpa dele. Botina e EPIs nunca são cobrados. Imprima o Termo de autorização de desconto e colha a assinatura antes.","Ao entregar camiseta, calça ou botina, a opção Lançar também na aba EPI's do Sistema eSocial cria o pedido na Aprovação.","Estorno: o botão Estornar desfaz um movimento. Ele pede confirmação, e um clique duplo não lança duas vezes.","Limpar histórico do estoque (aba Configurações): zera saldos e movimentos até agora em todos os computadores; depois lance a Contagem."]},
+ {t:"Estoque e EPIs",p:["Aba Saldo mostra uniformes por tamanho e EPIs. Contagem: digite o que há de fato e o Central lança só a diferença.","Entrada: compra ou devolução. Saída ou baixa: Primeiro uniforme (kit pronto e sem custo: 1 camiseta manga longa, 1 calça e 1 botina; só escolher os tamanhos, uma vez por trabalhador), Entrega de EPI (sem custo), Uniforme da safra (1 calça e 1 camisa por safra, sem custo), Fornecimento com desconto autorizado ou Baixa.","Empresa: na entrega, escolha a empresa para onde vai o uniforme (lista das empresas do Sistema eSocial, ou digite). O Central já sugere a do último relatório mensal. A empresa aparece nos Movimentos, na busca e no termo.","Entrega em lote: o mesmo kit para várias pessoas de uma vez. Escolha o motivo, a empresa e o kit, adicione as pessoas pelo nome ou CPF (ou cole uma lista, um por linha) e escolha o tamanho de cada uma (o Central sugere o da última entrega). Ao lançar, saem todos os termos, um por folha.","Falta de estoque no lote: se a peça não dá para todos, use Lançar o que tem e deixar pendente quem passar do estoque (ou marque Fica pendente na pessoa). O resto sai na hora, o termo mostra o que ficou para depois e a peça vai para Estoque › Pendentes. Quando ela chegar (Entrada), clique em Entregar ou em Entregar os que já têm estoque: sai o termo da peça.","Entrega em lote pela planilha: Baixar planilha modelo gera um Excel com o kit escolhido (uma coluna de tamanho por peça, com a lista de tamanhos em cada célula), a empresa, o motivo e as pessoas que já estão na lista. Preencha um trabalhador por linha (nome ou CPF) e use Importar planilha preenchida: a lista é substituída pela da planilha e o Central avisa quem não achou e tamanho que não existe.","Desconto autorizado só vale para peça extra pedida pelo trabalhador ou reposição por perda/dano por culpa dele. Botina e EPIs nunca são cobrados. Imprima o Termo de autorização de desconto e colha a assinatura antes.","Ao entregar camiseta, calça ou botina, a opção Lançar também na aba EPI's do Sistema eSocial cria o pedido na Aprovação.","Estorno: o botão Estornar desfaz um movimento. Ele pede confirmação, e um clique duplo não lança duas vezes.","Limpar histórico do estoque (aba Configurações): zera saldos e movimentos até agora em todos os computadores; depois lance a Contagem."]},
  {t:"NR-01 · Portal DOM",p:["Conecte o Portal DOM uma vez na engrenagem (e-mail e senha do portal). O Central consulta o portal a cada 10 minutos.","Aba Situação: quem está fora do portal, convidado, em treinamento ou concluiu, com os itens feitos.","Aba Importar: salva a planilha dos que faltam e abre a tela de importação do portal; arraste o arquivo e confirme lá.","Aba Faltam dados: quem não entra na planilha por falta de CPF, WhatsApp (celular com DDD) ou data de início."]},
  {t:"Adiantamentos",p:["Ferramentas › Adiantamentos: escolha o trabalhador pelo nome, o valor, a data e em quantas parcelas descontar (uma por quinzena). Registrar adiantamento só grava; o termo de adiantamento e autorização de desconto (2 vias) fica no botão Imprimir termo de cada adiantamento da lista e pode ser emitido a qualquer momento.","Programação de adiantamentos: escolha o período e imprima a lista A4 no formato da programação de pagamento, com conta, poupança ou PIX.","Lançar desconto no Guia (clique duas vezes para confirmar) manda cada parcela para a Aprovação como Crédito/Desconto ADIANTAMENTO SALARIAL; depois de aprovado, sai no holerite.","Na Programação de pagamento, o líquido já vem descontado e o nome aparece com “− Adiantamento”. Parcela da quinzena ainda não lançada no Guia aparece num aviso.","Base legal: CLT art. 462 (desconto de adiantamento) e Constituição art. 7º, XXXIV (avulso). Sem juros, com termo assinado e sem passar de 70% do líquido da quinzena."]},
  {t:"Programação de pagamento",p:["Escolha o mês e a quinzena e clique em Buscar produção e contas. As empresas com produção vêm marcadas.","Puxar o valor líquido preenche o VALOR com o líquido do holerite, lido das folhas já processadas da quinzena; empresa sem folha processada fica em branco e aparece um aviso. Quem trabalhou em mais de uma empresa fica na de mais diárias, com a soma (*).","Vale-transporte: em Anexar planilhas (.xlsx), escolha a planilha de transporte da empresa (pode ser a do ano todo). O programa pega só o período da quinzena, liga à empresa pelo nome do título (ex.: TRANSPORTE COAMO DOURADOS) e soma o Valor a Receber no valor de cada trabalhador, que aparece com “+ Transporte” na frente do nome. Se ligar à empresa errada, troque na lista ao lado: fica lembrado. Quem está na planilha mas não teve produção aparece num aviso.","Usar PIX para quem não tem conta: usa a chave do Guia; sem ela, o celular ou e-mail do cadastro marcado (conferir).","Imprima uma folha por empresa, as empresas marcadas juntas ou a folha em branco."]},
@@ -647,6 +648,7 @@ const ATALHOS=[
 /* Novidades curtas por versão (aparecem na engrenagem, no aviso de atualização e em Feedback). Uma linha por versão;
    o detalhe fica no CHANGELOG.md. Ao lançar versão, acrescente a linha nova no topo. */
 const VERSOES=[
+ ["0.2.2","Entrega em lote com falta de estoque: lança o que tem e deixa o resto pendente"],
  ["0.2.1","Verificação de atualização sem o aviso \"Sem conexão com o GitHub\""],
  ["0.2.0","Entrega em lote pela planilha (baixar modelo e importar preenchida)"],
  ["0.1.99","Estoque: empresa do uniforme, entrega em lote e fim do erro GitHub 403"],
@@ -2300,6 +2302,25 @@ async function estGravar(novos){
 const saldo=(p,t)=>Est.movs.reduce((s,m)=>m.prod===p&&m.tam===t?s+Number(m.qtd||0):s,0);
 const estornado=id=>Est.movs.some(m=>m.motivo==="estorno"&&m.ref===id);
 const descontado=id=>Est.movs.some(m=>m.motivo==="descontado"&&m.ref===id);
+// Pendência (entrega em lote sem saldo para todos): registro "pendente" com qtd 0, que não mexe no saldo (`pq` = quantidade,
+// `mot` = motivo da entrega). Fecha com a entrega (movimento com `pendDe`; reabre se ela for estornada) ou com "pendcancel".
+const NAO_MOV=["descontado","pendente","pendcancel"];
+const pendAberta=m=>m.motivo==="pendente"&&!Est.movs.some(x=>x.pendDe===m.id&&!estornado(x.id)||x.motivo==="pendcancel"&&x.ref===m.id);
+const pendEst=()=>Est.movs.filter(pendAberta);
+// Entrega as pendências que cabem no saldo (somando as do mesmo tamanho): um lote por pessoa, com termo e, se pedido no lote, a aba EPI's.
+async function entregarPend(ids){
+  const ps=ids.map(id=>Est.movs.find(m=>m.id===id)).filter(m=>m&&pendAberta(m)),usado={},ok=[];
+  for(const p of ps){const c=p.prod+"|"+p.tam;if((usado[c]||0)+p.pq<=saldo(p.prod,p.tam)){usado[c]=(usado[c]||0)+p.pq;ok.push(p)}}
+  if(!ok.length){toast("Ainda não há saldo para essas entregas.");return}
+  const porPessoa={};for(const p of ok)(porPessoa[p.cpf||p.w]=porPessoa[p.cpf||p.w]||[]).push(p);
+  const movs=[],lotes=[],guias=[];
+  for(const l of Object.values(porPessoa)){const lote=uid();lotes.push(lote);
+    for(const p of l)movs.push(novoMov({lote,grupo:p.grupo,prod:p.prod,tam:p.tam,qtd:-p.pq,motivo:p.mot,pendDe:p.id,obs:p.obs||"",...(p.emp?{emp:p.emp}:{}),w:p.w,wn:p.wn,cpf:p.cpf,...(p.safra?{safra:p.safra}:{})}));
+    const g=l.filter(p=>p.guia);if(g.length)guias.push([l[0],g.map(p=>({prod:p.prod,qtd:p.pq}))])}
+  await estGravar(movs);toast(`${ok.length} ite${ok.length>1?"ns entregues":"m entregue"}${ps.length>ok.length?` · ${ps.length-ok.length} continua${ps.length-ok.length>1?"m":""} pendente${ps.length-ok.length>1?"s":""} (sem saldo)`:""}`);if(current==="estoque")vEst();
+  let n=0;for(const [p,its] of guias){const w=S.workers.find(x=>x.cpf===p.cpf)||S.workers.find(x=>x.id===p.w);if(w)n+=await pedirEpiGuia(w,its)}
+  if(n)toast(`${n} lançamento${n>1?"s":""} de EPI enviado${n>1?"s":""} para Aprovação`);
+  termoEntrega(lotes)}
 const doColab=(m,w)=>w.cpf?m.cpf===w.cpf:m.w===w.id;
 function safraUsada(w,safra,grupo){return Est.movs.filter(m=>doColab(m,w)&&m.motivo==="safra"&&m.safra===safra&&prod(m.prod).grupo===grupo&&!estornado(m.id)).reduce((s,m)=>s-Number(m.qtd),0)}
 function valesDe(w){return Est.movs.filter(m=>doColab(m,w)&&m.motivo==="vale"&&!estornado(m.id))}
@@ -2336,12 +2357,13 @@ function vEst(){
   const zerados=PRODUTOS.reduce((n,p)=>n+p.tam.filter(t=>saldo(p.id,t)<=0).length,0);
   const aDescontar=Est.movs.filter(m=>m.motivo==="vale"&&!estornado(m.id)&&!descontado(m.id)).reduce((s,m)=>s+Number(m.valor||0),0);
   const busca=(ui.estBusca||"").toLowerCase();
-  const lista=Est.movs.filter(m=>m.motivo!=="descontado"&&(!busca||[m.wn,m.cpf,prod(m.prod).nome,m.tam,MOTIVOS[m.motivo],m.emp].join(" ").toLowerCase().includes(busca)));
+  const pends=pendEst(),pendOk=pends.filter(m=>saldo(m.prod,m.tam)>=m.pq);
+  const lista=Est.movs.filter(m=>!NAO_MOV.includes(m.motivo)&&(!busca||[m.wn,m.cpf,prod(m.prod).nome,m.tam,MOTIVOS[m.motivo],m.emp].join(" ").toLowerCase().includes(busca)));
   const aba=ui.estAba||"saldo",H=k=>aba===k?"":"hidden",pgM=paginar(lista,"estPg"),nDesc=Est.movs.filter(m=>m.motivo==="vale"&&!estornado(m.id)&&!descontado(m.id)).length;
   $("#view").innerHTML=`<div class="head"><div><h1>Estoque de uniformes e EPIs</h1><p>Camisetas, polos, calças, botinas e EPIs: entradas, entregas de EPI, vales, uniforme da safra e baixas. Cada saída fica ligada ao colaborador.</p></div>
    <div class="toolbar"><button class="btn" id="estInv">${ico("list",16)} Contagem</button><button class="btn" id="estEnt">${ico("plus",16)} Entrada</button><button class="btn" id="estLote">${ico("list",16)} Entrega em lote</button><button class="btn primary" id="estSai">Saída ou baixa</button></div></div>
   ${Est.erro?`<div class="banner" style="border-left-color:var(--crit)"><span>Não foi possível ler o estoque dos outros computadores (${esc(String(Est.erro).replace(/^Error:\s*/,""))}). Mostrando só os movimentos deste computador.</span></div>`:""}
-  ${abasHTML("estAba",[["saldo","Saldo"],["movimentos",`Movimentos (${lista.length})`],["descontos",`Descontos${nDesc?" ("+nDesc+")":""}`],["config","Configurações"]],aba)}
+  ${abasHTML("estAba",[["saldo","Saldo"],["movimentos",`Movimentos (${lista.length})`],["pendentes",`Pendentes${pends.length?" ("+pends.length+")":""}`],["descontos",`Descontos${nDesc?" ("+nDesc+")":""}`],["config","Configurações"]],aba)}
   <div class="tiles" ${H("saldo")}>${tot.filter(({p})=>p.grupo!=="epi").map(({p,q})=>`<div class="tile" style="cursor:default"><span class="ic">${ico("box",22)}</span><span class="n">${q}</span><span class="l">${esc(p.nome)}</span></div>`).join("")}</div>
   <div class="grid2" ${aba==="saldo"?"":"hidden"}>
    <section class="panel"><div class="panel-h"><h2>Uniformes · saldo por tamanho</h2><span class="small muted">${zerados} ${zerados===1?"item zerado":"itens zerados"}</span></div>
@@ -2351,6 +2373,13 @@ function vEst(){
     <div class="list">${PRODUTOS.filter(p=>p.grupo==="epi").flatMap(p=>p.tam.map(t=>{const s=saldo(p.id,t);return `<div class="row"><span class="small">${esc(p.nome)}${t==="Único"?"":` · ${esc(t)}`}</span><span class="pill ${s<=0?"crit":s<=2?"warn":"ok"}" style="white-space:nowrap">${s} ${unDe(p.id)}</span></div>`})).join("")}</div>
    </section>
   </div>
+   <section class="panel" ${H("pendentes")}><div class="panel-h"><h2>Itens pendentes de entrega</h2>${pendOk.length?`<button class="btn sm primary" id="pendTodos">Entregar os que já têm estoque (${pendOk.length})</button>`:""}</div>
+    ${pends.length?`<div class="tbl-wrap" style="box-shadow:none"><table><thead><tr><th>Desde</th><th>Colaborador</th><th>Item</th><th class="num">Qtd</th><th>Motivo</th><th class="num">Saldo</th><th></th></tr></thead><tbody>
+     ${pends.map(m=>{const s=saldo(m.prod,m.tam),da=s>=m.pq;return `<tr><td class="mono">${br(m.q.slice(0,10))}</td><td>${esc(m.wn||"")}${m.emp?`<div class="small muted">${esc(abrevEmpresa(m.emp))}</div>`:""}</td><td>${esc(prod(m.prod).nome)} <b>${esc(m.tam)}</b></td><td class="num mono">${m.pq}</td><td class="small">${esc(MOTIVOS[m.mot]||"")}${m.mot==="safra"&&m.safra?` <span class="muted">${esc(m.safra)}</span>`:""}</td><td class="num"><span class="pill ${da?"ok":"crit"}">${s}</span></td>
+      <td><span class="toolbar" style="justify-content:flex-end;flex-wrap:nowrap"><button class="btn sm" data-pent="${m.id}" ${da?"":`disabled title="Sem saldo de ${esc(prod(m.prod).nome)} ${esc(m.tam)}"`}>Entregar</button><button class="btn sm danger" data-pcan="${m.id}">Cancelar</button></span></td></tr>`}).join("")}
+    </tbody></table></div>`:`<div class="empty">Nenhum item pendente. Quando faltar estoque numa entrega em lote, a peça de quem ficar sem aparece aqui para entregar depois.</div>`}
+    <div class="note">Na entrega em lote, quem passa do saldo fica com a peça pendente: o resto é lançado na hora. Quando a peça chegar (Entrada), entregue por aqui: sai o termo da peça e, se foi pedido no lote, o lançamento na aba EPI's vai para a Aprovação.</div>
+   </section>
    <section class="panel" ${H("descontos")}><div class="panel-h"><h2>Descontos autorizados a efetuar</h2><span class="pill ${aDescontar?"warn":"ok"}">${brl(aDescontar)}</span></div>
     ${(()=>{const v=Est.movs.filter(m=>m.motivo==="vale"&&!estornado(m.id)&&!descontado(m.id));return v.length?`<div class="list">${v.map(m=>`<div class="row"><span><b>${esc(m.wn)}</b> <span class="small muted">· ${-m.qtd} ${esc(prod(m.prod).nome)} ${esc(m.tam)} · ${br(m.q.slice(0,10))}</span></span><span class="toolbar"><span class="mono">${brl(m.valor)}</span><button class="btn sm" data-desc="${m.id}">Marcar descontado</button></span></div>`).join("")}</div>`:`<div class="empty">Nenhum desconto pendente.</div>`})()}
     <div class="note">Desconto autorizado: só para peça extra de uniforme pedida pelo trabalhador ou reposição por perda/dano por culpa dele, pelo preço de custo e com o termo assinado antes do desconto (CLT art. 462; Súmula 342 do TST). Botina, EPIs e o uniforme exigido para o trabalho são sempre sem custo (CLT arts. 166 e 458, § 2º, I; NR-6; Lei 12.023/2009 art. 9º).</div>
@@ -2358,7 +2387,7 @@ function vEst(){
   <section class="panel" ${H("movimentos")}><div class="panel-h"><h2>Movimentos</h2><div class="search">${ico("search",16)}<input class="inp" id="estBusca" placeholder="Buscar colaborador, CPF, item ou empresa" value="${esc(ui.estBusca||"")}" aria-label="Buscar movimento"></div></div>
    ${lista.length?`<div class="tbl-wrap" style="box-shadow:none"><table><thead><tr><th>Data</th><th>Item</th><th class="num">Qtd</th><th>Motivo</th><th>Colaborador</th><th>Por</th><th></th></tr></thead><tbody>
     ${pgM.itens.map(m=>{const est=m.motivo==="estorno",feito=estornado(m.id);return `<tr style="${feito||est?"opacity:.55":""}"><td class="mono">${br(m.q.slice(0,10))} ${hhmm(new Date(m.q))}</td><td>${esc(prod(m.prod).nome)} <b>${esc(m.tam)}</b></td><td class="num mono" style="color:${m.qtd>0?"var(--ok)":"var(--crit)"}">${m.qtd>0?"+":""}${m.qtd}</td>
-     <td>${esc(MOTIVOS[m.motivo]||m.motivo)}${m.safra&&m.motivo==="safra"?` <span class="small muted">${esc(m.safra)}</span>`:""}${m.valor?` <span class="small muted">${brl(m.valor)}</span>`:""}${m.obs?`<div class="small muted">${esc(m.obs)}</div>`:""}</td>
+     <td>${esc(MOTIVOS[m.motivo]||m.motivo)}${m.safra&&m.motivo==="safra"?` <span class="small muted">${esc(m.safra)}</span>`:""}${m.pendDe?`<div class="small muted">Entrega de item pendente</div>`:""}${m.valor?` <span class="small muted">${brl(m.valor)}</span>`:""}${m.obs?`<div class="small muted">${esc(m.obs)}</div>`:""}</td>
      <td>${m.wn?esc(m.wn):"—"}${m.emp?`<div class="small muted">${esc(abrevEmpresa(m.emp))}</div>`:""}</td><td class="small muted">${esc(m.u||"")}</td>
      <td>${!est&&!feito?`<button class="btn sm" data-estorno="${m.id}">Estornar</button>`:feito?`<span class="small muted">Estornado</span>`:""}${m.motivo==="vale"&&!est?` <button class="btn sm" data-vale="${m.lote||m.id}">Termo de desconto</button>`:""}${m.w&&!est&&m.motivo!=="vale"?` <button class="btn sm" data-termo="${m.lote||m.id}">Termo</button>`:""}</td></tr>`}).join("")}
    </tbody></table></div>${pgM.html}`:`<div class="empty">Nenhum movimento ainda. Comece lançando a entrada do que há no estoque.</div>`}
@@ -2380,6 +2409,10 @@ function vEst(){
     const m=Est.movs.find(y=>y.id===x.dataset.estorno);await estGravar([novoMov({prod:m.prod,tam:m.tam,qtd:-m.qtd,motivo:"estorno",ref:m.id,w:m.w,wn:m.wn,cpf:m.cpf,obs:`Estorno de ${MOTIVOS[m.motivo]||m.motivo} de ${br(m.q.slice(0,10))}`})]);toast("Movimento estornado");vEst()});
   document.querySelectorAll("[data-desc]").forEach(x=>x.onclick=async()=>{if(x.disabled||descontado(x.dataset.desc))return;x.disabled=true;const m=Est.movs.find(y=>y.id===x.dataset.desc);await estGravar([novoMov({prod:m.prod,tam:m.tam,qtd:0,motivo:"descontado",ref:m.id,w:m.w,wn:m.wn})]);toast("Desconto marcado como efetuado");vEst()});
   document.querySelectorAll("[data-termo]").forEach(x=>x.onclick=()=>termoEntrega(x.dataset.termo));
+  if($("#pendTodos"))$("#pendTodos").onclick=async()=>{const b=$("#pendTodos");if(b.disabled)return;b.disabled=true;b.textContent="Entregando…";await entregarPend(pendOk.map(m=>m.id))};
+  document.querySelectorAll("[data-pent]").forEach(x=>x.onclick=async()=>{if(x.disabled)return;x.disabled=true;x.textContent="Entregando…";await entregarPend([x.dataset.pent])});
+  document.querySelectorAll("[data-pcan]").forEach(x=>x.onclick=async()=>{if(!x.dataset.armed){x.dataset.armed="1";x.textContent="Confirmar";return}if(x.disabled)return;x.disabled=true;
+    const m=Est.movs.find(y=>y.id===x.dataset.pcan);if(!m||!pendAberta(m))return;await estGravar([novoMov({prod:m.prod,tam:m.tam,qtd:0,motivo:"pendcancel",ref:m.id,w:m.w,wn:m.wn,cpf:m.cpf})]);toast("Pendência cancelada");vEst()});
   document.querySelectorAll("[data-vale]").forEach(x=>x.onclick=()=>imprimirVale(x.dataset.vale));
   $("#cfLimpar").onclick=async()=>{const b=$("#cfLimpar");if(!b.dataset.armed){b.dataset.armed="1";b.textContent=`Confirmar: limpar ${Est.movs.length} movimentos`;return}
     const c=estCfg();c.corte=new Date().toISOString();estCfgSalvar(c);registrarValor("estoque_cfg","cfg",c);await estCarregar();toast("Histórico do estoque limpo. Lance a Contagem para começar.");ui.estAba="saldo";vEst()};
@@ -2494,14 +2527,17 @@ function abrirLote(){
     m.querySelectorAll("[data-kp]").forEach(s=>s.onchange=()=>{kit[s.dataset.kp].prod=s.value;desenharTab()});
     m.querySelectorAll("[data-kq]").forEach(s=>s.oninput=()=>{kit[s.dataset.kq].qtd=parseInt(s.value,10)||0;aviso()});
     m.querySelectorAll("[data-kr]").forEach(b=>b.onclick=()=>{if(kit.length>1){kit.splice(Number(b.dataset.kr),1);desenharKit();desenharTab()}})};
-  const desenharTab=()=>{const cs=comTam();
+  // Cada célula: tamanho e "Fica pendente" (a peça não sai agora; vai para a aba Pendentes com o tamanho escolhido).
+  const desenharTab=()=>{const cs=kit;
     $("#ltTab").innerHTML=pessoas.length?`<div class="tbl-wrap" style="box-shadow:none"><table><thead><tr><th>Pessoa</th>${cs.map(k=>`<th>${esc(prod(k.prod).nome.replace(/ · CA .*/,""))}</th>`).join("")}<th></th></tr></thead><tbody>
-      ${pessoas.map((pz,i)=>`<tr><td><b>${esc(pz.w.nome)}</b><div class="small muted mono">${esc(fmtCPF(pz.w.cpf))}</div></td>${cs.map(k=>{const t=pz.tam[k.prod]||"";return `<td><select class="inp" data-pt="${i}|${k.prod}" aria-label="Tamanho de ${esc(prod(k.prod).nome)} para ${esc(pz.w.nome)}" style="min-width:110px"><option value="">Escolha</option>${prod(k.prod).tam.map(x=>`<option value="${esc(x)}" ${x===t?"selected":""}>${esc(x)} (saldo ${saldo(k.prod,x)})</option>`).join("")}</select></td>`}).join("")}<td><button class="btn sm danger" type="button" data-pr="${i}" aria-label="Tirar ${esc(pz.w.nome)}">Tirar</button></td></tr>`).join("")}</tbody></table></div>`
+      ${pessoas.map((pz,i)=>`<tr><td><b>${esc(pz.w.nome)}</b><div class="small muted mono">${esc(fmtCPF(pz.w.cpf))}</div></td>${cs.map(k=>{const t=tamDe(pz,k.prod),pd=!!pz.pend[k.prod];return `<td><select class="inp${pd?" pend":""}" data-pt="${i}|${k.prod}" aria-label="Tamanho de ${esc(prod(k.prod).nome)} para ${esc(pz.w.nome)}" style="min-width:110px"><option value="">Escolha</option>${prod(k.prod).tam.map(x=>`<option value="${esc(x)}" ${x===t?"selected":""}>${esc(x)} (saldo ${saldo(k.prod,x)})</option>`).join("")}</select>
+        <label class="small" style="display:flex;gap:6px;align-items:center;margin-top:4px;white-space:nowrap"><input type="checkbox" data-pp="${i}|${k.prod}" ${pd?"checked":""}> Fica pendente</label></td>`}).join("")}<td><button class="btn sm danger" type="button" data-pr="${i}" aria-label="Tirar ${esc(pz.w.nome)}">Tirar</button></td></tr>`).join("")}</tbody></table></div>`
       :`<div class="empty">Ninguém na entrega ainda. Busque pelo nome ou cole uma lista.</div>`;
     m.querySelectorAll("[data-pt]").forEach(s=>s.onchange=()=>{const[i,pid]=s.dataset.pt.split("|");pessoas[i].tam[pid]=s.value;aviso()});
+    m.querySelectorAll("[data-pp]").forEach(c=>c.onchange=()=>{const[i,pid]=c.dataset.pp.split("|");pessoas[i].pend[pid]=c.checked;m.querySelector(`[data-pt="${c.dataset.pp}"]`).classList.toggle("pend",c.checked);aviso()});
     m.querySelectorAll("[data-pr]").forEach(b=>b.onclick=()=>{pessoas.splice(Number(b.dataset.pr),1);desenharTab()});aviso()};
   const ativos=()=>S.workers.filter(w=>w.status!=="desligado"&&!w.exemplo);
-  const adicionar=w=>{if(pessoas.some(p=>p.w.id===w.id))return false;const tam={};for(const k of kit)tam[k.prod]=ultTam(w,k.prod);pessoas.push({w,tam});
+  const adicionar=w=>{if(pessoas.some(p=>p.w.id===w.id))return false;const tam={};for(const k of kit)tam[k.prod]=ultTam(w,k.prod);pessoas.push({w,tam,pend:{}});
     if(!$("#ltEmp").value)$("#ltEmp").value=empDe(w);return true};
   const tamDe=(pz,pid)=>{const p=prod(pid);return p.tam.length===1&&p.tam[0]==="Único"?"Único":pz.tam[pid]||(pz.tam[pid]=ultTam(pz.w,pid))};
   const itensDe=()=>kit.map(k=>({prod:k.prod,qtd:k.qtd}));
@@ -2509,12 +2545,19 @@ function abrirLote(){
     if(!pessoas.length)p.push("Adicione as pessoas da entrega.");
     if(kit.some(k=>k.qtd<1))p.push("Informe quantidades a partir de 1.");
     const sem=pessoas.filter(pz=>kit.some(k=>!tamDe(pz,k.prod)));if(sem.length)p.push(`Escolha os tamanhos de: ${sem.map(pz=>pz.w.nome.split(" ")[0]).join(", ")}.`);
-    const soma={};for(const pz of pessoas)for(const k of kit){const t=tamDe(pz,k.prod);if(t){const c=k.prod+"|"+t;soma[c]=(soma[c]||0)+k.qtd}}
-    for(const [c,q] of Object.entries(soma)){const[pp,t]=c.split("|"),s=saldo(pp,t);if(q>s)p.push(`${prod(pp).nome} ${t}: saldo ${s}, pedido ${q}.`)}
+    const soma={};for(const pz of pessoas)for(const k of kit){const t=tamDe(pz,k.prod);if(t&&!pz.pend[k.prod]){const c=k.prod+"|"+t;soma[c]=(soma[c]||0)+k.qtd}}
+    for(const [c,q] of Object.entries(soma)){const[pp,t]=c.split("|"),s=saldo(pp,t);if(q>s)p.push(`${prod(pp).nome.replace(/ · CA .*/,"")} ${t}: saldo ${s}, pedido ${q} (faltam ${q-s}).`)}
     p.push(...regrasKit(mot,its));for(const pz of pessoas)p.push(...regrasPessoa(mot,pz.w,its,cfg.safra));return p};
-  const aviso=()=>{const mot=$("#ltMot").value,p=problemas();$("#ltGuiaW").hidden=!kit.some(k=>EPI_GUIA[k.prod]);
-    $("#ltSalvar").textContent=pessoas.length?`Lançar entrega de ${pessoas.length} pessoa${pessoas.length>1?"s":""}`:"Lançar entrega";
-    $("#ltAviso").innerHTML=(p.length&&pessoas.length?`<div class="banner" style="border-left-color:var(--crit)"><span>${p.map(esc).join("<br>")}</span></div>`:"")+(mot==="safra"?`<div class="note">${esc(cfg.safra)}: até 1 calça e 1 camisa por colaborador, sem desconto.</div>`:"")};
+  // Quem passar do saldo (na ordem da lista) fica com a peça pendente; o resto sai agora.
+  const faltaSaldo=()=>{const u={};return pessoas.some(pz=>kit.some(k=>{const t=tamDe(pz,k.prod);if(!t||pz.pend[k.prod])return false;const c=k.prod+"|"+t;u[c]=(u[c]||0)+k.qtd;return u[c]>saldo(k.prod,t)}))};
+  const pendAuto=()=>{const u={};for(const pz of pessoas)for(const k of kit){const t=tamDe(pz,k.prod);if(!t||pz.pend[k.prod])continue;const c=k.prod+"|"+t;
+    if((u[c]||0)+k.qtd>saldo(k.prod,t))pz.pend[k.prod]=true;else u[c]=(u[c]||0)+k.qtd}desenharTab()};
+  const aviso=()=>{const mot=$("#ltMot").value,p=problemas(),np=pessoas.reduce((s,pz)=>s+kit.filter(k=>pz.pend[k.prod]).length,0);$("#ltGuiaW").hidden=!kit.some(k=>EPI_GUIA[k.prod]);
+    $("#ltSalvar").textContent=pessoas.length?`Lançar entrega de ${pessoas.length} pessoa${pessoas.length>1?"s":""}${np?` · ${np} pendente${np>1?"s":""}`:""}`:"Lançar entrega";
+    $("#ltAviso").innerHTML=(p.length&&pessoas.length?`<div class="banner" style="border-left-color:var(--crit);flex-wrap:wrap;gap:10px"><span>${p.map(esc).join("<br>")}</span>${faltaSaldo()?`<button class="btn sm primary" type="button" id="ltPendAuto">Lançar o que tem e deixar pendente quem passar do estoque</button>`:""}</div>`:"")
+      +(np?`<div class="note">${np} peça${np>1?"s ficam pendentes":" fica pendente"}: o resto sai agora e o termo mostra o que ficou para depois. Quando chegar ao estoque, entregue em Estoque › Pendentes.</div>`:"")
+      +(mot==="safra"?`<div class="note">${esc(cfg.safra)}: até 1 calça e 1 camisa por colaborador, sem desconto.</div>`:"");
+    if($("#ltPendAuto"))$("#ltPendAuto").onclick=pendAuto};
   const sug=()=>{const q=$("#ltBusca").value.toLowerCase().trim(),qd=q.replace(/\D/g,"");if(q.length<2){$("#ltSug").innerHTML="";return}
     const r=ativos().filter(w=>!pessoas.some(p=>p.w.id===w.id)&&(w.nome.toLowerCase().includes(q)||(qd.length>=3&&w.cpf.includes(qd)))).slice(0,6);
     $("#ltSug").innerHTML=r.map(w=>`<div class="row"><span><b>${esc(w.nome)}</b> <span class="small muted mono">${esc(fmtCPF(w.cpf))}</span></span><button class="btn sm" type="button" data-pick="${w.id}">Adicionar</button></div>`).join("")||`<div class="small muted">Ninguém encontrado.</div>`;
@@ -2559,7 +2602,7 @@ function abrirLote(){
       for(const l of pl.linhas.slice(hi+1)){if(!l)continue;const nome=iN>=0?l[iN]:"",cpf=iC>=0?l[iC]:"";if(!String(nome??"").trim()&&!String(cpf??"").trim())continue;
         const w=acharPessoa(nome,cpf);if(!w){fora.push(String(nome||cpf).trim());continue}if(novas.some(x=>x.w.id===w.id))continue;
         const tam={};for(const {i,p} of cols){const v=String(l[i]??"").trim().toUpperCase().replace(/\.0+$/,"");if(!v)continue;const t=p.tam.find(x=>x.toUpperCase()===v);if(t)tam[p.id]=t;else ruins.push(`${w.nome.split(" ")[0]} (${p.nome.replace(/ · CA .*/,"")} ${v})`)}
-        novas.push({w,tam})}
+        novas.push({w,tam,pend:{}})}
       pessoas=novas;desenharKit();desenharTab();
       msg.textContent=`Planilha importada: ${novas.length} pessoa${novas.length===1?"":"s"}.${fora.length?` Não encontrei (ou há mais de uma pessoa com esse nome): ${fora.join("; ")}.`:""}${ruins.length?` Tamanho que não existe, escolha de novo: ${ruins.join("; ")}.`:""}`}
     catch(e){msg.textContent="";toast(String(e.message||e))}};
@@ -2569,10 +2612,12 @@ function abrirLote(){
   $("#ltSalvar").onclick=async()=>{const bt=$("#ltSalvar");if(bt.disabled)return;const p=problemas();if(p.length){toast(p[0]);return}bt.disabled=true;bt.textContent="Lançando…";
     const mot=$("#ltMot").value,obs=$("#ltObs").value.trim(),emp=$("#ltEmp").value.replace(/\s+/g," ").trim(),grupo=uid(),guia=!$("#ltGuiaW").hidden&&$("#ltGuia").checked,lotes=[],movs=[];
     for(const pz of pessoas){const lote=uid();lotes.push(lote);
-      for(const k of kit)movs.push(novoMov({lote,grupo,prod:k.prod,tam:tamDe(pz,k.prod),qtd:-k.qtd,motivo:mot,obs,...(emp?{emp}:{}),w:pz.w.id,wn:pz.w.nome,cpf:pz.w.cpf,...(mot==="safra"?{safra:cfg.safra}:{})}))}
+      for(const k of kit){const base={lote,grupo,prod:k.prod,tam:tamDe(pz,k.prod),obs,...(emp?{emp}:{}),w:pz.w.id,wn:pz.w.nome,cpf:pz.w.cpf,...(mot==="safra"?{safra:cfg.safra}:{})};
+        movs.push(novoMov(pz.pend[k.prod]?{...base,qtd:0,pq:k.qtd,motivo:"pendente",mot,...(guia&&EPI_GUIA[k.prod]?{guia:true}:{})}:{...base,qtd:-k.qtd,motivo:mot}))}}
+    const np=movs.filter(x=>x.motivo==="pendente").length;
     try{await estGravar(movs)}catch(e){toast(String(e.message||e));bt.disabled=false;aviso();return}
-    close();toast(`Entrega lançada para ${pessoas.length} pessoa${pessoas.length>1?"s":""}`);if(current==="estoque")vEst();
-    if(guia){let n=0;for(const pz of pessoas)n+=await pedirEpiGuia(S.workers.find(x=>x.id===pz.w.id)||pz.w,itensDe());if(n)toast(`${n} lançamento${n>1?"s":""} de EPI enviado${n>1?"s":""} para Aprovação`)}
+    close();toast(`Entrega lançada para ${pessoas.length} pessoa${pessoas.length>1?"s":""}${np?` · ${np} peça${np>1?"s ficaram pendentes":" ficou pendente"} (Estoque › Pendentes)`:""}`);if(current==="estoque")vEst();
+    if(guia){let n=0;for(const pz of pessoas)n+=await pedirEpiGuia(S.workers.find(x=>x.id===pz.w.id)||pz.w,itensDe().filter(i=>!pz.pend[i.prod]));if(n)toast(`${n} lançamento${n>1?"s":""} de EPI enviado${n>1?"s":""} para Aprovação`)}
     termoEntrega(lotes)};
 }
 /* Desconto autorizado na folha: um lançamento em Lançamentos › Crédito/Desconto por parcela (a 2ª no mês seguinte),
@@ -2632,12 +2677,13 @@ function imprimirVale(lote){
   $("#vPrint").onclick=()=>{$("#printArea").innerHTML=folha(opc());if(IS_TAURI)window.print();else toast("A impressão funciona no programa instalado.")};
 }
 function termoHTML(lote){
-  const movs=Est.movs.filter(m=>(m.lote||m.id)===lote&&m.motivo!=="estorno");if(!movs.length)return "";
+  const todos=Est.movs.filter(m=>(m.lote||m.id)===lote&&m.motivo!=="estorno"),movs=todos.filter(m=>!NAO_MOV.includes(m.motivo)),pend=todos.filter(m=>m.motivo==="pendente");if(!movs.length)return "";
   const f=movs[0],vale=false,total=movs.reduce((s,m)=>s+Number(m.valor||0),0),dt=new Date(f.q);
   return `<div class="ficha"><header><div style="flex-direction:row;align-items:center;gap:0"><img class="logo-f" src="logo.png" alt=""><div style="display:flex;flex-direction:column;gap:2px"><b>SINTRAMOMED</b><span>Sindicato dos Trabalhadores na Movimentação de Mercadorias em Geral de Dourados · CNPJ 03.682.762/0001-03</span></div></div><div class="fr">Termo de entrega ${f.motivo==="epi"?"de EPI":f.motivo==="primeiro"?"do primeiro uniforme":"de uniforme"}<br><small>${br(iso(dt))} às ${hhmm(dt)}</small></div></header>
    <h1>${esc(f.wn||"")}</h1><p style="margin:0;color:#6e6e73">CPF ${esc(fmtCPF(f.cpf||""))} · ${esc(MOTIVOS[f.motivo])}${f.motivo==="safra"?" · "+esc(f.safra):""}${f.emp?" · Empresa: "+esc(f.emp):""}</p>
    <section><h2>Itens entregues</h2><table><tr><th>Item</th><td><b>Tamanho · Quantidade${vale?" · Valor":""}</b></td></tr>${movs.map(m=>`<tr><th>${esc(prod(m.prod).nome)}</th><td>${esc(m.tam)} · ${-m.qtd}${vale?" · "+brl(m.valor):""}</td></tr>`).join("")}${vale?`<tr><th>Total</th><td><b>${brl(total)}</b></td></tr>`:""}</table></section>
-   <p style="margin-top:18px">Declaro que recebi os itens acima em perfeito estado, comprometo-me a usá-los no trabalho e a conservá-los.${f.motivo==="epi"?" Comprometo-me a usar os EPIs durante o trabalho, guardá-los e conservá-los e a comunicar qualquer dano, conforme a NR-6.":f.motivo==="primeiro"?" Recebi o primeiro uniforme sem custo (camiseta, calça e botina de segurança). A botina é EPI: comprometo-me a usá-la no trabalho, conservá-la e comunicar qualquer dano, conforme a NR-6. Em caso de perda ou dano do uniforme por culpa minha, fora do desgaste natural de uso, concordo que a reposição seja descontada pelo preço de custo, mediante termo assinado (art. 462, § 1º, da CLT).":" O uniforme é fornecido sem custo e limitado a 1 calça e 1 camisa por safra. Em caso de perda ou dano por culpa minha, fora do desgaste natural de uso, concordo que a reposição seja descontada pelo preço de custo, mediante termo assinado (art. 462, § 1º, da CLT)."}</p>
+   ${pend.length?`<section><h2>Ficaram pendentes (sem estoque na entrega)</h2><table>${pend.map(m=>`<tr><th>${esc(prod(m.prod).nome)}</th><td>${esc(m.tam)} · ${m.pq}</td></tr>`).join("")}</table><p style="margin:6px 0 0;font-size:12px">Serão entregues quando chegarem ao estoque, com novo termo.</p></section>`:""}
+   <p style="margin-top:18px">Declaro que recebi os itens ${pend.length?"entregues ":""}acima em perfeito estado, comprometo-me a usá-los no trabalho e a conservá-los.${f.motivo==="epi"?" Comprometo-me a usar os EPIs durante o trabalho, guardá-los e conservá-los e a comunicar qualquer dano, conforme a NR-6.":f.motivo==="primeiro"?" Recebi o primeiro uniforme sem custo"+(pend.length?"":" (camiseta, calça e botina de segurança)")+". A botina é EPI: comprometo-me a usá-la no trabalho, conservá-la e comunicar qualquer dano, conforme a NR-6. Em caso de perda ou dano do uniforme por culpa minha, fora do desgaste natural de uso, concordo que a reposição seja descontada pelo preço de custo, mediante termo assinado (art. 462, § 1º, da CLT).":" O uniforme é fornecido sem custo e limitado a 1 calça e 1 camisa por safra. Em caso de perda ou dano por culpa minha, fora do desgaste natural de uso, concordo que a reposição seja descontada pelo preço de custo, mediante termo assinado (art. 462, § 1º, da CLT)."}</p>
    <footer><div>__________________________________<br>${esc(f.wn||"Colaborador")}</div><div>__________________________________<br>Responsável pela entrega${f.u?" ("+esc(f.u)+")":""}</div></footer></div>`}
 // Um termo (lote) ou vários (entrega em lote): cada termo sai numa folha A4.
 function termoEntrega(lotes){
@@ -2649,11 +2695,12 @@ function termoEntrega(lotes){
   $("#tPrint").onclick=()=>{$("#printArea").innerHTML=html;if(IS_TAURI)window.print();else toast("A impressão funciona no programa instalado.")};
 }
 function uniformesHTML(w){
-  const ms=Est.movs.filter(m=>doColab(m,w)&&!["estorno","descontado"].includes(m.motivo)&&!estornado(m.id));
-  if(!ms.length)return `<div class="small muted">Nenhum uniforme entregue pelo estoque.</div>`;
+  const ms=Est.movs.filter(m=>doColab(m,w)&&m.motivo!=="estorno"&&!NAO_MOV.includes(m.motivo)&&!estornado(m.id)),pw=pendEst().filter(m=>doColab(m,w));
+  const pendTxt=pw.length?`<div class="note">Pendente de entrega: ${pw.map(m=>`${esc(prod(m.prod).nome)} ${esc(m.tam)} × ${m.pq} (desde ${br(m.q.slice(0,10))})`).join("; ")}</div>`:"";
+  if(!ms.length)return `<div class="small muted">Nenhum uniforme entregue pelo estoque.</div>${pendTxt}`;
   const aberto=ms.filter(m=>m.motivo==="vale"&&!descontado(m.id)).reduce((s,m)=>s+Number(m.valor||0),0);
   return `<div class="list">${ms.slice(0,12).map(m=>`<div class="row"><span>${br(m.q.slice(0,10))} · ${esc(prod(m.prod).nome)} ${esc(m.tam)} × ${Math.abs(m.qtd)}</span><span class="small muted">${esc(MOTIVOS[m.motivo])}${m.motivo==="safra"?" · "+esc(m.safra):""}${m.valor?" · "+brl(m.valor)+(descontado(m.id)?" (descontado)":""):""}</span></div>`).join("")}</div>
-   ${aberto?`<div class="note">Descontos autorizados a efetuar: <b>${brl(aberto)}</b></div>`:""}`}
+   ${aberto?`<div class="note">Descontos autorizados a efetuar: <b>${brl(aberto)}</b></div>`:""}${pendTxt}`}
 
 /* ---------- PASTA DO CENTRAL, ASOs RECEBIDOS E DOCUMENTOS ----------
    O programa cria a própria pasta (Documentos\Central Sintramomed, ou a escolhida) com:

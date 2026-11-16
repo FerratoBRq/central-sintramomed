@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.2 — 16/11/2026
+- Entrega em lote com falta de estoque: antes o lote inteiro travava (ex.: 10 pessoas e 8 botinas). Agora cada peça de cada pessoa tem "Fica pendente" e o botão "Lançar o que tem e deixar pendente quem passar do estoque" marca, na ordem da lista, quem passa do saldo. O resto sai na hora; a peça pendente vira registro "pendente" no estoque (qtd 0, não mexe no saldo) e o termo lista o que ficou para depois.
+- Nova aba Estoque › Pendentes: entrega uma a uma ou "Entregar os que já têm estoque" (confere o saldo somando o mesmo tamanho), com termo da peça e, se foi pedido no lote, o lançamento na aba EPI's pela Aprovação; Cancelar com confirmação. Estornar a entrega reabre a pendência. A ficha do trabalhador mostra o que está pendente.
+
 ## 0.2.1 — 16/11/2026
 - "Sem conexão com o GitHub" na verificação de atualização: a consulta usava a API do GitHub sem token, que aceita só 60 consultas por hora por endereço de internet, somando os PCs do escritório (cada um a cada 5 min estourava o limite, e os PCs deixavam de se atualizar). Agora o programa lê o redirecionamento de github.com/.../releases/latest (sem API) e confere que o instalador já está publicado (`versao_publicada` em atualizacao.rs, com teste).
 
