@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.1 — 16/11/2026
+- "Sem conexão com o GitHub" na verificação de atualização: a consulta usava a API do GitHub sem token, que aceita só 60 consultas por hora por endereço de internet, somando os PCs do escritório (cada um a cada 5 min estourava o limite, e os PCs deixavam de se atualizar). Agora o programa lê o redirecionamento de github.com/.../releases/latest (sem API) e confere que o instalador já está publicado (`versao_publicada` em atualizacao.rs, com teste).
+
 ## 0.2.0 — 16/11/2026
 - Entrega em lote pela planilha: Baixar planilha modelo gera um .xlsx (sem bibliotecas) com Empresa, Motivo (lista), instrução e uma coluna de tamanho por peça do kit, com a lista de tamanhos em cada célula (validação de dados), já com as pessoas que estão na lista. Importar planilha preenchida lê o .xlsx (`xlsxLer`), acha o cabeçalho NOME, casa as pessoas pelo CPF (com o zero que o Excel tira) ou pelo nome, confere os tamanhos, troca a lista pela da planilha e avisa quem não achou e tamanho que não existe.
 - `xlsxFolha` aceita `listas` (listas de escolha nas células).

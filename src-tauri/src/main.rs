@@ -33,6 +33,7 @@ fn main() {
             esocial::esocial_post,
             esocial::esocial_gravar,
             atualizacao::instalar_atualizacao,
+            atualizacao::versao_publicada,
             pasta::pasta_ler,
             pasta::pasta_gravar,
             pasta::pasta_arquivo_gravar,

@@ -396,7 +396,7 @@ p,.head p,.note,.small{text-wrap:pretty}
     </nav>
     <button class="tema-b" id="btnTema" type="button"></button>
     <div class="side-foot">
-      <div class="row2"><span>Versão <b class="mono" id="ver">0.2.0</b></span><span id="runtime">Modo navegador</span></div>
+      <div class="row2"><span>Versão <b class="mono" id="ver">0.2.1</b></span><span id="runtime">Modo navegador</span></div>
       <span id="syncInfo"></span>
       <button class="link" id="btnSync" type="button" hidden>Sincronizar tudo agora</button>
       <span id="updInfo">Verificando atualizações…</span>
@@ -414,7 +414,7 @@ p,.head p,.note,.small{text-wrap:pretty}
 /* Tema: claro, escuro ou automático (segue o Windows). O botão de lua/sol fixa o modo neste computador. */
 const temaEscuro=()=>{const t=document.documentElement.dataset.theme;return t?t==="dark":matchMedia("(prefers-color-scheme: dark)").matches};
 try{const t=localStorage.getItem("cs_tema");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}
-const APP_VERSION="0.2.0";
+const APP_VERSION="0.2.1";
 /* ---------- utilidades ---------- */
 const $=(s,r=document)=>r.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -647,6 +647,7 @@ const ATALHOS=[
 /* Novidades curtas por versão (aparecem na engrenagem, no aviso de atualização e em Feedback). Uma linha por versão;
    o detalhe fica no CHANGELOG.md. Ao lançar versão, acrescente a linha nova no topo. */
 const VERSOES=[
+ ["0.2.1","Verificação de atualização sem o aviso \"Sem conexão com o GitHub\""],
  ["0.2.0","Entrega em lote pela planilha (baixar modelo e importar preenchida)"],
  ["0.1.99","Estoque: empresa do uniforme, entrega em lote e fim do erro GitHub 403"],
  ["0.1.98","Uniforme polo sem custo"],
@@ -1632,7 +1633,6 @@ function showUpd(v,nov){updPending=v;const b=$("#updBar");b.hidden=false;
   $("#doUpd").onclick=aplicarUpd}
 /* No programa instalado (como no Livro Caixa): consulta as versões publicadas no GitHub,
    baixa o instalador da versão nova, instala sem perguntas e reabre. Sem chave de assinatura. */
-const GH_RELEASES="https://api.github.com/repos/FerratoBRq/central-sintramomed/releases/latest";
 const cmpVer=(a,b)=>{const x=String(a).replace(/^v/,"").split(".").map(Number),y=String(b).replace(/^v/,"").split(".").map(Number);for(let i=0;i<3;i++){if((x[i]||0)!==(y[i]||0))return (x[i]||0)>(y[i]||0)?1:-1}return 0};
 let updUrl="";
 const autoUpd=()=>LS.get("cs_auto_upd")!=="0";
@@ -1644,15 +1644,13 @@ async function aplicarUpd(){
 async function checkUpd(manual){
   const info=$("#updInfo");
   try{
-    if(IS_TAURI){const r=await fetch(GH_RELEASES,{cache:"no-store",headers:{Accept:"application/vnd.github+json"}});
-      if(r.status===404){if(manual)toast("Ainda não há versão publicada");}
-      else{if(!r.ok)throw new Error("GitHub "+r.status);const rel=await r.json();const v=String(rel.tag_name||"").replace(/^v/,"");
-        const asset=(rel.assets||[]).find(a=>/-setup\.exe$/i.test(a.name));
-        if(v&&asset&&cmpVer(v,APP_VERSION)>0){updUrl=asset.browser_download_url;
-          const nov=String(rel.body||"").split(/\r?\n/).map(l=>l.replace(/^[-*]\s*/,"").trim()).filter(Boolean);
-          if(autoUpd()&&!Sync.rodando&&!$("#layer").innerHTML){updPending=v;aplicarUpd();return}
-          showUpd(v,nov)}
-        else if(manual)toast("Você já está na versão mais recente")}}
+    // Pelo programa (Rust), sem a API do GitHub: sem token ela aceita só 60 consultas por hora por endereço de internet,
+    // somando os PCs do escritório, e a verificação a cada 5 min estourava o limite ("Sem conexão com o GitHub").
+    if(IS_TAURI){const r=await tinvoke("versao_publicada");
+      if(r&&cmpVer(r[0],APP_VERSION)>0){const v=r[0];updUrl=r[1];
+        if(autoUpd()&&!Sync.rodando&&!$("#layer").innerHTML){updPending=v;aplicarUpd();return}
+        showUpd(v,[])}
+      else if(manual)toast(r?"Você já está na versão mais recente":"Nenhuma versão nova publicada ainda")}
     else{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});const v=await r.json();
       if(v.version&&cmpVer(v.version,APP_VERSION)>0)showUpd(v.version,v.novidades);else if(manual)toast("Você já está na versão mais recente")}
     const n=new Date();info.textContent=`Verificado às ${hhmm(n)} · próxima às ${hhmm(new Date(n.getTime()+UPD_MS))}`;
