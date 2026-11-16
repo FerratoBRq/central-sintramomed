@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.0 — 16/11/2026
+- Entrega em lote pela planilha: Baixar planilha modelo gera um .xlsx (sem bibliotecas) com Empresa, Motivo (lista), instrução e uma coluna de tamanho por peça do kit, com a lista de tamanhos em cada célula (validação de dados), já com as pessoas que estão na lista. Importar planilha preenchida lê o .xlsx (`xlsxLer`), acha o cabeçalho NOME, casa as pessoas pelo CPF (com o zero que o Excel tira) ou pelo nome, confere os tamanhos, troca a lista pela da planilha e avisa quem não achou e tamanho que não existe.
+- `xlsxFolha` aceita `listas` (listas de escolha nas células).
+
 ## 0.1.99 — 16/11/2026
 - Erro "GitHub 403" (estoque e sincronização): o limite do GitHub (5.000 pedidos por hora, somando os PCs) estourava porque cada PC pedia, a cada minuto, cada um dos 209 anexos que nunca tinham subido. Agora a lista de anexos é lida num pedido só e só quando a pasta muda (`ghArquivos`, novo comando `gh_arvore` em github.rs, só leitura); o registro interno vai a cada 30 min (era a cada minuto, um commit por vez); o diário igual ao último enviado não vai de novo; ao bater no limite, o Central pausa 10 min em vez de insistir e grava a mensagem do GitHub no registro interno.
 - Anexos lançados num PC que nunca chegaram ao GitHub voltam para a fila de envio desse PC (5 por minuto, dentro do limite de gravações do GitHub).
