@@ -251,7 +251,7 @@ td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
 .vale-l1 .vale-campo{flex:0 0 46%}.vale-data{padding-left:60px}.vale-data u{flex:0 0 22%;text-align:center}
 .vale-txt{font-size:11px;color:#222}.vale-q{font-size:9px;color:#666;text-align:right}
 .vale-corte{text-align:center;color:#666;font-size:11px;padding:3mm 0;letter-spacing:.05em}
-@media print{#printArea .vale-folha{padding:0;max-width:none}}
+@media print{#printArea .vale-folha{padding:0;max-width:none}#printArea .ficha+.ficha{break-before:page;page-break-before:always}}
 
 /* programação de pagamentos (folha A4 no modelo do sindicato) */
 .pg-folha{background:#fff;color:#111;width:100%;max-width:794px;margin:0 auto;padding:12mm 12mm 10mm;font:12px/1.3 Arial,Helvetica,sans-serif;box-sizing:border-box}
@@ -396,7 +396,7 @@ p,.head p,.note,.small{text-wrap:pretty}
     </nav>
     <button class="tema-b" id="btnTema" type="button"></button>
     <div class="side-foot">
-      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.98</b></span><span id="runtime">Modo navegador</span></div>
+      <div class="row2"><span>Versão <b class="mono" id="ver">0.1.99</b></span><span id="runtime">Modo navegador</span></div>
       <span id="syncInfo"></span>
       <button class="link" id="btnSync" type="button" hidden>Sincronizar tudo agora</button>
       <span id="updInfo">Verificando atualizações…</span>
@@ -414,7 +414,7 @@ p,.head p,.note,.small{text-wrap:pretty}
 /* Tema: claro, escuro ou automático (segue o Windows). O botão de lua/sol fixa o modo neste computador. */
 const temaEscuro=()=>{const t=document.documentElement.dataset.theme;return t?t==="dark":matchMedia("(prefers-color-scheme: dark)").matches};
 try{const t=localStorage.getItem("cs_tema");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}
-const APP_VERSION="0.1.98";
+const APP_VERSION="0.1.99";
 /* ---------- utilidades ---------- */
 const $=(s,r=document)=>r.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -445,7 +445,8 @@ const Diag={max:300,sujo:false,
   erro(tipo,msg,onde){try{const d=this.get();d.erros=(d.erros||[]).concat({t:new Date().toISOString(),tipo,tela:typeof current!=="undefined"?current:"",versao:typeof APP_VERSION!=="undefined"?APP_VERSION:"",msg:this.limpo(msg),onde:this.limpo(onde)}).slice(-this.max);this.set(d);this.sujo=true}catch(e){}},
   conta(grupo,chave,ms){try{const d=this.get(),dia=new Date().toISOString().slice(0,10);d.m=d.m||{};const g=((d.m[dia]=d.m[dia]||{})[grupo]=d.m[dia][grupo]||{}),x=g[chave]=g[chave]||{n:0,ms:0};x.n++;if(ms)x.ms+=Math.round(ms);
     const dias=Object.keys(d.m).sort();while(dias.length>30)delete d.m[dias.shift()];this.set(d);this.sujo=true}catch(e){}},
-  async enviar(){if(!this.sujo||!IS_TAURI||!compAtivo())return;this.sujo=false;
+  // No máximo a cada 30 min (era a cada minuto: um commit por minuto por PC, contando no limite do GitHub).
+  async enviar(){if(!this.sujo||!IS_TAURI||!compAtivo()||Date.now()-(this.ult||0)<30*60e3)return;this.sujo=false;this.ult=Date.now();
     try{await compGravar("central-logs",pcId()+".jsonl",JSON.stringify({pc:pcId(),versao:APP_VERSION,enviado:new Date().toISOString(),...this.get()}))}catch(e){this.sujo=true}}};
 window.addEventListener("error",e=>Diag.erro("script",e.message,`${String(e.filename||"").split("/").pop()}:${e.lineno}:${e.colno} ${e.error&&e.error.stack||""}`));
 window.addEventListener("unhandledrejection",e=>{const r=e.reason;Diag.erro("promessa",r&&(r.message||r),r&&r.stack)});
@@ -564,7 +565,7 @@ const MANUAL=[
  {t:"ASOs e NRs recebidos",p:["Salve os PDFs que chegam pelo WhatsApp na pasta ASOs para lançar ou NRs para lançar (Documentos > Central Sintramomed). O Central lê a cada minuto. Se o arquivo for para a pasta errada, ele muda sozinho.","Também dá para usar Anexar ou arrastar os PDFs para a tela.","Na aba Para conferir: Conferir e lançar abre o documento lido para conferir. Enviar prontos para aprovação manda de uma vez os que estão completos.","Depois de lançado, o arquivo vai para ASOs lançados ou NRs lançadas e fica anexado na ficha."]},
  {t:"Aprovação",p:["Tudo o que o Central vai gravar no Sistema eSocial (ASO, NR, endereço, desconto autorizado, EPI) aparece aqui com o que muda: como está no sistema e como vai ficar.","Aprovar e enviar pede uma segunda confirmação, grava no Guia e confere relendo a página. Recusar descarta o pedido.","A aba Histórico guarda o que foi enviado, recusado ou deu erro."]},
  {t:"Relatório mensal e sem produção",p:["Afastados e desligados entram no mês pela data de envio do evento ao eSocial (S-2399 ou S-2230), não pela data do término, que é retroativa. Ex.: término em 18/06 enviado em 15/10 entra em outubro. Na tela aparece a data da última produção de cada um (lida do relatório de produção do Guia ao Buscar) e, embaixo, a data do envio.","Relatório mensal: escolha o mês e clique em Buscar no Sistema eSocial. Vêm admissões, periódicos (com a empresa da produção) e afastados/desligados (pelo mês do lançamento).","Marque classificação do ASO, envio à DOM e antecedentes; inclua pessoas à mão se precisar; clique em Gerar Excel.","Aba Sem produção há +3 meses: marque quem deve ser desligado. Marcar não envia nada ao sistema."]},
- {t:"Estoque e EPIs",p:["Aba Saldo mostra uniformes por tamanho e EPIs. Contagem: digite o que há de fato e o Central lança só a diferença.","Entrada: compra ou devolução. Saída ou baixa: Primeiro uniforme (kit pronto e sem custo: 1 camiseta manga longa, 1 calça e 1 botina; só escolher os tamanhos, uma vez por trabalhador), Entrega de EPI (sem custo), Uniforme da safra (1 calça e 1 camisa por safra, sem custo), Fornecimento com desconto autorizado ou Baixa.","Desconto autorizado só vale para peça extra pedida pelo trabalhador ou reposição por perda/dano por culpa dele. Botina e EPIs nunca são cobrados. Imprima o Termo de autorização de desconto e colha a assinatura antes.","Ao entregar camiseta, calça ou botina, a opção Lançar também na aba EPI's do Sistema eSocial cria o pedido na Aprovação.","Estorno: o botão Estornar desfaz um movimento. Ele pede confirmação, e um clique duplo não lança duas vezes.","Limpar histórico do estoque (aba Configurações): zera saldos e movimentos até agora em todos os computadores; depois lance a Contagem."]},
+ {t:"Estoque e EPIs",p:["Aba Saldo mostra uniformes por tamanho e EPIs. Contagem: digite o que há de fato e o Central lança só a diferença.","Entrada: compra ou devolução. Saída ou baixa: Primeiro uniforme (kit pronto e sem custo: 1 camiseta manga longa, 1 calça e 1 botina; só escolher os tamanhos, uma vez por trabalhador), Entrega de EPI (sem custo), Uniforme da safra (1 calça e 1 camisa por safra, sem custo), Fornecimento com desconto autorizado ou Baixa.","Empresa: na entrega, escolha a empresa para onde vai o uniforme (lista das empresas do Sistema eSocial, ou digite). O Central já sugere a do último relatório mensal. A empresa aparece nos Movimentos, na busca e no termo.","Entrega em lote: o mesmo kit para várias pessoas de uma vez. Escolha o motivo, a empresa e o kit, adicione as pessoas pelo nome ou CPF (ou cole uma lista, um por linha) e escolha o tamanho de cada uma (o Central sugere o da última entrega). Ao lançar, saem todos os termos, um por folha.","Desconto autorizado só vale para peça extra pedida pelo trabalhador ou reposição por perda/dano por culpa dele. Botina e EPIs nunca são cobrados. Imprima o Termo de autorização de desconto e colha a assinatura antes.","Ao entregar camiseta, calça ou botina, a opção Lançar também na aba EPI's do Sistema eSocial cria o pedido na Aprovação.","Estorno: o botão Estornar desfaz um movimento. Ele pede confirmação, e um clique duplo não lança duas vezes.","Limpar histórico do estoque (aba Configurações): zera saldos e movimentos até agora em todos os computadores; depois lance a Contagem."]},
  {t:"NR-01 · Portal DOM",p:["Conecte o Portal DOM uma vez na engrenagem (e-mail e senha do portal). O Central consulta o portal a cada 10 minutos.","Aba Situação: quem está fora do portal, convidado, em treinamento ou concluiu, com os itens feitos.","Aba Importar: salva a planilha dos que faltam e abre a tela de importação do portal; arraste o arquivo e confirme lá.","Aba Faltam dados: quem não entra na planilha por falta de CPF, WhatsApp (celular com DDD) ou data de início."]},
  {t:"Adiantamentos",p:["Ferramentas › Adiantamentos: escolha o trabalhador pelo nome, o valor, a data e em quantas parcelas descontar (uma por quinzena). Registrar adiantamento só grava; o termo de adiantamento e autorização de desconto (2 vias) fica no botão Imprimir termo de cada adiantamento da lista e pode ser emitido a qualquer momento.","Programação de adiantamentos: escolha o período e imprima a lista A4 no formato da programação de pagamento, com conta, poupança ou PIX.","Lançar desconto no Guia (clique duas vezes para confirmar) manda cada parcela para a Aprovação como Crédito/Desconto ADIANTAMENTO SALARIAL; depois de aprovado, sai no holerite.","Na Programação de pagamento, o líquido já vem descontado e o nome aparece com “− Adiantamento”. Parcela da quinzena ainda não lançada no Guia aparece num aviso.","Base legal: CLT art. 462 (desconto de adiantamento) e Constituição art. 7º, XXXIV (avulso). Sem juros, com termo assinado e sem passar de 70% do líquido da quinzena."]},
  {t:"Programação de pagamento",p:["Escolha o mês e a quinzena e clique em Buscar produção e contas. As empresas com produção vêm marcadas.","Puxar o valor líquido preenche o VALOR com o líquido do holerite, lido das folhas já processadas da quinzena; empresa sem folha processada fica em branco e aparece um aviso. Quem trabalhou em mais de uma empresa fica na de mais diárias, com a soma (*).","Vale-transporte: em Anexar planilhas (.xlsx), escolha a planilha de transporte da empresa (pode ser a do ano todo). O programa pega só o período da quinzena, liga à empresa pelo nome do título (ex.: TRANSPORTE COAMO DOURADOS) e soma o Valor a Receber no valor de cada trabalhador, que aparece com “+ Transporte” na frente do nome. Se ligar à empresa errada, troque na lista ao lado: fica lembrado. Quem está na planilha mas não teve produção aparece num aviso.","Usar PIX para quem não tem conta: usa a chave do Guia; sem ela, o celular ou e-mail do cadastro marcado (conferir).","Imprima uma folha por empresa, as empresas marcadas juntas ou a folha em branco."]},
@@ -646,6 +647,7 @@ const ATALHOS=[
 /* Novidades curtas por versão (aparecem na engrenagem, no aviso de atualização e em Feedback). Uma linha por versão;
    o detalhe fica no CHANGELOG.md. Ao lançar versão, acrescente a linha nova no topo. */
 const VERSOES=[
+ ["0.1.99","Estoque: empresa do uniforme, entrega em lote e fim do erro GitHub 403"],
  ["0.1.98","Uniforme polo sem custo"],
  ["0.1.97","Estoque: camiseta P e uniforme polo (P a GG)"],
  ["0.1.96","Modelos para impressão saem impressos (não mais em branco), em tamanho real"],
@@ -2092,22 +2094,36 @@ function anotar(col,k,d,del){
   return dia}
 /* Transporte da troca: repositório privado do GitHub (se configurado) ou pasta compartilhada.
    O token fica no Gerenciador de Credenciais; o Rust só acessa contents/ do repositório configurado. */
-const GH={cfg:null,sha:{},cache:{}};
+const GH={cfg:null,sha:{},cache:{},arqDir:"",arqs:null,pausa:0};
 const ghOn=()=>IS_TAURI&&!!(GH.cfg&&GH.cfg.configurado);
 const compAtivo=()=>ghOn()||!!pastaComp();
 const compId=()=>ghOn()?"gh:"+GH.cfg.repo:pastaComp();
 const b64utf8=s=>{const u=new TextEncoder().encode(s);let r="";for(let i=0;i<u.length;i+=0x8000)r+=String.fromCharCode(...u.subarray(i,i+0x8000));return btoa(r)};
-async function ghGet(path,raw){const [st,txt]=await tinvoke("gh_conteudo",{metodo:"GET",caminho:path,corpo:null,raw});if(st===404)return null;if(st>=300)throw new Error(`GitHub ${st}`);return raw?txt:JSON.parse(txt)}
+// Limite do GitHub (5.000 pedidos por hora, somando todos os PCs com o mesmo token): ao bater nele (403/429), pausa 10 min
+// em vez de insistir; outras respostas de erro vão para o registro interno com a mensagem do GitHub.
+const GH_PAUSA="GitHub: limite de pedidos por hora atingido. O Central tenta de novo sozinho em alguns minutos.";
+function ghPausado(){if(Date.now()<GH.pausa)throw new Error(GH_PAUSA)}
+function ghFalha(st,txt,path){let msg="";try{msg=JSON.parse(txt).message||""}catch(e){}
+  if(st===429||st===403&&/rate limit/i.test(msg)){GH.pausa=Date.now()+10*60e3;Diag.erro("github",`${st} ${msg}`.slice(0,200),path);return new Error(GH_PAUSA)}
+  Diag.erro("github",`${st} ${msg}`.slice(0,200),path);return new Error(`GitHub ${st}${msg?": "+msg:""}`)}
+async function ghGet(path,raw){ghPausado();const [st,txt]=await tinvoke("gh_conteudo",{metodo:"GET",caminho:path,corpo:null,raw});if(st===404)return null;if(st>=300)throw ghFalha(st,txt,path);return raw?txt:JSON.parse(txt)}
+// Quais anexos já estão no GitHub: a lista da pasta só é lida de novo quando ela muda (sha vem da listagem de central-dados).
+// Antes, cada PC pedia ao GitHub, a cada minuto, cada anexo que faltava, e o limite por hora estourava (GitHub 403).
+async function ghArquivos(){
+  if(!GH.arqDir)return new Set();if(GH.arqs&&GH.arqs.sha===GH.arqDir)return GH.arqs.nomes;
+  ghPausado();const [st,txt]=await tinvoke("gh_arvore",{sha:GH.arqDir});if(st>=300)throw ghFalha(st,txt,"central-dados/arquivos");
+  GH.arqs={sha:GH.arqDir,nomes:new Set((JSON.parse(txt).tree||[]).map(f=>f.path))};return GH.arqs.nomes}
 async function ghPut(path,b64,msg){
   for(let t=0;t<3;t++){let sha=GH.sha[path];if(sha===undefined){const j=await ghGet(path,false);sha=j&&j.sha||null}
-    const [st,txt]=await tinvoke("gh_conteudo",{metodo:"PUT",caminho:path,corpo:JSON.stringify({message:msg,content:b64,...(sha?{sha}:{})}),raw:false});
+    ghPausado();const [st,txt]=await tinvoke("gh_conteudo",{metodo:"PUT",caminho:path,corpo:JSON.stringify({message:msg,content:b64,...(sha?{sha}:{})}),raw:false});
     if(st<300){GH.sha[path]=JSON.parse(txt).content.sha;return}
     if(st===409||st===422){delete GH.sha[path];continue}
-    throw new Error(`GitHub ${st}`)}
+    throw ghFalha(st,txt,path)}
   throw new Error("GitHub: não foi possível gravar (conflito)")}
 async function compLer(sub){
   if(!ghOn())return tinvoke("pasta_ler",{pasta:pastaComp(),subpasta:sub});
   const lista=await ghGet(sub,false)||[],out=[];
+  if(sub==="central-dados"){const a=lista.find(f=>f.type==="dir"&&f.name==="arquivos");GH.arqDir=a?a.sha:""}
   for(const f of lista){if(f.type!=="file"||!/\.jsonl$/.test(f.name))continue;
     if(!GH.cache[f.path]||GH.cache[f.path].sha!==f.sha)GH.cache[f.path]={sha:f.sha,txt:await ghGet(f.path,true)||""};
     GH.sha[f.path]=f.sha;out.push([f.name,GH.cache[f.path].txt])}
@@ -2116,8 +2132,9 @@ const compGravar=(sub,nome,conteudo)=>ghOn()?ghPut(`${sub}/${nome}`,b64utf8(cont
 async function compArqGravar(nome,base64){
   if(!ghOn())return tinvoke("pasta_arquivo_gravar",{pasta:pastaComp(),nome,base64});
   // ponytail: o anexo vai como texto base64 (o GitHub codifica de novo); limite de 100 MB por arquivo, os anexos têm no máximo 25 MB.
-  const p=`central-dados/arquivos/${nome}`;if(GH.sha[p])return;const j=await ghGet(p,false);if(j){GH.sha[p]=j.sha;return}
-  return ghPut(p,b64utf8(base64),"anexo")}
+  const p=`central-dados/arquivos/${nome}`;if(GH.sha[p]||(await ghArquivos()).has(nome))return;
+  if(GH.sha[p]===undefined)GH.sha[p]=null; // a lista diz que não existe: grava sem pedir o sha antes (se existir, o 422 refaz)
+  await ghPut(p,b64utf8(base64),"anexo");if(GH.arqs)GH.arqs.nomes.add(nome)}
 const compArqLer=nome=>ghOn()?ghGet(`central-dados/arquivos/${nome}`,true):tinvoke("pasta_arquivo_ler",{pasta:pastaComp(),nome});
 let _pub=Promise.resolve();
 // Anexos que não subiram (sem internet) ficam em cs_blob_pend e vão no próximo envio; sem isso o anexo nunca chegava aos outros PCs.
@@ -2127,9 +2144,11 @@ function publicar(blobs){
   if(!compAtivo())return;
   const novos=new Map((blobs||[]).filter(d=>d&&d.blob).map(d=>[d.id,d]));blobPendSet([...blobPend(),...novos.keys()]);
   _pub=_pub.then(async()=>{try{
-    for(const id of blobPend()){const d=novos.get(id)||S.docs.find(x=>x.id===id);
+    for(const id of blobPend().slice(0,5)){const d=novos.get(id)||S.docs.find(x=>x.id===id);
       if(d&&d.blob)await compArqGravar(d.id+".b64",await blobB64(d.blob));blobPendSet(blobPend().filter(x=>x!==id))}
-    await compGravar("central-dados",pcId()+".jsonl",diario().map(x=>JSON.stringify(x)).join("\n"));Comp.erro="";LS.del("cs_pub_falhou")}
+    // Diário igual ao último enviado não vai de novo (cada gravação no GitHub é um commit e conta no limite por hora).
+    const txt=diario().map(x=>JSON.stringify(x)).join("\n");if(txt!==Comp.pubTxt){await compGravar("central-dados",pcId()+".jsonl",txt);Comp.pubTxt=txt}
+    Comp.erro="";LS.del("cs_pub_falhou")}
    catch(e){Comp.erro=String(e);LS.set("cs_pub_falhou","1")}});return _pub}
 function registrar(col,o,del){
   if(!IS_TAURI||!o||o.exemplo||o.workerId==="__recebido")return;
@@ -2149,6 +2168,7 @@ async function aplicarRemoto(e){
   if(col==="docs"){
     if(e.del){await Store.del("docs",e.k,true);return true}
     const dono=d.dono===MOD_ID?MOD_ID:(S.workers.find(x=>x.cpf===d.dono)||{}).id;if(!dono)return false;
+    if(ghOn()&&!(await ghArquivos()).has(d.id+".b64"))return false; // anexo ainda não subiu: espera a pasta mudar, sem pedir ao GitHub
     const b=await compArqLer(d.id+".b64");if(!b)return false;
     const doc={...d,workerId:dono,blob:b64Blob(b,d.mime)};delete doc.dono;await Store.put("docs",doc,true);return true}
   if(col==="lists"||col==="interviews"){if(e.del)await Store.del(col,e.k,true);else await Store.put(col,d,true);return true}
@@ -2164,6 +2184,9 @@ async function puxarCompartilhado(){
     for(const e of ents){const key=e.col+"|"+e.k;if(mk[key]&&mk[key]>=e.t)continue;
       try{if(await aplicarRemoto(e)){mk[key]=e.t;mudou++}}catch(err){}}
     LS.set("cs_diario_t",JSON.stringify(mk));Comp.ultima=new Date().toISOString();
+    if(ghOn()&&!Comp.conferiuArq){Comp.conferiuArq=true;const tem=await ghArquivos(),meus=new Set(diario().filter(x=>x.col==="docs"&&!x.del).map(x=>x.k));
+      // Anexos lançados aqui que nunca chegaram ao GitHub (falha de rede antes da 0.1.96) voltam para a fila de envio.
+      const faltam=S.docs.filter(d=>meus.has(d.id)&&d.blob&&d.blob.size&&!tem.has(d.id+".b64")).map(d=>d.id);if(faltam.length)blobPendSet([...blobPend(),...faltam])}
     if(mudou){await loadAll();rerenderSeguro()}}
   catch(e){Comp.erro=String(e)}
   finally{Comp.rodando=false}}
@@ -2282,6 +2305,31 @@ const doColab=(m,w)=>w.cpf?m.cpf===w.cpf:m.w===w.id;
 function safraUsada(w,safra,grupo){return Est.movs.filter(m=>doColab(m,w)&&m.motivo==="safra"&&m.safra===safra&&prod(m.prod).grupo===grupo&&!estornado(m.id)).reduce((s,m)=>s-Number(m.qtd),0)}
 function valesDe(w){return Est.movs.filter(m=>doColab(m,w)&&m.motivo==="vale"&&!estornado(m.id))}
 const novoMov=o=>({id:uid(),q:new Date().toISOString(),pc:pcId(),u:nomeUsuario()||"",...o});
+// Empresas tomadoras (as do relatório de produção do Sistema eSocial), lidas uma vez por dia e guardadas em cs_empresas.
+async function empresasGuia(){
+  let c={};try{c=JSON.parse(LS.get("cs_empresas")||"{}")}catch(e){}
+  if(!IS_TAURI||c.dia===iso(TODAY)&&c.lista&&c.lista.length)return c.lista||[];
+  try{const l=[...dom(await sget("/register/rel_folhaproducao.php")).querySelectorAll('select[name="cod_empresa"] option')].filter(o=>o.value).map(o=>o.textContent.replace(/\s+/g," ").trim()).filter(Boolean);
+    if(l.length){LS.set("cs_empresas",JSON.stringify({dia:iso(TODAY),lista:l}));return l}}catch(e){}
+  return c.lista||[]}
+async function empPreencher(id){const l=await empresasGuia(),el=document.getElementById(id);if(el)el.innerHTML=l.map(n=>`<option value="${esc(n)}"></option>`).join("")}
+// Empresa sugerida: a do último relatório mensal (nome abreviado) casada com a lista; senão a da última entrega.
+function empDe(w){let l=[];try{l=JSON.parse(LS.get("cs_empresas")||"{}").lista||[]}catch(e){}
+  const ab=empresaDe(w.cpf),n=ab&&l.find(x=>abrevEmpresa(x)===ab);if(n)return n;const m=Est.movs.find(x=>doColab(x,w)&&x.emp);return m?m.emp:ab||""}
+// Regras de cada pessoa, na saída e na entrega em lote: primeiro uniforme uma vez só; uniforme da safra até 1 calça e 1 camisa.
+function regrasPessoa(mot,w,its,safra){const p=[],pn=w.nome.split(" ")[0];
+  if(mot==="primeiro"){const ja=Est.movs.find(x=>doColab(x,w)&&x.motivo==="primeiro"&&!estornado(x.id));if(ja)p.push(`${pn} já recebeu o primeiro uniforme em ${br(ja.q.slice(0,10))}. Use Uniforme da safra, Entrega de EPI ou Fornecimento com desconto autorizado.`)}
+  if(mot==="safra")for(const g of ["camisa","calca"]){const pedido=its.filter(i=>prod(i.prod).grupo===g).reduce((s,i)=>s+i.qtd,0),usado=safraUsada(w,safra,g);
+    if(pedido+usado>LIMITE_SAFRA[g])p.push(`${pn} já recebeu ${usado} ${g==="calca"?"calça":"camisa"} na ${safra}; o limite é ${LIMITE_SAFRA[g]}.`)}
+  return p}
+function regrasKit(mot,its){const p=[];
+  if(mot==="safra"){if(its.some(i=>prod(i.prod).grupo==="botina"))p.push("Botina não faz parte do uniforme da safra: é EPI. Use Entrega de EPI (sem custo).");if(its.some(i=>prod(i.prod).grupo==="epi"))p.push("EPI não faz parte do uniforme da safra. Use Entrega de EPI.")}
+  return p}
+// Lançamentos na aba EPI's do Sistema eSocial, um por item, pela Aprovação.
+async function pedirEpiGuia(w,its){let n=0;
+  for(const i of its.filter(i=>EPI_GUIA[i.prod])){const[cod,nome]=EPI_GUIA[i.prod],dados={data:iso(TODAY),equip_cod:cod,equip:nome,qtd:i.qtd};
+    await aprovCriar("epi",w,dados,[["Aba do sistema","Trabalhador › EPI's","Trabalhador › EPI's"],["Operação","—","Inserir lançamento novo"],["Data","",br(dados.data)],["Equipamento","",nome],["Quantidade","",String(i.qtd)]]);n++}
+  return n}
 
 function vEst(){
   const cfg=estCfg();
@@ -2289,11 +2337,11 @@ function vEst(){
   const zerados=PRODUTOS.reduce((n,p)=>n+p.tam.filter(t=>saldo(p.id,t)<=0).length,0);
   const aDescontar=Est.movs.filter(m=>m.motivo==="vale"&&!estornado(m.id)&&!descontado(m.id)).reduce((s,m)=>s+Number(m.valor||0),0);
   const busca=(ui.estBusca||"").toLowerCase();
-  const lista=Est.movs.filter(m=>m.motivo!=="descontado"&&(!busca||[m.wn,m.cpf,prod(m.prod).nome,m.tam,MOTIVOS[m.motivo]].join(" ").toLowerCase().includes(busca)));
+  const lista=Est.movs.filter(m=>m.motivo!=="descontado"&&(!busca||[m.wn,m.cpf,prod(m.prod).nome,m.tam,MOTIVOS[m.motivo],m.emp].join(" ").toLowerCase().includes(busca)));
   const aba=ui.estAba||"saldo",H=k=>aba===k?"":"hidden",pgM=paginar(lista,"estPg"),nDesc=Est.movs.filter(m=>m.motivo==="vale"&&!estornado(m.id)&&!descontado(m.id)).length;
   $("#view").innerHTML=`<div class="head"><div><h1>Estoque de uniformes e EPIs</h1><p>Camisetas, polos, calças, botinas e EPIs: entradas, entregas de EPI, vales, uniforme da safra e baixas. Cada saída fica ligada ao colaborador.</p></div>
-   <div class="toolbar"><button class="btn" id="estInv">${ico("list",16)} Contagem</button><button class="btn" id="estEnt">${ico("plus",16)} Entrada</button><button class="btn primary" id="estSai">Saída ou baixa</button></div></div>
-  ${Est.erro?`<div class="banner" style="border-left-color:var(--crit)"><span>Pasta compartilhada indisponível: ${esc(Est.erro)}. Mostrando só os movimentos deste computador.</span></div>`:""}
+   <div class="toolbar"><button class="btn" id="estInv">${ico("list",16)} Contagem</button><button class="btn" id="estEnt">${ico("plus",16)} Entrada</button><button class="btn" id="estLote">${ico("list",16)} Entrega em lote</button><button class="btn primary" id="estSai">Saída ou baixa</button></div></div>
+  ${Est.erro?`<div class="banner" style="border-left-color:var(--crit)"><span>Não foi possível ler o estoque dos outros computadores (${esc(String(Est.erro).replace(/^Error:\s*/,""))}). Mostrando só os movimentos deste computador.</span></div>`:""}
   ${abasHTML("estAba",[["saldo","Saldo"],["movimentos",`Movimentos (${lista.length})`],["descontos",`Descontos${nDesc?" ("+nDesc+")":""}`],["config","Configurações"]],aba)}
   <div class="tiles" ${H("saldo")}>${tot.filter(({p})=>p.grupo!=="epi").map(({p,q})=>`<div class="tile" style="cursor:default"><span class="ic">${ico("box",22)}</span><span class="n">${q}</span><span class="l">${esc(p.nome)}</span></div>`).join("")}</div>
   <div class="grid2" ${aba==="saldo"?"":"hidden"}>
@@ -2308,11 +2356,11 @@ function vEst(){
     ${(()=>{const v=Est.movs.filter(m=>m.motivo==="vale"&&!estornado(m.id)&&!descontado(m.id));return v.length?`<div class="list">${v.map(m=>`<div class="row"><span><b>${esc(m.wn)}</b> <span class="small muted">· ${-m.qtd} ${esc(prod(m.prod).nome)} ${esc(m.tam)} · ${br(m.q.slice(0,10))}</span></span><span class="toolbar"><span class="mono">${brl(m.valor)}</span><button class="btn sm" data-desc="${m.id}">Marcar descontado</button></span></div>`).join("")}</div>`:`<div class="empty">Nenhum desconto pendente.</div>`})()}
     <div class="note">Desconto autorizado: só para peça extra de uniforme pedida pelo trabalhador ou reposição por perda/dano por culpa dele, pelo preço de custo e com o termo assinado antes do desconto (CLT art. 462; Súmula 342 do TST). Botina, EPIs e o uniforme exigido para o trabalho são sempre sem custo (CLT arts. 166 e 458, § 2º, I; NR-6; Lei 12.023/2009 art. 9º).</div>
    </section>
-  <section class="panel" ${H("movimentos")}><div class="panel-h"><h2>Movimentos</h2><div class="search">${ico("search",16)}<input class="inp" id="estBusca" placeholder="Buscar colaborador, CPF ou item" value="${esc(ui.estBusca||"")}" aria-label="Buscar movimento"></div></div>
+  <section class="panel" ${H("movimentos")}><div class="panel-h"><h2>Movimentos</h2><div class="search">${ico("search",16)}<input class="inp" id="estBusca" placeholder="Buscar colaborador, CPF, item ou empresa" value="${esc(ui.estBusca||"")}" aria-label="Buscar movimento"></div></div>
    ${lista.length?`<div class="tbl-wrap" style="box-shadow:none"><table><thead><tr><th>Data</th><th>Item</th><th class="num">Qtd</th><th>Motivo</th><th>Colaborador</th><th>Por</th><th></th></tr></thead><tbody>
     ${pgM.itens.map(m=>{const est=m.motivo==="estorno",feito=estornado(m.id);return `<tr style="${feito||est?"opacity:.55":""}"><td class="mono">${br(m.q.slice(0,10))} ${hhmm(new Date(m.q))}</td><td>${esc(prod(m.prod).nome)} <b>${esc(m.tam)}</b></td><td class="num mono" style="color:${m.qtd>0?"var(--ok)":"var(--crit)"}">${m.qtd>0?"+":""}${m.qtd}</td>
      <td>${esc(MOTIVOS[m.motivo]||m.motivo)}${m.safra&&m.motivo==="safra"?` <span class="small muted">${esc(m.safra)}</span>`:""}${m.valor?` <span class="small muted">${brl(m.valor)}</span>`:""}${m.obs?`<div class="small muted">${esc(m.obs)}</div>`:""}</td>
-     <td>${m.wn?esc(m.wn):"—"}</td><td class="small muted">${esc(m.u||"")}</td>
+     <td>${m.wn?esc(m.wn):"—"}${m.emp?`<div class="small muted">${esc(abrevEmpresa(m.emp))}</div>`:""}</td><td class="small muted">${esc(m.u||"")}</td>
      <td>${!est&&!feito?`<button class="btn sm" data-estorno="${m.id}">Estornar</button>`:feito?`<span class="small muted">Estornado</span>`:""}${m.motivo==="vale"&&!est?` <button class="btn sm" data-vale="${m.lote||m.id}">Termo de desconto</button>`:""}${m.w&&!est&&m.motivo!=="vale"?` <button class="btn sm" data-termo="${m.lote||m.id}">Termo</button>`:""}</td></tr>`}).join("")}
    </tbody></table></div>${pgM.html}`:`<div class="empty">Nenhum movimento ainda. Comece lançando a entrada do que há no estoque.</div>`}
   </section>
@@ -2326,7 +2374,7 @@ function vEst(){
    <div class="small muted">${cfg.corte?`Histórico limpo em ${br(cfg.corte.slice(0,10))} às ${hhmm(new Date(cfg.corte))}. `:""}Limpar zera os saldos e tira todos os movimentos até agora, em todos os computadores. Depois, lance a Contagem.</div>
   </section>`;
   abasBind(vEst);paginarBind(vEst);
-  $("#estInv").onclick=abrirInventario;$("#estEnt").onclick=()=>abrirMov("entrada");$("#estSai").onclick=()=>abrirMov("saida");
+  $("#estInv").onclick=abrirInventario;$("#estEnt").onclick=()=>abrirMov("entrada");$("#estSai").onclick=()=>abrirMov("saida");$("#estLote").onclick=abrirLote;
   const b=$("#estBusca");b.oninput=()=>{ui.estBusca=b.value;ui.estPg=1;const pos=b.selectionStart;vEst();const nb=$("#estBusca");nb.focus();nb.setSelectionRange(pos,pos)};
   document.querySelectorAll("[data-estorno]").forEach(x=>x.onclick=async()=>{if(!x.dataset.armed){x.dataset.armed="1";x.textContent="Confirmar estorno";return}
     if(x.disabled||estornado(x.dataset.estorno))return;x.disabled=true;x.textContent="Estornando…";
@@ -2362,6 +2410,7 @@ function abrirMov(tipo){
    <div class="drawer-b" style="align-items:stretch">
     <div class="field"><label for="mvMot">Motivo</label><select id="mvMot" class="inp">${(entrada?["compra","devolucao"]:["primeiro","epi","safra","vale","baixa"]).map(k=>`<option value="${k}">${MOTIVOS[k]}</option>`).join("")}</select></div>
     <div id="mvQuem" class="field"><label for="mvBusca">Colaborador</label><input id="mvBusca" class="inp" placeholder="Digite o nome ou o CPF" autocomplete="off"><div id="mvSug" class="list"></div></div>
+    <div class="field" id="mvEmpW"><label for="mvEmp">Empresa (para onde vai o uniforme)</label><input id="mvEmp" class="inp" list="mvEmpL" placeholder="Escolha da lista ou digite" autocomplete="off"><datalist id="mvEmpL"></datalist></div>
     <div id="mvItens" style="display:flex;flex-direction:column;gap:10px">${entrada?linha():KIT_PRIMEIRO.map(linha).join("")}</div>
     <div><button class="btn sm" id="mvMais" type="button">${ico("plus",14)} Outro item</button></div>
     <div class="field" id="mvVmW" hidden><label for="mvVm">Motivo do desconto (base legal)</label><select id="mvVm" class="inp"><option value="extra">Peça extra pedida pelo trabalhador, além do uniforme gratuito (autorização prévia por escrito – Súmula 342 do TST)</option><option value="dano">Reposição de peça perdida ou danificada por culpa ou dolo do trabalhador, fora do desgaste natural (art. 462, § 1º, da CLT)</option></select></div>
@@ -2391,34 +2440,102 @@ function abrirMov(tipo){
     if(mot==="vale"&&its.some(i=>prod(i.prod).semCusto))p.push("Uniforme polo é sem custo e não pode ser descontado do trabalhador. Use Primeiro uniforme, Uniforme da safra ou Entrega de EPI.");
     if(mot==="vale"&&quem&&$("#mvVm").value==="extra")for(const g of ["camisa","calca"])if(its.some(i=>prod(i.prod).grupo===g)&&safraUsada(quem,cfg.safra,g)<LIMITE_SAFRA[g])p.push(`${quem.nome.split(" ")[0]} ainda não recebeu ${g==="calca"?"a calça":"a camisa"} gratuita da ${cfg.safra}. Entregue primeiro como Uniforme da safra (sem custo); o desconto só vale para peça extra.`);
     if(mot==="vale"&&$("#mvVm").value==="dano"&&!$("#mvObs").value.trim())p.push("Descreva na observação o que aconteceu com a peça (perda ou dano). Desgaste natural de uso não pode ser descontado.");
-    if(mot==="primeiro"&&quem){const ja=Est.movs.find(x=>doColab(x,quem)&&x.motivo==="primeiro"&&!estornado(x.id));if(ja)p.push(`${quem.nome.split(" ")[0]} já recebeu o primeiro uniforme em ${br(ja.q.slice(0,10))}. Use Uniforme da safra, Entrega de EPI ou Fornecimento com desconto autorizado.`)}
-    if(mot==="safra"){if(its.some(i=>prod(i.prod).grupo==="botina"))p.push("Botina não faz parte do uniforme da safra: é EPI. Use Entrega de EPI (sem custo).");if(its.some(i=>prod(i.prod).grupo==="epi"))p.push("EPI não faz parte do uniforme da safra. Use Entrega de EPI.");
-      if(quem)for(const g of ["camisa","calca"]){const pedido=its.filter(i=>prod(i.prod).grupo===g).reduce((s,i)=>s+i.qtd,0),usado=safraUsada(quem,cfg.safra,g);
-        if(pedido+usado>LIMITE_SAFRA[g])p.push(`${quem.nome.split(" ")[0]} já recebeu ${usado} ${g==="calca"?"calça":"camisa"} na ${cfg.safra}; o limite é ${LIMITE_SAFRA[g]}.`)}}
+    p.push(...regrasKit(mot,its));if(quem)p.push(...regrasPessoa(mot,quem,its,cfg.safra));
     return p};
-  const aviso=()=>{const mot=$("#mvMot").value;$("#mvQuem").hidden=!precisaQuem();$("#mvParcW").hidden=mot!=="vale";$("#mvGuiaW").hidden=!(quem&&["primeiro","epi","safra","vale"].includes(mot)&&itens().some(i=>EPI_GUIA[i.prod]));$("#mvVmW").hidden=mot!=="vale";const p=problemas();
+  const aviso=()=>{const mot=$("#mvMot").value;$("#mvQuem").hidden=!precisaQuem();$("#mvEmpW").hidden=!["primeiro","epi","safra","vale"].includes(mot);$("#mvParcW").hidden=mot!=="vale";$("#mvGuiaW").hidden=!(quem&&["primeiro","epi","safra","vale"].includes(mot)&&itens().some(i=>EPI_GUIA[i.prod]));$("#mvVmW").hidden=mot!=="vale";const p=problemas();
     const total=mot==="vale"?itens().reduce((s,i)=>s+i.qtd*(cfg.precos[i.prod]||0),0):0;
     $("#mvAviso").innerHTML=(p.length?`<div class="banner" style="border-left-color:var(--crit)"><span>${p.map(esc).join("<br>")}</span></div>`:"")+(mot==="vale"?`<div class="note">Valor a descontar (preço de custo): <b>${brl(total)}</b>${$("#mvParc").value==="2"?` em 2 parcelas de ${parcelas(total,2).map(brl).join(" e ")}`:""} (a descontar do colaborador). Desconto na folha: ${Array.from({length:Number($("#mvParc").value)||1},(_,i)=>br(dataDescontoQuinzena(iso(TODAY),i))).join(" e ")} (5º dia útil da${$("#mvParc").value==="2"?"s próximas quinzenas":" próxima quinzena"}).</div>`:mot==="safra"?`<div class="note">${esc(cfg.safra)}: até 1 calça e 1 camisa por colaborador, sem desconto.</div>`:"")};
   const sug=()=>{const q=$("#mvBusca").value.toLowerCase().trim(),qd=q.replace(/\D/g,"");if(q.length<2){$("#mvSug").innerHTML="";return}
     const r=S.workers.filter(w=>w.status!=="desligado"&&(w.nome.toLowerCase().includes(q)||(qd.length>=3&&w.cpf.includes(qd)))).slice(0,6);
     $("#mvSug").innerHTML=r.map(w=>`<div class="row"><span><b>${esc(w.nome)}</b> <span class="small muted mono">${esc(fmtCPF(w.cpf))}</span></span><button class="btn sm" data-pick="${w.id}">Escolher</button></div>`).join("")||`<div class="small muted">Ninguém encontrado.</div>`;
-    m.querySelectorAll("[data-pick]").forEach(b=>b.onclick=()=>{quem=S.workers.find(w=>w.id===b.dataset.pick);$("#mvBusca").value=quem.nome;$("#mvSug").innerHTML="";aviso()})};
+    m.querySelectorAll("[data-pick]").forEach(b=>b.onclick=()=>{quem=S.workers.find(w=>w.id===b.dataset.pick);$("#mvBusca").value=quem.nome;$("#mvSug").innerHTML="";if(!$("#mvEmp").value)$("#mvEmp").value=empDe(quem);aviso()})};
   $("#mvBusca").oninput=()=>{quem=null;sug();aviso()};$("#mvMot").onchange=()=>{const v=$("#mvMot").value;$("#mvItens").innerHTML=(KIT_MOTIVO[v]||["camisa-ml"]).map(linha).join("");ligar();aviso()};$("#mvParc").onchange=aviso;$("#mvVm").onchange=aviso;$("#mvObs").oninput=aviso;
   $("#mvMais").onclick=()=>{$("#mvItens").insertAdjacentHTML("beforeend",linha());ligar()};
-  ligar();aviso();
+  ligar();aviso();empPreencher("mvEmpL");
   // Um clique só: o botão trava enquanto grava (clique duplo não lança duas vezes).
   $("#mvSalvar").onclick=async()=>{const bt=$("#mvSalvar");if(bt.disabled)return;const p=problemas();if(p.length){toast(p[0]);return}bt.disabled=true;bt.textContent="Lançando…";
-    const mot=$("#mvMot").value,obs=$("#mvObs").value.trim(),lote=uid(),guiaEpi=!$("#mvGuiaW").hidden&&$("#mvGuia").checked,itensEpi=itens().filter(i=>EPI_GUIA[i.prod]);
-    const movs=itens().map(i=>novoMov({lote,prod:i.prod,tam:i.tam,qtd:entrada?i.qtd:-i.qtd,motivo:mot,obs,
+    const mot=$("#mvMot").value,obs=$("#mvObs").value.trim(),lote=uid(),guiaEpi=!$("#mvGuiaW").hidden&&$("#mvGuia").checked,emp=$("#mvEmpW").hidden?"":$("#mvEmp").value.replace(/\s+/g," ").trim();
+    const movs=itens().map(i=>novoMov({lote,prod:i.prod,tam:i.tam,qtd:entrada?i.qtd:-i.qtd,motivo:mot,obs,...(emp?{emp}:{}),
       ...(quem?{w:quem.id,wn:quem.nome,cpf:quem.cpf}:{}),...(mot==="safra"?{safra:cfg.safra}:{}),...(mot==="vale"?{valor:i.qtd*(cfg.precos[i.prod]||0),parcelas:Number($("#mvParc").value)||1,valeMotivo:$("#mvVm").value}:{})}));
     try{await estGravar(movs)}catch(e){toast(String(e.message||e));bt.disabled=false;bt.textContent=entrada?"Lançar entrada":"Lançar saída";return}
     close();toast(entrada?"Entrada lançada":"Saída lançada");if(current==="estoque")vEst();
-    if(quem&&guiaEpi){let n=0;const w=S.workers.find(x=>x.id===quem.id)||quem;
-      for(const i of itensEpi){const[cod,nome]=EPI_GUIA[i.prod],dados={data:iso(TODAY),equip_cod:cod,equip:nome,qtd:i.qtd};
-        await aprovCriar("epi",w,dados,[["Aba do sistema","Trabalhador › EPI's","Trabalhador › EPI's"],["Operação","—","Inserir lançamento novo"],["Data","",br(dados.data)],["Equipamento","",nome],["Quantidade","",String(i.qtd)]]);n++}
+    if(quem&&guiaEpi){const n=await pedirEpiGuia(S.workers.find(x=>x.id===quem.id)||quem,itens());
       if(n)toast(`${n} lançamento${n>1?"s":""} de EPI enviado${n>1?"s":""} para Aprovação`)}
     if(quem&&mot==="vale"){const n=await pedirDescontoVale(lote);if(n)toast(`Saída lançada · ${n} desconto${n>1?"s":""} na folha enviado${n>1?"s":""} para Aprovação`)}
     if(quem&&!entrada)(mot==="vale"?imprimirVale:termoEntrega)(lote)};
+}
+/* Entrega em lote: o mesmo kit para várias pessoas, com o tamanho de cada uma. Cada pessoa vira um lançamento próprio
+   (lote: termo e estorno como numa saída comum), ligados por `grupo`; no fim saem todos os termos, um por folha. */
+function abrirLote(){
+  const cfg=estCfg(),KIT={primeiro:["camisa-ml","calca","botina"],safra:["camisa-ml","calca"],epi:["botina"]};
+  let kit=KIT.primeiro.map(p=>({prod:p,qtd:1})),pessoas=[];
+  const comTam=()=>kit.filter(k=>prod(k.prod).tam.length>1||prod(k.prod).tam[0]!=="Único");
+  // Tamanho sugerido: o da última entrega do mesmo item (ou do mesmo tipo de peça) para a pessoa.
+  const ultTam=(w,pid)=>{const p=prod(pid),m=Est.movs.find(x=>doColab(x,w)&&x.qtd<0&&x.motivo!=="baixa"&&(x.prod===pid||prod(x.prod).grupo===p.grupo)&&p.tam.includes(x.tam));return m?m.tam:""};
+  const m=document.createElement("div");m.className="modal";
+  m.innerHTML=`<div class="scrim"></div><div class="modal-c" role="dialog" aria-modal="true" aria-labelledby="lth" style="max-width:980px"><div class="drawer-h"><div><div class="eyebrow">Estoque de uniformes</div><h2 id="lth" style="font-size:20px">Entrega em lote</h2></div><button class="btn" id="ltClose">Fechar</button></div>
+   <div class="drawer-b" style="align-items:stretch">
+    <div class="form-grid" style="grid-template-columns:minmax(0,1fr) minmax(0,1.5fr)"><div class="field"><label for="ltMot">Motivo</label><select id="ltMot" class="inp">${["primeiro","safra","epi"].map(k=>`<option value="${k}">${MOTIVOS[k]}</option>`).join("")}</select></div>
+     <div class="field"><label for="ltEmp">Empresa (para onde vai o uniforme)</label><input id="ltEmp" class="inp" list="ltEmpL" placeholder="Escolha da lista ou digite" autocomplete="off"><datalist id="ltEmpL"></datalist></div></div>
+    <fieldset><legend>Kit igual para todos</legend><div id="ltKit" style="display:flex;flex-direction:column;gap:8px"></div><div style="margin-top:8px"><button class="btn sm" id="ltKitMais" type="button">${ico("plus",14)} Outro item</button></div></fieldset>
+    <fieldset><legend>Pessoas e tamanhos</legend>
+     <div class="field"><label for="ltBusca">Adicionar pelo nome ou CPF</label><input id="ltBusca" class="inp" placeholder="Digite o nome ou o CPF" autocomplete="off"><div id="ltSug" class="list"></div></div>
+     <details style="margin:6px 0 10px"><summary class="small" style="cursor:pointer">Colar uma lista de nomes ou CPFs</summary><div class="field" style="margin-top:8px"><label for="ltCola">Um nome ou CPF por linha</label><textarea id="ltCola" class="inp" rows="4"></textarea></div><div class="toolbar"><button class="btn sm" id="ltColaOk" type="button">Adicionar da lista</button><span id="ltColaMsg" class="small muted"></span></div></details>
+     <div id="ltTab"></div></fieldset>
+    <label class="chk" id="ltGuiaW"><input type="checkbox" id="ltGuia" checked> Lançar também na aba EPI's do Sistema eSocial de cada pessoa (vai para a Aprovação)</label>
+    <div class="field"><label for="ltObs">Observação (opcional)</label><input id="ltObs" class="inp" placeholder="Ex.: turma de 16/11"></div>
+    <div id="ltAviso"></div>
+    <div class="toolbar" style="justify-content:flex-end"><button class="btn primary" id="ltSalvar">Lançar entrega</button></div>
+   </div></div>`;
+  document.body.appendChild(m);const close=()=>m.remove();m.querySelector(".scrim").onclick=close;$("#ltClose").onclick=close;
+  const opts=pid=>`<optgroup label="Uniformes">${PRODUTOS.filter(p=>p.grupo!=="epi").map(p=>`<option value="${p.id}" ${p.id===pid?"selected":""}>${esc(p.nome)}</option>`).join("")}</optgroup><optgroup label="EPIs">${PRODUTOS.filter(p=>p.grupo==="epi").map(p=>`<option value="${p.id}" ${p.id===pid?"selected":""}>${esc(p.nome)}</option>`).join("")}</optgroup>`;
+  const desenharKit=()=>{$("#ltKit").innerHTML=kit.map((k,i)=>`<div class="form-grid" style="grid-template-columns:minmax(0,1fr) 110px auto;align-items:end"><div class="field">${i?"":`<label for="ltKp0">Item</label>`}<select id="ltKp${i}" class="inp" data-kp="${i}" aria-label="Item ${i+1}">${opts(k.prod)}</select></div><div class="field">${i?"":`<label for="ltKq0">Quantidade</label>`}<input id="ltKq${i}" class="inp" type="number" min="1" step="1" value="${k.qtd}" data-kq="${i}" aria-label="Quantidade do item ${i+1}"></div><button class="btn sm danger" type="button" data-kr="${i}" aria-label="Tirar ${esc(prod(k.prod).nome)}">Tirar</button></div>`).join("");
+    m.querySelectorAll("[data-kp]").forEach(s=>s.onchange=()=>{kit[s.dataset.kp].prod=s.value;desenharTab()});
+    m.querySelectorAll("[data-kq]").forEach(s=>s.oninput=()=>{kit[s.dataset.kq].qtd=parseInt(s.value,10)||0;aviso()});
+    m.querySelectorAll("[data-kr]").forEach(b=>b.onclick=()=>{if(kit.length>1){kit.splice(Number(b.dataset.kr),1);desenharKit();desenharTab()}})};
+  const desenharTab=()=>{const cs=comTam();
+    $("#ltTab").innerHTML=pessoas.length?`<div class="tbl-wrap" style="box-shadow:none"><table><thead><tr><th>Pessoa</th>${cs.map(k=>`<th>${esc(prod(k.prod).nome.replace(/ · CA .*/,""))}</th>`).join("")}<th></th></tr></thead><tbody>
+      ${pessoas.map((pz,i)=>`<tr><td><b>${esc(pz.w.nome)}</b><div class="small muted mono">${esc(fmtCPF(pz.w.cpf))}</div></td>${cs.map(k=>{const t=pz.tam[k.prod]||"";return `<td><select class="inp" data-pt="${i}|${k.prod}" aria-label="Tamanho de ${esc(prod(k.prod).nome)} para ${esc(pz.w.nome)}" style="min-width:110px"><option value="">Escolha</option>${prod(k.prod).tam.map(x=>`<option value="${esc(x)}" ${x===t?"selected":""}>${esc(x)} (saldo ${saldo(k.prod,x)})</option>`).join("")}</select></td>`}).join("")}<td><button class="btn sm danger" type="button" data-pr="${i}" aria-label="Tirar ${esc(pz.w.nome)}">Tirar</button></td></tr>`).join("")}</tbody></table></div>`
+      :`<div class="empty">Ninguém na entrega ainda. Busque pelo nome ou cole uma lista.</div>`;
+    m.querySelectorAll("[data-pt]").forEach(s=>s.onchange=()=>{const[i,pid]=s.dataset.pt.split("|");pessoas[i].tam[pid]=s.value;aviso()});
+    m.querySelectorAll("[data-pr]").forEach(b=>b.onclick=()=>{pessoas.splice(Number(b.dataset.pr),1);desenharTab()});aviso()};
+  const ativos=()=>S.workers.filter(w=>w.status!=="desligado"&&!w.exemplo);
+  const adicionar=w=>{if(pessoas.some(p=>p.w.id===w.id))return false;const tam={};for(const k of kit)tam[k.prod]=ultTam(w,k.prod);pessoas.push({w,tam});
+    if(!$("#ltEmp").value)$("#ltEmp").value=empDe(w);return true};
+  const tamDe=(pz,pid)=>{const p=prod(pid);return p.tam.length===1&&p.tam[0]==="Único"?"Único":pz.tam[pid]||(pz.tam[pid]=ultTam(pz.w,pid))};
+  const itensDe=()=>kit.map(k=>({prod:k.prod,qtd:k.qtd}));
+  const problemas=()=>{const mot=$("#ltMot").value,its=itensDe(),p=[];
+    if(!pessoas.length)p.push("Adicione as pessoas da entrega.");
+    if(kit.some(k=>k.qtd<1))p.push("Informe quantidades a partir de 1.");
+    const sem=pessoas.filter(pz=>kit.some(k=>!tamDe(pz,k.prod)));if(sem.length)p.push(`Escolha os tamanhos de: ${sem.map(pz=>pz.w.nome.split(" ")[0]).join(", ")}.`);
+    const soma={};for(const pz of pessoas)for(const k of kit){const t=tamDe(pz,k.prod);if(t){const c=k.prod+"|"+t;soma[c]=(soma[c]||0)+k.qtd}}
+    for(const [c,q] of Object.entries(soma)){const[pp,t]=c.split("|"),s=saldo(pp,t);if(q>s)p.push(`${prod(pp).nome} ${t}: saldo ${s}, pedido ${q}.`)}
+    p.push(...regrasKit(mot,its));for(const pz of pessoas)p.push(...regrasPessoa(mot,pz.w,its,cfg.safra));return p};
+  const aviso=()=>{const mot=$("#ltMot").value,p=problemas();$("#ltGuiaW").hidden=!kit.some(k=>EPI_GUIA[k.prod]);
+    $("#ltSalvar").textContent=pessoas.length?`Lançar entrega de ${pessoas.length} pessoa${pessoas.length>1?"s":""}`:"Lançar entrega";
+    $("#ltAviso").innerHTML=(p.length&&pessoas.length?`<div class="banner" style="border-left-color:var(--crit)"><span>${p.map(esc).join("<br>")}</span></div>`:"")+(mot==="safra"?`<div class="note">${esc(cfg.safra)}: até 1 calça e 1 camisa por colaborador, sem desconto.</div>`:"")};
+  const sug=()=>{const q=$("#ltBusca").value.toLowerCase().trim(),qd=q.replace(/\D/g,"");if(q.length<2){$("#ltSug").innerHTML="";return}
+    const r=ativos().filter(w=>!pessoas.some(p=>p.w.id===w.id)&&(w.nome.toLowerCase().includes(q)||(qd.length>=3&&w.cpf.includes(qd)))).slice(0,6);
+    $("#ltSug").innerHTML=r.map(w=>`<div class="row"><span><b>${esc(w.nome)}</b> <span class="small muted mono">${esc(fmtCPF(w.cpf))}</span></span><button class="btn sm" type="button" data-pick="${w.id}">Adicionar</button></div>`).join("")||`<div class="small muted">Ninguém encontrado.</div>`;
+    m.querySelectorAll("[data-pick]").forEach(b=>b.onclick=()=>{adicionar(S.workers.find(w=>w.id===b.dataset.pick));$("#ltBusca").value="";$("#ltSug").innerHTML="";desenharTab();$("#ltBusca").focus()})};
+  $("#ltBusca").oninput=sug;
+  // Lista colada: CPF (11 dígitos) ou nome completo; nome parcial só quando bate com uma pessoa só.
+  $("#ltColaOk").onclick=()=>{const fora=[];let n=0;
+    for(const l of $("#ltCola").value.split(/\r?\n/).map(s=>s.trim()).filter(Boolean)){const d=l.replace(/\D/g,""),nn=normNome(l.replace(/[\d.\-\/]+/g," "));
+      let w=d.length===11?ativos().find(x=>x.cpf===d):null;if(!w&&nn){const ex=ativos().filter(x=>normNome(x.nome)===nn),pa=ex.length?ex:ativos().filter(x=>normNome(x.nome).includes(nn));if(pa.length===1)w=pa[0]}
+      if(w){if(adicionar(w))n++}else fora.push(l)}
+    $("#ltColaMsg").textContent=`${n} adicionada${n===1?"":"s"}.${fora.length?` Não encontrei (ou há mais de uma pessoa com esse nome): ${fora.join("; ")}.`:""}`;$("#ltCola").value=fora.join("\n");desenharTab()};
+  $("#ltMot").onchange=()=>{kit=KIT[$("#ltMot").value].map(p=>({prod:p,qtd:1}));for(const pz of pessoas)for(const k of kit)if(!pz.tam[k.prod])pz.tam[k.prod]=ultTam(pz.w,k.prod);desenharKit();desenharTab()};
+  $("#ltKitMais").onclick=()=>{const usado=new Set(kit.map(k=>k.prod)),p=PRODUTOS.find(x=>!usado.has(x.id));if(!p)return;kit.push({prod:p.id,qtd:1});for(const pz of pessoas)pz.tam[p.id]=pz.tam[p.id]||ultTam(pz.w,p.id);desenharKit();desenharTab()};
+  desenharKit();desenharTab();empPreencher("ltEmpL");
+  $("#ltSalvar").onclick=async()=>{const bt=$("#ltSalvar");if(bt.disabled)return;const p=problemas();if(p.length){toast(p[0]);return}bt.disabled=true;bt.textContent="Lançando…";
+    const mot=$("#ltMot").value,obs=$("#ltObs").value.trim(),emp=$("#ltEmp").value.replace(/\s+/g," ").trim(),grupo=uid(),guia=!$("#ltGuiaW").hidden&&$("#ltGuia").checked,lotes=[],movs=[];
+    for(const pz of pessoas){const lote=uid();lotes.push(lote);
+      for(const k of kit)movs.push(novoMov({lote,grupo,prod:k.prod,tam:tamDe(pz,k.prod),qtd:-k.qtd,motivo:mot,obs,...(emp?{emp}:{}),w:pz.w.id,wn:pz.w.nome,cpf:pz.w.cpf,...(mot==="safra"?{safra:cfg.safra}:{})}))}
+    try{await estGravar(movs)}catch(e){toast(String(e.message||e));bt.disabled=false;aviso();return}
+    close();toast(`Entrega lançada para ${pessoas.length} pessoa${pessoas.length>1?"s":""}`);if(current==="estoque")vEst();
+    if(guia){let n=0;for(const pz of pessoas)n+=await pedirEpiGuia(S.workers.find(x=>x.id===pz.w.id)||pz.w,itensDe());if(n)toast(`${n} lançamento${n>1?"s":""} de EPI enviado${n>1?"s":""} para Aprovação`)}
+    termoEntrega(lotes)};
 }
 /* Desconto autorizado na folha: um lançamento em Lançamentos › Crédito/Desconto por parcela (a 2ª no mês seguinte),
    com o histórico "DESC AUTORIZADO UNIFORME - itens - parcela x/n". Vai para a aba Aprovação; só grava depois de aprovado. */
@@ -2476,16 +2593,20 @@ function imprimirVale(lote){
   $("#vEmp").oninput=ver;$("#vValor").onchange=ver;ver();
   $("#vPrint").onclick=()=>{$("#printArea").innerHTML=folha(opc());if(IS_TAURI)window.print();else toast("A impressão funciona no programa instalado.")};
 }
-function termoEntrega(lote){
-  const movs=Est.movs.filter(m=>(m.lote||m.id)===lote&&m.motivo!=="estorno");if(!movs.length)return;
+function termoHTML(lote){
+  const movs=Est.movs.filter(m=>(m.lote||m.id)===lote&&m.motivo!=="estorno");if(!movs.length)return "";
   const f=movs[0],vale=false,total=movs.reduce((s,m)=>s+Number(m.valor||0),0),dt=new Date(f.q);
-  const html=`<div class="ficha"><header><div style="flex-direction:row;align-items:center;gap:0"><img class="logo-f" src="logo.png" alt=""><div style="display:flex;flex-direction:column;gap:2px"><b>SINTRAMOMED</b><span>Sindicato dos Trabalhadores na Movimentação de Mercadorias em Geral de Dourados · CNPJ 03.682.762/0001-03</span></div></div><div class="fr">Termo de entrega ${f.motivo==="epi"?"de EPI":f.motivo==="primeiro"?"do primeiro uniforme":"de uniforme"}<br><small>${br(iso(dt))} às ${hhmm(dt)}</small></div></header>
-   <h1>${esc(f.wn||"")}</h1><p style="margin:0;color:#6e6e73">CPF ${esc(fmtCPF(f.cpf||""))} · ${esc(MOTIVOS[f.motivo])}${f.motivo==="safra"?" · "+esc(f.safra):""}</p>
+  return `<div class="ficha"><header><div style="flex-direction:row;align-items:center;gap:0"><img class="logo-f" src="logo.png" alt=""><div style="display:flex;flex-direction:column;gap:2px"><b>SINTRAMOMED</b><span>Sindicato dos Trabalhadores na Movimentação de Mercadorias em Geral de Dourados · CNPJ 03.682.762/0001-03</span></div></div><div class="fr">Termo de entrega ${f.motivo==="epi"?"de EPI":f.motivo==="primeiro"?"do primeiro uniforme":"de uniforme"}<br><small>${br(iso(dt))} às ${hhmm(dt)}</small></div></header>
+   <h1>${esc(f.wn||"")}</h1><p style="margin:0;color:#6e6e73">CPF ${esc(fmtCPF(f.cpf||""))} · ${esc(MOTIVOS[f.motivo])}${f.motivo==="safra"?" · "+esc(f.safra):""}${f.emp?" · Empresa: "+esc(f.emp):""}</p>
    <section><h2>Itens entregues</h2><table><tr><th>Item</th><td><b>Tamanho · Quantidade${vale?" · Valor":""}</b></td></tr>${movs.map(m=>`<tr><th>${esc(prod(m.prod).nome)}</th><td>${esc(m.tam)} · ${-m.qtd}${vale?" · "+brl(m.valor):""}</td></tr>`).join("")}${vale?`<tr><th>Total</th><td><b>${brl(total)}</b></td></tr>`:""}</table></section>
    <p style="margin-top:18px">Declaro que recebi os itens acima em perfeito estado, comprometo-me a usá-los no trabalho e a conservá-los.${f.motivo==="epi"?" Comprometo-me a usar os EPIs durante o trabalho, guardá-los e conservá-los e a comunicar qualquer dano, conforme a NR-6.":f.motivo==="primeiro"?" Recebi o primeiro uniforme sem custo (camiseta, calça e botina de segurança). A botina é EPI: comprometo-me a usá-la no trabalho, conservá-la e comunicar qualquer dano, conforme a NR-6. Em caso de perda ou dano do uniforme por culpa minha, fora do desgaste natural de uso, concordo que a reposição seja descontada pelo preço de custo, mediante termo assinado (art. 462, § 1º, da CLT).":" O uniforme é fornecido sem custo e limitado a 1 calça e 1 camisa por safra. Em caso de perda ou dano por culpa minha, fora do desgaste natural de uso, concordo que a reposição seja descontada pelo preço de custo, mediante termo assinado (art. 462, § 1º, da CLT)."}</p>
-   <footer><div>__________________________________<br>${esc(f.wn||"Colaborador")}</div><div>__________________________________<br>Responsável pela entrega${f.u?" ("+esc(f.u)+")":""}</div></footer></div>`;
+   <footer><div>__________________________________<br>${esc(f.wn||"Colaborador")}</div><div>__________________________________<br>Responsável pela entrega${f.u?" ("+esc(f.u)+")":""}</div></footer></div>`}
+// Um termo (lote) ou vários (entrega em lote): cada termo sai numa folha A4.
+function termoEntrega(lotes){
+  lotes=[].concat(lotes);const fs=lotes.map(termoHTML).filter(Boolean);if(!fs.length)return;
+  const html=fs.join(""),nome=fs.length>1?`${fs.length} termos de entrega`:(Est.movs.find(m=>(m.lote||m.id)===lotes[0])||{}).wn||"";
   const md=document.createElement("div");md.className="modal";
-  md.innerHTML=`<div class="scrim"></div><div class="modal-c" role="dialog" aria-modal="true" aria-label="Termo de entrega"><div class="drawer-h"><div><div class="eyebrow">Termo de entrega · A4</div><h2 style="font-size:19px">${esc(f.wn||"")}</h2></div><div class="toolbar"><button class="btn primary" id="tPrint">Imprimir</button><button class="btn" id="tClose">Fechar</button></div></div><div class="drawer-b" style="background:var(--surface-2)">${html}</div></div>`;
+  md.innerHTML=`<div class="scrim"></div><div class="modal-c" role="dialog" aria-modal="true" aria-label="Termo de entrega"><div class="drawer-h"><div><div class="eyebrow">Termo de entrega · A4</div><h2 style="font-size:19px">${esc(nome)}</h2></div><div class="toolbar"><button class="btn primary" id="tPrint">Imprimir</button><button class="btn" id="tClose">Fechar</button></div></div><div class="drawer-b" style="background:var(--surface-2)">${html}</div></div>`;
   document.body.appendChild(md);const close=()=>md.remove();md.querySelector(".scrim").onclick=close;$("#tClose").onclick=close;
   $("#tPrint").onclick=()=>{$("#printArea").innerHTML=html;if(IS_TAURI)window.print();else toast("A impressão funciona no programa instalado.")};
 }

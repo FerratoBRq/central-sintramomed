@@ -1,7 +1,7 @@
 //! Troca de dados entre os computadores por um repositório PRIVADO do GitHub (só de dados).
 //! - Repositório e token ficam no Gerenciador de Credenciais do Windows (keyring), nunca em arquivo.
 //! - Só aceita repositório privado (dados de trabalhadores: LGPD).
-//! - Só acessa a pasta `contents/` desse repositório; cada computador grava o próprio arquivo.
+//! - Só acessa a pasta `contents/` desse repositório (e lê a lista de uma pasta por `git/trees/<sha>`); cada computador grava o próprio arquivo.
 
 use serde::{Deserialize, Serialize};
 
@@ -80,4 +80,29 @@ pub async fn gh_conteudo(metodo: String, caminho: String, corpo: Option<String>,
         .header("X-GitHub-Api-Version", "2022-11-28").send().await.map_err(|e| format!("Sem conexão com o GitHub: {e}"))?;
     let st = r.status().as_u16();
     Ok((st, r.text().await.map_err(|e| e.to_string())?))
+}
+
+/// Lista de uma pasta do repositório pelo sha da árvore (só leitura). A API de conteúdo lista no máximo 1.000 arquivos
+/// por pasta; a de árvores lista todos, num pedido só (a pasta de anexos passa disso).
+#[tauri::command]
+pub async fn gh_arvore(sha: String) -> Result<(u16, String), String> {
+    if !sha_valido(&sha) { return Err("Sha inválido.".into()); }
+    let c = ler()?.ok_or("GitHub não configurado.")?;
+    let r = cliente()?.get(format!("{API}{}/git/trees/{sha}", c.repo)).bearer_auth(&c.token).header("Accept", "application/vnd.github+json")
+        .header("X-GitHub-Api-Version", "2022-11-28").send().await.map_err(|e| format!("Sem conexão com o GitHub: {e}"))?;
+    let st = r.status().as_u16();
+    Ok((st, r.text().await.map_err(|e| e.to_string())?))
+}
+
+fn sha_valido(s: &str) -> bool { s.len() == 40 && s.chars().all(|c| c.is_ascii_hexdigit()) }
+
+#[cfg(test)]
+mod testes {
+    #[test]
+    fn sha_so_hex_de_40() {
+        assert!(super::sha_valido("0123456789abcdef0123456789abcdef01234567"));
+        assert!(!super::sha_valido("../contents"));
+        assert!(!super::sha_valido("0123456789abcdef0123456789abcdef0123456"));
+        assert!(!super::sha_valido("0123456789abcdef0123456789abcdef0123456g"));
+    }
 }

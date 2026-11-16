@@ -47,6 +47,7 @@ fn main() {
             github::gh_cred_status,
             github::gh_cred_apagar,
             github::gh_conteudo,
+            github::gh_arvore,
             dom::dom_cred_salvar,
             dom::dom_cred_status,
             dom::dom_cred_apagar,

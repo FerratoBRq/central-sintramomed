@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.99 — 16/11/2026
+- Erro "GitHub 403" (estoque e sincronização): o limite do GitHub (5.000 pedidos por hora, somando os PCs) estourava porque cada PC pedia, a cada minuto, cada um dos 209 anexos que nunca tinham subido. Agora a lista de anexos é lida num pedido só e só quando a pasta muda (`ghArquivos`, novo comando `gh_arvore` em github.rs, só leitura); o registro interno vai a cada 30 min (era a cada minuto, um commit por vez); o diário igual ao último enviado não vai de novo; ao bater no limite, o Central pausa 10 min em vez de insistir e grava a mensagem do GitHub no registro interno.
+- Anexos lançados num PC que nunca chegaram ao GitHub voltam para a fila de envio desse PC (5 por minuto, dentro do limite de gravações do GitHub).
+- Estoque: campo Empresa (para onde vai o uniforme) na entrega, com a lista das empresas do Sistema eSocial (relatório de produção, lida uma vez por dia) e sugestão pela empresa do último relatório mensal; aparece nos Movimentos, na busca e no termo.
+- Estoque: Entrega em lote — o mesmo kit para várias pessoas, com o tamanho de cada uma (sugerido pela última entrega), pessoas pelo nome/CPF ou colando uma lista; mesmas regras da saída (saldo, primeiro uniforme, limite da safra), pedidos na aba EPI's pela Aprovação e todos os termos de uma vez, um por folha.
+
 ## 0.1.98 — 13/11/2026
 - Uniforme polo sem custo: sai sem preço no saldo e nas Configurações, e o Fornecimento com desconto autorizado não aceita polo (use Primeiro uniforme, Uniforme da safra ou Entrega de EPI).
 
