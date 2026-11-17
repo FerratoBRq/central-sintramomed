@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.4 — 17/11/2026
+- Entrega em lote: no lugar de "Fica pendente", cada peça de cada pessoa tem "Sem camiseta manga longa", "Sem calça", "Sem botina"… (pedido do Gabriel): a pessoa não leva aquela peça e nada fica pendente. O botão de falta de estoque virou "Lançar o que tem: quem passar do estoque fica sem a peça". Regras da safra, saldo e aba EPI's contam só o que a pessoa leva; o termo mostra só o recebido.
+- A aba Pendentes só aparece enquanto houver pendências criadas nas versões 0.2.2 e 0.2.3 (entregar ou cancelar).
+
 ## 0.2.3 — 17/11/2026
 - Uniforme da safra: passa a ser 1 camisa, 1 calça e 1 botina por colaborador, por safra, sem custo (pedido do Gabriel). A botina (e EPIs, se precisar) entra no mesmo lançamento, na saída e na entrega em lote; antes o Central pedia para lançar a botina separada como Entrega de EPI. O kit padrão da safra no lote já vem com a botina, o limite por safra vale também para a botina e o termo traz a cláusula da NR-6 quando há botina ou EPI.
 
