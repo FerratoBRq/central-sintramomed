@@ -396,7 +396,7 @@ p,.head p,.note,.small{text-wrap:pretty}
     </nav>
     <button class="tema-b" id="btnTema" type="button"></button>
     <div class="side-foot">
-      <div class="row2"><span>Versão <b class="mono" id="ver">0.2.4</b></span><span id="runtime">Modo navegador</span></div>
+      <div class="row2"><span>Versão <b class="mono" id="ver">0.2.5</b></span><span id="runtime">Modo navegador</span></div>
       <span id="syncInfo"></span>
       <button class="link" id="btnSync" type="button" hidden>Sincronizar tudo agora</button>
       <span id="updInfo">Verificando atualizações…</span>
@@ -414,7 +414,7 @@ p,.head p,.note,.small{text-wrap:pretty}
 /* Tema: claro, escuro ou automático (segue o Windows). O botão de lua/sol fixa o modo neste computador. */
 const temaEscuro=()=>{const t=document.documentElement.dataset.theme;return t?t==="dark":matchMedia("(prefers-color-scheme: dark)").matches};
 try{const t=localStorage.getItem("cs_tema");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}
-const APP_VERSION="0.2.4";
+const APP_VERSION="0.2.5";
 /* ---------- utilidades ---------- */
 const $=(s,r=document)=>r.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -560,7 +560,7 @@ function abasBind(redesenhar){document.querySelectorAll("[data-aba]").forEach(b=
 const MANUAL=[
  {t:"Primeiros passos",p:["Abra a engrenagem (no alto do menu) e entre com o login e a senha do Sistema eSocial (Guia Campo Grande). A senha fica guardada no Windows.","O Central importa e atualiza os trabalhadores sozinho a cada 5 minutos. Para atualizar na hora, clique nas setas ao lado da engrenagem.","Use o botão Lançar (azul, no alto do menu) para lançar ASO, NR-33/NR-35 ou uma entrega do estoque.","Use Buscar ou Ctrl+K para achar um trabalhador pelo nome ou CPF, uma tela ou uma ação."]},
  {t:"Painel",p:["Mostra trabalhadores ativos, pendências críticas, vencimentos dos próximos 30 dias e quem está sem produção há mais de 3 meses. Clique num número para abrir a lista.","Vencimento das NRs: NR-35 e NR-33 que vencem até o dia 15 do mês depois do próximo.","Atalhos abrem os sistemas das tomadoras em nova aba."]},
- {t:"Trabalhadores e ficha",p:["A lista vem em ordem alfabética; em Ordem, escolha Por código interno para ver pelo código do Sistema eSocial (a primeira coluna). Busque por nome, CPF, matrícula ou código interno e filtre por Ativos, Pendência crítica, Sem produção, A desligar, Inativos e Desligados.","Clique no trabalhador para abrir a ficha: dados, documentos, ASO, NRs, uniformes e anexos. Emitir ficha › a Ficha do Trabalhador sai exatamente como no Guia (mesma fonte, tamanho e espaçamento); o Termo de EPI sai numa única folha A4, centralizado e no maior tamanho que couber.","Emitir ficha: escolha a Ficha do Trabalhador ou o Termo de EPI do próprio Sistema eSocial (Guia), a Ordem de Serviço ou a ficha do Central. O Termo de EPI sai com 2 calças, 2 camisetas e 1 par de botina na data do dia. Ficha do Trabalhador, Termo de EPI e Ordem de Serviço têm as mesmas opções: Data do documento (o termo usa na entrega do kit e no local e data; a O.S. na elaboração e nas assinaturas; a ficha do cadastro sai como está no Guia, sem data), o botão Impressão automática (desligado: só mostra a prévia; ligado: já abre a janela de impressão ao escolher; fica lembrado) e Imprimir, onde você escolhe a impressora ou Salvar como PDF. A Ordem de Serviço sai igual ao modelo do sindicato, só com o nome e a data.","Editar endereço no Sistema eSocial cria um pedido na Aprovação; nada é gravado no Guia sem aprovar.","Atualizar esta ficha do Sistema eSocial busca os dados mais novos daquele trabalhador."]},
+ {t:"Trabalhadores e ficha",p:["A lista vem em ordem alfabética; em Ordem, escolha Por código interno para ver pelo código do Sistema eSocial (a primeira coluna). Busque por nome, CPF, matrícula ou código interno e filtre por Ativos, Pendência crítica, Sem produção, A desligar, Inativos e Desligados.","Clique no trabalhador para abrir a ficha: dados, documentos, ASO, NRs, uniformes e anexos. Emitir ficha › a Ficha do Trabalhador sai exatamente como no Guia (mesma fonte, tamanho e espaçamento); o Termo de EPI sai numa única folha A4, centralizado e no maior tamanho que couber.","Emitir ficha: escolha a Ficha do Trabalhador ou o Termo de EPI do próprio Sistema eSocial (Guia), a Ordem de Serviço, o Termo Seguro-Desemprego ou a ficha do Central. O Termo Seguro-Desemprego (Termo de Ciência e Responsabilidade) sai em 2 vias A4, igual ao modelo do sindicato, com nome, CPF, NIS/PIS, nascimento, telefone e endereço do cadastro e a data escolhida; situação do seguro, parcelas e início na escala ficam para preencher à mão. O Termo de EPI sai com 2 calças, 2 camisetas e 1 par de botina na data do dia. Ficha do Trabalhador, Termo de EPI e Ordem de Serviço têm as mesmas opções: Data do documento (o termo usa na entrega do kit e no local e data; a O.S. na elaboração e nas assinaturas; a ficha do cadastro sai como está no Guia, sem data), o botão Impressão automática (desligado: só mostra a prévia; ligado: já abre a janela de impressão ao escolher; fica lembrado) e Imprimir, onde você escolhe a impressora ou Salvar como PDF. A Ordem de Serviço sai igual ao modelo do sindicato, só com o nome e a data.","Editar endereço no Sistema eSocial cria um pedido na Aprovação; nada é gravado no Guia sem aprovar.","Atualizar esta ficha do Sistema eSocial busca os dados mais novos daquele trabalhador."]},
  {t:"Pendências e vencimentos",p:["Vencimentos tem duas abas, NRs e ASOs, com calendário de 3 meses: o dia exato em que vence o curso ou o ASO de cada trabalhador fica marcado em vermelho (passe o mouse para ver os nomes). Na aba ASOs, clique no dia para ver quem vence e anote a data do exame marcado; na aba NRs, clique num dia para marcar a turma. A NR-33 pode ter mais de um dia: abra a outra data marcada e vincule o mesmo trabalhador (ele fica nas duas turmas); na lista, a NR-33 tem campo para o 2º dia marcado.","Pendências mostra o que falta em cada trabalhador (início, ASO, NR-35, NR-33, produção, término). Clique num item para filtrar; Críticas e Atenção separam a gravidade.","Vencimento das NRs: escolha NR-35 ou NR-33, clique num dia livre do calendário para marcar a turma (de preferência quarta, quinta ou sexta) e o Central distribui as pessoas. Clique num dia marcado para ver a turma, mover alguém para outra data, vincular um trabalhador ou desmarcar a data.","Lista para emissão de certificados: gera o Word no modelo da DOM, com 13 nomes por folha, separado por NR-33 e NR-35."]},
  {t:"ASOs e NRs recebidos",p:["Salve os PDFs que chegam pelo WhatsApp na pasta ASOs para lançar ou NRs para lançar (Documentos > Central Sintramomed). O Central lê a cada minuto. Se o arquivo for para a pasta errada, ele muda sozinho.","Também dá para usar Anexar ou arrastar os PDFs para a tela.","Na aba Para conferir: Conferir e lançar abre o documento lido para conferir. Enviar prontos para aprovação manda de uma vez os que estão completos.","Depois de lançado, o arquivo vai para ASOs lançados ou NRs lançadas e fica anexado na ficha."]},
  {t:"Aprovação",p:["Tudo o que o Central vai gravar no Sistema eSocial (ASO, NR, endereço, desconto autorizado, EPI) aparece aqui com o que muda: como está no sistema e como vai ficar.","Aprovar e enviar pede uma segunda confirmação, grava no Guia e confere relendo a página. Recusar descarta o pedido.","A aba Histórico guarda o que foi enviado, recusado ou deu erro."]},
@@ -647,6 +647,7 @@ const ATALHOS=[
 /* Novidades curtas por versão (aparecem na engrenagem, no aviso de atualização e em Feedback). Uma linha por versão;
    o detalhe fica no CHANGELOG.md. Ao lançar versão, acrescente a linha nova no topo. */
 const VERSOES=[
+ ["0.2.5","Emitir ficha: Termo de Ciência do Seguro-Desemprego para todos os colaboradores"],
  ["0.2.4","Entrega em lote: \"Sem botina\", \"Sem calça\"… no lugar de pendente"],
  ["0.2.3","Uniforme da safra com botina: camisa, calça e botina juntas, sem custo"],
  ["0.2.2","Entrega em lote com falta de estoque: lança o que tem e deixa o resto pendente"],
@@ -1021,7 +1022,7 @@ async function lerTrabalhador(id,producao){
     matricula:(se.match(/Matricula:\s*(\d+)/)||[])[1]||"",...((status==="desligado"||status==="afastado")&&!S.workers.some(w=>w.origemId===String(id)&&w.status===status&&w.dtSaidaEnvio)?await lerSaida(id,status):{}),telefone:v.celular_colaborador||v.fone_colaborador||"",email:v.colab_emailprinc||"",status,ultimaProducao:producao||"",
     s2300Enviado:(t=>!/N.o h. transmiss/.test(t)&&/\d{2}\/\d{2}\/\d{4}/.test(t))((ie.body?ie.body.innerText:"")),asoData:aso.d,asoValidade:aso.v,nr33Data:n33.d,nr33Validade:n33.v,nr35Data:n35.d,nr35Validade:n35.v,
     epiEntrega:epis.map(x=>XS.d2i(x[0])).sort().pop()||"",ctpsNum:docs.ctps||"",ctpsSerie:docs.serie_ctps||"",rgNum:docs.rg||"",rgOrgao:docs.ssp_rg||"",cnhNum:docs.colab_nrregcnh||"",cnhValidade:XS.d2i(docs.colab_dtvalidcnh),
-    endereco:[e.rua_colaborador,e.numero,e.bairro_colaborador,e.cep].filter(Boolean).join(", ")};
+    endereco:[e.rua_colaborador,e.numero,e.bairro_colaborador,e.cep].filter(Boolean).join(", "),cidade:e.cidade||"",uf:e.uf||""};
 }
 function syncInfo(){const el=$("#syncInfo");if(!el)return;
   if(!IS_TAURI){el.innerHTML=`Importação automática disponível no programa instalado`;return}
@@ -3322,6 +3323,56 @@ async function ordemServicoHTML(w,dataIso){
     .pg{position:relative;width:595.3pt;height:841.9pt;overflow:hidden}.pg img{position:absolute;left:0;top:0;width:100%;height:100%}
     .t{position:absolute;font:9pt "Times New Roman",Times,"Liberation Serif",serif;line-height:${m.alt}pt;white-space:nowrap;color:#000}</style></head>
     <body><div class="pg"><img src="${m.pagina}" alt="">${m.campos.data.map(p=>t(p,d)).join("")}${m.campos.nome.map(p=>t(p,normNome(w.nome))).join("")}</div></body></html>`}
+/* Termo de Ciência e Responsabilidade · Seguro-desemprego (modelo do sindicato, pedido do Gabriel em 18/11/2026): duas vias A4
+   (1ª do sindicato, com o recibo da 2ª; 2ª do trabalhador), na fonte Poppins do PDF (web/fontes, SIL OFL, só caracteres latinos).
+   Vêm do cadastro: nome, CPF, NIS/PIS, nascimento, telefone, endereço (cidade da aba Endereço do Guia) e a data escolhida.
+   Situação do seguro, parcelas e início na escala ficam em branco para preencher à mão. */
+const tituloPt=s=>String(s||"").toLowerCase().replace(/[^\s,]+/g,(p,i)=>/\d/.test(p)?p.toUpperCase():/^(x{0,3})(ix|iv|v?i{0,3})$/.test(p)&&p?p.toUpperCase():i&&/^(de|da|do|das|dos|e|em|na|no)$/.test(p)?p:p[0].toUpperCase()+p.slice(1));
+async function seguroHTML(w,dataIso){
+  let cid=w.cidade||"",uf=w.uf||"";
+  if(!cid&&IS_TAURI&&w.origemId)try{const e=XS.vals(dom(await sget(`/register/cad_colabEndereco.php?cod_colaborador=${w.origemId}`)));cid=e.cidade||"";uf=e.uf||""}catch(e){}
+  const dg=v=>String(v||"").replace(/\D/g,""),nis=(d=>d.length===11?`${d.slice(0,3)}.${d.slice(3,8)}.${d.slice(8,10)}-${d.slice(10)}`:w.nis||"")(dg(w.nis));
+  const tel=(d=>d.length===11?`(${d.slice(0,2)}) ${d.slice(2,7)}-${d.slice(7)}`:d.length===10?`(${d.slice(0,2)}) ${d.slice(2,6)}-${d.slice(6)}`:w.telefone||"")(dg(w.telefone));
+  const partes=String(w.endereco||"").split(/\s*,\s*/).filter(Boolean),iCep=partes.findIndex(x=>/^\d{2}\.?\d{3}-?\d{3}$/.test(x)),cep=iCep>=0?dg(partes.splice(iCep,1)[0]):"";
+  const local=cid?`${tituloPt(cid)}${uf?"/"+(uf.length<=3?uf.toUpperCase():tituloPt(uf)):""}`:"";
+  const ender=[...partes.map(tituloPt),local,cep?`CEP ${cep.slice(0,2)}.${cep.slice(2,5)}-${cep.slice(5)}`:""].filter(Boolean).join(", ");
+  const [aa,mm,dd]=(dataIso||iso(TODAY)).split("-"),dataExt=`${Number(dd)} de ${MESES[Number(mm)-1].toLowerCase()} de ${aa}`;
+  const fonte=n=>new URL(`fontes/Poppins-${n}.woff`,location.href).href,nome=esc(w.nome),cpf=esc(fmtCPF(w.cpf));
+  const via=(rotulo,recibo)=>`<section class="pg"><div class="cab"><b>SINTRAMOMED</b><span>Sindicato Dos Trabalhadores na Movimentação de Mercadorias em Geral de Dourados.</span><span>CNPJ 03.682.762/0001-03</span><span>Rua: Luiz Egidio de Cerqueira Cesar, 3085 Jardim Shekiná, Dourados-MS.</span></div>
+   <div class="via">${rotulo}</div><h1>TERMO DE CIÊNCIA E RESPONSABILIDADE</h1><div class="sub">Seguro-desemprego e ingresso na escala de trabalho avulso</div>
+   <table><tr><td style="width:49%"><b>Trabalhador:</b> ${nome}</td><td><b>Função:</b> Movimentador de Mercadorias</td></tr>
+    <tr><td><b>CPF:</b> ${cpf}&nbsp;&nbsp;&nbsp; <b>NIS/PIS:</b> ${esc(nis)}</td><td><b>Nascimento:</b> ${w.dtNasc?br(w.dtNasc):""}&nbsp;&nbsp;&nbsp; <b>Tel.:</b> ${esc(tel)}</td></tr>
+    <tr><td colspan="2"><b>Endereço:</b> ${esc(ender)}</td></tr>
+    <tr><td colspan="2"><b>Seguro-desemprego hoje:</b> (&nbsp;) Recebendo – parcelas recebidas ____ de ____ &nbsp; (&nbsp;) Requerido, sem parcelas recebidas &nbsp; (&nbsp;) Não recebe</td></tr>
+    <tr><td colspan="2"><b>Início na escala:</b> ____/____/________</td></tr></table>
+   <p><b>1. Natureza do trabalho.</b> Ingresso na escala como trabalhador avulso na movimentação de mercadorias, com intermediação do Sindicato (Lei nº 12.023/2009). A remuneração e os recolhimentos de INSS e FGTS são informados aos sistemas do Governo Federal (eSocial e CNIS).</p>
+   <p><b>2. Regras do seguro-desemprego (Lei nº 7.998/1990).</b> Fui informado de que: (a) o benefício exige não possuir renda própria suficiente ao sustento (art. 3º, V); (b) o pagamento é suspenso com o início de nova atividade, como novo emprego (art. 7º, I); (c) falsidade ou fraude cancelam o benefício e suspendem o direito por 2 anos, em dobro na reincidência (art. 8º, II, III e § 1º); (d) parcelas recebidas indevidamente devem ser devolvidas ou são descontadas de benefício futuro (art. 25-A).</p>
+   <p><b>3. Risco.</b> Estou ciente de que, ao iniciar na escala, <b>corro o risco de ter meu seguro-desemprego suspenso ou cancelado</b> pelo Ministério do Trabalho e Emprego, e de que parcelas recebidas enquanto trabalho podem ser cobradas de volta.</p>
+   <p><b>4. Orientação recebida.</b> O Sindicato me orientou a não acumular parcelas do seguro com a remuneração do trabalho avulso, a informar o início da atividade ao MTE (Carteira de Trabalho Digital, gov.br ou SINE) e a buscar orientação jurídica, se tiver dúvida.</p>
+   <p><b>5. Decisão e responsabilidade.</b> Decido livremente iniciar na escala, sem coação. Assumo as consequências sobre meu seguro-desemprego (suspensão, cancelamento, devolução ou desconto), que não são de responsabilidade do Sindicato nem da tomadora de serviços.</p>
+   <p><b>6. Veracidade e aceite.</b> Declaro verdadeiras as informações acima. Li (ou me foi lido), compreendi e <b>ACEITO integralmente este termo</b>, firmado em 2 (duas) vias de igual teor: a 1ª fica com o Sindicato e a 2ª com o trabalhador.</p>
+   <p class="data">Dourados/MS, ${dataExt}.</p>
+   <div class="ass"><div><b>${nome}</b>Movimentador de Mercadorias<br>CPF ${cpf}</div><div><b>GABRIEL FERRATO CAVALCANTE</b>Gerente de Recursos Humanos<br>SINTRAMOMED</div></div>
+   <div class="ass tes"><div>Testemunha 1 – Nome:<br>CPF:</div><div>Testemunha 2 – Nome:<br>CPF:</div></div>
+   ${recibo?`<p class="rec"><b>Recibo da 2ª via:</b> recebi em ____/____/______. Assinatura: ______________________</p>`:""}
+   <div class="rod">Dourados - MS</div></section>`;
+  return `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Termo de Ciência – Seguro-Desemprego – ${nome}</title><style>
+   @font-face{font-family:"Poppins";src:url("${fonte("Regular")}") format("woff");font-weight:400}
+   @font-face{font-family:"Poppins";src:url("${fonte("Medium")}") format("woff");font-weight:500}
+   @font-face{font-family:"Poppins";src:url("${fonte("Bold")}") format("woff");font-weight:700}
+   @page{size:A4;margin:0}html,body{margin:0;background:#fff;color:#000}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+   body{font:400 10pt/13.2pt "Poppins",Arial,sans-serif}b{font-weight:700}
+   .pg{position:relative;box-sizing:border-box;width:210mm;height:297mm;padding:34pt 56.7pt 0;overflow:hidden;break-after:page;page-break-after:always}.pg:last-child{break-after:auto;page-break-after:auto}
+   .cab{box-sizing:border-box;width:414pt;height:62pt;margin:0 auto;border:.8pt solid #000;text-align:center;padding-top:4pt}
+   .cab b{display:block;font-size:15pt;line-height:17pt;letter-spacing:.44em;margin-right:-.44em}.cab span{display:block;font-size:7.6pt;line-height:12pt}
+   .via{text-align:right;font-weight:700;font-size:8pt;line-height:10pt;margin-top:10pt}
+   h1{margin:8pt 0 0;font-size:12pt;line-height:14pt;font-weight:700;text-align:center}.sub{margin:1pt 0 5pt;font-size:10pt;line-height:13pt;font-weight:500;text-align:center}
+   table{width:100%;border-collapse:collapse;border:.6pt solid #000;font-size:9.5pt;line-height:12pt;margin-bottom:6pt}td{border:.3pt solid #000;padding:2.5pt 5.5pt;vertical-align:middle}
+   p{margin:0 0 4pt;text-align:justify;word-spacing:-.1pt}.data{margin-top:8pt;text-align:left}
+   .ass{display:flex;justify-content:space-between;margin-top:26pt}.ass>div{width:224pt;border-top:.7pt solid #000;padding-top:3pt;text-align:center;font-size:9.5pt;line-height:12pt}.ass b{display:block}
+   .ass.tes{margin-top:34pt}.rec{margin-top:12pt;font-size:9.5pt;text-align:left}
+   .rod{position:absolute;left:0;right:0;bottom:28pt;text-align:center;font-weight:700;font-size:10pt}
+  </style></head><body>${via("1ª VIA – SINDICATO",true)}${via("2ª VIA – TRABALHADOR",false)}</body></html>`}
 // Termo de EPI: em vez do histórico, sai o kit padrão (2 calças, 2 camisetas, 1 par de botina) com a data de hoje.
 // O certificado (CA) de cada item vem das entregas que já estavam no termo; sem ele, fica em branco.
 function epiPadrao(d,dataBr){const tr=[...d.querySelectorAll("tr")],cab=tr.find(x=>/Equipamentos/i.test(x.textContent)&&/Quantidade/i.test(x.textContent));if(!cab)return;
@@ -3350,7 +3401,7 @@ async function fichaGuiaHTML(tipo,w,dataIso){
    "Abrir a impressão" ao escolher (lembrado) e Imprimir (impressora ou Salvar como PDF). Limites de cada uma: a ficha do
    cadastro não tem data (sai como no Guia); o Termo de EPI usa a data na entrega do kit e no local/data; a O.S. nas datas
    de elaboração e assinaturas (a data da revisão não muda). Ficha e termo dependem do Guia; a O.S. não. */
-const FICHA_INFO={ficha:"Como está no Sistema eSocial (Guia). Não tem data para escolher.",epi:"Kit padrão: 2 calças, 2 camisetas e 1 par de botina, com a data de entrega escolhida.",os:"Modelo do sindicato. Mudam só a data (elaboração e assinaturas) e o nome do colaborador."};
+const FICHA_INFO={ficha:"Como está no Sistema eSocial (Guia). Não tem data para escolher.",epi:"Kit padrão: 2 calças, 2 camisetas e 1 par de botina, com a data de entrega escolhida.",os:"Modelo do sindicato. Mudam só a data (elaboração e assinaturas) e o nome do colaborador.",seguro:"Modelo do sindicato, em 2 vias (sindicato e trabalhador), com os dados do cadastro e a data escolhida. Situação do seguro, parcelas e início na escala ficam para preencher à mão."};
 /* Fichas do Guia (Ficha do Trabalhador e Termo de EPI) sempre numa folha A4, centralizadas e do maior tamanho que couber,
    sem ajustar escala na impressão. Área útil do A4 com margem de 8 mm: 733 × 1062 px (usa 1010 de altura, folga de 5%).
    O conteúdo vai para uma caixa centralizada; o zoom é o maior que cabe na largura e na altura (até 1,6×). Como o leiaute do
@@ -3372,21 +3423,21 @@ function emitirFicha(w){
   const guia=IS_TAURI&&!!w.origemId,m=document.createElement("div");m.className="modal";let tipo=guia?"ficha":"os",dataDoc=iso(TODAY),auto=LS.get("cs_ficha_auto")==="1",imprimirAoCarregar=auto;
   m.innerHTML=`<div class="scrim"></div><div class="modal-c" role="dialog" aria-modal="true" aria-label="Emitir ficha" style="max-width:900px"><div class="drawer-h"><div><div class="eyebrow">Emitir ficha · A4</div><h2 style="font-size:20px">${esc(w.nome)}</h2></div><div class="toolbar"><button class="btn primary" id="fPrint">${ico("print",16)} Imprimir</button><button class="btn" id="fClose">Fechar</button></div></div>
    <div class="drawer-b" style="background:var(--surface-2);align-items:stretch">
-    ${abasHTML("fichaTipo",[...(guia?[["ficha","Ficha do Trabalhador (Guia)"],["epi","Termo de EPI (Guia)"]]:[]),["os","Ordem de Serviço"],["central","Ficha do Central"]],tipo)}
+    ${abasHTML("fichaTipo",[...(guia?[["ficha","Ficha do Trabalhador (Guia)"],["epi","Termo de EPI (Guia)"]]:[]),["os","Ordem de Serviço"],["seguro","Termo Seguro-Desemprego"],["central","Ficha do Central"]],tipo)}
     ${guia?"":`<div class="small muted">A Ficha do Trabalhador e o Termo de EPI do Sistema eSocial aparecem no programa instalado, para trabalhadores já sincronizados.</div>`}
     <div class="toolbar" id="fOpc" style="flex-wrap:wrap;gap:12px;align-items:center"><label class="small" for="fData">Data do documento</label><input type="date" id="fData" class="inp" style="width:auto" value="${dataDoc}">
      <button type="button" class="btn sm${auto?" primary":""}" id="fAuto" aria-pressed="${auto}" title="Ligada: ao escolher a ficha, já abre a janela de impressão (impressora ou Salvar como PDF). Desligada: só mostra a prévia.">${ico("print",14)} Impressão automática: ${auto?"ligada":"desligada"}</button><span class="small muted" id="fInfo"></span></div>
     <div id="fPrev"></div></div></div>`;
   document.body.appendChild(m);const close=()=>m.remove();m.querySelector(".scrim").onclick=close;$("#fClose").onclick=close;
   let html="";
-  const imprimir=()=>{const f=$("#fIframe");if(!f||!html){toast("Aguarde a ficha carregar");return}f.contentWindow.focus();f.contentWindow.print()};
+  const imprimir=async()=>{const f=$("#fIframe");if(!f||!html){toast("Aguarde a ficha carregar");return}if(f.contentDocument&&f.contentDocument.fonts)await f.contentDocument.fonts.ready;f.contentWindow.focus();f.contentWindow.print()};
   const mostrar=async()=>{m.querySelectorAll("[data-aba]").forEach(b=>{const on=b.dataset.aba==="fichaTipo:"+tipo;b.setAttribute("aria-pressed",on);b.setAttribute("aria-selected",on)});
     const pv=$("#fPrev"),central=tipo==="central";$("#fOpc").style.display=central?"none":"";$("#fData").disabled=tipo==="ficha";$("#fInfo").textContent=FICHA_INFO[tipo]||"";
     if(central){html="";pv.innerHTML=fichaHTML(w);return}
     const ir=imprimirAoCarregar&&IS_TAURI;imprimirAoCarregar=false;
-    pv.innerHTML=`<div class="empty">${tipo==="os"?"Montando a Ordem de Serviço…":"Buscando no Sistema eSocial…"}</div>`;
-    try{html=tipo==="os"?await ordemServicoHTML(w,dataDoc):await fichaGuiaHTML(tipo,w,dataDoc);pv.innerHTML=`<iframe id="fIframe" title="Prévia para impressão" sandbox="allow-same-origin allow-modals" style="width:100%;height:64vh;border:0;border-radius:8px;background:#fff"></iframe>`;
-      const f=$("#fIframe");f.onload=()=>{const imgs=[...f.contentDocument.images].filter(i=>!i.complete);Promise.all(imgs.map(i=>new Promise(r=>{i.onload=i.onerror=r}))).then(()=>{if(tipo==="epi")folhaA4(f.contentDocument);/* a Ficha do Trabalhador sai exatamente como no Guia (fonte, tamanho e espaçamento do site) */if(ir)imprimir()})};f.srcdoc=html}
+    pv.innerHTML=`<div class="empty">${tipo==="os"?"Montando a Ordem de Serviço…":tipo==="seguro"?"Montando o termo…":"Buscando no Sistema eSocial…"}</div>`;
+    try{html=tipo==="os"?await ordemServicoHTML(w,dataDoc):tipo==="seguro"?await seguroHTML(w,dataDoc):await fichaGuiaHTML(tipo,w,dataDoc);pv.innerHTML=`<iframe id="fIframe" title="Prévia para impressão" sandbox="allow-same-origin allow-modals" style="width:100%;height:64vh;border:0;border-radius:8px;background:#fff"></iframe>`;
+      const f=$("#fIframe");f.onload=()=>{const imgs=[...f.contentDocument.images].filter(i=>!i.complete);Promise.all([...imgs.map(i=>new Promise(r=>{i.onload=i.onerror=r})),f.contentDocument.fonts?f.contentDocument.fonts.ready:0]).then(()=>{if(tipo==="epi")folhaA4(f.contentDocument);/* a Ficha do Trabalhador sai exatamente como no Guia (fonte, tamanho e espaçamento do site) */if(ir)imprimir()})};f.srcdoc=html}
     catch(e){html="";pv.innerHTML=`<div class="banner" style="border-left-color:var(--crit)"><span>Não foi possível montar: ${esc(String(e.message||e))}</span></div>`}};
   m.querySelectorAll("[data-aba]").forEach(b=>b.onclick=()=>{tipo=b.dataset.aba.split(":")[1];imprimirAoCarregar=auto;mostrar()});
   $("#fData").onchange=e=>{if(!e.target.value)return;dataDoc=e.target.value;mostrar()};

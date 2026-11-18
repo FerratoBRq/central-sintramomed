@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.5 — 18/11/2026
+- Emitir ficha: nova aba "Termo Seguro-Desemprego" (Termo de Ciência e Responsabilidade · seguro-desemprego e ingresso na escala de trabalho avulso), para qualquer colaborador. Sai em 2 vias A4 (1ª do sindicato, com o recibo da 2ª; 2ª do trabalhador), igual ao modelo do sindicato e na fonte Poppins do PDF (web/fontes, SIL OFL, só caracteres latinos). Preenche nome, CPF, NIS/PIS, nascimento, telefone, endereço com cidade e CEP e a data escolhida; situação do seguro, parcelas e início na escala ficam em branco. Mesmas opções das outras fichas (data, impressão automática, Imprimir/Salvar como PDF); a impressão espera a fonte carregar.
+- A sincronização passa a guardar a cidade e a UF da aba Endereço do Guia (`cidade`, `uf`); sem elas, o termo lê a aba na hora.
+
 ## 0.2.4 — 17/11/2026
 - Entrega em lote: no lugar de "Fica pendente", cada peça de cada pessoa tem "Sem camiseta manga longa", "Sem calça", "Sem botina"… (pedido do Gabriel): a pessoa não leva aquela peça e nada fica pendente. O botão de falta de estoque virou "Lançar o que tem: quem passar do estoque fica sem a peça". Regras da safra, saldo e aba EPI's contam só o que a pessoa leva; o termo mostra só o recebido.
 - A aba Pendentes só aparece enquanto houver pendências criadas nas versões 0.2.2 e 0.2.3 (entregar ou cancelar).
