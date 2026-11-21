@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.7 — 21/11/2026
+- Escala e produção: sai o quadro do valor produzido no período e entra "Pararam nos últimos 30 dias" (ativos com 31 a 60 dias sem produção). Os quadros de parados abrem a lista Para reescalar filtrada (`ui.escFaixa`), com "Mostrar todos" para tirar o filtro.
+
 ## 0.2.6 — 21/11/2026
 - Nova tela Gestão › Escala e produção (pedido do Gabriel): quem trabalhou em cada quinzena, em que empresa, diárias e produção bruta (R$ do Extrato Produção), desde o início. Gráfico por quinzena (pessoas, diárias ou R$), filtro de período e empresa, quadros de resumo, Ranking de produção, Para reescalar (ativos parados há mais de 30 dias ou esperando a 1ª escala, com empresa onde mais trabalharam, experiência no último ano, ASO/NRs e aviso de quem vai completar 90 dias), Empresas e impressão da aba.
 - Histórico montado em segundo plano (`escMontar`): cada quinzena é lida uma vez pela mesma consulta da programação de pagamento (`prodQuinzena`, agora compartilhada; só leitura, 2 empresas por vez e pausa entre quinzenas), guardada só neste PC (lists tipo "producao", fora do diário) e em `central-producao/AAAA-MM-Q.jsonl` no compartilhamento para os outros PCs. Volta no tempo até 6 quinzenas seguidas sem produção; quinzena com empresa que não respondeu não é guardada. A atual e as duas anteriores são relidas depois de 6 h.
