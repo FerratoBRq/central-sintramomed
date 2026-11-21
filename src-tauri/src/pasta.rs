@@ -6,7 +6,8 @@
 use std::path::PathBuf;
 
 // central-logs: registro interno de erros e métricas de cada PC (não aparece no programa; lido pelo Claude).
-const SUBPASTAS: [&str; 3] = ["central-estoque", "central-dados", "central-logs"];
+// central-producao: produção de cada quinzena (escala), lida uma vez do Sistema eSocial e usada pelos outros PCs.
+const SUBPASTAS: [&str; 4] = ["central-estoque", "central-dados", "central-logs", "central-producao"];
 
 fn nome_valido(nome: &str, ext: &str) -> bool {
     nome.len() <= 90

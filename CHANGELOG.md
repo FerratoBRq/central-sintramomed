@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.6 — 21/11/2026
+- Nova tela Gestão › Escala e produção (pedido do Gabriel): quem trabalhou em cada quinzena, em que empresa, diárias e produção bruta (R$ do Extrato Produção), desde o início. Gráfico por quinzena (pessoas, diárias ou R$), filtro de período e empresa, quadros de resumo, Ranking de produção, Para reescalar (ativos parados há mais de 30 dias ou esperando a 1ª escala, com empresa onde mais trabalharam, experiência no último ano, ASO/NRs e aviso de quem vai completar 90 dias), Empresas e impressão da aba.
+- Histórico montado em segundo plano (`escMontar`): cada quinzena é lida uma vez pela mesma consulta da programação de pagamento (`prodQuinzena`, agora compartilhada; só leitura, 2 empresas por vez e pausa entre quinzenas), guardada só neste PC (lists tipo "producao", fora do diário) e em `central-producao/AAAA-MM-Q.jsonl` no compartilhamento para os outros PCs. Volta no tempo até 6 quinzenas seguidas sem produção; quinzena com empresa que não respondeu não é guardada. A atual e as duas anteriores são relidas depois de 6 h.
+- Histórico de cada pessoa: diárias por quinzena, empresas, advertências e ocorrências (lists tipo "advertencia": data, tipo, motivo, empresa) e indicações de escala (lists tipo "escala": empresa, a partir de, observação), no diário compartilhado. pasta.rs aceita a subpasta central-producao.
+
 ## 0.2.5 — 18/11/2026
 - Emitir ficha: nova aba "Termo Seguro-Desemprego" (Termo de Ciência e Responsabilidade · seguro-desemprego e ingresso na escala de trabalho avulso), para qualquer colaborador. Sai em 2 vias A4 (1ª do sindicato, com o recibo da 2ª; 2ª do trabalhador), igual ao modelo do sindicato e na fonte Poppins do PDF (web/fontes, SIL OFL, só caracteres latinos). Preenche nome, CPF, NIS/PIS, nascimento, telefone, endereço com cidade e CEP e a data escolhida; situação do seguro, parcelas e início na escala ficam em branco. Mesmas opções das outras fichas (data, impressão automática, Imprimir/Salvar como PDF); a impressão espera a fonte carregar.
 - A sincronização passa a guardar a cidade e a UF da aba Endereço do Guia (`cidade`, `uf`); sem elas, o termo lê a aba na hora.

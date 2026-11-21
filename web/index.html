@@ -383,6 +383,7 @@ p,.head p,.note,.small{text-wrap:pretty}
         <button data-v="nrs"><span data-ico="upload"></span>NRs recebidas <span class="count" id="navNr" hidden></span></button>
         <button data-v="aprovacao"><span data-ico="list"></span>Aprovação <span class="count" id="navAprov" hidden></span></button></div></div>
       <div class="nav-g" data-g="gestao"><button class="nav-l" type="button" aria-expanded="true">Gestão</button><div class="nav-i">
+        <button data-v="escala"><span data-ico="chart"></span>Escala e produção</button>
         <button data-v="relatorios"><span data-ico="list"></span>Relatório mensal</button>
         <button data-v="estoque"><span data-ico="box"></span>Estoque e EPIs</button>
         <button data-v="nr01"><span data-ico="users"></span>NR-01 · Portal DOM</button></div></div>
@@ -396,7 +397,7 @@ p,.head p,.note,.small{text-wrap:pretty}
     </nav>
     <button class="tema-b" id="btnTema" type="button"></button>
     <div class="side-foot">
-      <div class="row2"><span>Versão <b class="mono" id="ver">0.2.5</b></span><span id="runtime">Modo navegador</span></div>
+      <div class="row2"><span>Versão <b class="mono" id="ver">0.2.6</b></span><span id="runtime">Modo navegador</span></div>
       <span id="syncInfo"></span>
       <button class="link" id="btnSync" type="button" hidden>Sincronizar tudo agora</button>
       <span id="updInfo">Verificando atualizações…</span>
@@ -414,7 +415,7 @@ p,.head p,.note,.small{text-wrap:pretty}
 /* Tema: claro, escuro ou automático (segue o Windows). O botão de lua/sol fixa o modo neste computador. */
 const temaEscuro=()=>{const t=document.documentElement.dataset.theme;return t?t==="dark":matchMedia("(prefers-color-scheme: dark)").matches};
 try{const t=localStorage.getItem("cs_tema");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}
-const APP_VERSION="0.2.5";
+const APP_VERSION="0.2.6";
 /* ---------- utilidades ---------- */
 const $=(s,r=document)=>r.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -454,6 +455,7 @@ function toast(msg){if(/não foi possível|não consegui|erro|falh/i.test(msg))D
 const IS_TAURI=!!(window.__TAURI__||window.__TAURI_INTERNALS__);
 const ICONS={
   home:'<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M10 21v-6h4v6"/>',
+  chart:'<path d="M3 20h18"/><path d="M6 20v-7"/><path d="M11 20V6"/><path d="M16 20v-10"/><path d="M21 20V9"/>',
   users:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7"/><path d="M18.5 14a6.5 6.5 0 0 1 3 6"/>',
   alert:'<path d="M12 3 2 20h20L12 3z"/><path d="M12 10v4"/><path d="M12 17.5v.01"/>',
   list:'<path d="M8 6h13M8 12h13M8 18h13"/><path d="M3.5 6h.01M3.5 12h.01M3.5 18h.01"/>',
@@ -564,7 +566,8 @@ const MANUAL=[
  {t:"Pendências e vencimentos",p:["Vencimentos tem duas abas, NRs e ASOs, com calendário de 3 meses: o dia exato em que vence o curso ou o ASO de cada trabalhador fica marcado em vermelho (passe o mouse para ver os nomes). Na aba ASOs, clique no dia para ver quem vence e anote a data do exame marcado; na aba NRs, clique num dia para marcar a turma. A NR-33 pode ter mais de um dia: abra a outra data marcada e vincule o mesmo trabalhador (ele fica nas duas turmas); na lista, a NR-33 tem campo para o 2º dia marcado.","Pendências mostra o que falta em cada trabalhador (início, ASO, NR-35, NR-33, produção, término). Clique num item para filtrar; Críticas e Atenção separam a gravidade.","Vencimento das NRs: escolha NR-35 ou NR-33, clique num dia livre do calendário para marcar a turma (de preferência quarta, quinta ou sexta) e o Central distribui as pessoas. Clique num dia marcado para ver a turma, mover alguém para outra data, vincular um trabalhador ou desmarcar a data.","Lista para emissão de certificados: gera o Word no modelo da DOM, com 13 nomes por folha, separado por NR-33 e NR-35."]},
  {t:"ASOs e NRs recebidos",p:["Salve os PDFs que chegam pelo WhatsApp na pasta ASOs para lançar ou NRs para lançar (Documentos > Central Sintramomed). O Central lê a cada minuto. Se o arquivo for para a pasta errada, ele muda sozinho.","Também dá para usar Anexar ou arrastar os PDFs para a tela.","Na aba Para conferir: Conferir e lançar abre o documento lido para conferir. Enviar prontos para aprovação manda de uma vez os que estão completos.","Depois de lançado, o arquivo vai para ASOs lançados ou NRs lançadas e fica anexado na ficha."]},
  {t:"Aprovação",p:["Tudo o que o Central vai gravar no Sistema eSocial (ASO, NR, endereço, desconto autorizado, EPI) aparece aqui com o que muda: como está no sistema e como vai ficar.","Aprovar e enviar pede uma segunda confirmação, grava no Guia e confere relendo a página. Recusar descarta o pedido.","A aba Histórico guarda o que foi enviado, recusado ou deu erro."]},
- {t:"Relatório mensal e sem produção",p:["Afastados e desligados entram no mês pela data de envio do evento ao eSocial (S-2399 ou S-2230), não pela data do término, que é retroativa. Ex.: término em 18/06 enviado em 15/10 entra em outubro. Na tela aparece a data da última produção de cada um (lida do relatório de produção do Guia ao Buscar) e, embaixo, a data do envio.","Relatório mensal: escolha o mês e clique em Buscar no Sistema eSocial. Vêm admissões, periódicos (com a empresa da produção) e afastados/desligados (pelo mês do lançamento).","Marque classificação do ASO, envio à DOM e antecedentes; inclua pessoas à mão se precisar; clique em Gerar Excel.","Aba Sem produção há +3 meses: marque quem deve ser desligado. Marcar não envia nada ao sistema."]},
+ {t:"Escala e produção",p:["Gestão › Escala e produção mostra quem trabalhou em cada quinzena, em que empresa, quantas diárias e quanto produziu (R$ bruto do Extrato Produção do Sistema eSocial), desde o início.","Na primeira vez o Central monta o histórico sozinho, em segundo plano: a quinzena atual primeiro e depois as anteriores, uma por vez, até o início. Pode continuar usando o programa. O que um computador lê fica disponível para os outros. A quinzena atual e as duas anteriores são relidas depois de 6 horas; Atualizar agora relê na hora.","Escolha o período (6 quinzenas até desde o início) e a empresa. O gráfico mostra pessoas que trabalharam, diárias ou R$ por quinzena (passe o mouse na barra para ver os números).","Ranking de produção: quem mais trabalhou no período, com a empresa principal, quinzenas trabalhadas, diárias, produção e a situação (Produzindo até 30 dias, Parado de 31 a 89, Inativo com 90 ou mais).","Para reescalar: ativos do cadastro sem produção há mais de 30 dias ou esperando a 1ª escala, com onde mais trabalharam, experiência no último ano e ASO/NRs. Ordene por mais tempo parado, mais perto dos 90 dias (para não chegar ao desligamento) ou mais experiência. Escalar registra para qual empresa e a partir de quando.","Histórico (em cada nome): todas as quinzenas, as empresas, as advertências e as indicações de escala. Registre advertências e ocorrências (verbal, escrita, suspensão) com data, motivo e empresa; ficam para todos os computadores.","Empresas: pessoas, diárias e produção de cada empresa no período. Imprimir sai a lista da aba aberta."]},
+{t:"Relatório mensal e sem produção",p:["Afastados e desligados entram no mês pela data de envio do evento ao eSocial (S-2399 ou S-2230), não pela data do término, que é retroativa. Ex.: término em 18/06 enviado em 15/10 entra em outubro. Na tela aparece a data da última produção de cada um (lida do relatório de produção do Guia ao Buscar) e, embaixo, a data do envio.","Relatório mensal: escolha o mês e clique em Buscar no Sistema eSocial. Vêm admissões, periódicos (com a empresa da produção) e afastados/desligados (pelo mês do lançamento).","Marque classificação do ASO, envio à DOM e antecedentes; inclua pessoas à mão se precisar; clique em Gerar Excel.","Aba Sem produção há +3 meses: marque quem deve ser desligado. Marcar não envia nada ao sistema."]},
  {t:"Estoque e EPIs",p:["Aba Saldo mostra uniformes por tamanho e EPIs. Contagem: digite o que há de fato e o Central lança só a diferença.","Entrada: compra ou devolução. Saída ou baixa: Primeiro uniforme (kit pronto e sem custo: 1 camiseta manga longa, 1 calça e 1 botina; só escolher os tamanhos, uma vez por trabalhador), Entrega de EPI (sem custo), Uniforme da safra (1 camisa, 1 calça e 1 botina por safra, sem custo), Fornecimento com desconto autorizado ou Baixa.","Empresa: na entrega, escolha a empresa para onde vai o uniforme (lista das empresas do Sistema eSocial, ou digite). O Central já sugere a do último relatório mensal. A empresa aparece nos Movimentos, na busca e no termo.","Entrega em lote: o mesmo kit para várias pessoas de uma vez. Escolha o motivo, a empresa e o kit, adicione as pessoas pelo nome ou CPF (ou cole uma lista, um por linha) e escolha o tamanho de cada uma (o Central sugere o da última entrega). Ao lançar, saem todos os termos, um por folha.","Quem não leva uma peça no lote: marque Sem botina, Sem calça, Sem camiseta… na pessoa. Se a peça não dá para todos, o botão Lançar o que tem: quem passar do estoque fica sem a peça marca isso sozinho, na ordem da lista. Nada fica pendente e o termo mostra só o que a pessoa recebeu.","Entrega em lote pela planilha: Baixar planilha modelo gera um Excel com o kit escolhido (uma coluna de tamanho por peça, com a lista de tamanhos em cada célula), a empresa, o motivo e as pessoas que já estão na lista. Preencha um trabalhador por linha (nome ou CPF) e use Importar planilha preenchida: a lista é substituída pela da planilha e o Central avisa quem não achou e tamanho que não existe.","Desconto autorizado só vale para peça extra pedida pelo trabalhador ou reposição por perda/dano por culpa dele. Botina e EPIs nunca são cobrados. Imprima o Termo de autorização de desconto e colha a assinatura antes.","Ao entregar camiseta, calça ou botina, a opção Lançar também na aba EPI's do Sistema eSocial cria o pedido na Aprovação.","Estorno: o botão Estornar desfaz um movimento. Ele pede confirmação, e um clique duplo não lança duas vezes.","Limpar histórico do estoque (aba Configurações): zera saldos e movimentos até agora em todos os computadores; depois lance a Contagem."]},
  {t:"NR-01 · Portal DOM",p:["Conecte o Portal DOM uma vez na engrenagem (e-mail e senha do portal). O Central consulta o portal a cada 10 minutos.","Aba Situação: quem está fora do portal, convidado, em treinamento ou concluiu, com os itens feitos.","Aba Importar: salva a planilha dos que faltam e abre a tela de importação do portal; arraste o arquivo e confirme lá.","Aba Faltam dados: quem não entra na planilha por falta de CPF, WhatsApp (celular com DDD) ou data de início."]},
  {t:"Adiantamentos",p:["Ferramentas › Adiantamentos: escolha o trabalhador pelo nome, o valor, a data e em quantas parcelas descontar (uma por quinzena). Registrar adiantamento só grava; o termo de adiantamento e autorização de desconto (2 vias) fica no botão Imprimir termo de cada adiantamento da lista e pode ser emitido a qualquer momento.","Programação de adiantamentos: escolha o período e imprima a lista A4 no formato da programação de pagamento, com conta, poupança ou PIX.","Lançar desconto no Guia (clique duas vezes para confirmar) manda cada parcela para a Aprovação como Crédito/Desconto ADIANTAMENTO SALARIAL; depois de aprovado, sai no holerite.","Na Programação de pagamento, o líquido já vem descontado e o nome aparece com “− Adiantamento”. Parcela da quinzena ainda não lançada no Guia aparece num aviso.","Base legal: CLT art. 462 (desconto de adiantamento) e Constituição art. 7º, XXXIV (avulso). Sem juros, com termo assinado e sem passar de 70% do líquido da quinzena."]},
@@ -580,7 +583,7 @@ function abrirManual(){const m=document.createElement("div");m.className="modal"
     $("#manLista").innerHTML=ls.length?ls.map((x,i)=>`<details class="panel" style="padding:14px 18px" ${q||i===0?"open":""}><summary style="cursor:pointer;font-weight:600;font-size:16px">${esc(x.t)}</summary><ol style="margin:10px 0 0;padding-left:20px;line-height:1.6">${x.p.map(l=>`<li>${esc(l)}</li>`).join("")}</ol></details>`).join(""):`<div class="empty">Nada encontrado no manual.</div>`};
   $("#manBusca").oninput=draw;draw();$("#manBusca").focus()}
 /* ---------- roteamento ---------- */
-const VIEWS=["painel","trabalhadores","pendencias","fatiador","relatorios","entrevista","modelos","feedback","estoque","asos","nrs","aprovacao","previsao","pagamentos","nr01"];
+const VIEWS=["painel","escala","trabalhadores","pendencias","fatiador","relatorios","entrevista","modelos","feedback","estoque","asos","nrs","aprovacao","previsao","pagamentos","nr01"];
 let current=VIEWS.includes(location.hash.slice(1))?location.hash.slice(1):"painel";
 let ui={filtro:"todos",busca:"",nivelPend:"todos"};
 function go(v){current=v;try{history.replaceState(null,"","#"+v)}catch(e){}render();window.scrollTo(0,0)}
@@ -628,7 +631,7 @@ function render(){
   document.querySelectorAll("#nav button[data-v]").forEach(b=>b.setAttribute("aria-current",b.dataset.v===current?"page":"false"));navGrupos();
   const crit=S.workers.filter(w=>nivel(w)==="crit").length;const nc=$("#navCount");nc.hidden=!crit;nc.textContent=crit;
   const t0=performance.now();
-  ({painel:vPainel,trabalhadores:vTrab,pendencias:vPend,fatiador:vFat,relatorios:vRel,entrevista:vEnt,modelos:vMod,feedback:vFeed,estoque:vEst,asos:vAsos,nrs:vNrs,aprovacao:vAprov,pagamentos:vPag,adiantamentos:vAdt,nr01:vNr01,previsao:vPrev})[current]();
+  ({painel:vPainel,trabalhadores:vTrab,pendencias:vPend,fatiador:vFat,relatorios:vRel,entrevista:vEnt,modelos:vMod,feedback:vFeed,estoque:vEst,asos:vAsos,nrs:vNrs,aprovacao:vAprov,pagamentos:vPag,adiantamentos:vAdt,nr01:vNr01,previsao:vPrev,escala:vEsc})[current]();
   asoBadge();aprovBadge();Diag.conta("tela",current,performance.now()-t0);
 }
 const exBanner=()=>S.workers.some(w=>w.exemplo)?`<div class="banner"><span><b>Dados de exemplo.</b> Os trabalhadores marcados como exemplo servem só para testar as telas.</span><button class="btn sm" id="clrEx">Remover exemplos</button></div>`:"";
@@ -647,6 +650,7 @@ const ATALHOS=[
 /* Novidades curtas por versão (aparecem na engrenagem, no aviso de atualização e em Feedback). Uma linha por versão;
    o detalhe fica no CHANGELOG.md. Ao lançar versão, acrescente a linha nova no topo. */
 const VERSOES=[
+ ["0.2.6","Nova tela Escala e produção: histórico por quinzena, ranking, quem reescalar e advertências"],
  ["0.2.5","Emitir ficha: Termo de Ciência do Seguro-Desemprego para todos os colaboradores"],
  ["0.2.4","Entrega em lote: \"Sem botina\", \"Sem calça\"… no lugar de pendente"],
  ["0.2.3","Uniforme da safra com botina: camisa, calça e botina juntas, sem custo"],
@@ -2200,7 +2204,7 @@ async function publicarExistente(){
   for(const w of S.workers.filter(w=>!w.exemplo&&proprios(w)))anotar("workers",w.cpf||w.id,{...w},false);
   const docs=S.docs.filter(d=>d.workerId===MOD_ID||S.workers.some(w=>w.id===d.workerId&&!w.exemplo));
   for(const d of docs){const x={...d};delete x.blob;const w=S.workers.find(y=>y.id===d.workerId);x.dono=d.workerId===MOD_ID?MOD_ID:(w?w.cpf:"");anotar("docs",d.id,x,false)}
-  for(const l of S.lists)anotar("lists",l.id,l,false);for(const i of S.interviews)anotar("interviews",i.id,i,false);
+  for(const l of S.lists.filter(l=>l.tipo!=="producao"))anotar("lists",l.id,l,false); // produção é cache local (vem do Guia e de central-producao)for(const i of S.interviews)anotar("interviews",i.id,i,false);
   anotar("feedback","lista",fbLista(),false);anotar("modelos_ocultos","lista",modOcultos(),false);
   await publicar(docs);await _pub;if(!Comp.erro)LS.set("cs_diario_inicial",compId());
 }
@@ -2894,10 +2898,12 @@ async function pagLiquidos(ini,fim,aoAndar){
       for(const[cpf,v]of Object.entries(f))e[cpf]=Math.round(((e[cpf]||0)+v)*100)/100}catch(err){}
     feitos++;aoAndar&&aoAndar(`Valor líquido: ${feitos} de ${total} folhas`)}};
   await Promise.all([passo(),passo(),passo()]);return {liq:out,adt}}
-async function pagBuscar(r,aoAndar){
-  const[ini,fim]=pagPeriodo(r.mes,r.q);
+// Produção de um período por empresa (Extrato Produção do rel_folhaproducao.php, uma empresa por vez, só leitura):
+// [{cod,nome,pessoas:[{nome,cpf,diarias,valor}]}] e quantas empresas não responderam (falhas).
+async function prodQuinzena(ini,fim,aoAndar,par=4){
   const emps=[...dom(await sget("/register/rel_folhaproducao.php")).querySelectorAll('select[name="cod_empresa"] option')].filter(o=>o.value).map(o=>({cod:o.value,nome:o.textContent.trim()}));
-  const nm=porNome(),achadas=[];let feitos=0;const fila=[...emps];
+  if(!emps.length)throw new Error("O Sistema eSocial não mostrou a lista de empresas (sessão expirada?).");
+  const nm=porNome(),achadas=[];let feitos=0,falhas=0;const fila=[...emps];
   const passo=async()=>{while(fila.length){const e=fila.shift();
     try{const d=dom(await spost("/register/rel_folhaproducao.php",[["acao","Visualizar"],["codempresa",e.cod],["cod_empresa",e.cod],["empset_codigo",""],["codcolaborador",""],["cod_colaborador",""],["dt_ini",br(ini)],["dt_fim",br(fim)],["tipo","5"],["opcaoAgrup","2"],["via","empresa"],["opcaoFiscal","1"]]));
       const linhas=[...d.querySelectorAll("tr")].map(tr=>[...tr.children].map(c=>c.textContent.replace(/\s+/g," ").trim()));
@@ -2909,9 +2915,13 @@ async function pagBuscar(r,aoAndar){
         if(tot){atual.valor+=Number(tot[1].replace(/\./g,"").replace(",","."))||0;continue}
         if(/^\d{3,5} - /.test(c[0])&&/DIARIA/i.test(c[1]))atual.diarias+=parseFloat(c[3])||0}
       const pessoas=Object.values(ps).map(x=>{const w=nm[x.nome];return {...x,valor:Math.round(x.valor*100)/100,cpf:w?w.cpf:""}});
-      if(pessoas.length)achadas.push({cod:e.cod,nome:e.nome,pessoas})}catch(err){}
+      if(pessoas.length)achadas.push({cod:e.cod,nome:e.nome,pessoas})}catch(err){falhas++}
     feitos++;aoAndar&&aoAndar(`Produção: ${feitos} de ${emps.length} empresas`)}};
-  await Promise.all([passo(),passo(),passo(),passo()]);
+  await Promise.all(Array.from({length:par},passo));
+  return {achadas,falhas}}
+async function pagBuscar(r,aoAndar){
+  const[ini,fim]=pagPeriodo(r.mes,r.q);
+  const {achadas}=await prodQuinzena(ini,fim,aoAndar);
   // Valor líquido de cada um, da folha processada da empresa (null = folha ainda não processada).
   const {liq,adt}=await pagLiquidos(ini,fim,aoAndar);
   // Nome da empresa na folha pode ter complemento (ex.: "CARGILL ... DOURADOS" × "CARGILL ... DOURADOSMOVIMENTACAO FARELO"): aceita prefixo único.
@@ -3447,6 +3457,196 @@ function emitirFicha(w){
     imprimir()};
   mostrar();
 }
+
+/* ---------- ESCALA E PRODUÇÃO (pedido do Gabriel em 21/11/2026) ----------
+   Quem trabalhou em cada quinzena, em que empresa, quantas diárias e quanto produziu (R$ bruto do Extrato Produção),
+   desde o início. Cada quinzena é lida uma vez do Sistema eSocial (prodQuinzena, só leitura) e guardada como lists tipo
+   "producao" (id "prod-AAAA-MM-Q", só neste PC, fora do diário) e no compartilhamento em central-producao/AAAA-MM-Q.jsonl,
+   para os outros PCs não lerem de novo. O histórico se monta em segundo plano (escMontar), uma quinzena por vez com pausa,
+   voltando no tempo até 6 quinzenas seguidas sem produção (o início). A quinzena atual e as duas anteriores são relidas
+   depois de 6 h (lançamentos atrasados). Advertências (tipo "advertencia") e indicações de escala (tipo "escala") vão
+   para o diário, como os outros registros. */
+const qAtual=()=>{const d=iso(TODAY);return [d.slice(0,7),Number(d.slice(8,10))<=15?"1":"2"]};
+const qAnt=([mes,q])=>{if(q==="2")return [mes,"1"];const[a,m]=mes.split("-").map(Number);return [m>1?`${a}-${pad(m-1)}`:`${a-1}-12`,"2"]};
+const qChave=([mes,q])=>`${mes}-${q}`;
+const qRot=k=>{const[a,m,q]=k.split("-");return `${q}ª ${MESES[Number(m)-1].slice(0,3).toLowerCase()}/${a.slice(2)}`};
+const prodReg=k=>S.lists.find(x=>x.id==="prod-"+k);
+const ESC_RELER=6*3600e3,Esc={rodando:false,msg:"",feitas:0,fim:0};
+const fmtNum=v=>Number(v||0).toLocaleString("pt-BR",{maximumFractionDigits:1});
+async function prodGuardar(r,enviar){
+  const i=S.lists.findIndex(x=>x.id===r.id);if(i>=0)S.lists[i]=r;else S.lists.push(r);
+  if(enviar&&compAtivo())try{const {sha,...dados}=r;await compGravar("central-producao",r.q+".jsonl",JSON.stringify(dados));if(ghOn())r.sha=GH.sha[`central-producao/${r.q}.jsonl`]}
+    catch(e){Diag.erro("producao",String(e.message||e),"gravar "+r.q)}
+  await Store.put("lists",r,true)}
+// Lê uma quinzena no Guia. Se alguma empresa não respondeu, não guarda (senão a quinzena ficaria incompleta para sempre).
+async function prodLer(k){
+  const[a,m,q]=k.split("-"),[ini,fim]=pagPeriodo(`${a}-${m}`,q),{achadas,falhas}=await prodQuinzena(ini,fim,null,2);
+  if(falhas)throw new Error(`${falhas} empresa${falhas>1?"s":""} não respondeu`);
+  const emp={},p=[];for(const e of achadas){emp[e.cod]=e.nome;for(const x of e.pessoas)p.push([x.cpf||"",x.cpf?"":x.nome,e.cod,x.diarias,x.valor])}
+  const r={id:"prod-"+k,tipo:"producao",q:k,ini,fim,lidoEm:new Date().toISOString(),emp,p};await prodGuardar(r,true);return r}
+// Traz do compartilhamento as quinzenas que outro PC leu (só as novas ou mais recentes que a daqui).
+async function prodPuxar(){
+  if(!compAtivo())return;const traz=async(k,o,sha)=>{const r=prodReg(k);if(r&&r.lidoEm>=o.lidoEm){if(sha&&r.sha!==sha){r.sha=sha;await Store.put("lists",r,true)}return}await prodGuardar({...o,id:"prod-"+k,tipo:"producao",q:k,...(sha?{sha}:{})},false)};
+  if(ghOn()){for(const f of await ghGet("central-producao",false)||[]){const m=f.type==="file"&&f.name.match(/^(\d{4}-\d{2}-[12])\.jsonl$/);if(!m)continue;const r=prodReg(m[1]);if(r&&r.sha===f.sha)continue;
+      const t=await ghGet(f.path,true);if(t)try{await traz(m[1],JSON.parse(t),f.sha)}catch(e){}}}
+  else for(const [nome,t] of await tinvoke("pasta_ler",{pasta:pastaComp(),subpasta:"central-producao"})){const m=nome.match(/^(\d{4}-\d{2}-[12])\.jsonl$/);if(m)try{await traz(m[1],JSON.parse(t))}catch(e){}}}
+function escStatus(){const el=$("#escStatus");if(el)el.innerHTML=escStatusHTML()}
+const escStatusHTML=()=>{const n=S.lists.filter(l=>l.tipo==="producao").length;return Esc.rodando?`<span class="pill warn">Montando o histórico</span> ${esc(Esc.msg)}`
+  :Esc.msg?`<span class="pill crit">Pausado</span> ${esc(Esc.msg)}`:n?`<span class="pill ok">Histórico em dia</span> ${n} quinzenas lidas.`:IS_TAURI?"":"O histórico é lido do Sistema eSocial no programa instalado."};
+// Roda ao abrir a Escala (no máximo a cada 30 min, ou em "Atualizar agora") e continua mesmo se você sair da tela.
+async function escMontar(forcar){
+  if(Esc.rodando||!IS_TAURI||!(Sync.cfg&&Sync.cfg.configurado)||!forcar&&Date.now()-Esc.fim<30*60e3)return;Esc.rodando=true;Esc.msg="Conferindo o que já foi lido…";escStatus();
+  const pausa=ms=>new Promise(r=>setTimeout(r,ms)),velho=r=>!r||Date.now()-new Date(r.lidoEm)>ESC_RELER;
+  try{try{await prodPuxar()}catch(e){}
+    let k=qAtual(),vazias=0;
+    for(let i=0;i<400;i++,k=qAnt(k)){const kk=qChave(k),recente=i<3;
+      if(!prodReg(kk)||recente&&velho(prodReg(kk))){
+        while(Sync.rodando)await pausa(5000);
+        try{await prodPuxar()}catch(e){} // outro PC pode ter acabado de ler
+        if(!prodReg(kk)||recente&&velho(prodReg(kk))){Esc.msg=`Lendo a ${qRot(kk)} no Sistema eSocial (${Esc.feitas} lidas nesta sessão)…`;escStatus();
+          try{await prodLer(kk)}catch(e){Esc.msg=`A ${qRot(kk)} não foi lida (${e.message||e}). O Central tenta de novo quando você abrir a Escala.`;Diag.erro("producao",String(e.message||e),"ler "+kk);return}
+          Esc.feitas++;if(current==="escala")rerenderSeguro();await pausa(8000)}}
+      vazias=prodReg(kk).p.length?0:vazias+1;if(vazias>=6||kk<"2015-01-1")break}
+    Esc.msg=""}
+  finally{Esc.rodando=false;Esc.fim=Date.now();escStatus();if(current==="escala")rerenderSeguro()}}
+
+// Pessoas × quinzenas: diárias (d), produção (v) e diárias por empresa (e).
+function escDados(){
+  const regs=S.lists.filter(l=>l.tipo==="producao").sort((a,b)=>a.q.localeCompare(b.q)),pessoas=new Map(),qs=[],emp={},porCpf={},nm=porNome();
+  S.workers.forEach(w=>{if(w.cpf)porCpf[w.cpf]=w});
+  for(const r of regs){let td=0,tv=0;const quem=new Set();Object.assign(emp,r.emp);
+    for(const [cpf,nome,cod,d,v] of r.p){const k=cpf||"n:"+nome;let x=pessoas.get(k);if(!x){x={k,cpf,nome:nome||"",w:cpf?porCpf[cpf]:nm[nome],q:{}};if(x.w)x.nome=x.w.nome;pessoas.set(k,x)}
+      const c=x.q[r.q]||(x.q[r.q]={d:0,v:0,e:{}});c.d+=d;c.v+=v;c.e[cod]=(c.e[cod]||0)+d;quem.add(k);td+=d;tv+=v}
+    qs.push({q:r.q,fim:r.fim,pessoas:quem.size,d:td,v:tv})}
+  // Última produção: a da quinzena mais recente com diárias ou a do cadastro (relatório de inatividade), a maior.
+  for(const x of pessoas.values()){const ks=Object.keys(x.q).filter(k=>x.q[k].d>0).sort();x.ultQ=ks[ks.length-1]||"";const r=x.ultQ&&regs.find(y=>y.q===x.ultQ);
+    x.ult=[r?r.fim:"",x.w&&x.w.ultimaProducao||""].sort().pop()}
+  return {qs,pessoas,emp}}
+// Situação pela última produção: até 30 dias produzindo, 31 a 89 parado, 90 ou mais inativo (regra de desligamento).
+// Quem nunca produziu conta desde o cadastro ("Aguardando 1ª escala" até 89 dias).
+const escSit=(ult,w)=>{if(w&&w.status==="desligado")return ["Desligado","info",null];
+  if(!ult){const c=w&&parse(w.dtCadastro);if(!c)return ["Sem produção","crit",null];const d=daysBetween(c,TODAY);return d<90?["Aguardando 1ª escala","warn",d]:["Sem produção","crit",d]}
+  const d=daysBetween(parse(ult),TODAY);return d<=30?["Produzindo","ok",d]:d<90?["Parado","warn",d]:["Inativo","crit",d]};
+const advDe=cpf=>S.lists.filter(l=>l.tipo==="advertencia"&&l.cpf===cpf).sort((a,b)=>b.data.localeCompare(a.data));
+const escalasDe=cpf=>S.lists.filter(l=>l.tipo==="escala"&&l.cpf===cpf).sort((a,b)=>b.data.localeCompare(a.data));
+// Gráfico de barras em HTML (sem bibliotecas): uma barra por quinzena, com os números no title de cada uma.
+function escBarras(itens,alt,rot,cor){
+  const n=itens.length;if(!n)return "";const max=Math.max(1,...itens.map(i=>i.y)),passo=Math.ceil(n/10);
+  return `<div role="img" aria-label="${esc(rot)}"><div style="display:flex;align-items:flex-end;gap:${n>60?1:3}px;height:${alt}px;border-bottom:1px solid var(--line)">
+    ${itens.map(it=>`<div title="${esc(it.t)}" style="flex:1;min-width:2px;height:${it.y?Math.max(2,Math.round(it.y/max*100)):0}%;background:${cor};border-radius:3px 3px 0 0"></div>`).join("")}</div>
+    <div style="display:flex;gap:${n>60?1:3}px;margin-top:4px">${itens.map((it,i)=>`<div style="flex:1;min-width:2px;position:relative;height:16px">${i%passo===0||i===n-1&&n%passo>passo/2?`<span class="small muted" style="position:absolute;left:0;white-space:nowrap">${esc(it.l)}</span>`:""}</div>`).join("")}</div></div>`}
+// Minigráfico de uma linha (altura relativa ao maior valor da própria linha).
+const escMini=(q,ks)=>{const ds=ks.map(k=>(q[k]||{}).d||0),mx=Math.max(1,...ds);return `<span style="display:inline-flex;gap:2px;align-items:flex-end;height:22px" aria-hidden="true">${ds.map(d=>`<span style="width:5px;height:${d?Math.max(4,Math.round(d/mx*22)):2}px;background:${d?"var(--accent)":"var(--line)"};border-radius:1px"></span>`).join("")}</span>`};
+
+function vEsc(){
+  const {qs,pessoas,emp}=escDados(),aba=ui.escAba||"ranking",per=ui.escPer||"12",ordem=ui.escOrd||"d",met=ui.escMet||"pessoas",empF=ui.escEmp||"",busca=(ui.escBusca||"").trim();
+  const ks=(per==="todas"?qs:qs.slice(-Number(per))).map(x=>x.q),kSet=new Set(ks),qsP=qs.filter(x=>kSet.has(x.q)),noPer=x=>ks.reduce((s,k)=>{const c=x.q[k];if(!c)return s;const d=empF?(c.e[empF]||0):c.d;return {d:s.d+d,v:s.v+(empF?(c.d?c.v*d/c.d:0):c.v),n:s.n+(d>0?1:0)}},{d:0,v:0,n:0});
+  const principal=(x,lista)=>{const t={};for(const k of lista)for(const [c,d] of Object.entries((x.q[k]||{}).e||{}))t[c]=(t[c]||0)+d;const c=Object.keys(t).sort((a,b)=>t[b]-t[a])[0];return c?emp[c]||c:""};
+  const tira=s=>normNome(s||""),bq=tira(busca),dq=busca.replace(/\D/g,""),achou=x=>!busca||tira(x.nome).includes(bq)||(dq.length>=3&&(x.cpf||"").includes(dq));
+  const ultimaComDados=[...qs].reverse().find(x=>x.pessoas),ativosW=S.workers.filter(w=>w.status==="ativo");
+  // Situação de cada ativo do cadastro (produção do histórico ou do relatório de inatividade).
+  const linhaW=w=>pessoas.get(w.cpf)||{k:w.cpf,cpf:w.cpf,nome:w.nome,w,q:{},ult:w.ultimaProducao||"",ultQ:""};
+  const sitAtivos=ativosW.map(w=>{const x=linhaW(w);return {x,s:escSit(x.ult,w)}}),parados=sitAtivos.filter(o=>o.s[0]==="Parado"||o.s[0]==="Aguardando 1ª escala"),inativos=sitAtivos.filter(o=>o.s[0]==="Inativo"||o.s[0]==="Sem produção");
+  const totP=qsP.reduce((s,x)=>({d:s.d+x.d,v:s.v+x.v}),{d:0,v:0});
+  const rank=[...pessoas.values()].map(x=>({x,p:noPer(x)})).filter(o=>o.p.n&&achou(o.x)).sort((a,b)=>ordem==="v"?b.p.v-a.p.v:ordem==="n"?b.p.n-a.p.n||b.p.d-a.p.d:b.p.d-a.p.d||b.p.v-a.p.v);
+  const ks24=qs.slice(-24).map(x=>x.q),hist24=x=>ks24.reduce((s,k)=>s+((x.q[k]||{}).d||0),0);
+  const rees=[...parados,...inativos].filter(o=>achou(o.x)&&(!empF||ks24.some(k=>((o.x.q[k]||{}).e||{})[empF]))).sort(ui.escReOrd==="hist"?(a,b)=>hist24(b.x)-hist24(a.x):ui.escReOrd==="perto"?(a,b)=>{const c=o=>o.s[2]==null?1e9:o.s[2]<90?90-o.s[2]:1e6+o.s[2];return c(a)-c(b)}:(a,b)=>(b.s[2]??1e9)-(a.s[2]??1e9));
+  const empsP={};for(const x of pessoas.values())for(const k of ks){const c=x.q[k];if(!c)continue;for(const [cod,d] of Object.entries(c.e)){const e=empsP[cod]||(empsP[cod]={cod,quem:new Set(),d:0,v:0,ult:"",q:{}});e.quem.add(x.k);e.d+=d;e.v+=c.d?c.v*d/c.d:0;e.q[k]=(e.q[k]||0)+d;if(d&&k>e.ult)e.ult=k}}
+  const empLista=Object.values(empsP).sort((a,b)=>b.d-a.d);
+  const pg=paginar(aba==="ranking"?rank:aba==="reescalar"?rees:empLista,"escPg");
+  const yv=x=>met==="d"?x.d:met==="v"?x.v:x.pessoas;
+  const barras=escBarras(qsP.map(x=>({y:yv(x),l:qRot(x.q),t:`${qRot(x.q)}: ${x.pessoas} pessoas · ${fmtNum(x.d)} diárias · ${brl(x.v)}`})),150,`Produção por quinzena (${met==="d"?"diárias":met==="v"?"R$":"pessoas que trabalharam"})`,"var(--accent)");
+  const pillAso=w=>{if(!w)return "";const p=pendencias(w).filter(z=>/ASO|NR-3/.test(z.t));return p.length?p.map(z=>`<span class="pill ${z.l}">${esc(z.t)}</span>`).join(" "):`<span class="pill ok">ASO/NR em dia</span>`};
+  const escRec=cpf=>{const e=escalasDe(cpf)[0];return e&&daysBetween(parse(e.data),TODAY)<=30?`<span class="pill info" title="${esc(e.obs||"")}">Escalado: ${esc(abrevEmpresa(e.emp))} · ${br(e.data)}</span>`:""};
+  const advN=cpf=>{const n=cpf?advDe(cpf).length:0;return n?`<span class="pill warn">${n} advertência${n>1?"s":""}</span>`:""};
+  $("#view").innerHTML=`<div class="head"><div><h1>Escala e produção</h1><p>Quem trabalhou em cada quinzena, em que empresa e quanto produziu, desde o início. Veja quem está parado para reescalar e registre advertências no histórico de cada um.</p></div>
+    <div class="toolbar"><button class="btn" id="escImp">${ico("print",16)} Imprimir</button>${IS_TAURI?`<button class="btn" id="escAtual">${ico("sync",16)} Atualizar agora</button>`:""}</div></div>
+   <div class="small" id="escStatus" role="status" style="margin:-6px 0 14px">${escStatusHTML()}</div>
+   ${qs.length?"":`<div class="banner"><span><b>O histórico ainda não foi lido.</b> ${IS_TAURI?(Sync.cfg&&Sync.cfg.configurado?"Ele está sendo montado agora, em segundo plano: a quinzena atual primeiro, depois as anteriores até o início. Pode continuar usando o programa.":"Conecte o Sistema eSocial (engrenagem) para o Central ler a produção."):"A produção vem do Sistema eSocial e só é lida no programa instalado."}</span></div>`}
+   <div class="tiles">
+    <div class="tile" style="cursor:default"><span class="ic">${ico("users",22)}</span><span class="n">${ultimaComDados?ultimaComDados.pessoas:0}</span><span class="l">Trabalharam na ${ultimaComDados?qRot(ultimaComDados.q):"última quinzena"}</span></div>
+    <button class="tile warn" data-escaba="reescalar"><span class="ic">${ico("pause",22)}</span><span class="n">${parados.length}</span><span class="l">Ativos parados ou esperando a 1ª escala (até 89 dias)</span></button>
+    <button class="tile crit" data-escaba="reescalar"><span class="ic">${ico("alert",22)}</span><span class="n">${inativos.length}</span><span class="l">Ativos sem produção há 90 dias ou mais</span></button>
+    <div class="tile slate" style="cursor:default"><span class="ic">${ico("chart",22)}</span><span class="n" style="font-size:22px">${brl(totP.v)}</span><span class="l">${fmtNum(totP.d)} diárias no período</span></div></div>
+   <section class="panel"><div class="panel-h"><h2>Produção por quinzena</h2><span class="toolbar">${abasHTML("escMet",[["pessoas","Pessoas"],["d","Diárias"],["v","R$"]],met)}</span></div>
+    <div class="toolbar" style="flex-wrap:wrap;gap:12px;margin-bottom:10px">
+     <label class="small" for="escPer">Período</label><select id="escPer" class="inp" style="width:auto">${[["6","Últimas 6 quinzenas"],["12","Últimas 12 (6 meses)"],["24","Últimas 24 (1 ano)"],["48","Últimas 48 (2 anos)"],["todas","Desde o início"]].map(([v,n])=>`<option value="${v}" ${v===per?"selected":""}>${n}</option>`).join("")}</select>
+     <label class="small" for="escEmp">Empresa</label><select id="escEmp" class="inp" style="width:auto;max-width:320px"><option value="">Todas</option>${Object.entries(emp).sort((a,b)=>a[1].localeCompare(b[1])).map(([c,n])=>`<option value="${esc(c)}" ${c===empF?"selected":""}>${esc(n)}</option>`).join("")}</select></div>
+    ${qsP.length?barras:`<div class="empty">Sem quinzenas lidas ainda.</div>`}</section>
+   <section class="panel"><div class="panel-h"><h2>${aba==="ranking"?"Quem mais trabalhou":aba==="reescalar"?"Para reescalar":"Empresas"}</h2>${abasHTML("escAba",[["ranking","Ranking de produção"],["reescalar",`Para reescalar (${parados.length+inativos.length})`],["empresas","Empresas"]],aba)}</div>
+    <div class="toolbar" style="flex-wrap:wrap;gap:12px;margin-bottom:10px">${aba==="empresas"?"":`<div class="search">${ico("search",16)}<input class="inp" id="escBusca" placeholder="Buscar nome ou CPF" value="${esc(busca)}" aria-label="Buscar nome ou CPF"></div>`}
+     ${aba==="ranking"?`<label class="small" for="escOrd">Ordenar por</label><select id="escOrd" class="inp" style="width:auto">${[["d","Diárias"],["v","Produção (R$)"],["n","Quinzenas trabalhadas"]].map(([v,n])=>`<option value="${v}" ${v===ordem?"selected":""}>${n}</option>`).join("")}</select>`:""}
+     ${aba==="reescalar"?`<label class="small" for="escReOrd">Ordenar por</label><select id="escReOrd" class="inp" style="width:auto"><option value="dias">Mais tempo parado</option><option value="perto" ${ui.escReOrd==="perto"?"selected":""}>Mais perto dos 90 dias</option><option value="hist" ${ui.escReOrd==="hist"?"selected":""}>Mais experiência (diárias no último ano)</option></select>`:""}</div>
+    ${aba==="ranking"?(pg.itens.length?`<div class="tbl-wrap" style="box-shadow:none"><table><thead><tr><th class="num">#</th><th>Colaborador</th><th>Empresa principal</th><th class="num">Quinzenas</th><th class="num">Diárias</th><th class="num">Produção</th><th>Por quinzena</th><th>Situação</th><th></th></tr></thead><tbody>
+      ${pg.itens.map(({x,p},i)=>{const s=escSit(x.ult,x.w);return `<tr><td class="num mono">${rank.findIndex(o=>o.x===x)+1}</td><td><b>${esc(x.nome)}</b>${advN(x.cpf)}</td><td class="small">${esc(abrevEmpresa(principal(x,ks)))}</td><td class="num mono">${p.n}/${ks.length}</td><td class="num mono">${fmtNum(p.d)}</td><td class="num mono">${brl(p.v)}</td><td>${escMini(x.q,ks.slice(-24))}</td><td><span class="pill ${s[1]}">${s[0]}${s[2]!=null&&s[0]!=="Produzindo"?` · ${s[2]} d`:""}</span></td><td><button class="btn sm" data-esch="${esc(x.k)}">Histórico</button></td></tr>`}).join("")}</tbody></table></div>`:`<div class="empty">Ninguém com produção no período${empF?" nessa empresa":""}${busca?" com essa busca":""}.</div>`)
+     :aba==="reescalar"?(pg.itens.length?`<div class="note" style="margin-bottom:10px">Ativos no cadastro que não produzem há mais de 30 dias. Com 90 dias sem produção o trabalhador é desligado: priorize quem está chegando lá.</div><div class="tbl-wrap" style="box-shadow:none"><table><thead><tr><th>Colaborador</th><th>Parado há</th><th>Onde mais trabalhou</th><th class="num">Diárias no último ano</th><th>ASO e NRs</th><th></th></tr></thead><tbody>
+      ${pg.itens.map(({x,s})=>`<tr><td><b>${esc(x.nome)}</b>${advN(x.cpf)} ${escRec(x.cpf)}</td><td><span class="pill ${s[1]}">${s[0]==="Aguardando 1ª escala"?"Aguardando 1ª escala":s[2]!=null?`${s[2]} dias`:"Nunca produziu"}</span>${s[2]!=null&&s[2]>=75&&s[2]<90?`<div class="small" style="color:var(--crit)">Completa 90 dias em ${90-s[2]} dia${90-s[2]>1?"s":""}</div>`:""}${x.ult?`<div class="small muted">Última: ${br(x.ult)}</div>`:""}</td><td class="small">${esc(abrevEmpresa(principal(x,ks24)))||"—"}</td><td class="num mono">${fmtNum(hist24(x))}</td><td>${pillAso(x.w)}</td>
+        <td><span class="toolbar" style="justify-content:flex-end;flex-wrap:nowrap"><button class="btn sm primary" data-esce="${esc(x.k)}">Escalar</button><button class="btn sm" data-esch="${esc(x.k)}">Histórico</button></span></td></tr>`).join("")}</tbody></table></div>`:`<div class="empty">Nenhum ativo parado${busca?" com essa busca":""}.</div>`)
+     :(pg.itens.length?`<div class="tbl-wrap" style="box-shadow:none"><table><thead><tr><th>Empresa</th><th class="num">Pessoas</th><th class="num">Diárias</th><th class="num">Produção</th><th>Por quinzena</th><th>Última quinzena</th></tr></thead><tbody>
+      ${pg.itens.map(e=>`<tr><td><b>${esc(emp[e.cod]||e.cod)}</b></td><td class="num mono">${e.quem.size}</td><td class="num mono">${fmtNum(e.d)}</td><td class="num mono">${brl(e.v)}</td><td>${escMini(Object.fromEntries(Object.entries(e.q).map(([k,d])=>[k,{d}])),ks.slice(-24))}</td><td class="small">${e.ult?qRot(e.ult):"—"}</td></tr>`).join("")}</tbody></table></div>`:`<div class="empty">Sem produção no período.</div>`)}
+    ${pg.html}</section>`;
+  abasBind(vEsc);paginarBind(vEsc);
+  document.querySelectorAll("[data-escaba]").forEach(b=>b.onclick=()=>{ui.escAba=b.dataset.escaba;ui.escPg=1;vEsc()});
+  $("#escPer").onchange=e=>{ui.escPer=e.target.value;vEsc()};$("#escEmp").onchange=e=>{ui.escEmp=e.target.value;ui.escPg=1;vEsc()};
+  if($("#escOrd"))$("#escOrd").onchange=e=>{ui.escOrd=e.target.value;vEsc()};if($("#escReOrd"))$("#escReOrd").onchange=e=>{ui.escReOrd=e.target.value;vEsc()};
+  if($("#escBusca"))$("#escBusca").oninput=e=>{ui.escBusca=e.target.value;ui.escPg=1;clearTimeout(vEsc.t);vEsc.t=setTimeout(()=>{vEsc();const b=$("#escBusca");if(b){b.focus();b.setSelectionRange(b.value.length,b.value.length)}},250)};
+  const pessoa=k=>pessoas.get(k)||(()=>{const w=S.workers.find(y=>y.cpf===k);return w?linhaW(w):null})();
+  document.querySelectorAll("[data-esch]").forEach(b=>b.onclick=()=>escHistorico(pessoa(b.dataset.esch),{qs,emp}));
+  document.querySelectorAll("[data-esce]").forEach(b=>b.onclick=()=>escEscalar(pessoa(b.dataset.esce),vEsc));
+  if($("#escAtual"))$("#escAtual").onclick=()=>{if(Esc.rodando){toast("O histórico já está sendo lido");return}Esc.msg="";S.lists.filter(l=>l.tipo==="producao").sort((a,b)=>b.q.localeCompare(a.q)).slice(0,3).forEach(r=>r.lidoEm="2000-01-01T00:00:00Z");escMontar(true)};
+  $("#escImp").onclick=()=>{const t=document.querySelector("#view .panel:last-of-type .tbl-wrap");if(!t){toast("Nada para imprimir nesta aba");return}
+    $("#printArea").innerHTML=`<div class="ficha"><header><div style="display:flex;flex-direction:column;gap:2px"><b>SINTRAMOMED</b><span>Escala e produção · ${aba==="ranking"?"Ranking de produção":aba==="reescalar"?"Para reescalar":"Empresas"}</span><span>${per==="todas"?"Desde o início":`Últimas ${per} quinzenas`}${empF?" · "+esc(emp[empF]||""):""} · emitido em ${br(iso(new Date()))}</span></div></header>${t.innerHTML.replace(/<button[^>]*>.*?<\/button>/g,"")}</div>`;
+    if(IS_TAURI)window.print();else toast("A impressão funciona no programa instalado.")};
+  escMontar()}
+
+// Histórico de uma pessoa: todas as quinzenas, empresas, advertências e indicações de escala.
+function escHistorico(x,{qs,emp}){
+  if(!x)return;const w=x.w||S.workers.find(y=>y.cpf===x.cpf),m=document.createElement("div");m.className="modal";
+  const desde=Object.keys(x.q).sort()[0],ks=qs.map(q=>q.q).filter(k=>desde&&k>=desde),tot=ks.reduce((s,k)=>({d:s.d+((x.q[k]||{}).d||0),v:s.v+((x.q[k]||{}).v||0),n:s.n+(((x.q[k]||{}).d||0)>0?1:0)}),{d:0,v:0,n:0});
+  const porEmp={};ks.forEach(k=>{for(const [c,d] of Object.entries((x.q[k]||{}).e||{})){const e=porEmp[c]||(porEmp[c]={d:0,n:0,ult:""});e.d+=d;if(d){e.n++;e.ult=k}}});
+  const s=escSit(x.ult,w);
+  const desenhar=()=>{const advs=x.cpf?advDe(x.cpf):[],escs=x.cpf?escalasDe(x.cpf):[];
+    m.innerHTML=`<div class="scrim"></div><div class="modal-c" role="dialog" aria-modal="true" aria-labelledby="ehT" style="max-width:920px"><div class="drawer-h"><div><div class="eyebrow">Escala e produção · histórico</div><h2 id="ehT" style="font-size:20px">${esc(x.nome)}</h2></div>
+     <div class="toolbar">${w?`<button class="btn" id="ehCad">Abrir cadastro</button>`:""}${x.cpf?`<button class="btn primary" id="ehEsc">Escalar</button>`:""}<button class="btn" id="ehX">Fechar</button></div></div>
+     <div class="drawer-b" style="align-items:stretch">
+      <div class="toolbar" style="flex-wrap:wrap;gap:8px"><span class="pill ${s[1]}">${s[0]}${s[2]!=null?` · última produção há ${s[2]} dias`:""}</span>${x.ult?`<span class="small muted">Última produção: ${br(x.ult)}</span>`:""}${w?pendencias(w).filter(z=>/ASO|NR-3/.test(z.t)).map(z=>`<span class="pill ${z.l}">${esc(z.t)}</span>`).join(""):""}</div>
+      <div class="grid2" style="grid-template-columns:repeat(4,minmax(0,1fr));gap:10px">${[["Quinzenas trabalhadas",`${tot.n} de ${ks.length}`],["Diárias",fmtNum(tot.d)],["Produção (bruta)",brl(tot.v)],["Média por quinzena trabalhada",tot.n?`${fmtNum(Math.round(tot.d/tot.n*10)/10)} diárias`:"—"]].map(([l,v])=>`<div class="panel" style="padding:12px 14px;margin:0"><div class="small muted">${l}</div><div style="font-weight:700;font-size:18px">${v}</div></div>`).join("")}</div>
+      <section class="panel" style="margin:0"><h2>Diárias por quinzena${desde?` · desde ${qRot(desde)}`:""}</h2>${ks.length?escBarras(ks.map(k=>({y:(x.q[k]||{}).d||0,l:qRot(k),t:`${qRot(k)}: ${fmtNum((x.q[k]||{}).d||0)} diárias · ${brl((x.q[k]||{}).v||0)}${Object.keys((x.q[k]||{}).e||{}).length?" · "+Object.keys(x.q[k].e).map(c=>abrevEmpresa(emp[c]||c)).join(", "):""}`})),120,"Diárias por quinzena","var(--accent)"):`<div class="empty">Nenhuma produção no histórico lido.</div>`}</section>
+      ${Object.keys(porEmp).length?`<section class="panel" style="margin:0"><h2>Empresas</h2><div class="tbl-wrap" style="box-shadow:none"><table><thead><tr><th>Empresa</th><th class="num">Quinzenas</th><th class="num">Diárias</th><th>Última</th></tr></thead><tbody>${Object.entries(porEmp).sort((a,b)=>b[1].d-a[1].d).map(([c,e])=>`<tr><td>${esc(emp[c]||c)}</td><td class="num mono">${e.n}</td><td class="num mono">${fmtNum(e.d)}</td><td class="small">${e.ult?qRot(e.ult):"—"}</td></tr>`).join("")}</tbody></table></div></section>`:""}
+      <section class="panel" style="margin:0"><div class="panel-h"><h2>Advertências e ocorrências</h2></div>
+       ${x.cpf?`<div class="form-grid"><div class="field"><label for="avD">Data</label><input id="avD" type="date" value="${iso(TODAY)}"></div><div class="field"><label for="avT">Tipo</label><select id="avT">${["Advertência verbal","Advertência escrita","Suspensão","Outra ocorrência"].map(t=>`<option>${t}</option>`).join("")}</select></div>
+        <div class="field span2"><label for="avE">Empresa (opcional)</label><input id="avE" list="avEL" autocomplete="off" placeholder="Onde aconteceu"><datalist id="avEL"></datalist></div>
+        <div class="field span4"><label for="avM">Motivo</label><input id="avM" maxlength="200" placeholder="Ex.: falta sem justificativa na escala de 20/11"></div></div>
+        <div class="toolbar" style="margin:8px 0 12px"><button class="btn primary" id="avOk">${ico("plus",16)} Registrar no histórico</button><span class="small muted">O modelo para imprimir a advertência fica em Ferramentas › Modelos para impressão.</span></div>`:`<div class="small muted">Sem CPF no cadastro: não dá para registrar.</div>`}
+       ${advs.length?`<div class="list">${advs.map(a=>`<div class="row" style="align-items:flex-start"><span><b>${esc(a.nivel)}</b> · ${br(a.data)}${a.emp?` · ${esc(abrevEmpresa(a.emp))}`:""}<div class="small">${esc(a.motivo)}</div><div class="small muted">Registrado por ${esc(a.criadoPor||"—")} em ${br(a.criadoEm.slice(0,10))}</div></span><button class="btn sm danger" data-avx="${a.id}">Excluir</button></div>`).join("")}</div>`:`<div class="empty">Nenhuma advertência registrada.</div>`}</section>
+      ${escs.length?`<section class="panel" style="margin:0"><h2>Indicações de escala</h2><div class="list">${escs.map(e=>`<div class="row" style="align-items:flex-start"><span><b>${esc(e.emp)}</b> · a partir de ${br(e.data)}${e.obs?`<div class="small">${esc(e.obs)}</div>`:""}<div class="small muted">Por ${esc(e.criadoPor||"—")} em ${br(e.criadoEm.slice(0,10))}</div></span><button class="btn sm danger" data-esx="${e.id}">Excluir</button></div>`).join("")}</div></section>`:""}
+     </div></div>`;
+    m.querySelector(".scrim").onclick=fechar;$("#ehX").onclick=fechar;
+    if($("#ehCad"))$("#ehCad").onclick=()=>{fechar();openWorker(w.id)};
+    if($("#ehEsc"))$("#ehEsc").onclick=()=>escEscalar(x,desenhar);
+    if($("#avE"))empPreencher("avEL");
+    if($("#avOk"))$("#avOk").onclick=async e=>{const b=e.currentTarget;if(b.disabled)return;const motivo=$("#avM").value.trim(),data=$("#avD").value;if(!motivo){toast("Escreva o motivo");$("#avM").focus();return}if(!data){toast("Informe a data");return}
+      b.disabled=true;const a={id:"adv-"+uid(),tipo:"advertencia",cpf:x.cpf,nome:x.nome,data,nivel:$("#avT").value,motivo,emp:$("#avE").value.replace(/\s+/g," ").trim(),criadoEm:new Date().toISOString(),criadoPor:nomeUsuario()||""};
+      S.lists.push(a);await Store.put("lists",a);toast("Advertência registrada no histórico");desenhar()};
+    const armar=b=>{if(b.dataset.armed)return false;b.dataset.armed="1";b.textContent="Confirmar exclusão";return true};
+    m.querySelectorAll("[data-avx],[data-esx]").forEach(b=>b.onclick=async()=>{if(armar(b)||b.disabled)return;b.disabled=true;const id=b.dataset.avx||b.dataset.esx;S.lists=S.lists.filter(l=>l.id!==id);await Store.del("lists",id);toast("Excluído");desenhar()})};
+  const fechar=()=>{m.remove();if(current==="escala")rerenderSeguro()};document.body.appendChild(m);desenhar()}
+
+// Indicação de escala: para qual empresa e a partir de quando (fica no histórico e aparece em "Para reescalar" por 30 dias).
+function escEscalar(x,depois){
+  if(!x||!x.cpf){toast("Sem CPF no cadastro");return}const m=document.createElement("div");m.className="modal";
+  m.innerHTML=`<div class="scrim"></div><div class="modal-c" role="dialog" aria-modal="true" aria-labelledby="eeT" style="max-width:560px"><div class="drawer-h"><div><div class="eyebrow">Escalar</div><h2 id="eeT" style="font-size:19px">${esc(x.nome)}</h2></div><button class="btn" id="eeX">Fechar</button></div>
+   <div class="drawer-b" style="align-items:stretch"><div class="form-grid" style="grid-template-columns:1fr">
+    <div class="field"><label for="eeE">Empresa</label><input id="eeE" list="eeEL" autocomplete="off" placeholder="Escolha da lista ou digite"><datalist id="eeEL"></datalist></div>
+    <div class="field"><label for="eeD">A partir de</label><input id="eeD" type="date" value="${iso(TODAY)}"></div>
+    <div class="field"><label for="eeO">Observação (opcional)</label><input id="eeO" maxlength="160" placeholder="Ex.: turma da noite, avisado por telefone"></div></div>
+    <div class="note">Fica registrado no histórico do colaborador. Lançar a produção continua sendo no Sistema eSocial.</div>
+    <div class="toolbar" style="justify-content:flex-end"><button class="btn primary" id="eeOk">Registrar escala</button></div></div></div>`;
+  document.body.appendChild(m);const close=()=>m.remove();m.querySelector(".scrim").onclick=close;$("#eeX").onclick=close;empPreencher("eeEL");
+  const w=x.w||S.workers.find(y=>y.cpf===x.cpf);if(w)$("#eeE").value=empDe(w);
+  $("#eeOk").onclick=async e=>{const b=e.currentTarget;if(b.disabled)return;const emp=$("#eeE").value.replace(/\s+/g," ").trim(),data=$("#eeD").value;if(!emp){toast("Escolha a empresa");$("#eeE").focus();return}if(!data){toast("Informe a data");return}
+    b.disabled=true;const r={id:"esc-"+uid(),tipo:"escala",cpf:x.cpf,nome:x.nome,emp,data,obs:$("#eeO").value.trim(),criadoEm:new Date().toISOString(),criadoPor:nomeUsuario()||""};
+    S.lists.push(r);await Store.put("lists",r);toast("Escala registrada");close();depois&&depois()}}
 
 /* ---------- rodapé: data e hora ---------- */
 (function relogio(){const el=$("#relogio");if(!el)return;const t=()=>{const n=new Date();el.textContent=n.toLocaleDateString("pt-BR",{weekday:"long",day:"2-digit",month:"2-digit",year:"numeric"})+" · "+n.toLocaleTimeString("pt-BR")};t();setInterval(t,1000)})();
