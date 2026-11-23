@@ -184,14 +184,14 @@ fn get_permitido(caminho: &str) -> bool {
     q.split('&').all(|par| {
         let (k, v) = par.split_once('=').unwrap_or((par, ""));
         // O PHP ignora espaços no início do nome do campo, então " acao" também é "acao".
-        let k = decodificar(k).trim_start_matches(' ').to_ascii_lowercase();
+        let k = decodificar_url(k).trim_start_matches(' ').to_ascii_lowercase();
         if k != "acao" { return true; }
-        matches!(decodificar(v).to_ascii_lowercase().as_str(), "" | "procurar" | "procura" | "visualizar")
+        matches!(decodificar_url(v).to_ascii_lowercase().as_str(), "" | "procurar" | "procura" | "visualizar")
     })
 }
 
 /// Decodifica percentual (%41) e '+' como espaço, para comparar o que o servidor vai ler de fato.
-fn decodificar(s: &str) -> String {
+fn decodificar_url(s: &str) -> String {
     let b = s.as_bytes();
     let mut out = Vec::with_capacity(b.len());
     let mut i = 0;
