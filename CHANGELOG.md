@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.8 — 23/11/2026
+Revisão do código com agentes (achados conferidos antes de corrigir):
+- Aprovação: o pedido grava `status:"enviando"` no diário antes do POST e um segundo clique ou o lote ignora o mesmo pedido (`aprovEnviando`). Pedido que ficou em "enviando" (programa fechou no meio) não é reenviado sozinho: aparece com "Envio interrompido" e os botões Marcar como enviado / Voltar para pendente. `enviarDesconto` confere o relatório de Descontos/Créditos antes de inserir e não lança de novo o mesmo tipo, data e valor.
+- ASO/NR: `lancarNoSistema` só inativa registros ativos com data igual ou anterior à do documento novo (`dataReg`); se já houver um ativo mais novo, o novo entra INATIVO e nada é inativado (aviso no pedido).
+- Sincronização: `comp()` sem reentrada; anexo que falha não trava o diário (vai para o fim da fila, após 5 falhas tenta de hora em hora, `cs_blob_try`); movimento de estoque que não subiu é reenviado (`cs_est_falhou`); `anotar` avisa quando o espaço do navegador acaba; o Portal DOM (`dom-nr01`) não vai mais ao diário; entrevistas voltam ao primeiro envio (linha tinha ficado dentro de um comentário); leitura de fichas limitada a 60 por ciclo (as mais antigas primeiro) e com uma segunda tentativa.
+- Atualização automática espera terminar envio, Aprovação e estoque (`Ocup`).
+- Telas: proteção contra redesenho depois de fechar a janela (`drawSlots`, `redrawCp`, leitura de ASO/NR).
+- Rust: `esocial_gravar` recusa qualquer campo `acao` que não seja um único Inserir/Alterar; `get_permitido` decodifica `%xx` e `+` antes de conferir (`%61cao=Excluir` não passa); `gh_conteudo` só grava em central-dados, central-estoque, central-logs, central-producao e feedback; `arq_mover` não dá erro quando o arquivo já saiu da origem.
+
 ## 0.2.7 — 21/11/2026
 - Escala e produção: sai o quadro do valor produzido no período e entra "Pararam nos últimos 30 dias" (ativos com 31 a 60 dias sem produção). Os quadros de parados abrem a lista Para reescalar filtrada (`ui.escFaixa`), com "Mostrar todos" para tirar o filtro.
 

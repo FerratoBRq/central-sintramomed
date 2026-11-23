@@ -191,6 +191,13 @@ pub fn arq_gravar(base: String, rel: String, bytes: Vec<u8>) -> Result<String, S
 #[tauri::command]
 pub fn arq_mover(base: String, de: String, para: String) -> Result<String, String> {
     let o = rel_seguro(&base, &de)?;
+    if !o.exists() {
+        // Já saiu daqui (outra rodada ou outro PC moveu): devolve o destino pedido, sem erro do sistema.
+        // ponytail: devolve o nome pedido, sem "nome (2)"; se o arquivo não estiver no destino, a leitura seguinte acusa.
+        rel_seguro(&base, &para)?;
+        return Ok(para);
+    }
+    if !o.is_file() { return Err("O caminho de origem não é um arquivo.".into()); }
     let (d, r) = nome_livre(&base, &para)?;
     if let Some(pai) = d.parent() { std::fs::create_dir_all(pai).map_err(|e| e.to_string())?; }
     std::fs::rename(&o, &d).map_err(|e| format!("Não foi possível mover o arquivo: {e}"))?;

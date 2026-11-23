@@ -415,7 +415,7 @@ p,.head p,.note,.small{text-wrap:pretty}
 /* Tema: claro, escuro ou automático (segue o Windows). O botão de lua/sol fixa o modo neste computador. */
 const temaEscuro=()=>{const t=document.documentElement.dataset.theme;return t?t==="dark":matchMedia("(prefers-color-scheme: dark)").matches};
 try{const t=localStorage.getItem("cs_tema");if(t==="dark"||t==="light")document.documentElement.dataset.theme=t}catch(e){}
-const APP_VERSION="0.2.7";
+const APP_VERSION="0.2.8";
 /* ---------- utilidades ---------- */
 const $=(s,r=document)=>r.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -565,7 +565,7 @@ const MANUAL=[
  {t:"Trabalhadores e ficha",p:["A lista vem em ordem alfabética; em Ordem, escolha Por código interno para ver pelo código do Sistema eSocial (a primeira coluna). Busque por nome, CPF, matrícula ou código interno e filtre por Ativos, Pendência crítica, Sem produção, A desligar, Inativos e Desligados.","Clique no trabalhador para abrir a ficha: dados, documentos, ASO, NRs, uniformes e anexos. Emitir ficha › a Ficha do Trabalhador sai exatamente como no Guia (mesma fonte, tamanho e espaçamento); o Termo de EPI sai numa única folha A4, centralizado e no maior tamanho que couber.","Emitir ficha: escolha a Ficha do Trabalhador ou o Termo de EPI do próprio Sistema eSocial (Guia), a Ordem de Serviço, o Termo Seguro-Desemprego ou a ficha do Central. O Termo Seguro-Desemprego (Termo de Ciência e Responsabilidade) sai em 2 vias A4, igual ao modelo do sindicato, com nome, CPF, NIS/PIS, nascimento, telefone e endereço do cadastro e a data escolhida; situação do seguro, parcelas e início na escala ficam para preencher à mão. O Termo de EPI sai com 2 calças, 2 camisetas e 1 par de botina na data do dia. Ficha do Trabalhador, Termo de EPI e Ordem de Serviço têm as mesmas opções: Data do documento (o termo usa na entrega do kit e no local e data; a O.S. na elaboração e nas assinaturas; a ficha do cadastro sai como está no Guia, sem data), o botão Impressão automática (desligado: só mostra a prévia; ligado: já abre a janela de impressão ao escolher; fica lembrado) e Imprimir, onde você escolhe a impressora ou Salvar como PDF. A Ordem de Serviço sai igual ao modelo do sindicato, só com o nome e a data.","Editar endereço no Sistema eSocial cria um pedido na Aprovação; nada é gravado no Guia sem aprovar.","Atualizar esta ficha do Sistema eSocial busca os dados mais novos daquele trabalhador."]},
  {t:"Pendências e vencimentos",p:["Vencimentos tem duas abas, NRs e ASOs, com calendário de 3 meses: o dia exato em que vence o curso ou o ASO de cada trabalhador fica marcado em vermelho (passe o mouse para ver os nomes). Na aba ASOs, clique no dia para ver quem vence e anote a data do exame marcado; na aba NRs, clique num dia para marcar a turma. A NR-33 pode ter mais de um dia: abra a outra data marcada e vincule o mesmo trabalhador (ele fica nas duas turmas); na lista, a NR-33 tem campo para o 2º dia marcado.","Pendências mostra o que falta em cada trabalhador (início, ASO, NR-35, NR-33, produção, término). Clique num item para filtrar; Críticas e Atenção separam a gravidade.","Vencimento das NRs: escolha NR-35 ou NR-33, clique num dia livre do calendário para marcar a turma (de preferência quarta, quinta ou sexta) e o Central distribui as pessoas. Clique num dia marcado para ver a turma, mover alguém para outra data, vincular um trabalhador ou desmarcar a data.","Lista para emissão de certificados: gera o Word no modelo da DOM, com 13 nomes por folha, separado por NR-33 e NR-35."]},
  {t:"ASOs e NRs recebidos",p:["Salve os PDFs que chegam pelo WhatsApp na pasta ASOs para lançar ou NRs para lançar (Documentos > Central Sintramomed). O Central lê a cada minuto. Se o arquivo for para a pasta errada, ele muda sozinho.","Também dá para usar Anexar ou arrastar os PDFs para a tela.","Na aba Para conferir: Conferir e lançar abre o documento lido para conferir. Enviar prontos para aprovação manda de uma vez os que estão completos.","Depois de lançado, o arquivo vai para ASOs lançados ou NRs lançadas e fica anexado na ficha."]},
- {t:"Aprovação",p:["Tudo o que o Central vai gravar no Sistema eSocial (ASO, NR, endereço, desconto autorizado, EPI) aparece aqui com o que muda: como está no sistema e como vai ficar.","Aprovar e enviar pede uma segunda confirmação, grava no Guia e confere relendo a página. Recusar descarta o pedido.","A aba Histórico guarda o que foi enviado, recusado ou deu erro."]},
+ {t:"Aprovação",p:["Tudo o que o Central vai gravar no Sistema eSocial (ASO, NR, endereço, desconto autorizado, EPI) aparece aqui com o que muda: como está no sistema e como vai ficar.","Aprovar e enviar pede uma segunda confirmação, grava no Guia e confere relendo a página. Recusar descarta o pedido.","A aba Histórico guarda o que foi enviado, recusado ou deu erro.","Um pedido só é enviado uma vez: enquanto envia, fica como \"enviando\". Se o programa fechar no meio (atualização, queda de energia), o pedido aparece com o aviso Envio interrompido: confira no Sistema eSocial e use Marcar como enviado (já está lá) ou Voltar para pendente (não está). Desconto autorizado já lançado com o mesmo tipo, data e valor não é lançado de novo.","ASO ou NR mais antigo do que um já ativo no sistema entra como INATIVO e não inativa o mais novo; o aviso aparece no pedido."]},
  {t:"Escala e produção",p:["Gestão › Escala e produção mostra quem trabalhou em cada quinzena, em que empresa, quantas diárias e quanto produziu (R$ bruto do Extrato Produção do Sistema eSocial), desde o início.","Na primeira vez o Central monta o histórico sozinho, em segundo plano: a quinzena atual primeiro e depois as anteriores, uma por vez, até o início. Pode continuar usando o programa. O que um computador lê fica disponível para os outros. A quinzena atual e as duas anteriores são relidas depois de 6 horas; Atualizar agora relê na hora.","Os quadros do alto mostram quem trabalhou na última quinzena, quem parou nos últimos 30 dias (31 a 60 dias sem produção), os parados ou esperando a 1ª escala e quem está sem produção há 90 dias ou mais. Clique num quadro para abrir a lista Para reescalar só com essas pessoas.","Escolha o período (6 quinzenas até desde o início) e a empresa. O gráfico mostra pessoas que trabalharam, diárias ou R$ por quinzena (passe o mouse na barra para ver os números).","Ranking de produção: quem mais trabalhou no período, com a empresa principal, quinzenas trabalhadas, diárias, produção e a situação (Produzindo até 30 dias, Parado de 31 a 89, Inativo com 90 ou mais).","Para reescalar: ativos do cadastro sem produção há mais de 30 dias ou esperando a 1ª escala, com onde mais trabalharam, experiência no último ano e ASO/NRs. Ordene por mais tempo parado, mais perto dos 90 dias (para não chegar ao desligamento) ou mais experiência. Escalar registra para qual empresa e a partir de quando.","Histórico (em cada nome): todas as quinzenas, as empresas, as advertências e as indicações de escala. Registre advertências e ocorrências (verbal, escrita, suspensão) com data, motivo e empresa; ficam para todos os computadores.","Empresas: pessoas, diárias e produção de cada empresa no período. Imprimir sai a lista da aba aberta."]},
 {t:"Relatório mensal e sem produção",p:["Afastados e desligados entram no mês pela data de envio do evento ao eSocial (S-2399 ou S-2230), não pela data do término, que é retroativa. Ex.: término em 18/06 enviado em 15/10 entra em outubro. Na tela aparece a data da última produção de cada um (lida do relatório de produção do Guia ao Buscar) e, embaixo, a data do envio.","Relatório mensal: escolha o mês e clique em Buscar no Sistema eSocial. Vêm admissões, periódicos (com a empresa da produção) e afastados/desligados (pelo mês do lançamento).","Marque classificação do ASO, envio à DOM e antecedentes; inclua pessoas à mão se precisar; clique em Gerar Excel.","Aba Sem produção há +3 meses: marque quem deve ser desligado. Marcar não envia nada ao sistema."]},
  {t:"Estoque e EPIs",p:["Aba Saldo mostra uniformes por tamanho e EPIs. Contagem: digite o que há de fato e o Central lança só a diferença.","Entrada: compra ou devolução. Saída ou baixa: Primeiro uniforme (kit pronto e sem custo: 1 camiseta manga longa, 1 calça e 1 botina; só escolher os tamanhos, uma vez por trabalhador), Entrega de EPI (sem custo), Uniforme da safra (1 camisa, 1 calça e 1 botina por safra, sem custo), Fornecimento com desconto autorizado ou Baixa.","Empresa: na entrega, escolha a empresa para onde vai o uniforme (lista das empresas do Sistema eSocial, ou digite). O Central já sugere a do último relatório mensal. A empresa aparece nos Movimentos, na busca e no termo.","Entrega em lote: o mesmo kit para várias pessoas de uma vez. Escolha o motivo, a empresa e o kit, adicione as pessoas pelo nome ou CPF (ou cole uma lista, um por linha) e escolha o tamanho de cada uma (o Central sugere o da última entrega). Ao lançar, saem todos os termos, um por folha.","Quem não leva uma peça no lote: marque Sem botina, Sem calça, Sem camiseta… na pessoa. Se a peça não dá para todos, o botão Lançar o que tem: quem passar do estoque fica sem a peça marca isso sozinho, na ordem da lista. Nada fica pendente e o termo mostra só o que a pessoa recebeu.","Entrega em lote pela planilha: Baixar planilha modelo gera um Excel com o kit escolhido (uma coluna de tamanho por peça, com a lista de tamanhos em cada célula), a empresa, o motivo e as pessoas que já estão na lista. Preencha um trabalhador por linha (nome ou CPF) e use Importar planilha preenchida: a lista é substituída pela da planilha e o Central avisa quem não achou e tamanho que não existe.","Desconto autorizado só vale para peça extra pedida pelo trabalhador ou reposição por perda/dano por culpa dele. Botina e EPIs nunca são cobrados. Imprima o Termo de autorização de desconto e colha a assinatura antes.","Ao entregar camiseta, calça ou botina, a opção Lançar também na aba EPI's do Sistema eSocial cria o pedido na Aprovação.","Estorno: o botão Estornar desfaz um movimento. Ele pede confirmação, e um clique duplo não lança duas vezes.","Limpar histórico do estoque (aba Configurações): zera saldos e movimentos até agora em todos os computadores; depois lance a Contagem."]},
@@ -650,6 +650,7 @@ const ATALHOS=[
 /* Novidades curtas por versão (aparecem na engrenagem, no aviso de atualização e em Feedback). Uma linha por versão;
    o detalhe fica no CHANGELOG.md. Ao lançar versão, acrescente a linha nova no topo. */
 const VERSOES=[
+ ["0.2.8","Aprovação sem envio duplicado ao Sistema eSocial; ASO/NR antigo não inativa o mais novo; correções de sincronização"],
  ["0.2.7","Escala: quadro \"Pararam nos últimos 30 dias\" no lugar do valor"],
  ["0.2.6","Nova tela Escala e produção: histórico por quinzena, ranking, quem reescalar e advertências"],
  ["0.2.5","Emitir ficha: Termo de Ciência do Seguro-Desemprego para todos os colaboradores"],
@@ -762,7 +763,7 @@ function openConfig(){
   const au=$("#autoUpd");if(au)au.onchange=()=>{LS.set("cs_auto_upd",au.checked?"1":"0");toast(au.checked?"Atualização automática ligada":"Atualização automática desligada")};
   const redraw=()=>{$("#vBody").innerHTML=body();bind()};
   const redrawCx=()=>{$("#cxBody").innerHTML=conexaoHTML();bindConexao(redrawCx)};bindConexao(redrawCx);
-  const redrawCp=()=>{$("#cpBody").innerHTML=ghHTML()+compHTML();bindGh(redrawCp);bindComp(redrawCp)};redrawCp();
+  const redrawCp=()=>{const el=$("#cpBody");if(!el)return;el.innerHTML=ghHTML()+compHTML();bindGh(redrawCp);bindComp(redrawCp)};redrawCp();
   const bind=()=>{
     const c=$("#vCreate");if(c)c.onclick=async()=>{const a=$("#pin1").value,b=$("#pin2").value;if(!/^\d{6,}$/.test(a)){toast("O PIN precisa ter pelo menos 6 números");return}if(a!==b){toast("Os dois PINs não são iguais");return}
       if(!(await Vault.create(a))){toast("Este navegador não permite guardar dados. Use o programa instalado.");Vault.lock();return}toast("Cofre criado");redraw()};
@@ -910,7 +911,7 @@ function openWorker(id,preset){
   const auto={asoData:["asoValidade",1],nr35Data:["nr35Validade",2],nr33Data:["nr33Validade",1]};
   document.querySelectorAll("#layer [data-k],#layer [data-c]").forEach(i=>i.addEventListener("change",()=>{const a=auto[i.dataset.k];if(a&&i.value){const t=$("#f_"+a[0]);if(!t.value)t.value=addYears(i.value,a[1])}if(i.dataset.k==="cpf")i.value=fmtCPF(i.value);if(i.dataset.k==="nome")$("#dh").textContent=i.value||"Sem nome";pendBox()}));
   $("#f_cpf").value=fmtCPF(w.cpf);
-  const drawSlots=()=>{const ds=docsDe(w.id);$("#slots").innerHTML=DOC_TIPOS.map(t=>{const mine=ds.filter(d=>d.tipo===t);return `<div class="slot ${mine.length?"has":""}"><div class="t"><span>${t}</span>${DOC_OBRIG.includes(t)?`<span class="small muted">Obrig.</span>`:""}</div>
+  const drawSlots=()=>{const sl=$("#slots");if(!sl)return;const ds=docsDe(w.id);sl.innerHTML=DOC_TIPOS.map(t=>{const mine=ds.filter(d=>d.tipo===t);return `<div class="slot ${mine.length?"has":""}"><div class="t"><span>${t}</span>${DOC_OBRIG.includes(t)?`<span class="small muted">Obrig.</span>`:""}</div>
     <div class="f">${mine.map(d=>`<span><a data-view="${d.id}">${esc(d.nome)}</a> <button class="btn sm danger" data-rm="${d.id}">Remover</button></span>`).join("")||"Nenhum arquivo"}</div>
     <button class="btn sm" data-up="${esc(t)}">Anexar arquivo</button></div>`}).join("");
     document.querySelectorAll("[data-up]").forEach(b=>b.onclick=()=>pickFile(".pdf,image/*",async file=>{await saveDoc(w.id,b.dataset.up,file.name,file,file.type);drawSlots();pendBox();toast(`${b.dataset.up} anexado`)}));
@@ -992,7 +993,7 @@ async function aplicarPlano(pl,marca){
 /* ---------- SINCRONIZAÇÃO AUTOMÁTICA com o Sistema eSocial (só no programa instalado) ----------
    Somente leitura. A cada 5 min: lista + relatório de produção; detalhes (ASO, NR, EPI, documentos)
    em lotes de até 50 trabalhadores, priorizando novos e quem mudou de situação. */
-const SYNC_MS=5*60*1000,LOTE=50;
+const SYNC_MS=5*60*1000,LOTE=50,MAX_CICLO=60;
 const Sync={rodando:false,cfg:null,erro:"",feitos:0,total:0,ultima:LS.get("cs_sync_ultima")||""};
 const tinvoke=(c,a)=>window.__TAURI__.core.invoke(c,a||{}).catch(e=>{if(!["cred_status","gh_cred_status","dom_cred_status"].includes(c))Diag.erro("comando",`${c}: ${e&&e.message||e}`);throw e});
 const sget=c=>tinvoke("esocial_get",{caminho:c});
@@ -1015,7 +1016,9 @@ async function lerSaida(id,status){
   if(!t)return {};
   // ponytail: o S-2399 não guarda motivo; o padrão do sindicato é 90 dias sem produção (editável no relatório).
   return {dtSaida:t.d,dtSaidaEnvio:await envio("cad_termino","tsveterm_id",t.cod),motivoSaida:`Trabalhador foi desligado, pois está há mais de ${INATIVO_DIAS} dias sem produção`}}
-async function lerTrabalhador(id,producao){
+// Uma falha de leitura (rede, sessão) ganha uma segunda tentativa antes de desistir daquela ficha.
+async function lerTrabalhador(id,producao){try{return await lerTrabalhador1(id,producao)}catch(e){return await lerTrabalhador1(id,producao)}}
+async function lerTrabalhador1(id,producao){
   const m=await sget("/register/cad_colaborador.php?acao=Procurar&cod_colaborador="+id);const md=dom(m);const v=XS.vals(md);
   const i=m.indexOf("Status eSocial");const st=m.slice(i,i+700).replace(/<[^>]+>/g," ").replace(/&nbsp;/g," ").replace(/\s+/g," ");
   const se=(st.match(/Status eSocial:\s*(.*?)\s*Data/)||[])[1]||"",ss=(st.match(/Status Sistema:\s*(\w+)/)||[])[1]||"";
@@ -1066,6 +1069,8 @@ async function syncCiclo(manual,tudo){
         else if(ATIVOS(w))prioridade.add(id)}
     }
     let fila=primeira||tudo?ids.slice():[...prioridade];
+    // Teto por ciclo (prioritários incluídos): os mais antigos primeiro, para todos serem relidos com o tempo.
+    if(!primeira&&!tudo&&fila.length>MAX_CICLO){fila.sort((a,b)=>String(porOrigem[a]?.syncAt||"").localeCompare(String(porOrigem[b]?.syncAt||"")));fila=fila.slice(0,MAX_CICLO)}
     if(!primeira&&fila.length<LOTE){const resto=ids.filter(id=>!prioridade.has(id)).sort((a,b)=>String(porOrigem[a]?.syncAt||"").localeCompare(String(porOrigem[b]?.syncAt||"")));fila=fila.concat(resto.slice(0,LOTE-fila.length))}
     Sync.total=fila.length;syncInfo();
     const agora=new Date().toISOString();const tot={novos:0,atualiza:0,lidos:0};let falhas=0;let pend=[];let fila2=Promise.resolve();
@@ -1657,7 +1662,7 @@ async function checkUpd(manual){
     // somando os PCs do escritório, e a verificação a cada 5 min estourava o limite ("Sem conexão com o GitHub").
     if(IS_TAURI){const r=await tinvoke("versao_publicada");
       if(r&&cmpVer(r[0],APP_VERSION)>0){const v=r[0];updUrl=r[1];
-        if(autoUpd()&&!Sync.rodando&&!$("#layer").innerHTML){updPending=v;aplicarUpd();return}
+        if(autoUpd()&&!Sync.rodando&&!Ocup.n&&!$("#layer").innerHTML){updPending=v;aplicarUpd();return}
         showUpd(v,[])}
       else if(manual)toast(r?"Você já está na versão mais recente":"Nenhuma versão nova publicada ainda")}
     else{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});const v=await r.json();
@@ -1731,6 +1736,8 @@ async function gravarForm(pagina,mudancas,acao){
   return tinvoke("esocial_gravar",{caminho:pagina,campos:final})}
 // Na lista do sistema, cada registro tem um botão "Alterar" com onClick="location.href='...&chave=123'".
 function registros(html,chave){return [...dom(html).querySelectorAll(`[onclick*="${chave}="],a[href*="${chave}="]`)].map(a=>{const tr=a.closest("tr");const ref=a.getAttribute("onclick")||a.getAttribute("href")||"";return {codigo:(ref.match(new RegExp(chave+"=(\\d+)"))||[])[1],texto:(tr?tr.textContent:"").replace(/\s+/g," ").trim()}}).filter(r=>r.codigo)}
+// Data de realização do registro na lista do sistema: a menor data dd/mm/aaaa da linha (a outra é a validade).
+const dataReg=r=>[...r.texto.matchAll(/\d{2}\/\d{2}\/\d{4}/g)].map(m=>XS.d2i(m[0])).filter(Boolean).sort()[0]||"";
 const NR_COD={"NR 33":"1","NR 35":"2","NR 12":"3","NR 31":"4","NR 11":"5","NR 18":"6"};
 async function lancarNoSistema(w,x){
   if(!IS_TAURI)throw new Error("O lançamento no Sistema eSocial funciona no programa instalado.");
@@ -1740,14 +1747,16 @@ async function lancarNoSistema(w,x){
   const chave=aso?"colabexam_codigo":"colabcurs_codigo";
   const nomeCurso=aso?"":x.nr;
   const antes=registros(await sget(lista),chave).filter(r=>/\bATIVO\b/.test(r.texto)&&!/INATIVO/.test(r.texto)&&(aso?/ASO/.test(r.texto):r.texto.includes(nomeCurso)));
-  const muda=aso?{cod_tipo:"1",exam_codigo:x.exameCod,colabexam_empresa:semAcento(x.empresa),colabexam_data:br(x.data),colabexam_datavalidade:br(x.validade)}
-                :{cod_tipo:"1",curs_codigo:NR_COD[x.nr],colabcurs_empresa:semAcento(x.empresa),colabcurs_data:br(x.data),colabcurs_datavalidade:br(x.validade)};
+  // Só inativa os registros mais antigos que o documento novo. Se já há um ativo mais novo, não inativa nada e o novo entra INATIVO.
+  const posterior=antes.some(a=>dataReg(a)>x.data),velhos=antes.filter(a=>!dataReg(a)||dataReg(a)<=x.data),tp=posterior?"2":"1";
+  const muda=aso?{cod_tipo:tp,exam_codigo:x.exameCod,colabexam_empresa:semAcento(x.empresa),colabexam_data:br(x.data),colabexam_datavalidade:br(x.validade)}
+                :{cod_tipo:tp,curs_codigo:NR_COD[x.nr],colabcurs_empresa:semAcento(x.empresa),colabcurs_data:br(x.data),colabcurs_datavalidade:br(x.validade)};
   await gravarForm(lista,muda,"Inserir");
   const depois=registros(await sget(lista),chave);
   const novo=depois.find(r=>!antes.some(a=>a.codigo===r.codigo)&&r.texto.includes(br(x.data))&&r.texto.includes(br(x.validade)));
   if(!novo)throw new Error("O Sistema eSocial não mostrou o registro novo. Confira lá antes de tentar de novo.");
   let inativados=0;
-  if(x.inativarAnterior)for(const a of antes){const pg=aso?`/register/cad_colabexames.php?acao=Procurar&colabexam_codigo=${a.codigo}`:`/register/cad_colabcursos.php?acao=Procurar&colabcurs_codigo=${a.codigo}`;await gravarForm(pg,{cod_tipo:"2"},"Alterar");inativados++}
+  if(x.inativarAnterior&&!posterior)for(const a of velhos){const pg=aso?`/register/cad_colabexames.php?acao=Procurar&colabexam_codigo=${a.codigo}`:`/register/cad_colabcursos.php?acao=Procurar&colabcurs_codigo=${a.codigo}`;await gravarForm(pg,{cod_tipo:"2"},"Alterar");inativados++}
   await atualizarDoSistema(w);
   return {inativados}}
 async function atualizarDoSistema(w){const rec=await lerTrabalhador(w.origemId,w.ultimaProducao);await aplicarPlano(planImport([rec],true),{syncAt:new Date().toISOString()})}
@@ -1824,8 +1833,8 @@ function abrirLancamento(w0,aoTerminar,arquivoInicial){let w=w0;
       const diff=aprovDiffDoc(w,y);await registrarNoCentral(w,y,arquivo);await aprovCriar(y.tipo==="aso"?"aso":"curso",w,y,diff);
       close();toast("Registrado no Central e enviado para Aprovação");aoTerminar&&aoTerminar("aprovacao")}};
   const ler=async f=>{arquivo=f;if(!arquivo)return;$("#lRes").innerHTML=`<div class="empty">Lendo o documento…</div>`;
-    try{const txt=await textoDoArquivo(arquivo,t=>$("#lRes").innerHTML=`<div class="empty">${esc(t)}</div>`);form(lerDocumentoTexto(txt))}
-    catch(e){$("#lRes").innerHTML=`<div class="empty">${esc(String(e&&e.message||e))} Preencha os dados à mão.</div>`;setTimeout(()=>form({tipo:"aso"}),1500)}};
+    try{const txt=await textoDoArquivo(arquivo,t=>{const el=$("#lRes");if(el)el.innerHTML=`<div class="empty">${esc(t)}</div>`});if(!$("#lRes"))return;form(lerDocumentoTexto(txt))}
+    catch(e){if(!$("#lRes"))return;$("#lRes").innerHTML=`<div class="empty">${esc(String(e&&e.message||e))} Preencha os dados à mão.</div>`;setTimeout(()=>form({tipo:"aso"}),1500)}};
   $("#lFile").onchange=ev=>ler(ev.target.files[0]);if(arquivoInicial)ler(arquivoInicial);
 }
 /* ---------- LANÇAR NR-33 / NR-35 (separado do ASO) ----------
@@ -1874,9 +1883,9 @@ function abrirNR(w0,aoTerminar,arquivoInicial){let w=w0,arquivo=null;
     $("#nGo").onclick=async()=>{const y=ler();if(outro||!valida(y))return;if(!y.empresa.trim()){toast("Informe a empresa ou o instrutor");return}
       const diff=aprovDiffDoc(w,y);await registrarNoCentral(w,y,arquivo);await aprovCriar("curso",w,y,diff);close();toast("Registrado no Central e enviado para Aprovação");aoTerminar&&aoTerminar("aprovacao")}};
   const lerArq=async f=>{arquivo=f;if(!f)return;$("#nRes").innerHTML=`<div class="empty">Lendo o certificado…</div>`;
-    try{const txt=await textoDoArquivo(f,t=>$("#nRes").innerHTML=`<div class="empty">${esc(t)}</div>`);const x=lerDocumentoTexto(txt);
+    try{const txt=await textoDoArquivo(f,t=>{const el=$("#nRes");if(el)el.innerHTML=`<div class="empty">${esc(t)}</div>`});if(!$("#nRes"))return;const x=lerDocumentoTexto(txt);
       if(x.tipo==="aso"){$("#nRes").innerHTML=`<div class="empty">Este documento parece um ASO. Use Lançar ASO.</div>`;return}form(x)}
-    catch(e){$("#nRes").innerHTML=`<div class="empty">${esc(String(e&&e.message||e))} Preencha os dados à mão.</div>`;setTimeout(()=>form({}),1500)}};
+    catch(e){if(!$("#nRes"))return;$("#nRes").innerHTML=`<div class="empty">${esc(String(e&&e.message||e))} Preencha os dados à mão.</div>`;setTimeout(()=>form({}),1500)}};
   $("#nFile").onchange=ev=>lerArq(ev.target.files[0]);if(arquivoInicial)lerArq(arquivoInicial);
 }
 
@@ -2098,7 +2107,8 @@ function anotar(col,k,d,del){
   if(!IS_TAURI)return null;
   const t=new Date().toISOString();
   const dia=diario().filter(x=>!(x.col===col&&x.k===k));dia.push({t,pc:pcId(),col,k,del:!!del,d:del?null:d});
-  LS.set("cs_diario",JSON.stringify(dia));const mk=marcas();mk[col+"|"+k]=t;LS.set("cs_diario_t",JSON.stringify(mk));
+  if(LS.set("cs_diario",JSON.stringify(dia))===false){toast("Não consegui guardar a alteração para os outros computadores: espaço do navegador cheio");Diag.erro("diario","cs_diario: espaço cheio");return null}
+  const mk=marcas();mk[col+"|"+k]=t;LS.set("cs_diario_t",JSON.stringify(mk));
   return dia}
 /* Transporte da troca: repositório privado do GitHub (se configurado) ou pasta compartilhada.
    O token fica no Gerenciador de Credenciais; o Rust só acessa contents/ do repositório configurado. */
@@ -2145,19 +2155,28 @@ async function compArqGravar(nome,base64){
   await ghPut(p,b64utf8(base64),"anexo");if(GH.arqs)GH.arqs.nomes.add(nome)}
 const compArqLer=nome=>ghOn()?ghGet(`central-dados/arquivos/${nome}`,true):tinvoke("pasta_arquivo_ler",{pasta:pastaComp(),nome});
 let _pub=Promise.resolve();
+const Ocup={n:0}; // gravações em andamento (envio, Aprovação, estoque): a atualização automática espera zerar
+const blobTent=()=>{try{return JSON.parse(LS.get("cs_blob_try")||"{}")}catch(e){return{}}}; // tentativas por anexo: {id:{n,prox}}
 // Anexos que não subiram (sem internet) ficam em cs_blob_pend e vão no próximo envio; sem isso o anexo nunca chegava aos outros PCs.
 const blobPend=()=>{try{return JSON.parse(LS.get("cs_blob_pend")||"[]")}catch(e){return[]}};
 const blobPendSet=l=>LS.set("cs_blob_pend",JSON.stringify([...new Set(l)]));
 function publicar(blobs){
   if(!compAtivo())return;
   const novos=new Map((blobs||[]).filter(d=>d&&d.blob).map(d=>[d.id,d]));blobPendSet([...blobPend(),...novos.keys()]);
+  Ocup.n++;
   _pub=_pub.then(async()=>{try{
-    for(const id of blobPend().slice(0,5)){const d=novos.get(id)||S.docs.find(x=>x.id===id);
-      if(d&&d.blob)await compArqGravar(d.id+".b64",await blobB64(d.blob));blobPendSet(blobPend().filter(x=>x!==id))}
+    // Um anexo que falha não trava o diário: vai para o fim da fila; após 5 falhas só tenta de hora em hora.
+    const tent=blobTent(),agora=Date.now();
+    for(const id of blobPend().filter(x=>!(tent[x]&&tent[x].prox>agora)).slice(0,5)){const d=novos.get(id)||S.docs.find(x=>x.id===id);
+      try{if(d&&d.blob)await compArqGravar(d.id+".b64",await blobB64(d.blob));blobPendSet(blobPend().filter(x=>x!==id));delete tent[id]}
+      catch(e){const n=(tent[id]&&tent[id].n||0)+1;tent[id]={n,prox:n>=5?agora+3600e3:0};if(n===5)Diag.erro("anexo",`Anexo ${id} não subiu após 5 tentativas: ${e&&e.message||e}`);
+        blobPendSet([...blobPend().filter(x=>x!==id),id])}}
+    LS.set("cs_blob_try",JSON.stringify(tent));
     // Diário igual ao último enviado não vai de novo (cada gravação no GitHub é um commit e conta no limite por hora).
     const txt=diario().map(x=>JSON.stringify(x)).join("\n");if(txt!==Comp.pubTxt){await compGravar("central-dados",pcId()+".jsonl",txt);Comp.pubTxt=txt}
     Comp.erro="";LS.del("cs_pub_falhou")}
-   catch(e){Comp.erro=String(e);LS.set("cs_pub_falhou","1")}});return _pub}
+   catch(e){Comp.erro=String(e);LS.set("cs_pub_falhou","1")}
+   finally{Ocup.n--}});return _pub}
 function registrar(col,o,del){
   if(!IS_TAURI||!o||o.exemplo||o.workerId==="__recebido")return;
   let k=o.id,d={...o};
@@ -2205,7 +2224,9 @@ async function publicarExistente(){
   for(const w of S.workers.filter(w=>!w.exemplo&&proprios(w)))anotar("workers",w.cpf||w.id,{...w},false);
   const docs=S.docs.filter(d=>d.workerId===MOD_ID||S.workers.some(w=>w.id===d.workerId&&!w.exemplo));
   for(const d of docs){const x={...d};delete x.blob;const w=S.workers.find(y=>y.id===d.workerId);x.dono=d.workerId===MOD_ID?MOD_ID:(w?w.cpf:"");anotar("docs",d.id,x,false)}
-  for(const l of S.lists.filter(l=>l.tipo!=="producao"))anotar("lists",l.id,l,false); // produção é cache local (vem do Guia e de central-producao)for(const i of S.interviews)anotar("interviews",i.id,i,false);
+  // produção e dom-nr01 são cache local (vêm do Guia, de central-producao e do portal DOM)
+  for(const l of S.lists.filter(l=>l.tipo!=="producao"&&l.id!=="dom-nr01"))anotar("lists",l.id,l,false);
+  for(const i of S.interviews)anotar("interviews",i.id,i,false);
   anotar("feedback","lista",fbLista(),false);anotar("modelos_ocultos","lista",modOcultos(),false);
   await publicar(docs);await _pub;if(!Comp.erro)LS.set("cs_diario_inicial",compId());
 }
@@ -2303,9 +2324,10 @@ async function estCarregar(){
 async function estGravar(novos){
   const meus=meusMovs().concat(novos);
   if(!LS.set("cs_est_movs",JSON.stringify(meus)))throw new Error("Não foi possível guardar o movimento neste computador.");
-  if(compAtivo()){try{await compGravar("central-estoque",pcId()+".jsonl",meus.map(m=>JSON.stringify(m)).join("\n"))}
-    catch(e){toast("Gravado neste computador, mas não foi para os outros computadores: "+e)}}
-  await estCarregar();
+  Ocup.n++;try{
+  if(compAtivo()){try{await compGravar("central-estoque",pcId()+".jsonl",meus.map(m=>JSON.stringify(m)).join("\n"));LS.del("cs_est_falhou")}
+    catch(e){LS.set("cs_est_falhou","1");toast("Gravado neste computador, mas não foi para os outros computadores: "+e)}}
+  await estCarregar()}finally{Ocup.n--}
 }
 const saldo=(p,t)=>Est.movs.reduce((s,m)=>m.prod===p&&m.tam===t?s+Number(m.qtd||0):s,0);
 const estornado=id=>Est.movs.some(m=>m.motivo==="estorno"&&m.ref===id);
@@ -2650,10 +2672,14 @@ async function pedirDescontoVale(lote){
 async function enviarDesconto(w,d){
   if(!w.origemId)throw new Error("Este trabalhador ainda não foi sincronizado com o Sistema eSocial.");
   const pg="/register/cad_desconto.php";
+  const relDesc=async tipo=>dom(await spost("/register/rel_desconto.php",[["acao","Visualizar"],["codempresa",""],["cod_empresa",""],["codcolaborador",w.origemId],["cod_colaborador",w.origemId],["cod_tipo_desconto",tipo],["fp_refmes",""],["fp_refano",""],["dt_ini",br(d.data)],["dt_fim",br(d.data)],["tipo","0"],["opcReferencia","1"],["tipo1","2"]]));
+  // Antes de inserir: se o mesmo tipo, data e valor já estão lançados (envio interrompido antes), não lança de novo.
+  const vEsc=reais(d.valor).replace(/[.,]/g,"\\$&");
+  if(new RegExp("(^|[^\\d.,])"+vEsc+"(?![\\d,])").test((await relDesc(d.cod_tipo_desconto)).body.textContent.replace(/\s+/g," ")))return;
   const r=await gravarForm(pg,{cod_colaborador:w.origemId,codcolaborador:w.origemId,cod_tipo_desconto:d.cod_tipo_desconto,data:br(d.data),valor:reais(d.valor),desc_historico:d.historico},"Inserir");
   const txt=dom(r).body?dom(r).body.textContent:"";if(/\+\+\s*Erro|n[aã]o foi poss/i.test(txt))throw new Error("O Sistema eSocial recusou o lançamento: "+(txt.match(/\+\+[^\n]{0,120}/)||[""])[0]);
   // Confere no relatório de Descontos/Créditos do trabalhador (só leitura).
-  const rel=dom(await spost("/register/rel_desconto.php",[["acao","Visualizar"],["codempresa",""],["cod_empresa",""],["codcolaborador",w.origemId],["cod_colaborador",w.origemId],["cod_tipo_desconto",""],["fp_refmes",""],["fp_refano",""],["dt_ini",br(d.data)],["dt_fim",br(d.data)],["tipo","0"],["opcReferencia","1"],["tipo1","2"]]));
+  const rel=await relDesc("");
   if(!rel.body.textContent.replace(/\s+/g," ").includes(reais(d.valor)))throw new Error("Lançado, mas o relatório de Descontos/Créditos ainda não mostrou o valor. Confira no Sistema eSocial antes de lançar de novo.")}
 // Parcelas em centavos exatos: a última leva a diferença do arredondamento.
 const parcelas=(total,n)=>{const c=Math.round(total*100),b=Math.floor(c/n);return Array.from({length:n},(_,i)=>(i===n-1?c-b*(n-1):b)/100)};
@@ -3179,7 +3205,7 @@ async function domSincronizar(aoAndar){if(Dom.lendo)return;Dom.lendo=true;Dom.er
     for(let pg=1;pg<=60;pg++){const[,html]=await tinvoke("dom_get",{caminho:`${doc.empresa}/trabalhadores?page=${pg}`});const r=domLerPagina(html);if(r.total!=null)total=r.total;
       r.linhas.forEach(l=>{if(l.cpf)trab[l.cpf]=l});aoAndar&&aoAndar(`Lendo o Portal DOM: ${Object.keys(trab).length}${total?" de "+total:""}`);
       if(!r.linhas.length||(total&&Object.keys(trab).length>=total))break}
-    doc.trab=trab;doc.lidoEm=new Date().toISOString();await Store.put("lists",doc)}
+    doc.trab=trab;doc.lidoEm=new Date().toISOString();await Store.put("lists",doc,true)} // true: cada PC lê o portal sozinho, não vai ao diário
   catch(e){Dom.erro=String(e.message||e)}finally{Dom.lendo=false}}
 async function domAuto(){try{if(!IS_TAURI)return;Dom.cfg=Dom.cfg||await tinvoke("dom_cred_status");const d=domDoc();
   if(Dom.cfg.configurado&&(!d.lidoEm||Date.now()-new Date(d.lidoEm)>9*60e3)){await domSincronizar();if(current==="nr01"&&!document.querySelector(".modal"))vNr01()}}catch(e){}}
@@ -3239,7 +3265,7 @@ async function vNr01(){
    edição de endereço viram um pedido com cada alteração (campo, como está, como vai ficar). Quem aprova
    envia; o pedido fica no histórico. Pedidos ficam na coleção lists (tipo "aprovacao"), compartilhada. */
 const aprovPedidos=()=>S.lists.filter(l=>l.tipo==="aprovacao");
-const aprovPendentes=()=>aprovPedidos().filter(p=>p.status==="pendente").length;
+const aprovPendentes=()=>aprovPedidos().filter(p=>p.status==="pendente"||p.status==="enviando").length;
 function aprovBadge(){const el=$("#navAprov");if(!el)return;const n=aprovPendentes();el.hidden=!n;el.textContent=n}
 const EXAME_NOME={"1":"ASO ADMISSIONAL","2":"ASO PERIÓDICO"};
 function aprovDiffDoc(w,y){
@@ -3268,30 +3294,44 @@ async function enviarEpi(w,d){
   const r=await gravarForm(pg,{cod_colaborador:w.origemId,coleq_dt:br(d.data),coleq_qtd:String(d.qtd),equip_cod:d.equip_cod},"Inserir");
   const txt=dom(r).body?dom(r).body.textContent:"";if(/\+\+\s*Erro(?!: Registro nao localizado)/i.test(txt))throw new Error("O Sistema eSocial recusou o lançamento: "+(txt.match(/\+\+[^\n]{0,120}/)||[""])[0]);
   if(conta(await sget(pg))<=antes)throw new Error("Lançado, mas a aba EPI's ainda não mostrou o registro. Confira no Sistema eSocial antes de lançar de novo.")}
+const aprovEnviando=new Set(); // pedidos sendo enviados agora neste PC (ignora segundo clique/lote)
 async function aprovEnviar(p){
+  if(aprovEnviando.has(p.id)||p.status!=="pendente")return false;
   const w=S.workers.find(z=>z.cpf===p.wcpf);if(!w)throw new Error("Trabalhador não encontrado no Central.");
+  aprovEnviando.add(p.id);Ocup.n++;
+  try{
+  // Grava "enviando" no diário ANTES do POST: se o programa fechar no meio, o pedido não é reenviado sozinho.
+  p.status="enviando";p.enviandoEm=new Date().toISOString();await Store.put("lists",p);
+  try{
   if(p.acao==="endereco")await enviarEndereco(w,p.dados);else if(p.acao==="epi")await enviarEpi(w,p.dados);else if(p.acao==="desconto")await enviarDesconto(w,p.dados);else await lancarNoSistema(w,p.dados);
-  p.status="enviado";p.enviadoEm=new Date().toISOString();p.enviadoPor=nomeUsuario()||"";delete p.erro;await Store.put("lists",p)}
+  }catch(e){p.status="pendente";delete p.enviandoEm;throw e}
+  p.status="enviado";p.enviadoEm=new Date().toISOString();p.enviadoPor=nomeUsuario()||"";delete p.erro;delete p.enviandoEm;await Store.put("lists",p);return true
+  }finally{aprovEnviando.delete(p.id);Ocup.n--}}
 function vAprov(){
-  const ps=aprovPedidos().sort((a,b)=>b.criadoEm.localeCompare(a.criadoEm)),pend=ps.filter(p=>p.status==="pendente"),hist=ps.filter(p=>p.status!=="pendente"),aba=ui.aprAba||"pendentes",pgA=paginar(aba==="pendentes"?pend:hist,"aprPg"+aba);
+  const ps=aprovPedidos().sort((a,b)=>b.criadoEm.localeCompare(a.criadoEm)),pend=ps.filter(p=>p.status==="pendente"),espera=ps.filter(p=>p.status==="pendente"||p.status==="enviando"),hist=ps.filter(p=>!espera.includes(p)),aba=ui.aprAba||"pendentes",pgA=paginar(aba==="pendentes"?espera:hist,"aprPg"+aba);
   const titulo=p=>p.acao==="epi"?`EPI/uniforme · ${p.dados.equip}`:p.acao==="endereco"?"Endereço":p.acao==="aso"?"ASO":p.acao==="desconto"?`${p.dados.adt?"Adiantamento salarial":"Desconto autorizado de uniforme"}${p.dados.de>1?` (parcela ${p.dados.parcela}/${p.dados.de})`:""}`:"Curso "+(p.dados&&p.dados.nr||"");
   const cartao=p=>`<section class="panel" data-pid="${p.id}"><div class="panel-h"><div><h2>${esc(titulo(p))} · ${esc(p.wnome)}</h2><span class="small muted">CPF ${esc(fmtCPF(p.wcpf))} · pedido ${p.criadoPor?"por "+esc(p.criadoPor)+" ":""}em ${br(p.criadoEm.slice(0,10))} ${hhmm(new Date(p.criadoEm))}</span></div>
-     ${p.status==="pendente"?`<div class="toolbar"><button class="btn" data-recusa="${p.id}">Recusar</button><button class="btn primary" data-aprova="${p.id}">Aprovar e enviar</button></div>`:`<span class="pill ${p.status==="enviado"?"ok":p.status==="erro"?"crit":"warn"}">${p.status==="enviado"?"enviado":p.status==="erro"?"erro":"recusado"}</span>`}</div>
+     ${p.status==="pendente"?`<div class="toolbar"><button class="btn" data-recusa="${p.id}">Recusar</button><button class="btn primary" data-aprova="${p.id}">Aprovar e enviar</button></div>`:p.status==="enviando"?(aprovEnviando.has(p.id)?`<span class="pill warn">enviando…</span>`:`<div class="toolbar"><button class="btn" data-volta="${p.id}">Voltar para pendente</button><button class="btn primary" data-marca="${p.id}">Marcar como enviado</button></div>`):`<span class="pill ${p.status==="enviado"?"ok":p.status==="erro"?"crit":"warn"}">${p.status==="enviado"?"enviado":p.status==="erro"?"erro":"recusado"}</span>`}</div>
+    ${p.status==="enviando"&&!aprovEnviando.has(p.id)?`<div class="banner" style="background:var(--crit-soft)">Envio interrompido: confira no Sistema eSocial antes de reenviar. Se o lançamento já está lá, use "Marcar como enviado"; se não está, "Voltar para pendente".</div>`:""}
     <div class="tbl-wrap" style="box-shadow:none"><table><thead><tr><th>Campo</th><th>No sistema hoje</th><th>Vai ficar</th></tr></thead><tbody>
      ${p.diff.map(([c,a,n])=>`<tr><td>${esc(c)}</td><td class="muted">${a?esc(a):"—"}</td><td>${a!==n?`<b>${esc(n||"—")}</b>`:esc(n||"—")}</td></tr>`).join("")}</tbody></table></div>
     ${p.status==="pendente"&&!["endereco","desconto","epi"].includes(p.acao)&&p.dados.inativarAnterior?`<div class="note" data-ant="${p.id}">Registros que serão marcados INATIVO: ${IS_TAURI?"consultando o sistema…":"consultados no programa instalado."}</div>`:""}
     ${p.erro?`<div class="banner" style="background:var(--crit-soft)">${esc(p.erro)}</div>`:""}
-    ${p.status==="enviado"?`<div class="small muted">Enviado ${p.enviadoPor?"por "+esc(p.enviadoPor)+" ":""}em ${br(p.enviadoEm.slice(0,10))} ${hhmm(new Date(p.enviadoEm))} e conferido relendo o sistema.</div>`:""}</section>`;
+    ${p.status==="enviado"?`<div class="small muted">Enviado ${p.enviadoPor?"por "+esc(p.enviadoPor)+" ":""}em ${br(p.enviadoEm.slice(0,10))} ${hhmm(new Date(p.enviadoEm))} ${p.manual?"(marcado como enviado manualmente, após conferir no sistema).":"e conferido relendo o sistema."}</div>`:""}</section>`;
   $("#view").innerHTML=`<div class="head"><div><h1>Aprovação de atualização</h1><p>Tudo o que o Central vai gravar no Sistema eSocial (Guia Campo Grande) passa por aqui, com cada alteração mostrada antes de enviar.</p></div>
     ${pend.length>1?`<button class="btn primary" id="apTodos">Aprovar e enviar os ${pend.length}</button>`:""}</div>
-   ${abasHTML("aprAba",[["pendentes",`Esperando aprovação (${pend.length})`],["historico",`Histórico (${hist.length})`]],aba)}
+   ${abasHTML("aprAba",[["pendentes",`Esperando aprovação (${espera.length})`],["historico",`Histórico (${hist.length})`]],aba)}
    ${pgA.itens.length?pgA.itens.map(cartao).join("")+pgA.html:`<div class="empty">${aba==="pendentes"?"Nenhuma atualização esperando aprovação.":"Nada no histórico ainda."}</div>`}`;
   abasBind(vAprov);paginarBind(vAprov);
-  const enviar=async(p,b)=>{try{await aprovEnviar(p);return true}catch(e){p.status="erro";p.erro=String(e.message||e);await Store.put("lists",p);return false}};
+  const enviar=async(p,b)=>{try{return await aprovEnviar(p)}catch(e){p.status="erro";p.erro=String(e.message||e);await Store.put("lists",p);return false}};
   document.querySelectorAll("[data-aprova]").forEach(b=>b.onclick=async()=>{const p=S.lists.find(x=>x.id===b.dataset.aprova);
     if(!IS_TAURI){toast("O envio ao Sistema eSocial funciona no programa instalado.");return}
     if(!b.dataset.armed){b.dataset.armed="1";b.textContent="Confirmar envio ao Sistema eSocial";return}
-    b.disabled=true;b.textContent="Enviando…";const ok=await enviar(p);toast(ok?"Enviado e conferido no Sistema eSocial":"Erro: "+p.erro);aprovBadge();vAprov()});
+    b.disabled=true;b.textContent="Enviando…";const ok=await enviar(p);toast(ok?"Enviado e conferido no Sistema eSocial":p.erro?"Erro: "+p.erro:"Este pedido já está sendo enviado");aprovBadge();vAprov()});
+  document.querySelectorAll("[data-marca],[data-volta]").forEach(b=>b.onclick=async()=>{const marca=!!b.dataset.marca,p=S.lists.find(x=>x.id===(b.dataset.marca||b.dataset.volta));if(!p||p.status!=="enviando"||aprovEnviando.has(p.id))return;
+    if(!b.dataset.armed){b.dataset.armed="1";b.textContent=marca?"Confirmar: já está no sistema":"Confirmar: não está no sistema";return}
+    delete p.enviandoEm;if(marca){p.status="enviado";p.enviadoEm=new Date().toISOString();p.enviadoPor=nomeUsuario()||"";p.manual=true;delete p.erro}else p.status="pendente";
+    await Store.put("lists",p);aprovBadge();vAprov()});
   document.querySelectorAll("[data-recusa]").forEach(b=>b.onclick=async()=>{if(!b.dataset.armed){b.dataset.armed="1";b.textContent="Confirmar recusa";return}
     const p=S.lists.find(x=>x.id===b.dataset.recusa);p.status="recusado";p.recusadoEm=new Date().toISOString();p.recusadoPor=nomeUsuario()||"";await Store.put("lists",p);aprovBadge();vAprov()});
   const t=$("#apTodos");if(t)t.onclick=async()=>{if(!IS_TAURI){toast("O envio ao Sistema eSocial funciona no programa instalado.");return}
@@ -3302,7 +3342,9 @@ function vAprov(){
   if(IS_TAURI)pend.filter(p=>p.acao!=="endereco"&&p.acao!=="desconto"&&p.dados.inativarAnterior).forEach(async p=>{const el=document.querySelector(`[data-ant="${p.id}"]`);const w=S.workers.find(z=>z.cpf===p.wcpf);if(!el||!w||!w.origemId)return;
     try{const aso=p.acao==="aso",lista=aso?`/register/cad_colabexames.php?cod_colaborador=${w.origemId}`:`/register/cad_colabcursos.php?cod_colaborador=${w.origemId}`;
       const ant=registros(await sget(lista),aso?"colabexam_codigo":"colabcurs_codigo").filter(r=>/\bATIVO\b/.test(r.texto)&&!/INATIVO/.test(r.texto)&&(aso?/ASO/.test(r.texto):r.texto.includes(p.dados.nr)));
-      el.innerHTML=ant.length?`Registros que serão marcados INATIVO no sistema:<br>${ant.map(r=>esc(r.texto.replace(/\s*(Alterar|Excluir)\s*/g," ").trim())).join("<br>")}`:"Nenhum registro ativo anterior no sistema."}
+      const tx=r=>esc(r.texto.replace(/\s*(Alterar|Excluir)\s*/g," ").trim()),velhos=ant.filter(r=>!dataReg(r)||dataReg(r)<=p.dados.data);
+      el.innerHTML=ant.some(r=>dataReg(r)>p.dados.data)?`<b>Já existe um documento mais novo ativo; este será lançado sem inativar o atual (e entra como INATIVO).</b><br>${ant.map(tx).join("<br>")}`
+        :velhos.length?`Registros que serão marcados INATIVO no sistema:<br>${velhos.map(tx).join("<br>")}`:"Nenhum registro ativo anterior no sistema."}
     catch(e){el.textContent="Não foi possível consultar os registros atuais: "+(e.message||e)}});
 }
 
@@ -3663,6 +3705,9 @@ function escEscalar(x,depois){
   if(IS_TAURI){setTimeout(()=>syncCiclo(false),2500);setInterval(()=>syncCiclo(false),SYNC_MS)}
   // Estoque e pasta compartilhada: lê o que os outros computadores gravaram a cada minuto.
   Diag.conta("inicio","abrir",performance.now());
-  const comp=async()=>{Diag.enviar();if(compAtivo()&&(LS.get("cs_pub_falhou")||blobPend().length)){publicar([]);await _pub}await asoVerificarPasta(false);await puxarCompartilhado();await docsSincronizar();await estCarregar();if(current==="estoque")rerenderSeguro()};
+  const comp=async()=>{if(comp.rodando)return;comp.rodando=true;try{ // sem reentrada: chamadas ao GitHub podem passar de 1 min
+    Diag.enviar();if(compAtivo()&&(LS.get("cs_pub_falhou")||blobPend().length)){publicar([]);await _pub}
+    if(compAtivo()&&LS.get("cs_est_falhou")){try{await compGravar("central-estoque",pcId()+".jsonl",meusMovs().map(m=>JSON.stringify(m)).join("\n"));LS.del("cs_est_falhou")}catch(e){}}
+    await asoVerificarPasta(false);await puxarCompartilhado();await docsSincronizar();await estCarregar();if(current==="estoque")rerenderSeguro()}finally{comp.rodando=false}};
   if(IS_TAURI){try{GH.cfg=await tinvoke("gh_cred_status")}catch(e){}}await centralPasta();await estCarregar();if(["estoque","asos","nrs"].includes(current))render();if(IS_TAURI){setTimeout(comp,4000);setInterval(comp,60000)}})();
 </script>

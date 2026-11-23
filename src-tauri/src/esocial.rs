@@ -179,11 +179,36 @@ pub async fn esocial_testar(st: State<'_, Esocial>) -> Result<(), String> {
 /// GET só para consulta: páginas PHP antigas às vezes executam ações por GET (ex.: ?acao=Excluir).
 /// Se o endereço tiver "acao=", ela precisa ser de leitura (Procurar, Procura ou Visualizar).
 fn get_permitido(caminho: &str) -> bool {
-    let q = caminho.split_once('?').map(|x| x.1).unwrap_or("").to_ascii_lowercase();
-    q.split('&').all(|par| match par.split_once('=') {
-        Some(("acao", v)) => matches!(v, "" | "procurar" | "procura" | "visualizar"),
-        _ => true,
+    let q = caminho.split_once('?').map(|x| x.1).unwrap_or("");
+    // Separa por & antes de decodificar (como o servidor faz), depois decodifica nome e valor.
+    q.split('&').all(|par| {
+        let (k, v) = par.split_once('=').unwrap_or((par, ""));
+        // O PHP ignora espaços no início do nome do campo, então " acao" também é "acao".
+        let k = decodificar(k).trim_start_matches(' ').to_ascii_lowercase();
+        if k != "acao" { return true; }
+        matches!(decodificar(v).to_ascii_lowercase().as_str(), "" | "procurar" | "procura" | "visualizar")
     })
+}
+
+/// Decodifica percentual (%41) e '+' como espaço, para comparar o que o servidor vai ler de fato.
+fn decodificar(s: &str) -> String {
+    let b = s.as_bytes();
+    let mut out = Vec::with_capacity(b.len());
+    let mut i = 0;
+    while i < b.len() {
+        match b[i] {
+            b'+' => out.push(b' '),
+            b'%' if i + 2 < b.len() && (b[i + 1] as char).is_ascii_hexdigit() && (b[i + 2] as char).is_ascii_hexdigit() => {
+                let h = |c: u8| (c as char).to_digit(16).unwrap_or(0) as u8;
+                out.push(h(b[i + 1]) * 16 + h(b[i + 2]));
+                i += 3;
+                continue;
+            }
+            c => out.push(c),
+        }
+        i += 1;
+    }
+    String::from_utf8_lossy(&out).into_owned()
 }
 
 #[tauri::command]
@@ -222,9 +247,10 @@ pub async fn esocial_gravar(st: State<'_, Esocial>, caminho: String, campos: Vec
     if !GRAVAVEIS.contains(&pagina) {
         return Err("Este formulário não pode ser gravado pelo Central.".into());
     }
-    let acao = campos.iter().find(|(k, _)| k == "acao").map(|(_, v)| v.as_str()).unwrap_or("");
-    if acao != "Inserir" && acao != "Alterar" {
-        return Err("Ação não permitida (só Inserir ou Alterar).".into());
+    // Todo campo "acao" (sem diferenciar maiúscula) conta: precisa ser um só, Inserir ou Alterar.
+    let acoes: Vec<&str> = campos.iter().filter(|(k, _)| k.eq_ignore_ascii_case("acao")).map(|(_, v)| v.as_str()).collect();
+    if acoes.len() != 1 || (acoes[0] != "Inserir" && acoes[0] != "Alterar") {
+        return Err("Ação não permitida (só Inserir ou Alterar, em um único campo ação).".into());
     }
     let u = url(&caminho)?;
     pedir(&st, || st.client.post(&u).form(&campos)).await
@@ -239,6 +265,15 @@ mod testes {
         assert!(super::get_permitido("/register/rel_folhaPagamento.php?pagina=2&acao=Visualizar"));
         assert!(!super::get_permitido("/register/cad_colaborador.php?acao=Excluir&cod_colaborador=1"));
         assert!(!super::get_permitido("/register/cad_coleq.php?ACAO=Remover&id=3"));
+    }
+
+    #[test]
+    fn get_so_leitura_com_codificacao() {
+        assert!(super::get_permitido("/register/cad_colaborador.php?acao=Procurar"));
+        assert!(!super::get_permitido("/register/cad_colaborador.php?acao=Excluir"));
+        assert!(!super::get_permitido("/register/cad_colaborador.php?%61cao=Excluir"));
+        assert!(!super::get_permitido("/register/cad_colaborador.php?acao=%45xcluir"));
+        assert!(!super::get_permitido("/register/cad_colaborador.php?%20acao=Excluir"));
     }
 
     #[test]

@@ -69,6 +69,7 @@ pub async fn gh_conteudo(metodo: String, caminho: String, corpo: Option<String>,
     let ok = !caminho.is_empty() && caminho.len() <= 300
         && caminho.split('/').all(|p| !p.is_empty() && p != "." && p != ".." && p.chars().all(|ch| ch.is_ascii_alphanumeric() || "-_.".contains(ch)));
     if !ok { return Err("Caminho inválido.".into()); }
+    if metodo != "GET" && !caminho_gravacao_valido(&caminho) { return Err("Caminho de gravação não permitido.".into()); }
     let url = format!("{API}{}/contents/{caminho}", c.repo);
     let cl = cliente()?;
     let req = match metodo.as_str() {
@@ -96,8 +97,28 @@ pub async fn gh_arvore(sha: String) -> Result<(u16, String), String> {
 
 fn sha_valido(s: &str) -> bool { s.len() == 40 && s.chars().all(|c| c.is_ascii_hexdigit()) }
 
+/// Gravação só nas pastas de dados que o programa usa (conferido em web/index.html: compGravar, ghPut, feedback).
+fn caminho_gravacao_valido(caminho: &str) -> bool {
+    const PASTAS: [&str; 5] = ["central-dados", "central-estoque", "central-logs", "central-producao", "feedback"];
+    let partes: Vec<&str> = caminho.split('/').collect();
+    PASTAS.contains(&partes[0]) && partes.iter().all(|p| !p.is_empty() && !p.starts_with('.'))
+}
+
 #[cfg(test)]
 mod testes {
+    #[test]
+    fn caminho_de_gravacao() {
+        assert!(super::caminho_gravacao_valido("central-dados/PC1.jsonl"));
+        assert!(super::caminho_gravacao_valido("central-dados/arquivos/12.b64"));
+        assert!(super::caminho_gravacao_valido("feedback/123.json"));
+        assert!(!super::caminho_gravacao_valido("README.md"));
+        assert!(!super::caminho_gravacao_valido(".github/workflows/x.yml"));
+        assert!(!super::caminho_gravacao_valido("central-dados/../x.json"));
+        assert!(!super::caminho_gravacao_valido("central-dados/./x.json"));
+        assert!(!super::caminho_gravacao_valido("central-dados//x.json"));
+        assert!(!super::caminho_gravacao_valido("central-sintramomed/x.json"));
+    }
+
     #[test]
     fn sha_so_hex_de_40() {
         assert!(super::sha_valido("0123456789abcdef0123456789abcdef01234567"));
